@@ -1,3 +1,6 @@
+#ifndef _MC_PARSER_H_
+#define _MC_PARSER_H_
+
 typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned long uint32;
@@ -35,6 +38,12 @@ typedef struct {
 	
 	uint8 S;	/* 20-20 */
 	
+	uint8 Rn;	/* 19-16 */
+	
+	uint8 Rd;	/* 15-12 */
+	
+	uint16 imm12;	/* 11-0 */
+	
 } OpCodeFormatType_add_1;
 
 typedef struct {
@@ -60,3 +69,5 @@ typedef struct {
 #define OP_DECODE_MAX	(3)
 
 extern int op_parse(uint16 code[OP_DECODE_MAX], OpDecodedCodeType *decoded_code, OperationCodeType *optype);
+
+#endif /* !_MC_PARSER_H_ */

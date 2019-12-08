@@ -3,10 +3,10 @@
 /* op constants */
 {% for op in op_parsers %}
     /* {{ op.name }} */
-    #define OP_FB_MASK_{{ op.name }} (0x{{ '%x'|format(op.fixed_bits_mask) }}l) /* fixed bits mask */
-    #define OP_FB_{{ op.name }} (0x{{ '%x'|format(op.fixed_bits) }}l) /* fixed bits */
+    #define OP_FB_MASK_{{ op.name }} (0x{{ '%08x'|format(op.fixed_bits_mask) }}l) /* fixed bits mask */
+    #define OP_FB_{{ op.name }} (0x{{ '%08x'|format(op.fixed_bits) }}l) /* fixed bits */
     {% for arg in op.arg_parsers %}
-        #define OP_ARG_MASK_{{ op.name }}_{{ arg.name }} (0x{{ '%x'|format(arg.mask) }}l) /* arg mask: {{ arg.name }} */
+        #define OP_ARG_MASK_{{ op.name }}_{{ arg.name }} (0x{{ '%08x'|format(arg.mask) }}l) /* arg mask: {{ arg.name }} */
         #define OP_ARG_END_BIT_{{ op.name }}_{{ arg.name }} ({{ arg.end_bit }}) /* arg end bit: {{ arg.name }} */
     {% endfor %}
 {% endfor %}

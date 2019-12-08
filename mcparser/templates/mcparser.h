@@ -1,3 +1,6 @@
+#ifndef _MC_PARSER_H_
+#define _MC_PARSER_H_
+
 typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned long uint32;
@@ -27,7 +30,7 @@ typedef struct {
 {% for op in op_parsers %}
 typedef struct {
 	{% for arg in op.arg_parsers %}
-	uint{{ arg.bit_size }} {{ arg.name }};	/* {{ arg.start_bit }}-{{ arg.end_bit }} */
+	uint{{ arg.type_bit_size }} {{ arg.name }};	/* {{ arg.start_bit }}-{{ arg.end_bit }} */
 	{% endfor %}
 } OpCodeFormatType_{{ op.name }};
 {% endfor %}
@@ -44,3 +47,5 @@ typedef struct {
 #define OP_DECODE_MAX	(3)
 
 extern int op_parse(uint16 code[OP_DECODE_MAX], OpDecodedCodeType *decoded_code, OperationCodeType *optype);
+
+#endif /* !_MC_PARSER_H_ */
