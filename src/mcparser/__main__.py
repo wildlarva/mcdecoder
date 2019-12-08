@@ -7,6 +7,7 @@ def main():
         return
 
     generator.generate(sys.argv[1])
+    print('Generated MC parsers.')
 
 
 if __name__ == '__main__':
