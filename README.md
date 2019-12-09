@@ -4,22 +4,22 @@
 ```
 git clone https://github.com/wildlarva/mcparser-gen.git
 cd <path-to-cloned-directory>
-python3 -m pip install .
+python3.8 -m pip install .
 ```
 
 ### For developers
 ```
 git clone https://github.com/wildlarva/mcparser-gen.git
 cd <path-to-cloned-directory>
-python3 -m pip install -e .
+python3.8 -m pip install -e .
 ```
 After the installation, changes to the cloned directory are immediately reflected to the tool you installed.
 
 ## How to use
 ```
-python3 -m mcparser_gen <path-to-mc-description-file>
+python3.8 -m mcparser_gen <path-to-mc-description-file>
 
-ex. python3 -m mcparser_gen test/arm.yaml
+ex. python3.8 -m mcparser_gen test/arm.yaml
 ```
 MC parser files are generated as
 * out/mcparser.c
