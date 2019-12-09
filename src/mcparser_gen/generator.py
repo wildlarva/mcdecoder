@@ -1,7 +1,7 @@
 import os
 import yaml
 import jinja2
-from typing import Any, Dict, List, NamedTuple, Optional
+from typing import cast, Any, Dict, List, NamedTuple, Optional
 
 
 class ArgParser(NamedTuple):
@@ -25,16 +25,17 @@ class McParser(NamedTuple):
 
 def generate(mcfile_path: str) -> bool:
     """Generate MC parser files from MC description file"""
-    mcparser_model: McParser = _create_mcparser_model(mcfile_path)
+    mcparser_model = _create_mcparser_model(mcfile_path)
     return _generate(mcparser_model)
 
 
 def _create_mcparser_model(mcfile_path: str) -> McParser:
     """Create a model which contains information of MC parser"""
     with open(mcfile_path, 'rb') as file:
-        mc_desc_model: Any = yaml.load(file, Loader=yaml.Loader)
+        mc_desc_model = cast(
+            Dict[str, Any], yaml.load(file, Loader=yaml.Loader))
 
-    op_parsers: List[OpParser] = list(map(lambda instruction_desc_model: _create_opparser_model(
+    op_parsers = list(map(lambda instruction_desc_model: _create_opparser_model(
         instruction_desc_model), mc_desc_model['instructions']))
     return McParser(
         op_parsers=op_parsers,
@@ -44,25 +45,25 @@ def _create_mcparser_model(mcfile_path: str) -> McParser:
 def _create_opparser_model(instruction_desc_model: Dict[str, Any]) -> OpParser:
     """Create a model which contains information of individual OP parser"""
     # Parse instruction format
-    instruction_format: List[Dict[str, Any]] = _parse_instruction_format(
+    instruction_format = _parse_instruction_format(
         instruction_desc_model['format'])
 
-    instruction_bit_size: int = sum(map(lambda arg_format: len(
+    instruction_bit_size = sum(map(lambda arg_format: len(
         arg_format['bits_format']), instruction_format))
 
     # Create arg parsers and build fixed bits information
     arg_parsers: List[ArgParser] = []
-    start_bit: int = instruction_bit_size - 1
-    fixed_bits_mask: int = 0
-    fixed_bits: int = 0
+    start_bit = instruction_bit_size - 1
+    fixed_bits_mask = 0
+    fixed_bits = 0
 
     for arg_format in instruction_format:
         # Calculate bit size and position
-        bit_size: int = len(arg_format['bits_format'])
-        end_bit: int = start_bit - bit_size + 1
+        bit_size = len(arg_format['bits_format'])
+        end_bit = start_bit - bit_size + 1
 
         # Build arg mask and fixed bits information
-        arg_mask: int = 0
+        arg_mask = 0
         for bit_format in arg_format['bits_format']:
             if bit_format == 'x':
                 fixed_bits_mask = (fixed_bits_mask << 1) | 0
@@ -106,7 +107,7 @@ def _create_opparser_model(instruction_desc_model: Dict[str, Any]) -> OpParser:
 
 def _parse_instruction_format(instruction_format: str) -> List[Dict[str, Any]]:
     """Parse an instruction format and returns an array of arg formats"""
-    arg_formats: List[str] = instruction_format.split('|')
+    arg_formats = instruction_format.split('|')
     return list(map(lambda arg_format: _parse_arg_format(arg_format), arg_formats))
 
 
@@ -122,11 +123,11 @@ def _parse_arg_format(arg_format: str) -> Dict[str, Any]:
 
 def _generate(mcparser_model: McParser) -> bool:
     """Generate MC parser files from a MC parser model"""
-    env: jinja2.Environment = jinja2.Environment(
+    env = jinja2.Environment(
         loader=jinja2.PackageLoader('mcparser_gen', 'templates')
     )
-    parser_header_template: jinja2.Template = env.get_template('mcparser.h')
-    parser_source_template: jinja2.Template = env.get_template('mcparser.c')
+    parser_header_template = env.get_template('mcparser.h')
+    parser_source_template = env.get_template('mcparser.c')
 
     if not os.path.exists('out'):
         os.mkdir('out')

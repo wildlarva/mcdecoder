@@ -2,7 +2,7 @@ from mcparser_gen.generator import _create_mcparser_model, _generate, ArgParser,
 
 
 def test_create_mcparser_model():
-    mcparser_model: McParser = _create_mcparser_model(
+    mcparser_model = _create_mcparser_model(
         'test/arm.yaml')
 
     assert len(mcparser_model.op_parsers) == 2
@@ -13,7 +13,7 @@ def test_create_mcparser_model():
     assert op_parser_model_add_1.fixed_bits == 0x02800000
     assert len(op_parser_model_add_1.arg_parsers) == 5
 
-    arg_cond: ArgParser = op_parser_model_add_1.arg_parsers[0]
+    arg_cond = op_parser_model_add_1.arg_parsers[0]
     assert arg_cond.name == 'cond'
     assert arg_cond.mask == 0xf0000000
     assert arg_cond.start_bit == 31
@@ -22,7 +22,7 @@ def test_create_mcparser_model():
 
 
 def test_generate():
-    mcparser_model: McParser = McParser(
+    mcparser_model = McParser(
         op_parsers=[
             OpParser(
                 name='add_1',
