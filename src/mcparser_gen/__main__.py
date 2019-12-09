@@ -7,9 +7,11 @@ def main():
         print('Please add an argument to specify MC description file path.')
         return
 
-    generator.generate(sys.argv[1])
-    print('Generated MC parsers.')
-
+    result: bool = generator.generate(sys.argv[1])
+    if result:
+        print('Generated MC parsers.')
+    else:
+        print('Error occurred on generation.')
 
 if __name__ == '__main__':
     main()
