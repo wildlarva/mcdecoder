@@ -1,7 +1,8 @@
 # Machine Code Parser Generator(mcparser-gen)
 ## Installation
 ```
-cd <path-to-project-dir>
+git clone https://github.com/wildlarva/mcparser-gen.git
+cd <path-to-cloned-dir>
 python3 -m pip install -e .
 ```
 
