@@ -1,8 +1,8 @@
-from mcparser_gen.generator import _create_mcparser_model, _generate
+from mcparser_gen import generator
 
 
 def test_create_mcparser_model():
-    mcparser_model = _create_mcparser_model('test/arm.yaml')
+    mcparser_model = generator._create_mcparser_model('test/arm.yaml')
 
     assert mcparser_model['parser'] is not None
     assert len(mcparser_model['op_parsers']) == 2
@@ -49,4 +49,4 @@ def test_generate():
             },
         ],
     }
-    assert _generate(mcparser_model) == True
+    assert generator._generate(mcparser_model) == True
