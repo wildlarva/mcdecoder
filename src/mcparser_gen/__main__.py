@@ -1,5 +1,6 @@
 import sys
-from mcparser import generator
+from mcparser_gen import generator
+
 
 def main():
     if len(sys.argv) < 2:

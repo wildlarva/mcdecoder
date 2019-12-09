@@ -7,9 +7,9 @@ python3 -m pip install -e .
 
 ## How to use
 ```
-python3 -m mcparser <path-to-mc-description-file>
+python3 -m mcparser_gen <path-to-mc-description-file>
 
-ex. python3 -m mcparser test/arm.yaml
+ex. python3 -m mcparser_gen test/arm.yaml
 ```
 MC parser files are generated as
 * out/mcparser.c
