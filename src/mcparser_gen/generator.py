@@ -103,7 +103,7 @@ def _parse_arg_format(arg_format):
 def _generate(mcparser_model):
     """Generate MC parser files from a MC parser model"""
     env = jinja2.Environment(
-        loader=jinja2.PackageLoader('mcparser', 'templates')
+        loader=jinja2.PackageLoader('mcparser_gen', 'templates')
     )
     parser_header_template = env.get_template('mcparser.h')
     parser_source_template = env.get_template('mcparser.c')
