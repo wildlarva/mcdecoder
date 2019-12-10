@@ -69,8 +69,8 @@ def _create_mcparser_model(mcfile_path: str) -> McParser:
         mc_desc_model = cast(
             McDescription, yaml.load(file, Loader=yaml.Loader))
 
-    op_parsers = list(map(lambda instruction_desc_model: _create_opparser_model(
-        instruction_desc_model), mc_desc_model['instructions']))
+    op_parsers = [_create_opparser_model(
+        instruction_desc_model) for instruction_desc_model in mc_desc_model['instructions']]
     return McParser(
         op_parsers=op_parsers,
     )
@@ -143,7 +143,7 @@ def _parse_instruction_format(instruction_format: str) -> InstructionFormat:
     """Parse an instruction format and returns an array of arg formats"""
     arg_formats = instruction_format.split('|')
     return InstructionFormat(
-        arg_formats=list(map(lambda arg_format: _parse_arg_format(arg_format), arg_formats)))
+        arg_formats=[_parse_arg_format(arg_format) for arg_format in arg_formats])
 
 
 def _parse_arg_format(arg_format: str) -> ArgFormat:
