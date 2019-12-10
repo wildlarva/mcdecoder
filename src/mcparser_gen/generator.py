@@ -1,7 +1,23 @@
 import os
-import yaml
+from typing import Any, Dict, List, NamedTuple, Optional, TypedDict, cast
+
 import jinja2
-from typing import cast, Any, Dict, List, NamedTuple, Optional
+import yaml
+
+
+# MC description models loaded from yaml files
+
+
+class InstructionDescrition(TypedDict):
+    name: str
+    format: str
+
+
+class McDescription(TypedDict):
+    instructions: List[InstructionDescrition]
+
+
+# Parser models
 
 
 class ArgParser(NamedTuple):
@@ -23,17 +39,35 @@ class McParser(NamedTuple):
     op_parsers: List[OpParser]
 
 
+# Instruction format
+
+
+class ArgFormat(NamedTuple):
+    name: Optional[str]
+    bits_format: str
+
+
+class InstructionFormat(NamedTuple):
+    arg_formats: List[ArgFormat]
+
+
+# External functions
+
+
 def generate(mcfile_path: str) -> bool:
     """Generate MC parser files from MC description file"""
     mcparser_model = _create_mcparser_model(mcfile_path)
     return _generate(mcparser_model)
 
 
+# Internal functions
+
+
 def _create_mcparser_model(mcfile_path: str) -> McParser:
     """Create a model which contains information of MC parser"""
     with open(mcfile_path, 'rb') as file:
         mc_desc_model = cast(
-            Dict[str, Any], yaml.load(file, Loader=yaml.Loader))
+            McDescription, yaml.load(file, Loader=yaml.Loader))
 
     op_parsers = list(map(lambda instruction_desc_model: _create_opparser_model(
         instruction_desc_model), mc_desc_model['instructions']))
@@ -42,14 +76,14 @@ def _create_mcparser_model(mcfile_path: str) -> McParser:
     )
 
 
-def _create_opparser_model(instruction_desc_model: Dict[str, Any]) -> OpParser:
+def _create_opparser_model(instruction_desc_model: InstructionDescrition) -> OpParser:
     """Create a model which contains information of individual OP parser"""
     # Parse instruction format
     instruction_format = _parse_instruction_format(
         instruction_desc_model['format'])
 
     instruction_bit_size = sum(map(lambda arg_format: len(
-        arg_format['bits_format']), instruction_format))
+        arg_format.bits_format), instruction_format.arg_formats))
 
     # Create arg parsers and build fixed bits information
     arg_parsers: List[ArgParser] = []
@@ -57,14 +91,14 @@ def _create_opparser_model(instruction_desc_model: Dict[str, Any]) -> OpParser:
     fixed_bits_mask = 0
     fixed_bits = 0
 
-    for arg_format in instruction_format:
+    for arg_format in instruction_format.arg_formats:
         # Calculate bit size and position
-        bit_size = len(arg_format['bits_format'])
+        bit_size = len(arg_format.bits_format)
         end_bit = start_bit - bit_size + 1
 
         # Build arg mask and fixed bits information
         arg_mask = 0
-        for bit_format in arg_format['bits_format']:
+        for bit_format in arg_format.bits_format:
             if bit_format == 'x':
                 fixed_bits_mask = (fixed_bits_mask << 1) | 0
                 fixed_bits = (fixed_bits << 1) | 0
@@ -77,7 +111,7 @@ def _create_opparser_model(instruction_desc_model: Dict[str, Any]) -> OpParser:
         arg_mask <<= end_bit
 
         # Build arg parser for a named arg
-        if arg_format['arg_name'] is not None:
+        if arg_format.name is not None:
             if bit_size <= 8:
                 type_bit_size = 8
             elif bit_size <= 16:
@@ -86,7 +120,7 @@ def _create_opparser_model(instruction_desc_model: Dict[str, Any]) -> OpParser:
                 type_bit_size = 32
 
             arg_parser = ArgParser(
-                name=arg_format['arg_name'],
+                name=arg_format.name,
                 mask=arg_mask,
                 start_bit=start_bit,
                 end_bit=end_bit,
@@ -105,20 +139,21 @@ def _create_opparser_model(instruction_desc_model: Dict[str, Any]) -> OpParser:
     )
 
 
-def _parse_instruction_format(instruction_format: str) -> List[Dict[str, Any]]:
+def _parse_instruction_format(instruction_format: str) -> InstructionFormat:
     """Parse an instruction format and returns an array of arg formats"""
     arg_formats = instruction_format.split('|')
-    return list(map(lambda arg_format: _parse_arg_format(arg_format), arg_formats))
+    return InstructionFormat(
+        arg_formats=list(map(lambda arg_format: _parse_arg_format(arg_format), arg_formats)))
 
 
-def _parse_arg_format(arg_format: str) -> Dict[str, Any]:
+def _parse_arg_format(arg_format: str) -> ArgFormat:
     """Parse an arg format and returns an arg format dictionary"""
     arg_formats: List[Optional[str]] = arg_format.split(':')
     bits_format, arg_name = (arg_formats + [None])[:2]
-    return {
-        'bits_format': bits_format,
-        'arg_name': arg_name,
-    }
+    return ArgFormat(
+        name=arg_name,
+        bits_format=cast(str, bits_format),
+    )
 
 
 def _generate(mcparser_model: McParser) -> bool:
