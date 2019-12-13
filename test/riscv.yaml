@@ -1,5 +1,7 @@
-basics:
+machine:
   endian: little
+  decoder:
+    namespace: riscv
 instructions:
   - name: c_addi_1
     format: 000:funct3|x:imm_1|xxxxx:dest|xxxxx:imm_2|01:op

@@ -13,7 +13,16 @@ class InstructionDescrition(TypedDict):
     format: str
 
 
+class MachineDecoderDescription(TypedDict):
+    namespace: Optional[str]
+
+
+class MachineDescription(TypedDict):
+    decoder: Optional[MachineDecoderDescription]
+
+
 class McDescription(TypedDict):
+    machine: MachineDescription
     instructions: List[InstructionDescrition]
 
 
@@ -36,7 +45,12 @@ class OpParser(NamedTuple):
     arg_parsers: List[ArgParser]
 
 
+class MachineParser(NamedTuple):
+    namespace: Optional[str]
+
+
 class McParser(NamedTuple):
+    machine_parser: MachineParser
     op_parsers: List[OpParser]
 
 
@@ -70,11 +84,23 @@ def _create_mcparser_model(mcfile_path: str) -> McParser:
         mc_desc_model = cast(
             McDescription, yaml.load(file, Loader=yaml.Loader))
 
+    machine_parser = _create_machine_parser_model(mc_desc_model['machine'])
     op_parsers = [_create_opparser_model(
         instruction_desc_model) for instruction_desc_model in mc_desc_model['instructions']]
     return McParser(
+        machine_parser=machine_parser,
         op_parsers=op_parsers,
     )
+
+
+def _create_machine_parser_model(machine_desc_model: MachineDescription) -> MachineParser:
+    namespace: Optional[str] = None
+    if 'decoder' in machine_desc_model:
+        decoder_desc_model = machine_desc_model['decoder']
+        if 'namespace' in decoder_desc_model:
+            namespace = decoder_desc_model['namespace']
+
+    return MachineParser(namespace=namespace)
 
 
 def _create_opparser_model(instruction_desc_model: InstructionDescrition) -> OpParser:
@@ -133,6 +159,7 @@ def _create_opparser_model(instruction_desc_model: InstructionDescrition) -> OpP
         arg_parsers=arg_parsers,
     )
 
+
 def _calc_type_bit_size(bit_size: int) -> int:
     if bit_size <= 8:
         return 8
@@ -140,6 +167,7 @@ def _calc_type_bit_size(bit_size: int) -> int:
         return 16
     else:
         return 32
+
 
 def _parse_instruction_format(instruction_format: str) -> InstructionFormat:
     """Parse an instruction format and returns an array of arg formats"""
@@ -171,12 +199,19 @@ def _generate(mcparser_model: McParser) -> bool:
     elif not os.path.isdir('out'):
         return False
 
-    with open('out/mcparser.h', 'w') as file:
-        file.write(parser_header_template.render(
-            op_parsers=mcparser_model.op_parsers))
+    ns_prefix = _make_namespace_prefix(mcparser_model.machine_parser.namespace)
+    template_args = {
+        'ns': ns_prefix,
+        'op_parsers': mcparser_model.op_parsers
+    }
 
-    with open('out/mcparser.c', 'w') as file:
-        file.write(parser_source_template.render(
-            op_parsers=mcparser_model.op_parsers))
+    with open(f'out/{ns_prefix}mcparser.h', 'w') as file:
+        file.write(parser_header_template.render(template_args))
+
+    with open(f'out/{ns_prefix}mcparser.c', 'w') as file:
+        file.write(parser_source_template.render(template_args))
 
     return True
+
+def _make_namespace_prefix(namespace: Optional[str]) -> str:
+    return namespace + '_' if namespace is not None else ''

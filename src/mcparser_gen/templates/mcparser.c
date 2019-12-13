@@ -1,11 +1,11 @@
-#include "mcparser.h"
+#include "{{ ns }}mcparser.h"
 
 typedef struct {
-    uint16 *code;
-    OpDecodedCodeType *decoded_code;
-    OperationCodeType *optype;
-    uint16 code16;
-    uint32 code32;
+    {{ ns }}uint16 *code;
+    {{ ns }}OpDecodedCodeType *decoded_code;
+    {{ ns }}OperationCodeType *optype;
+    {{ ns }}uint16 code16;
+    {{ ns }}uint32 code32;
 } OpDecodeContext;
 
 /* op constants */
@@ -27,9 +27,9 @@ typedef struct {
             return 1;
         }
 
-        context->optype->code_id = OpCodeId_{{ op.name }};
-        context->optype->format_id = OP_CODE_FORMAT_{{ op.name }};
-        context->decoded_code->type_id = OP_CODE_FORMAT_{{ op.name }};
+        context->optype->code_id = {{ ns }}OpCodeId_{{ op.name }};
+        context->optype->format_id = {{ ns }}OP_CODE_FORMAT_{{ op.name }};
+        context->decoded_code->type_id = {{ ns }}OP_CODE_FORMAT_{{ op.name }};
         {% for arg in op.arg_parsers %}
             context->decoded_code->code.{{ op.name }}.{{ arg.name }} = (context->code{{ op.type_bit_size }} & OP_ARG_MASK_{{ op.name }}_{{ arg.name }}) >> OP_ARG_END_BIT_{{ op.name }}_{{ arg.name }};
         {% endfor %}
@@ -38,13 +38,13 @@ typedef struct {
 {% endfor %}
 
 /* op parse function */
-int op_parse(uint16 code[OP_DECODE_MAX], OpDecodedCodeType *decoded_code, OperationCodeType *optype) {
+int {{ ns }}op_parse({{ ns }}uint16 code[{{ ns }}OP_DECODE_MAX], {{ ns }}OpDecodedCodeType *decoded_code, {{ ns }}OperationCodeType *optype) {
     OpDecodeContext context;
     context.code = &code[0];
     context.decoded_code = decoded_code;
     context.optype = optype;
-    context.code16 = (uint16) code[0];
-    context.code32 = *((uint32 *) &code[0]);
+    context.code16 = ({{ ns }}uint16) code[0];
+    context.code32 = *(({{ ns }}uint32 *) &code[0]);
 
     {% for op in op_parsers %}
         if (op_parse_{{ op.name }}(&context) == 0) {

@@ -1,4 +1,13 @@
-from mcparser_gen.generator import _create_mcparser_model, _generate, ArgParser, McParser, OpParser
+from mcparser_gen.generator import (
+    ArgParser, MachineParser, McParser, OpParser, _create_mcparser_model,
+    _generate)
+
+
+def test_create_mcparser_model_namespace() -> None:
+    mcparser_model = _create_mcparser_model(
+        'test/arm.yaml')
+
+    mcparser_model.machine_parser.namespace == 'arm'
 
 
 def test_create_mcparser_model_32bit_instructions() -> None:
@@ -49,6 +58,7 @@ def test_create_mcparser_model_16bit_instructions() -> None:
 
 def test_generate() -> None:
     mcparser_model = McParser(
+        machine_parser=MachineParser(namespace='ns'),
         op_parsers=[
             OpParser(
                 name='add_1',

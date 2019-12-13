@@ -1,5 +1,7 @@
-basics:
+machine:
   endian: little
+  decoder:
+    namespace: arm
 instructions:
   - name: add_1
     format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxxxxxxxxxx:imm12

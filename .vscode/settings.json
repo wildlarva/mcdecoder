@@ -7,6 +7,9 @@
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
     "files.associations": {
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "mcparser.h": "c",
+        "system_error": "c",
+        "stdint.h": "c"
     }
 }
