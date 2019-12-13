@@ -1,9 +1,11 @@
 #ifndef _MC_PARSER_H_
 #define _MC_PARSER_H_
 
-typedef unsigned char uint8;
-typedef unsigned short uint16;
-typedef unsigned long uint32;
+#include <stdint.h>
+
+typedef uint8_t uint8;
+typedef uint16_t uint16;
+typedef uint32_t uint32;
 
 #define OP_CODE_FORMAT_NUM	OP_CODE_FORMAT_UNKNOWN
 
