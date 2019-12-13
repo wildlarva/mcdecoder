@@ -1,0 +1,29 @@
+# Specification of machine code description file
+#
+# Machine code description file needs to be a YAML format.
+
+# Describes a machine
+machine:
+  decoder: # [optional] Decoder information for the machine
+    namespace: arm # [optional] Namespace for the symbols of a generated decoder
+
+# Describes instructions
+#
+# Each list element represents an instruction.
+instructions:
+  - name: add_1 # Name of the instruction
+
+    # Encoding format of the instruction
+    #
+    # <field_bits>[:<field_name>]|...
+    # where
+    #   <field_bits>: Encoding format of an instruction field
+    #                 It takes an array of 0, 1, or x.
+    #                 '0' or '1' represents a fixed bit of an instruction field. 'x' represents any bit.
+    #   <field_name>: [optional] Name of an instruction field
+    #
+    # Instruction fields are separated by bar symbol(|).
+    format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxxxxxxxxxx:imm12
+
+  - name: push_1
+    format: xxxx:cond|100100|1|0|1101|xxxxxxxxxxxxxxxx:register_list
