@@ -23,6 +23,8 @@ MC parser files are generated as
 * out/mcparser.c
 * out/mcparser.h
 
+See [the specification of machine code description file](doc/mc_desc_spec.yaml).
+
 ## For developers
 
 ### How to setup environment for development

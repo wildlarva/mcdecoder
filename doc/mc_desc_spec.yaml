@@ -19,8 +19,8 @@ instructions:
     # where
     #   <field_bits>: Encoding format of an instruction field
     #                 It takes an array of 0, 1, or x.
-    #                 '0' or '1' represents a fixed bit of an instruction field. 'x' represents any bit.
-    #   <field_name>: [optional] Name of an instruction field
+    #                 '0' or '1' represents a fixed bit of the instruction field. 'x' represents any bit.
+    #   <field_name>: [optional] Name of the instruction field
     #
     # Instruction fields are separated by bar symbol(|).
     format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxxxxxxxxxx:imm12
