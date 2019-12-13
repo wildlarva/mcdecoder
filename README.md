@@ -25,7 +25,7 @@ MC parser files are generated as
 
 ## For developers
 
-## How to setup environment for development
+### How to setup environment for development
 
 ```bash
 # Clone mcparser-gen
@@ -45,7 +45,7 @@ pip install -e .
 
 After the installation, changes to the cloned directory are immediately reflected to mcparser-gen you installed.
 
-## How to run tests for mcparser-gen
+### How to run tests for mcparser-gen
 
 ```bash
 # Switch to virtual environment
@@ -56,7 +56,7 @@ source env/bin/activate
 pytest
 ```
 
-## How to run tests for generated parsers
+### How to run tests for generated parsers
 
 ```bash
 # Switch to virtual environment
