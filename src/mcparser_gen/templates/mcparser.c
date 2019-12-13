@@ -1,5 +1,13 @@
 #include "mcparser.h"
 
+typedef struct {
+    uint16 *code;
+    OpDecodedCodeType *decoded_code;
+    OperationCodeType *optype;
+    uint16 code16;
+    uint32 code32;
+} OpDecodeContext;
+
 /* op constants */
 {% for op in op_parsers %}
     /* {{ op.name }} */
@@ -14,17 +22,16 @@
 /* individual op parse functions */
 {% for op in op_parsers %}
     /* {{ op.name }} */
-    static int op_parse_{{ op.name }}(uint16 code[OP_DECODE_MAX], OpDecodedCodeType *decoded_code, OperationCodeType *optype) {
-        uint32 code32 = *(uint32 *) &code[0];
-        if ((code32 & OP_FB_MASK_{{ op.name }}) != OP_FB_{{ op.name }}) {
+    static int op_parse_{{ op.name }}(OpDecodeContext *context) {
+        if ((context->code32 & OP_FB_MASK_{{ op.name }}) != OP_FB_{{ op.name }}) {
             return 1;
         }
 
-        optype->code_id = OpCodeId_{{ op.name }};
-        optype->format_id = OP_CODE_FORMAT_{{ op.name }};
-        decoded_code->type_id = OP_CODE_FORMAT_{{ op.name }};
+        context->optype->code_id = OpCodeId_{{ op.name }};
+        context->optype->format_id = OP_CODE_FORMAT_{{ op.name }};
+        context->decoded_code->type_id = OP_CODE_FORMAT_{{ op.name }};
         {% for arg in op.arg_parsers %}
-            decoded_code->code.{{ op.name }}.{{ arg.name }} = (code32 & OP_ARG_MASK_{{ op.name }}_{{ arg.name }}) >> OP_ARG_END_BIT_{{ op.name }}_{{ arg.name }};
+            context->decoded_code->code.{{ op.name }}.{{ arg.name }} = (context->code32 & OP_ARG_MASK_{{ op.name }}_{{ arg.name }}) >> OP_ARG_END_BIT_{{ op.name }}_{{ arg.name }};
         {% endfor %}
         return 0;
     }
@@ -32,8 +39,15 @@
 
 /* op parse function */
 int op_parse(uint16 code[OP_DECODE_MAX], OpDecodedCodeType *decoded_code, OperationCodeType *optype) {
+    OpDecodeContext context;
+    context.code = &code[0];
+    context.decoded_code = decoded_code;
+    context.optype = optype;
+    context.code16 = (uint16) code[0];
+    context.code32 = *((uint32 *) &code[0]);
+
     {% for op in op_parsers %}
-        if (op_parse_{{ op.name }}(code, decoded_code, optype) == 0) {
+        if (op_parse_{{ op.name }}(&context) == 0) {
             return 0;
         }
     {% endfor %}

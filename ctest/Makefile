@@ -12,6 +12,7 @@ test: all
 generate: out/mcparser.c out/mcparser.h
 
 clean: setup
+	rm -vfr out
 	make -f build.mk clean
 
 setup: build/conanbuildinfo.mak
