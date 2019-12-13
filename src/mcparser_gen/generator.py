@@ -32,6 +32,7 @@ class OpParser(NamedTuple):
     name: str
     fixed_bits_mask: int
     fixed_bits: int
+    type_bit_size: int
     arg_parsers: List[ArgParser]
 
 
@@ -93,8 +94,8 @@ def _create_opparser_model(instruction_desc_model: InstructionDescrition) -> OpP
 
     for arg_format in instruction_format.arg_formats:
         # Calculate bit size and position
-        bit_size = len(arg_format.bits_format)
-        end_bit = start_bit - bit_size + 1
+        arg_bit_size = len(arg_format.bits_format)
+        end_bit = start_bit - arg_bit_size + 1
 
         # Build arg mask and fixed bits information
         arg_mask = 0
@@ -112,32 +113,33 @@ def _create_opparser_model(instruction_desc_model: InstructionDescrition) -> OpP
 
         # Build arg parser for a named arg
         if arg_format.name is not None:
-            if bit_size <= 8:
-                type_bit_size = 8
-            elif bit_size <= 16:
-                type_bit_size = 16
-            else:
-                type_bit_size = 32
-
             arg_parser = ArgParser(
                 name=arg_format.name,
                 mask=arg_mask,
                 start_bit=start_bit,
                 end_bit=end_bit,
-                type_bit_size=type_bit_size)
+                type_bit_size=_calc_type_bit_size(arg_bit_size))
             arg_parsers.append(arg_parser)
 
         # Change start bit to next arg position
-        start_bit -= bit_size
+        start_bit -= arg_bit_size
 
     # Create OP parser model
     return OpParser(
         name=instruction_desc_model['name'],
         fixed_bits_mask=fixed_bits_mask,
         fixed_bits=fixed_bits,
+        type_bit_size=_calc_type_bit_size(instruction_bit_size),
         arg_parsers=arg_parsers,
     )
 
+def _calc_type_bit_size(bit_size: int) -> int:
+    if bit_size <= 8:
+        return 8
+    elif bit_size <= 16:
+        return 16
+    else:
+        return 32
 
 def _parse_instruction_format(instruction_format: str) -> InstructionFormat:
     """Parse an instruction format and returns an array of arg formats"""

@@ -23,7 +23,7 @@ typedef struct {
 {% for op in op_parsers %}
     /* {{ op.name }} */
     static int op_parse_{{ op.name }}(OpDecodeContext *context) {
-        if ((context->code32 & OP_FB_MASK_{{ op.name }}) != OP_FB_{{ op.name }}) {
+        if ((context->code{{ op.type_bit_size }} & OP_FB_MASK_{{ op.name }}) != OP_FB_{{ op.name }}) {
             return 1;
         }
 
@@ -31,7 +31,7 @@ typedef struct {
         context->optype->format_id = OP_CODE_FORMAT_{{ op.name }};
         context->decoded_code->type_id = OP_CODE_FORMAT_{{ op.name }};
         {% for arg in op.arg_parsers %}
-            context->decoded_code->code.{{ op.name }}.{{ arg.name }} = (context->code32 & OP_ARG_MASK_{{ op.name }}_{{ arg.name }}) >> OP_ARG_END_BIT_{{ op.name }}_{{ arg.name }};
+            context->decoded_code->code.{{ op.name }}.{{ arg.name }} = (context->code{{ op.type_bit_size }} & OP_ARG_MASK_{{ op.name }}_{{ arg.name }}) >> OP_ARG_END_BIT_{{ op.name }}_{{ arg.name }};
         {% endfor %}
         return 0;
     }

@@ -1,0 +1,7 @@
+basics:
+  endian: little
+instructions:
+  - name: c_addi_1
+    format: 000:funct3|x:imm_1|xxxxx:dest|xxxxx:imm_2|01:op
+  - name: c_sd_1
+    format: 111:funct3|xxxxxx:offset|xxxxx:src|10:op
