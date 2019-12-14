@@ -66,5 +66,5 @@ cd <path-to-cloned-directory>
 source env/bin/activate
 
 # Run tests
-make test -C ctest
+make -C ctest clean test
 ```
