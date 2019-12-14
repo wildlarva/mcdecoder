@@ -5,7 +5,7 @@
 ### Installation
 
 ```bash
-git clone https://github.com/wildlarva/mcparser-gen.git
+git clone https://github.com/wildlarva/mcdecoder.git
 cd <path-to-cloned-directory>
 python3.8 -m pip install .
 ```
@@ -31,7 +31,7 @@ See [the specification of machine code description file](doc/mc_desc_spec.yaml).
 
 ```bash
 # Clone mcdecoder
-git clone https://github.com/wildlarva/mcparser-gen.git
+git clone https://github.com/wildlarva/mcdecoder.git
 
 # Create virtual environment and switch to it
 cd <path-to-cloned-directory>
