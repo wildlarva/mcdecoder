@@ -1,5 +1,5 @@
-#ifndef _{{ ns }}MC_PARSER_H_
-#define _{{ ns }}MC_PARSER_H_
+#ifndef _{{ ns }}MC_DECODER_H_
+#define _{{ ns }}MC_DECODER_H_
 
 #include <stdint.h>
 
@@ -10,15 +10,15 @@ typedef uint32_t {{ ns }}uint32;
 #define {{ ns }}OP_CODE_FORMAT_NUM	{{ ns }}OP_CODE_FORMAT_UNKNOWN
 
 typedef enum {
-	{% for op in op_parsers %}
-		{{ ns }}OP_CODE_FORMAT_{{ op.name }},
+	{% for inst in instruction_decoders %}
+		{{ ns }}OP_CODE_FORMAT_{{ inst.name }},
 	{% endfor %}
 	{{ ns }}OP_CODE_FORMAT_UNKNOWN,
 } {{ ns }}OpCodeFormatId;
 
 typedef enum {
-	{% for op in op_parsers %}
-		{{ ns }}OpCodeId_{{ op.name }},
+	{% for inst in instruction_decoders %}
+		{{ ns }}OpCodeId_{{ inst.name }},
 	{% endfor %}
 	{{ ns }}OpCodeId_Num,
 } {{ ns }}OpCodeId;
@@ -29,19 +29,19 @@ typedef struct {
 } {{ ns }}OperationCodeType;
 
 
-{% for op in op_parsers %}
+{% for inst in instruction_decoders %}
 typedef struct {
-	{% for arg in op.arg_parsers %}
-		{{ ns }}uint{{ arg.type_bit_size }} {{ arg.name }};	/* {{ arg.start_bit }}-{{ arg.end_bit }} */
+	{% for field in inst.field_decoders %}
+		{{ ns }}uint{{ field.type_bit_size }} {{ field.name }};	/* {{ field.start_bit }}-{{ field.end_bit }} */
 	{% endfor %}
-} {{ ns }}OpCodeFormatType_{{ op.name }};
+} {{ ns }}OpCodeFormatType_{{ inst.name }};
 {% endfor %}
 
 typedef struct {
 	{{ ns }}OpCodeFormatId type_id;
     union {
-		{% for op in op_parsers %}
-        	{{ ns }}OpCodeFormatType_{{ op.name }} {{ op.name }};
+		{% for inst in instruction_decoders %}
+        	{{ ns }}OpCodeFormatType_{{ inst.name }} {{ inst.name }};
 		{% endfor %}
     } code;
 } {{ ns }}OpDecodedCodeType;
@@ -50,4 +50,4 @@ typedef struct {
 
 extern int {{ ns }}op_parse({{ ns }}uint16 code[{{ ns }}OP_DECODE_MAX], {{ ns }}OpDecodedCodeType *decoded_code, {{ ns }}OperationCodeType *optype);
 
-#endif /* !_{{ ns }}MC_PARSER_H_ */
+#endif /* !_{{ ns }}MC_DECODER_H_ */

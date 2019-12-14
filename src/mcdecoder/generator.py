@@ -26,10 +26,10 @@ class McDescription(TypedDict):
     instructions: List[InstructionDescrition]
 
 
-# Parser models
+# Decoder models
 
 
-class ArgParser(NamedTuple):
+class InstructionFieldDecoder(NamedTuple):
     name: str
     mask: int
     start_bit: int
@@ -37,95 +37,95 @@ class ArgParser(NamedTuple):
     type_bit_size: int
 
 
-class OpParser(NamedTuple):
+class InstructionDecoder(NamedTuple):
     name: str
     fixed_bits_mask: int
     fixed_bits: int
     type_bit_size: int
-    arg_parsers: List[ArgParser]
+    field_decoders: List[InstructionFieldDecoder]
 
 
-class MachineParser(NamedTuple):
+class MachineDecoder(NamedTuple):
     namespace: Optional[str]
 
 
-class McParser(NamedTuple):
-    machine_parser: MachineParser
-    op_parsers: List[OpParser]
+class McDecoder(NamedTuple):
+    machine_decoder: MachineDecoder
+    instruction_decoders: List[InstructionDecoder]
 
 
 # Instruction format
 
 
-class ArgFormat(NamedTuple):
+class InstructionFieldFormat(NamedTuple):
     name: Optional[str]
     bits_format: str
 
 
 class InstructionFormat(NamedTuple):
-    arg_formats: List[ArgFormat]
+    field_formats: List[InstructionFieldFormat]
 
 
 # External functions
 
 
 def generate(mcfile_path: str) -> bool:
-    """Generate MC parser files from MC description file"""
-    mcparser_model = _create_mcparser_model(mcfile_path)
-    return _generate(mcparser_model)
+    """Generate MC decoder files from MC description file"""
+    mcdecoder_model = _create_mcdecoder_model(mcfile_path)
+    return _generate(mcdecoder_model)
 
 
 # Internal functions
 
 
-def _create_mcparser_model(mcfile_path: str) -> McParser:
-    """Create a model which contains information of MC parser"""
+def _create_mcdecoder_model(mcfile_path: str) -> McDecoder:
+    """Create a model which contains information of MC decoder"""
     with open(mcfile_path, 'rb') as file:
         mc_desc_model = cast(
             McDescription, yaml.load(file, Loader=yaml.Loader))
 
-    machine_parser = _create_machine_parser_model(mc_desc_model['machine'])
-    op_parsers = [_create_opparser_model(
+    machine_decoder = _create_machine_decoder_model(mc_desc_model['machine'])
+    instruction_decoders = [_create_instruction_decoder_model(
         instruction_desc_model) for instruction_desc_model in mc_desc_model['instructions']]
-    return McParser(
-        machine_parser=machine_parser,
-        op_parsers=op_parsers,
+    return McDecoder(
+        machine_decoder=machine_decoder,
+        instruction_decoders=instruction_decoders,
     )
 
 
-def _create_machine_parser_model(machine_desc_model: MachineDescription) -> MachineParser:
+def _create_machine_decoder_model(machine_desc_model: MachineDescription) -> MachineDecoder:
     namespace: Optional[str] = None
     if 'decoder' in machine_desc_model:
         decoder_desc_model = machine_desc_model['decoder']
         if 'namespace' in decoder_desc_model:
             namespace = decoder_desc_model['namespace']
 
-    return MachineParser(namespace=namespace)
+    return MachineDecoder(namespace=namespace)
 
 
-def _create_opparser_model(instruction_desc_model: InstructionDescrition) -> OpParser:
-    """Create a model which contains information of individual OP parser"""
+def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrition) -> InstructionDecoder:
+    """Create a model which contains information of individual instruction decoder"""
     # Parse instruction format
     instruction_format = _parse_instruction_format(
         instruction_desc_model['format'])
 
-    instruction_bit_size = sum(map(lambda arg_format: len(
-        arg_format.bits_format), instruction_format.arg_formats))
+    instruction_bit_size = sum(map(lambda field_format: len(
+        field_format.bits_format), instruction_format.field_formats))
 
-    # Create arg parsers and build fixed bits information
-    arg_parsers: List[ArgParser] = []
+    # Create field decoders and build fixed bits information
+    field_decoders: List[InstructionFieldDecoder] = []
     start_bit = instruction_bit_size - 1
     fixed_bits_mask = 0
     fixed_bits = 0
 
-    for arg_format in instruction_format.arg_formats:
+    for field_format in instruction_format.field_formats:
         # Calculate bit size and position
-        arg_bit_size = len(arg_format.bits_format)
-        end_bit = start_bit - arg_bit_size + 1
+        field_bit_size = len(field_format.bits_format)
+        end_bit = start_bit - field_bit_size + 1
 
-        # Build arg mask and fixed bits information
-        arg_mask = 0
-        for bit_format in arg_format.bits_format:
+        # Build field mask and fixed bits information
+        field_mask = 0
+        for bit_format in field_format.bits_format:
             if bit_format == 'x':
                 fixed_bits_mask = (fixed_bits_mask << 1) | 0
                 fixed_bits = (fixed_bits << 1) | 0
@@ -133,30 +133,30 @@ def _create_opparser_model(instruction_desc_model: InstructionDescrition) -> OpP
                 fixed_bits_mask = (fixed_bits_mask << 1) | 1
                 fixed_bits = (fixed_bits << 1) | int(bit_format)
 
-            arg_mask = (arg_mask << 1) | 1
+            field_mask = (field_mask << 1) | 1
 
-        arg_mask <<= end_bit
+        field_mask <<= end_bit
 
-        # Build arg parser for a named arg
-        if arg_format.name is not None:
-            arg_parser = ArgParser(
-                name=arg_format.name,
-                mask=arg_mask,
+        # Build field decoder for a named field
+        if field_format.name is not None:
+            field_decoder = InstructionFieldDecoder(
+                name=field_format.name,
+                mask=field_mask,
                 start_bit=start_bit,
                 end_bit=end_bit,
-                type_bit_size=_calc_type_bit_size(arg_bit_size))
-            arg_parsers.append(arg_parser)
+                type_bit_size=_calc_type_bit_size(field_bit_size))
+            field_decoders.append(field_decoder)
 
-        # Change start bit to next arg position
-        start_bit -= arg_bit_size
+        # Change start bit to next field position
+        start_bit -= field_bit_size
 
-    # Create OP parser model
-    return OpParser(
+    # Create OP decoder model
+    return InstructionDecoder(
         name=instruction_desc_model['name'],
         fixed_bits_mask=fixed_bits_mask,
         fixed_bits=fixed_bits,
         type_bit_size=_calc_type_bit_size(instruction_bit_size),
-        arg_parsers=arg_parsers,
+        field_decoders=field_decoders,
     )
 
 
@@ -170,46 +170,46 @@ def _calc_type_bit_size(bit_size: int) -> int:
 
 
 def _parse_instruction_format(instruction_format: str) -> InstructionFormat:
-    """Parse an instruction format and returns an array of arg formats"""
-    arg_formats = instruction_format.split('|')
+    """Parse an instruction format and returns an array of field formats"""
+    field_formats = instruction_format.split('|')
     return InstructionFormat(
-        arg_formats=[_parse_arg_format(arg_format) for arg_format in arg_formats])
+        field_formats=[_parse_field_format(field_format) for field_format in field_formats])
 
 
-def _parse_arg_format(arg_format: str) -> ArgFormat:
-    """Parse an arg format and returns an arg format dictionary"""
-    arg_formats: List[Optional[str]] = arg_format.split(':')
-    bits_format, arg_name = (arg_formats + [None])[:2]
-    return ArgFormat(
-        name=arg_name,
+def _parse_field_format(field_format: str) -> InstructionFieldFormat:
+    """Parse an field format and returns an field format dictionary"""
+    field_formats: List[Optional[str]] = field_format.split(':')
+    bits_format, field_name = (field_formats + [None])[:2]
+    return InstructionFieldFormat(
+        name=field_name,
         bits_format=cast(str, bits_format),
     )
 
 
-def _generate(mcparser_model: McParser) -> bool:
-    """Generate MC parser files from a MC parser model"""
+def _generate(mcdecoder_model: McDecoder) -> bool:
+    """Generate MC decoder files from a MC decoder model"""
     env = jinja2.Environment(
-        loader=jinja2.PackageLoader('mcparser_gen', 'templates')
+        loader=jinja2.PackageLoader('mcdecoder', 'templates')
     )
-    parser_header_template = env.get_template('mcparser.h')
-    parser_source_template = env.get_template('mcparser.c')
+    decoder_header_template = env.get_template('mcdecoder.h')
+    decoder_source_template = env.get_template('mcdecoder.c')
 
     if not os.path.exists('out'):
         os.mkdir('out')
     elif not os.path.isdir('out'):
         return False
 
-    ns_prefix = _make_namespace_prefix(mcparser_model.machine_parser.namespace)
+    ns_prefix = _make_namespace_prefix(mcdecoder_model.machine_decoder.namespace)
     template_args = {
         'ns': ns_prefix,
-        'op_parsers': mcparser_model.op_parsers
+        'instruction_decoders': mcdecoder_model.instruction_decoders
     }
 
-    with open(f'out/{ns_prefix}mcparser.h', 'w') as file:
-        file.write(parser_header_template.render(template_args))
+    with open(f'out/{ns_prefix}mcdecoder.h', 'w') as file:
+        file.write(decoder_header_template.render(template_args))
 
-    with open(f'out/{ns_prefix}mcparser.c', 'w') as file:
-        file.write(parser_source_template.render(template_args))
+    with open(f'out/{ns_prefix}mcdecoder.c', 'w') as file:
+        file.write(decoder_source_template.render(template_args))
 
     return True
 

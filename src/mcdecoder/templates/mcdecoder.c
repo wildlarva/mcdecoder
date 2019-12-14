@@ -1,4 +1,4 @@
-#include "{{ ns }}mcparser.h"
+#include "{{ ns }}mcdecoder.h"
 
 typedef struct {
     {{ ns }}uint16 *code;
@@ -9,29 +9,29 @@ typedef struct {
 } OpDecodeContext;
 
 /* op constants */
-{% for op in op_parsers %}
-    /* {{ op.name }} */
-    #define OP_FB_MASK_{{ op.name }} (0x{{ '%08x'|format(op.fixed_bits_mask) }}l) /* fixed bits mask */
-    #define OP_FB_{{ op.name }} (0x{{ '%08x'|format(op.fixed_bits) }}l) /* fixed bits */
-    {% for arg in op.arg_parsers %}
-        #define OP_ARG_MASK_{{ op.name }}_{{ arg.name }} (0x{{ '%08x'|format(arg.mask) }}l) /* arg mask: {{ arg.name }} */
-        #define OP_ARG_END_BIT_{{ op.name }}_{{ arg.name }} ({{ arg.end_bit }}) /* arg end bit: {{ arg.name }} */
+{% for inst in instruction_decoders %}
+    /* {{ inst.name }} */
+    #define OP_FB_MASK_{{ inst.name }} (0x{{ '%08x'|format(inst.fixed_bits_mask) }}l) /* fixed bits mask */
+    #define OP_FB_{{ inst.name }} (0x{{ '%08x'|format(inst.fixed_bits) }}l) /* fixed bits */
+    {% for field in inst.field_decoders %}
+        #define OP_FIELD_MASK_{{ inst.name }}_{{ field.name }} (0x{{ '%08x'|format(field.mask) }}l) /* field mask: {{ field.name }} */
+        #define OP_FIELD_END_BIT_{{ inst.name }}_{{ field.name }} ({{ field.end_bit }}) /* field end bit: {{ field.name }} */
     {% endfor %}
 {% endfor %}
 
 /* individual op parse functions */
-{% for op in op_parsers %}
-    /* {{ op.name }} */
-    static int op_parse_{{ op.name }}(OpDecodeContext *context) {
-        if ((context->code{{ op.type_bit_size }} & OP_FB_MASK_{{ op.name }}) != OP_FB_{{ op.name }}) {
+{% for inst in instruction_decoders %}
+    /* {{ inst.name }} */
+    static int op_parse_{{ inst.name }}(OpDecodeContext *context) {
+        if ((context->code{{ inst.type_bit_size }} & OP_FB_MASK_{{ inst.name }}) != OP_FB_{{ inst.name }}) {
             return 1;
         }
 
-        context->optype->code_id = {{ ns }}OpCodeId_{{ op.name }};
-        context->optype->format_id = {{ ns }}OP_CODE_FORMAT_{{ op.name }};
-        context->decoded_code->type_id = {{ ns }}OP_CODE_FORMAT_{{ op.name }};
-        {% for arg in op.arg_parsers %}
-            context->decoded_code->code.{{ op.name }}.{{ arg.name }} = (context->code{{ op.type_bit_size }} & OP_ARG_MASK_{{ op.name }}_{{ arg.name }}) >> OP_ARG_END_BIT_{{ op.name }}_{{ arg.name }};
+        context->optype->code_id = {{ ns }}OpCodeId_{{ inst.name }};
+        context->optype->format_id = {{ ns }}OP_CODE_FORMAT_{{ inst.name }};
+        context->decoded_code->type_id = {{ ns }}OP_CODE_FORMAT_{{ inst.name }};
+        {% for field in inst.field_decoders %}
+            context->decoded_code->code.{{ inst.name }}.{{ field.name }} = (context->code{{ inst.type_bit_size }} & OP_FIELD_MASK_{{ inst.name }}_{{ field.name }}) >> OP_FIELD_END_BIT_{{ inst.name }}_{{ field.name }};
         {% endfor %}
         return 0;
     }
@@ -46,8 +46,8 @@ int {{ ns }}op_parse({{ ns }}uint16 code[{{ ns }}OP_DECODE_MAX], {{ ns }}OpDecod
     context.code16 = ({{ ns }}uint16) code[0];
     context.code32 = *(({{ ns }}uint32 *) &code[0]);
 
-    {% for op in op_parsers %}
-        if (op_parse_{{ op.name }}(&context) == 0) {
+    {% for inst in instruction_decoders %}
+        if (op_parse_{{ inst.name }}(&context) == 0) {
             return 0;
         }
     {% endfor %}

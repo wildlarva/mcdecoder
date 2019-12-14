@@ -1,5 +1,5 @@
 import sys
-from mcparser_gen import generator
+from mcdecoder import generator
 
 
 def main() -> None:
@@ -9,7 +9,7 @@ def main() -> None:
 
     result = generator.generate(sys.argv[1])
     if result:
-        print('Generated MC parsers.')
+        print('Generated MC decoders.')
     else:
         print('Error occurred on generation.')
 

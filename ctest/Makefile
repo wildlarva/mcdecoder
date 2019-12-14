@@ -9,7 +9,7 @@ all: setup generate
 test: all
 	make -f build.mk test
 
-generate: out/arm_mcparser.c out/arm_mcparser.h out/riscv_mcparser.c out/riscv_mcparser.h
+generate: out/arm_mcdecoder.c out/arm_mcdecoder.h out/riscv_mcdecoder.c out/riscv_mcdecoder.h
 
 clean: setup
 	rm -vfr out
@@ -22,8 +22,8 @@ build/conanbuildinfo.mak: conanfile.txt
 	mkdir build && \
 	conan install -if build .
 
-out/arm_mcparser.c out/arm_mcparser.h: ../test/arm.yaml
-	python3.8 -m mcparser_gen $<
+out/arm_mcdecoder.c out/arm_mcdecoder.h: ../test/arm.yaml
+	python3.8 -m mcdecoder $<
 
-out/riscv_mcparser.c out/riscv_mcparser.h: ../test/riscv.yaml
-	python3.8 -m mcparser_gen $<
+out/riscv_mcdecoder.c out/riscv_mcdecoder.h: ../test/riscv.yaml
+	python3.8 -m mcdecoder $<

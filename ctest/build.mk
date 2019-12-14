@@ -6,13 +6,13 @@ include build/conanbuildinfo.mak
 
 CXX_SRCS = \
 	test.cpp \
-	out/arm_mcparser.c \
-	out/riscv_mcparser.c
+	out/arm_mcdecoder.c \
+	out/riscv_mcdecoder.c
 
 CXX_OBJ_FILES = \
 	build/test.o \
-	build/arm_mcparser.o \
-	build/riscv_mcparser.o
+	build/arm_mcdecoder.o \
+	build/riscv_mcdecoder.o
 
 EXE_FILENAME = \
 	build/test

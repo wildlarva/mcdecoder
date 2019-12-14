@@ -2,11 +2,11 @@
 
 extern "C"
 {
-#include "out/arm_mcparser.h"
-#include "out/riscv_mcparser.h"
+#include "out/arm_mcdecoder.h"
+#include "out/riscv_mcdecoder.h"
 }
 
-TEST(op_parse, should_parse_32bit_instructions)
+TEST(op_parse, should_decode_32bit_instructions)
 {
   // constants
   unsigned char machine_codes[] = {
@@ -47,7 +47,7 @@ TEST(op_parse, should_parse_32bit_instructions)
   EXPECT_EQ(decoded_code_add.code.add_1.imm12, 0x04); /* 11-0 bit */
 }
 
-TEST(op_parse, should_parse_16bit_instructions)
+TEST(op_decode, should_decode_16bit_instructions)
 {
   // constants
   unsigned char machine_codes[] = {

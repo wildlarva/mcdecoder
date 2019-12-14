@@ -129,5 +129,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# mcparser-gen
+# mcdecoder
 out/
