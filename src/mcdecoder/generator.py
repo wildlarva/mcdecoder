@@ -28,6 +28,7 @@ class McDescription(TypedDict):
 
 # Decoder models
 class InstructionSubfieldDecoder(NamedTuple):
+    index: int
     mask: int
     start_bit_in_instruction: int
     end_bit_in_instruction: int
@@ -36,9 +37,6 @@ class InstructionSubfieldDecoder(NamedTuple):
 
 class InstructionFieldDecoder(NamedTuple):
     name: str
-    mask: int # obsolete
-    start_bit: int # obsolete
-    end_bit: int # obsolete
     type_bit_size: int
     subfield_decoders: List[InstructionSubfieldDecoder]
 
@@ -147,11 +145,8 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
         if field_format.name is not None:
             field_decoder = InstructionFieldDecoder(
                 name=field_format.name,
-                mask=field_mask,
-                start_bit=start_bit,
-                end_bit=end_bit,
                 type_bit_size=_calc_type_bit_size(field_bit_size),
-                subfield_decoders=[InstructionSubfieldDecoder(mask=field_mask, start_bit_in_instruction=start_bit, end_bit_in_instruction=end_bit, end_bit_in_field=0)])
+                subfield_decoders=[InstructionSubfieldDecoder(index=0, mask=field_mask, start_bit_in_instruction=start_bit, end_bit_in_instruction=end_bit, end_bit_in_field=0)])
             field_decoders.append(field_decoder)
 
         # Change start bit to next field position

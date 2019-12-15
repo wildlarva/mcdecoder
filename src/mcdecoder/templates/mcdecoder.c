@@ -14,8 +14,12 @@ typedef struct {
     #define OP_FB_MASK_{{ inst.name }} (0x{{ '%08x'|format(inst.fixed_bits_mask) }}l) /* fixed bits mask */
     #define OP_FB_{{ inst.name }} (0x{{ '%08x'|format(inst.fixed_bits) }}l) /* fixed bits */
     {% for field in inst.field_decoders %}
-        #define OP_FIELD_MASK_{{ inst.name }}_{{ field.name }} (0x{{ '%08x'|format(field.mask) }}l) /* field mask: {{ field.name }} */
-        #define OP_FIELD_END_BIT_{{ inst.name }}_{{ field.name }} ({{ field.end_bit }}) /* field end bit: {{ field.name }} */
+        {% for sf in field.subfield_decoders %}
+            /* {{ sf.index }}th subfield of the field '{{ field.name }}' */
+            #define OP_SF_MASK_{{ inst.name }}_{{ field.name }}_{{ sf.index }} (0x{{ '%08x'|format(sf.mask) }}l) /* subfield mask */
+            #define OP_SF_EBII_{{ inst.name }}_{{ field.name }}_{{ sf.index }} ({{ sf.end_bit_in_instruction }}) /* subfield end bit position in instruction */
+            #define OP_SF_EBIF_{{ inst.name }}_{{ field.name }}_{{ sf.index }} ({{ sf.end_bit_in_field }}) /* subfield end bit position in field */
+        {% endfor %}
     {% endfor %}
 {% endfor %}
 
@@ -31,7 +35,10 @@ typedef struct {
         context->optype->format_id = {{ ns }}OP_CODE_FORMAT_{{ inst.name }};
         context->decoded_code->type_id = {{ ns }}OP_CODE_FORMAT_{{ inst.name }};
         {% for field in inst.field_decoders %}
-            context->decoded_code->code.{{ inst.name }}.{{ field.name }} = (context->code{{ inst.type_bit_size }} & OP_FIELD_MASK_{{ inst.name }}_{{ field.name }}) >> OP_FIELD_END_BIT_{{ inst.name }}_{{ field.name }};
+            context->decoded_code->code.{{ inst.name }}.{{ field.name }} =
+            {% for sf in field.subfield_decoders %}
+                ((context->code{{ inst.type_bit_size }} & OP_SF_MASK_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) >> OP_SF_EBII_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) << OP_SF_EBIF_{{ inst.name }}_{{ field.name }}_{{ sf.index }};
+            {% endfor %}
         {% endfor %}
         return 0;
     }

@@ -25,10 +25,15 @@ def test_create_mcdecoder_model_32bit_instructions() -> None:
 
     field_cond = instruction_decoder_model_add_1.field_decoders[0]
     assert field_cond.name == 'cond'
-    assert field_cond.mask == 0xf0000000
-    assert field_cond.start_bit == 31
-    assert field_cond.end_bit == 28
     assert field_cond.type_bit_size == 8
+    assert len(field_cond.subfield_decoders) == 1
+
+    subfield_cond = field_cond.subfield_decoders[0]
+    assert subfield_cond.index == 0
+    assert subfield_cond.mask == 0xf0000000
+    assert subfield_cond.start_bit_in_instruction == 31
+    assert subfield_cond.end_bit_in_instruction == 28
+    assert subfield_cond.end_bit_in_field == 0
 
     assert instruction_decoder_model_push_1.name == 'push_1'
 
@@ -48,10 +53,15 @@ def test_create_mcdecoder_model_16bit_instructions() -> None:
 
     field_cond = instruction_decoder_model_addi_1.field_decoders[0]
     assert field_cond.name == 'funct3'
-    assert field_cond.mask == 0xe000
-    assert field_cond.start_bit == 15
-    assert field_cond.end_bit == 13
     assert field_cond.type_bit_size == 8
+    assert len(field_cond.subfield_decoders) == 1
+
+    subfield_cond = field_cond.subfield_decoders[0]
+    assert subfield_cond.index == 0
+    assert subfield_cond.mask == 0xe000
+    assert subfield_cond.start_bit_in_instruction == 15
+    assert subfield_cond.end_bit_in_instruction == 13
+    assert subfield_cond.end_bit_in_field == 0
 
     assert instruction_decoder_model_sd_1.name == 'c_sd_1'
 
@@ -66,10 +76,10 @@ def test_generate() -> None:
                 fixed_bits=0x02800000,
                 type_bit_size=32,
                 field_decoders=[
-                    InstructionFieldDecoder(name='cond', mask=0xf0000000,
-                              start_bit=31, end_bit=28, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(mask=0xf0000000, start_bit_in_instruction=31, end_bit_in_instruction=28, end_bit_in_field=0)]),
-                    InstructionFieldDecoder(name='S', mask=0x00100000, start_bit=20,
-                              end_bit=20, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(mask=0x00100000, start_bit_in_instruction=20, end_bit_in_instruction=20, end_bit_in_field=0)]),
+                    InstructionFieldDecoder(name='cond', type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(
+                        index=0, mask=0xf0000000, start_bit_in_instruction=31, end_bit_in_instruction=28, end_bit_in_field=0)]),
+                    InstructionFieldDecoder(name='S', type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(
+                        index=0, mask=0x00100000, start_bit_in_instruction=20, end_bit_in_instruction=20, end_bit_in_field=0)]),
                 ],
             ),
             InstructionDecoder(
@@ -78,10 +88,10 @@ def test_generate() -> None:
                 fixed_bits=0x02800000,
                 type_bit_size=32,
                 field_decoders=[
-                    InstructionFieldDecoder(name='cond', mask=0xf0000000, start_bit=31,
-                              end_bit=28, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(mask=0xf0000000, start_bit_in_instruction=31, end_bit_in_instruction=28, end_bit_in_field=0)]),
-                    InstructionFieldDecoder(name='register_list', mask=0x0000ffff,
-                              start_bit=15,  end_bit=0, type_bit_size=16, subfield_decoders=[InstructionSubfieldDecoder(mask=0x0000ffff, start_bit_in_instruction=15, end_bit_in_instruction=0, end_bit_in_field=0)]),
+                    InstructionFieldDecoder(name='cond', type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(
+                        index=0, mask=0xf0000000, start_bit_in_instruction=31, end_bit_in_instruction=28, end_bit_in_field=0)]),
+                    InstructionFieldDecoder(name='register_list', type_bit_size=16, subfield_decoders=[InstructionSubfieldDecoder(
+                        index=0, mask=0x0000ffff, start_bit_in_instruction=15, end_bit_in_instruction=0, end_bit_in_field=0)]),
                 ],
             ),
         ],
