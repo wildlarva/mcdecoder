@@ -1,4 +1,5 @@
 import os
+import re
 from typing import Any, Dict, List, NamedTuple, Optional, TypedDict, cast
 
 import jinja2
@@ -117,6 +118,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
     # Parse instruction format
     instruction_format = _parse_instruction_format(
         instruction_desc_model['format'])
+    print(instruction_format)
 
     instruction_bit_size = sum(map(lambda field_format: len(
         field_format.bits_format), instruction_format.field_formats))
@@ -234,13 +236,33 @@ def _parse_instruction_format(instruction_format: str) -> InstructionFormat:
 
 def _parse_field_format(field_format: str) -> InstructionFieldFormat:
     """Parse an field format and returns an field format dictionary"""
-    field_formats: List[Optional[str]] = field_format.split(':')
-    bits_format, field_name = (field_formats + [None])[:2]
-    bits_format = cast(str, bits_format)
+    # Parse each construct of field format
+    matched = re.match(r'([01x]+)(:(\w+)(\[([\d:,]+)\])?)?', field_format) # <field_bits>:<field_name>[field_start:field_end, ...]
+
+    bits_format = matched.group(1)
+    field_name = matched.group(3)
+    field_bit_ranges_str = matched.group(5)
+ 
+    # Parse bit ranges
+    bit_ranges: List[BitRange] = []
+    if field_bit_ranges_str is not None:
+        field_bit_range_strs = field_bit_ranges_str.split(',')
+        for field_bit_range_str in field_bit_range_strs:
+            field_bit_start, field_bit_end = (cast(List[Optional[str]], field_bit_range_str.split(':')) + [None, None])[:2]
+            if field_bit_end is not None:
+                bit_range = BitRange(start=int(cast(str, field_bit_start)), end=int(cast(str, field_bit_end)))
+            else:
+                bit_range = BitRange(start=int(cast(str, field_bit_start)), end=int(cast(str, field_bit_start)))
+            bit_ranges.append(bit_range)
+    else:
+        # If there are no bit ranges, treat as a single bit range
+        bit_ranges.append(BitRange(start=len(bits_format) - 1, end=0))
+
+    # Build field format model
     return InstructionFieldFormat(
         name=field_name,
         bits_format=bits_format,
-        bit_ranges=[BitRange(start=len(bits_format) - 1, end=0)],
+        bit_ranges=bit_ranges,
     )
 
 

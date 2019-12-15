@@ -37,7 +37,7 @@ typedef struct {
         {% for field in inst.field_decoders %}
             context->decoded_code->code.{{ inst.name }}.{{ field.name }} =
             {% for sf in field.subfield_decoders %}
-                ((context->code{{ inst.type_bit_size }} & OP_SF_MASK_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) >> OP_SF_EBII_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) << OP_SF_EBIF_{{ inst.name }}_{{ field.name }}_{{ sf.index }};
+                {% if not loop.first %}| {% endif %}(((context->code{{ inst.type_bit_size }} & OP_SF_MASK_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) >> OP_SF_EBII_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) << OP_SF_EBIF_{{ inst.name }}_{{ field.name }}_{{ sf.index }}){% if loop.last %};{% endif %}
             {% endfor %}
         {% endfor %}
         return 0;

@@ -76,9 +76,8 @@ TEST(op_decode, should_decode_16bit_instructions)
   EXPECT_EQ(optype_addi.format_id, riscv_OP_CODE_FORMAT_c_addi_1);
   EXPECT_EQ(decoded_code_addi.type_id, riscv_OP_CODE_FORMAT_c_addi_1);
   EXPECT_EQ(decoded_code_addi.code.c_addi_1.funct3, 0x00);            /* 15-13 bit */
-  EXPECT_EQ(decoded_code_addi.code.c_addi_1.imm_1, 0x01); /* 12 bit */
+  EXPECT_EQ(decoded_code_addi.code.c_addi_1.imm, (0x1 << 5) | 0x10); /* 12, 6-2 bit */
   EXPECT_EQ(decoded_code_addi.code.c_addi_1.dest, 0x02); /* 11-7 bit */
-  EXPECT_EQ(decoded_code_addi.code.c_addi_1.imm_2, 0x10); /* 6-2 bit */
   EXPECT_EQ(decoded_code_addi.code.c_addi_1.op, 0x01); /* 1-0 bit */
 
   // sd
@@ -87,7 +86,7 @@ TEST(op_decode, should_decode_16bit_instructions)
   EXPECT_EQ(optype_sd.format_id, riscv_OP_CODE_FORMAT_c_sd_1);
   EXPECT_EQ(decoded_code_sd.type_id, riscv_OP_CODE_FORMAT_c_sd_1);
   EXPECT_EQ(decoded_code_sd.code.c_sd_1.funct3, 0x07);  /* 15-13 bit */
-  EXPECT_EQ(decoded_code_sd.code.c_sd_1.offset, 0x08);  /* 12-7 bit */
+  EXPECT_EQ(decoded_code_sd.code.c_sd_1.offset, (0x1 << 3) | (0x0 << 6));  /* 12-10, 9-7 bit */
   EXPECT_EQ(decoded_code_sd.code.c_sd_1.src, 0x01);  /* 6-2 bit */
   EXPECT_EQ(decoded_code_sd.code.c_sd_1.op, 0x02);  /* 1-0 bit */
 }
