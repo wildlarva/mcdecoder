@@ -117,7 +117,6 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
     # Parse instruction format
     instruction_format = _parse_instruction_format(
         instruction_desc_model['format'])
-    print(instruction_format)
 
     instruction_bit_size = sum(map(lambda field_format: len(
         field_format.bits_format), instruction_format.field_formats))
