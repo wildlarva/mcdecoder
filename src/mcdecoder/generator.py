@@ -27,14 +27,20 @@ class McDescription(TypedDict):
 
 
 # Decoder models
+class InstructionSubfieldDecoder(NamedTuple):
+    mask: int
+    start_bit_in_instruction: int
+    end_bit_in_instruction: int
+    end_bit_in_field: int
 
 
 class InstructionFieldDecoder(NamedTuple):
     name: str
-    mask: int
-    start_bit: int
-    end_bit: int
+    mask: int # obsolete
+    start_bit: int # obsolete
+    end_bit: int # obsolete
     type_bit_size: int
+    subfield_decoders: List[InstructionSubfieldDecoder]
 
 
 class InstructionDecoder(NamedTuple):
@@ -144,7 +150,8 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
                 mask=field_mask,
                 start_bit=start_bit,
                 end_bit=end_bit,
-                type_bit_size=_calc_type_bit_size(field_bit_size))
+                type_bit_size=_calc_type_bit_size(field_bit_size),
+                subfield_decoders=[InstructionSubfieldDecoder(mask=field_mask, start_bit_in_instruction=start_bit, end_bit_in_instruction=end_bit, end_bit_in_field=0)])
             field_decoders.append(field_decoder)
 
         # Change start bit to next field position
@@ -199,7 +206,8 @@ def _generate(mcdecoder_model: McDecoder) -> bool:
     elif not os.path.isdir('out'):
         return False
 
-    ns_prefix = _make_namespace_prefix(mcdecoder_model.machine_decoder.namespace)
+    ns_prefix = _make_namespace_prefix(
+        mcdecoder_model.machine_decoder.namespace)
     template_args = {
         'ns': ns_prefix,
         'instruction_decoders': mcdecoder_model.instruction_decoders
@@ -212,6 +220,7 @@ def _generate(mcdecoder_model: McDecoder) -> bool:
         file.write(decoder_source_template.render(template_args))
 
     return True
+
 
 def _make_namespace_prefix(namespace: Optional[str]) -> str:
     return namespace + '_' if namespace is not None else ''

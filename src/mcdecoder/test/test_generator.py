@@ -1,5 +1,5 @@
 from mcdecoder.generator import (
-    InstructionFieldDecoder, MachineDecoder, McDecoder, InstructionDecoder, _create_mcdecoder_model,
+    InstructionFieldDecoder, InstructionSubfieldDecoder, MachineDecoder, McDecoder, InstructionDecoder, _create_mcdecoder_model,
     _generate)
 
 
@@ -67,9 +67,9 @@ def test_generate() -> None:
                 type_bit_size=32,
                 field_decoders=[
                     InstructionFieldDecoder(name='cond', mask=0xf0000000,
-                              start_bit=31, end_bit=28, type_bit_size=8, ),
+                              start_bit=31, end_bit=28, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(mask=0xf0000000, start_bit_in_instruction=31, end_bit_in_instruction=28, end_bit_in_field=0)]),
                     InstructionFieldDecoder(name='S', mask=0x00100000, start_bit=20,
-                              end_bit=20, type_bit_size=8, ),
+                              end_bit=20, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(mask=0x00100000, start_bit_in_instruction=20, end_bit_in_instruction=20, end_bit_in_field=0)]),
                 ],
             ),
             InstructionDecoder(
@@ -79,9 +79,9 @@ def test_generate() -> None:
                 type_bit_size=32,
                 field_decoders=[
                     InstructionFieldDecoder(name='cond', mask=0xf0000000, start_bit=31,
-                              end_bit=28, type_bit_size=8, ),
+                              end_bit=28, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(mask=0xf0000000, start_bit_in_instruction=31, end_bit_in_instruction=28, end_bit_in_field=0)]),
                     InstructionFieldDecoder(name='register_list', mask=0x0000ffff,
-                              start_bit=15,  end_bit=0, type_bit_size=16, ),
+                              start_bit=15,  end_bit=0, type_bit_size=16, subfield_decoders=[InstructionSubfieldDecoder(mask=0x0000ffff, start_bit_in_instruction=15, end_bit_in_instruction=0, end_bit_in_field=0)]),
                 ],
             ),
         ],
