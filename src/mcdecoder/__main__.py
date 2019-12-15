@@ -1,4 +1,5 @@
 import sys
+
 from mcdecoder import generator
 
 

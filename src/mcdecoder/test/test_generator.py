@@ -1,6 +1,6 @@
 from mcdecoder.generator import (
-    InstructionFieldDecoder, InstructionSubfieldDecoder, MachineDecoder, McDecoder, InstructionDecoder, _create_mcdecoder_model,
-    _generate)
+    InstructionDecoder, InstructionFieldDecoder, InstructionSubfieldDecoder,
+    MachineDecoder, McDecoder, _create_mcdecoder_model, _generate)
 
 
 def test_create_mcdecoder_model_namespace() -> None:

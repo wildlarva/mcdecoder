@@ -5,7 +5,6 @@ from typing import Any, Dict, List, NamedTuple, Optional, TypedDict, cast
 import jinja2
 import yaml
 
-
 # MC description models loaded from yaml files
 
 
