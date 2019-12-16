@@ -1,6 +1,6 @@
 import os
 import re
-from typing import Any, Dict, List, NamedTuple, Optional, TypedDict, cast
+from typing import Any, Dict, List, NamedTuple, Optional, Tuple, TypedDict, cast
 
 import jinja2
 import yaml
@@ -117,96 +117,33 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
     # Parse instruction format
     instruction_format = _parse_instruction_format(
         instruction_desc_model['format'])
-
     instruction_bit_size = sum(map(lambda field_format: len(
         field_format.bits_format), instruction_format.field_formats))
 
     # Build fixed bits information
-    fixed_bits_mask = 0
-    fixed_bits = 0
+    fixed_bits_mask, fixed_bits = _build_fixed_bits_info(instruction_format)
+
+    # Save the start bit positions of field formats
     ff_start_bit_in_instruction = instruction_bit_size - 1
     ff_index_to_start_bit: Dict[int, int] = {}
 
     for field_format in instruction_format.field_formats:
-        # Calculate bit size
         field_bit_size = len(field_format.bits_format)
-
-        # Build fixed bits information
-        for bit_format in field_format.bits_format:
-            if bit_format == 'x':
-                fixed_bits_mask = (fixed_bits_mask << 1) | 0
-                fixed_bits = (fixed_bits << 1) | 0
-            else:
-                fixed_bits_mask = (fixed_bits_mask << 1) | 1
-                fixed_bits = (fixed_bits << 1) | int(bit_format)
-
-        # Save start bit position
         ff_index_to_start_bit[instruction_format.field_formats.index(
             field_format)] = ff_start_bit_in_instruction
-
-        # Change start bit to the next field format position
         ff_start_bit_in_instruction -= field_bit_size
 
-    # Build field decoders
+    # Create field decoders
     field_names = set(map(lambda field: cast(str, field.name), filter(
         lambda field: field.name is not None, instruction_format.field_formats)))
-
-    field_decoders: List[InstructionFieldDecoder] = []
-
-    for field_name in field_names:
-        field_formats = filter(lambda field: field.name ==
-                               field_name, instruction_format.field_formats)
-
-        # Build subfield decoders
-        sf_decoders: List[InstructionSubfieldDecoder] = []
-        start_bit_in_field = 0
-        field_start_bit_in_instruction = 0
-        sf_index = 0
-
-        for field_format in field_formats:
-            # Calculate bit position for the field format
-            sf_start_bit_in_instruction = ff_index_to_start_bit[instruction_format.field_formats.index(
-                field_format)]
-            field_start_bit_in_instruction = max(
-                field_start_bit_in_instruction, sf_start_bit_in_instruction)
-
-            for bit_range in field_format.bit_ranges:
-                # Calculate bit size and position for the subfield
-                sf_bit_size = bit_range.start - bit_range.end + 1
-                sf_end_bit_in_instruction = sf_start_bit_in_instruction - sf_bit_size + 1
-
-                # Build subfield mask
-                sf_mask = 0
-                for _ in range(0, sf_bit_size):
-                    sf_mask = (sf_mask << 1) | 1
-
-                sf_mask <<= sf_end_bit_in_instruction
-
-                # Build subfield decoder
-                sf_decoder = InstructionSubfieldDecoder(
-                    index=sf_index, mask=sf_mask, start_bit_in_instruction=sf_start_bit_in_instruction, end_bit_in_instruction=sf_end_bit_in_instruction, end_bit_in_field=bit_range.end)
-                sf_decoders.append(sf_decoder)
-
-                # Update the field start bit position
-                start_bit_in_field = max(start_bit_in_field, bit_range.start)
-
-                # Change status for the next subfield position
-                sf_index += 1
-                sf_start_bit_in_instruction -= sf_bit_size
-
-        # Build field decoder
-        field_decoder = InstructionFieldDecoder(
-            name=field_name,
-            start_bit=field_start_bit_in_instruction,
-            type_bit_size=_calc_type_bit_size(start_bit_in_field + 1),
-            subfield_decoders=sf_decoders)
-        field_decoders.append(field_decoder)
+    field_decoders = [_create_field_decoder(
+        field_name, instruction_format, ff_index_to_start_bit) for field_name in field_names]
 
     # Sort field decoders according to start bit position
     field_decoders = sorted(
         field_decoders, key=lambda field: field.start_bit, reverse=True)
 
-    # Create OP decoder model
+    # Create instruction decoder model
     return InstructionDecoder(
         name=instruction_desc_model['name'],
         fixed_bits_mask=fixed_bits_mask,
@@ -216,7 +153,77 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
     )
 
 
+def _build_fixed_bits_info(instruction_format: InstructionFormat) -> Tuple[int, int]:
+    """Build fixed bits information and returns fixed_bits_mask and fixed_bits"""
+    fixed_bits_mask = 0
+    fixed_bits = 0
+
+    for field_format in instruction_format.field_formats:
+        for bit_format in field_format.bits_format:
+            if bit_format == 'x':
+                fixed_bits_mask = (fixed_bits_mask << 1) | 0
+                fixed_bits = (fixed_bits << 1) | 0
+            else:
+                fixed_bits_mask = (fixed_bits_mask << 1) | 1
+                fixed_bits = (fixed_bits << 1) | int(bit_format)
+
+    return fixed_bits_mask, fixed_bits
+
+
+def _create_field_decoder(field_name: str, instruction_format: InstructionFormat, ff_index_to_start_bit: Dict[int, int]) -> InstructionFieldDecoder:
+    """Create a model which contains information of a instruction field decoder"""
+    # Find related field formats
+    field_formats = filter(lambda field: field.name ==
+                           field_name, instruction_format.field_formats)
+
+    # Create subfield decoders
+    start_bit_in_field = 0
+    field_start_bit_in_instruction = 0
+
+    sf_decoders: List[InstructionSubfieldDecoder] = []
+    sf_index = 0
+
+    for field_format in field_formats:
+        # Calculate bit position for the field format
+        sf_start_bit_in_instruction = ff_index_to_start_bit[instruction_format.field_formats.index(
+            field_format)]
+        field_start_bit_in_instruction = max(
+            field_start_bit_in_instruction, sf_start_bit_in_instruction)
+
+        for bit_range in field_format.bit_ranges:
+            # Calculate bit size and position for the subfield
+            sf_bit_size = bit_range.start - bit_range.end + 1
+            sf_end_bit_in_instruction = sf_start_bit_in_instruction - sf_bit_size + 1
+
+            # Build subfield mask
+            sf_mask = 0
+            for _ in range(0, sf_bit_size):
+                sf_mask = (sf_mask << 1) | 1
+
+            sf_mask <<= sf_end_bit_in_instruction
+
+            # Create subfield decoder
+            sf_decoder = InstructionSubfieldDecoder(
+                index=sf_index, mask=sf_mask, start_bit_in_instruction=sf_start_bit_in_instruction, end_bit_in_instruction=sf_end_bit_in_instruction, end_bit_in_field=bit_range.end)
+            sf_decoders.append(sf_decoder)
+
+            # Update the field start bit position
+            start_bit_in_field = max(start_bit_in_field, bit_range.start)
+
+            # Change status for the next subfield position
+            sf_index += 1
+            sf_start_bit_in_instruction -= sf_bit_size
+
+    # Create field decoder
+    return InstructionFieldDecoder(
+        name=field_name,
+        start_bit=field_start_bit_in_instruction,
+        type_bit_size=_calc_type_bit_size(start_bit_in_field + 1),
+        subfield_decoders=sf_decoders)
+
+
 def _calc_type_bit_size(bit_size: int) -> int:
+    """Calculate the bit size of a data type which can express the given bit size"""
     if bit_size <= 8:
         return 8
     elif bit_size <= 16:
@@ -235,22 +242,26 @@ def _parse_instruction_format(instruction_format: str) -> InstructionFormat:
 def _parse_field_format(field_format: str) -> InstructionFieldFormat:
     """Parse an field format and returns an field format dictionary"""
     # Parse each construct of field format
-    matched = re.match(r'([01x]+)(:(\w+)(\[([\d:,]+)\])?)?', field_format) # <field_bits>:<field_name>[field_start:field_end, ...]
+    # <field_bits>:<field_name>[field_start:field_end, ...]
+    matched = re.match(r'([01x]+)(:(\w+)(\[([\d:,]+)\])?)?', field_format)
 
     bits_format = matched.group(1)
     field_name = matched.group(3)
     field_bit_ranges_str = matched.group(5)
- 
+
     # Parse bit ranges
     bit_ranges: List[BitRange] = []
     if field_bit_ranges_str is not None:
         field_bit_range_strs = field_bit_ranges_str.split(',')
         for field_bit_range_str in field_bit_range_strs:
-            field_bit_start, field_bit_end = (cast(List[Optional[str]], field_bit_range_str.split(':')) + [None, None])[:2]
+            field_bit_start, field_bit_end = (
+                cast(List[Optional[str]], field_bit_range_str.split(':')) + [None, None])[:2]
             if field_bit_end is not None:
-                bit_range = BitRange(start=int(cast(str, field_bit_start)), end=int(cast(str, field_bit_end)))
+                bit_range = BitRange(
+                    start=int(cast(str, field_bit_start)), end=int(cast(str, field_bit_end)))
             else:
-                bit_range = BitRange(start=int(cast(str, field_bit_start)), end=int(cast(str, field_bit_start)))
+                bit_range = BitRange(start=int(cast(str, field_bit_start)), end=int(
+                    cast(str, field_bit_start)))
             bit_ranges.append(bit_range)
     else:
         # If there are no bit ranges, treat as a single bit range
