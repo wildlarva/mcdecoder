@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import os
 import re
 from typing import Any, Dict, List, NamedTuple, Optional, Tuple, TypedDict, cast
@@ -27,7 +28,8 @@ class McDescription(TypedDict):
 
 
 # Decoder models
-class InstructionSubfieldDecoder(NamedTuple):
+@dataclass
+class InstructionSubfieldDecoder:
     index: int
     mask: int
     start_bit_in_instruction: int
@@ -35,14 +37,16 @@ class InstructionSubfieldDecoder(NamedTuple):
     end_bit_in_field: int
 
 
-class InstructionFieldDecoder(NamedTuple):
+@dataclass
+class InstructionFieldDecoder:
     name: str
     start_bit: int
     type_bit_size: int
     subfield_decoders: List[InstructionSubfieldDecoder]
 
 
-class InstructionDecoder(NamedTuple):
+@dataclass
+class InstructionDecoder:
     name: str
     fixed_bits_mask: int
     fixed_bits: int
@@ -50,28 +54,33 @@ class InstructionDecoder(NamedTuple):
     field_decoders: List[InstructionFieldDecoder]
 
 
-class MachineDecoder(NamedTuple):
+@dataclass
+class MachineDecoder:
     namespace: Optional[str]
 
 
-class McDecoder(NamedTuple):
+@dataclass
+class McDecoder:
     machine_decoder: MachineDecoder
     instruction_decoders: List[InstructionDecoder]
 
 
 # Instruction format
-class BitRange(NamedTuple):
+@dataclass
+class BitRange:
     start: int
     end: int
 
 
-class InstructionFieldFormat(NamedTuple):
+@dataclass
+class InstructionFieldFormat:
     name: Optional[str]
     bits_format: str
     bit_ranges: List[BitRange]
 
 
-class InstructionFormat(NamedTuple):
+@dataclass
+class InstructionFormat:
     field_formats: List[InstructionFieldFormat]
 
 
