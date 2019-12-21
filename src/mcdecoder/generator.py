@@ -313,8 +313,10 @@ def _generate(mcdecoder_model: McDecoder) -> bool:
     ns_prefix = _make_namespace_prefix(
         mcdecoder_model.machine_decoder.namespace)
     template_args = {
+        'mc_decoder': mcdecoder_model,
+        'machine_decoder': mcdecoder_model.machine_decoder,
+        'instruction_decoders': mcdecoder_model.instruction_decoders,
         'ns': ns_prefix,
-        'instruction_decoders': mcdecoder_model.instruction_decoders
     }
 
     with open(f'out/{ns_prefix}mcdecoder.h', 'w') as file:
