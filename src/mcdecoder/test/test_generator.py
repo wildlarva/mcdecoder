@@ -10,6 +10,19 @@ def test_create_mcdecoder_model_namespace() -> None:
     mcdecoder_model.machine_decoder.namespace == 'arm'
 
 
+def test_create_mcdecoder_model_extras() -> None:
+    mcdecoder_model = _create_mcdecoder_model(
+        'test/arm.yaml')
+
+    machine_extras = mcdecoder_model.machine_decoder.extras
+    assert machine_extras is not None
+    assert machine_extras['arch_type'] == 'arm'
+
+    instruction_extras = mcdecoder_model.instruction_decoders[0].extras
+    assert instruction_extras is not None
+    assert instruction_extras['clocks'] == 10
+
+
 def test_create_mcdecoder_model_32bit_instructions() -> None:
     mcdecoder_model = _create_mcdecoder_model(
         'test/arm.yaml')
@@ -106,7 +119,7 @@ def test_create_mcdecoder_model_16bit_instructions() -> None:
 
 def test_generate() -> None:
     mcdecoder_model = McDecoder(
-        machine_decoder=MachineDecoder(namespace='ns'),
+        machine_decoder=MachineDecoder(namespace='ns', extras=None),
         instruction_decoders=[
             InstructionDecoder(
                 name='add_1',
@@ -119,6 +132,7 @@ def test_generate() -> None:
                     InstructionFieldDecoder(name='S', start_bit=20, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(
                         index=0, mask=0x00100000, start_bit_in_instruction=20, end_bit_in_instruction=20, end_bit_in_field=0)]),
                 ],
+                extras=None,
             ),
             InstructionDecoder(
                 name='push_1',
@@ -131,6 +145,7 @@ def test_generate() -> None:
                     InstructionFieldDecoder(name='register_list', start_bit=15, type_bit_size=16, subfield_decoders=[InstructionSubfieldDecoder(
                         index=0, mask=0x0000ffff, start_bit_in_instruction=15, end_bit_in_instruction=0, end_bit_in_field=0)]),
                 ],
+                extras=None,
             ),
         ],
     )

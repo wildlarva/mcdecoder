@@ -12,6 +12,7 @@ import yaml
 class InstructionDescrition(TypedDict):
     name: str
     format: str
+    extras: Optional[Any]
 
 
 class MachineDecoderDescription(TypedDict):
@@ -20,6 +21,7 @@ class MachineDecoderDescription(TypedDict):
 
 class MachineDescription(TypedDict):
     decoder: Optional[MachineDecoderDescription]
+    extras: Optional[Any]
 
 
 class McDescription(TypedDict):
@@ -52,11 +54,13 @@ class InstructionDecoder:
     fixed_bits: int
     type_bit_size: int
     field_decoders: List[InstructionFieldDecoder]
+    extras: Optional[Any]
 
 
 @dataclass
 class MachineDecoder:
     namespace: Optional[str]
+    extras: Optional[Any]
 
 
 @dataclass
@@ -117,8 +121,12 @@ def _create_machine_decoder_model(machine_desc_model: MachineDescription) -> Mac
         decoder_desc_model = machine_desc_model['decoder']
         if 'namespace' in decoder_desc_model:
             namespace = decoder_desc_model['namespace']
+    
+    extras: Optional[Any] = None
+    if 'extras' in machine_desc_model:
+        extras = machine_desc_model['extras']
 
-    return MachineDecoder(namespace=namespace)
+    return MachineDecoder(namespace=namespace, extras=extras)
 
 
 def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrition) -> InstructionDecoder:
@@ -153,12 +161,17 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
         field_decoders, key=lambda field: field.start_bit, reverse=True)
 
     # Create instruction decoder model
+    extras: Optional[Any] = None
+    if 'extras' in instruction_desc_model:
+        extras = instruction_desc_model['extras']
+
     return InstructionDecoder(
         name=instruction_desc_model['name'],
         fixed_bits_mask=fixed_bits_mask,
         fixed_bits=fixed_bits,
         type_bit_size=_calc_type_bit_size(instruction_bit_size),
         field_decoders=field_decoders,
+        extras=extras,
     )
 
 
