@@ -4,7 +4,7 @@
 
 ### Requirements
 
-- Python 3.8 (with pip and venv)
+- Python 3.8 (with pip)
 
 ### Installation
 
@@ -30,6 +30,10 @@ MC decoder files are generated as
 See [the specification of machine code description file](doc/mc_desc_spec.yaml).
 
 ## For developers
+
+### Requirements
+
+- Python 3.8 (with pip and venv)
 
 ### How to setup environment for development
 
