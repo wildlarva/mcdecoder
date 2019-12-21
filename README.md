@@ -2,6 +2,10 @@
 
 ## For users
 
+### Requirements
+
+- Python 3.8 (with pip and venv)
+
 ### Installation
 
 ```bash
