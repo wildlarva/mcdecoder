@@ -7,6 +7,10 @@ machine:
   decoder: # [optional] Decoder information for the machine
     namespace: ns # [optional] Namespace for the symbols of a generated decoder
 
+    extras: # Container of user-defined data for the machine
+      # Any structure can be defined here
+      arch_type: arm
+
 # Describes instructions
 #
 # Each list element represents an instruction.
@@ -39,6 +43,10 @@ instructions:
     #   <subfield_end>: [optional] Subfield end bit position in the instruction field
     #     NOTE: This is an end bit position in a field, not in an instruction.
     format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxxxxxxxxxx:imm12
+
+    extras: # Container of user-defined data for the instruction
+      # Any structure can be defined here
+      clocks: 10
 
   - name: push_1
     format: xxxx:cond|100100|1|0|1101|xxxxxxxxxxxxxxxx:register_list
