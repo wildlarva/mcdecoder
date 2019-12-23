@@ -6,11 +6,13 @@ include build/conanbuildinfo.mak
 
 CXX_SRCS = \
 	test.cpp \
+	stub.c \
 	out/arm_mcdecoder.c \
 	out/riscv_mcdecoder.c
 
 CXX_OBJ_FILES = \
 	build/test.o \
+	build/stub.o \
 	build/arm_mcdecoder.o \
 	build/riscv_mcdecoder.o
 
@@ -68,6 +70,9 @@ $(EXE_FILENAME) : $(CXX_OBJ_FILES)
 
 build/%.o: %.cpp
 	$(COMPILE_CXX_COMMAND)
+
+build/%.o: %.c
+	$(COMPILE_C_COMMAND)
 
 build/%.o: out/%.c
 	$(COMPILE_C_COMMAND)
