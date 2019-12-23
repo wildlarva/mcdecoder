@@ -1,0 +1,58 @@
+{
+    "type": "object",
+    "properties": {
+        "machine": {
+            "type": "object",
+            "properties": {
+                "decoder": {
+                    "type": "object",
+                    "properties": {
+                        "namespace": {
+                            "type": "string",
+                            "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
+                        }
+                    }
+                },
+                "extras": {}
+            },
+            "additionalProperties": false
+        },
+        "instructions": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
+                    },
+                    "format": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9_:\\[\\],|]*$"
+                    },
+                    "condition": {
+                        "type": "object",
+                        "patternProperties": {
+                            "^[A-Za-z][A-Za-z0-9_]*$": {
+                                "type": "string",
+                                "pattern": "^[A-Za-z0-9_\\-!=>< ]*$"
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "extras": {}
+                },
+                "additionalProperties": false,
+                "required": [
+                    "name",
+                    "format"
+                ]
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "machine",
+        "instructions"
+    ]
+}

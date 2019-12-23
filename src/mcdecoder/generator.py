@@ -1,9 +1,15 @@
 from dataclasses import dataclass
+import importlib.resources
+import json
 import os
 import re
-from typing import Any, Dict, Iterable, List, NamedTuple, Optional, Tuple, TypedDict, Union, cast
+from typing import (
+    Any, Dict, Iterable, List, NamedTuple, Optional, Tuple, TypedDict, Union,
+    cast)
 
 import jinja2
+import jsonschema
+import mcdecoder
 import yaml
 
 # MC description models loaded from yaml files
@@ -144,10 +150,15 @@ def generate(mcfile_path: str) -> bool:
 
 def _create_mcdecoder_model(mcfile_path: str) -> McDecoder:
     """Create a model which contains information of MC decoder"""
+    # Load MC description
     with open(mcfile_path, 'rb') as file:
         mc_desc_model = cast(
             McDescription, yaml.load(file, Loader=yaml.Loader))
 
+    # Validate
+    _validate_mc_desc_model(mc_desc_model)
+
+    # Create decoder model
     machine_decoder = _create_machine_decoder_model(mc_desc_model['machine'])
     instruction_decoders = [_create_instruction_decoder_model(
         instruction_desc_model) for instruction_desc_model in mc_desc_model['instructions']]
@@ -155,6 +166,13 @@ def _create_mcdecoder_model(mcfile_path: str) -> McDecoder:
         machine_decoder=machine_decoder,
         instruction_decoders=instruction_decoders,
     )
+
+
+def _validate_mc_desc_model(mc_desc_model: McDescription) -> None:
+    with importlib.resources.open_text(mcdecoder, 'mc_schema.json') as file:
+        schema = json.load(file)
+
+    jsonschema.validate(mc_desc_model, schema)
 
 
 def _create_machine_decoder_model(machine_desc_model: MachineDescription) -> MachineDecoder:

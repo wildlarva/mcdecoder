@@ -7,9 +7,9 @@ machine:
   decoder: # [optional] Decoder information for the machine
     namespace: ns # [optional] Namespace for the symbols of a generated decoder
 
-    extras: # [optional] Container of user-defined data for the machine
-      # Any structure can be defined here
-      arch_type: arm
+  extras: # [optional] Container of user-defined data for the machine
+    # Any structure can be defined here
+    arch_type: arm
 
 # Describes instructions
 #

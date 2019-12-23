@@ -1,5 +1,4 @@
 machine:
-  endian: little
   decoder:
     namespace: arm
   extras:
