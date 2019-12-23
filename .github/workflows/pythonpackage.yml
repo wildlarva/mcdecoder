@@ -34,4 +34,5 @@ jobs:
         pytest
     - name: Test with gtest
       run: |
+        pip install .
         make -C ctest clean test
