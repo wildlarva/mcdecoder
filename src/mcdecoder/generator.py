@@ -48,11 +48,36 @@ class InstructionFieldDecoder:
 
 
 @dataclass
+class InstructionDecodeCondition:
+    """A condition of instruction encoding when an instruction applys"""
+    type: str # The type of subclass
+
+
+@dataclass
+class EqualityInstructionDecodeCondition(InstructionDecodeCondition):
+    """An equality condition subclass for InstructionDecodeCondition to express a field value's equality to a value like !=, >, >=, <, <=, etc."""
+    field: str
+    operator: str
+    value: int
+    type: str = 'equality'
+
+
+@dataclass
+class InRangeInstructionDecodeCondition(InstructionDecodeCondition):
+    """An in-range condition subclass for InstructionDecodeCondition to express an instruction field is in a value range(inclusive)"""
+    field: str
+    value_start: int
+    value_end: int
+    type: str = 'in_range'
+
+
+@dataclass
 class InstructionDecoder:
     name: str
     fixed_bits_mask: int
     fixed_bits: int
     type_bit_size: int
+    conditions: List[InstructionDecodeCondition]
     field_decoders: List[InstructionFieldDecoder]
     extras: Optional[Any]
 
@@ -121,7 +146,7 @@ def _create_machine_decoder_model(machine_desc_model: MachineDescription) -> Mac
         decoder_desc_model = machine_desc_model['decoder']
         if 'namespace' in decoder_desc_model:
             namespace = decoder_desc_model['namespace']
-    
+
     extras: Optional[Any] = None
     if 'extras' in machine_desc_model:
         extras = machine_desc_model['extras']
@@ -171,6 +196,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
         fixed_bits=fixed_bits,
         type_bit_size=_calc_type_bit_size(instruction_bit_size),
         field_decoders=field_decoders,
+        conditions=[],
         extras=extras,
     )
 
