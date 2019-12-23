@@ -21,7 +21,7 @@ instructions:
     #
     # Instruction fields are separated by bar symbol(|).
     #
-    # <field_bits>:<field_name>[<field_bit_ranges]|...
+    # <field_bits>:<field_name>[<field_bit_ranges>]|...
     #
     # where
     #   <field_bits>: Encoding format of an instruction field
@@ -44,12 +44,43 @@ instructions:
     #     NOTE: This is an end bit position in a field, not in an instruction.
     format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxxxxxxxxxx:imm12
 
+    # [optional] Bit condition when the instruction applys
+    #
+    # Each mapping key represents a field used for a condition and its value represents the condition itself.
+    # If multiple field conditions are defined, they're combined with AND operator.
+    #
+    # The following condition types are supported.
+    # - Equality: The equality between a field value and a given value.
+    #     Its expression is '<operator> <value>'.
+    # - In Range: A field value is in a given value range(inclusive) or not.
+    #     Its expression is 'in_range <value_start>-<value_end>'.
+    #
+    # where
+    #   <operator>: An equality operator to check.
+    #     It can be !=, <, <=, > or >=.
+    #
+    #   <value>: A value to check the equality
+    #     10-base integer values like 1, 2, 10, etc.
+    #
+    #   <value_start>: The start of a value range(inclusive)
+    #     10-base integer values like 1, 2, 10, etc.
+    #
+    #   <value_end>: The end of a value range(inclusive)
+    #     10-base integer values like 1, 2, 10, etc.
+    #
+    # NOTE: You have to wrap your conditional expression with quotes when you use ! or > as the first letter of a condition.
+    #       This is a restriction of YAML format.
+    condition:
+      cond: in_range 0-14
+
     extras: # [optional] Container of user-defined data for the instruction
       # Any structure can be defined here
       clocks: 10
 
   - name: push_1
     format: xxxx:cond|100100|1|0|1101|xxxxxxxxxxxxxxxx:register_list
+    condition:
+      cond: '!= 15'
 
   - name: c_addi_1
     format: 000:funct3|x:imm[5]|xxxxx:dest|xxxxx:imm[4:0]|01:op
