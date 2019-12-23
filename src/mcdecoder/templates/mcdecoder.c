@@ -40,6 +40,21 @@ typedef struct {
                 {% if not loop.first %}| {% endif %}(((context->code{{ inst.type_bit_size }} & OP_SF_MASK_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) >> OP_SF_EBII_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) << OP_SF_EBIF_{{ inst.name }}_{{ field.name }}_{{ sf.index }}){% if loop.last %};{% endif %}
             {% endfor %}
         {% endfor %}
+
+        {% if inst.conditions %}
+            if (!(
+                {% for cond in inst.conditions %}
+                    {%- if not loop.first %} && {% endif -%}
+                    {%- if cond.type == 'equality' -%}
+                        context->decoded_code->code.{{ inst.name }}.{{ cond.field }} {{ cond.operator }} {{ cond.value }}
+                    {%- elif cond.type == 'in_range' -%}
+                        context->decoded_code->code.{{ inst.name }}.{{ cond.field }} >= {{ cond.value_start }} && context->decoded_code->code.{{ inst.name }}.{{ cond.field }} <= {{ cond.value_end }}
+                    {%- endif %}
+                {% endfor %}
+            )) {
+                return 1;
+            }
+        {% endif %}
         return 0;
     }
 {% endfor %}
@@ -61,3 +76,9 @@ int {{ ns }}op_parse({{ ns }}uint16 code[{{ ns }}OP_DECODE_MAX], {{ ns }}OpDecod
 
     return 1;
 }
+
+{{ ns }}OpExecType {{ ns }}op_exec_table[{{ ns }}OpCodeId_Num] = {
+    {% for inst in instruction_decoders %}
+	{ 1, {{ ns }}op_exec_{{ inst.name }} },		/* {{ inst.name }} */
+    {% endfor %}
+};

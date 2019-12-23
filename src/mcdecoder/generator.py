@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import os
 import re
-from typing import Any, Dict, List, NamedTuple, Optional, Tuple, TypedDict, cast
+from typing import Any, Dict, Iterable, List, NamedTuple, Optional, Tuple, TypedDict, Union, cast
 
 import jinja2
 import yaml
@@ -12,6 +12,7 @@ import yaml
 class InstructionDescrition(TypedDict):
     name: str
     format: str
+    condition: Optional[Dict[str, str]]
     extras: Optional[Any]
 
 
@@ -48,11 +49,38 @@ class InstructionFieldDecoder:
 
 
 @dataclass
+class InstructionDecodeCondition:
+    """
+    A condition of instruction encoding when an instruction applys.
+    Each subclass must have a string attribute 'type' to express the type of a subclass.
+    """
+
+
+@dataclass
+class EqualityInstructionDecodeCondition(InstructionDecodeCondition):
+    """An equality condition subclass for InstructionDecodeCondition to express a field value's equality to a value like !=, >, >=, <, <=, etc."""
+    field: str
+    operator: str
+    value: int
+    type: str = 'equality'
+
+
+@dataclass
+class InRangeInstructionDecodeCondition(InstructionDecodeCondition):
+    """An in-range condition subclass for InstructionDecodeCondition to express an instruction field is in a value range(inclusive)"""
+    field: str
+    value_start: int
+    value_end: int
+    type: str = 'in_range'
+
+
+@dataclass
 class InstructionDecoder:
     name: str
     fixed_bits_mask: int
     fixed_bits: int
     type_bit_size: int
+    conditions: List[InstructionDecodeCondition]
     field_decoders: List[InstructionFieldDecoder]
     extras: Optional[Any]
 
@@ -67,6 +95,20 @@ class MachineDecoder:
 class McDecoder:
     machine_decoder: MachineDecoder
     instruction_decoders: List[InstructionDecoder]
+
+
+# Instruction condition
+@dataclass
+class InstructionCondition:
+    field: str
+    operator: str
+    values: List[int]
+
+
+@dataclass
+class _InstructionConditionToken:
+    kind: str
+    value: Union[int, str]
 
 
 # Instruction format
@@ -121,7 +163,7 @@ def _create_machine_decoder_model(machine_desc_model: MachineDescription) -> Mac
         decoder_desc_model = machine_desc_model['decoder']
         if 'namespace' in decoder_desc_model:
             namespace = decoder_desc_model['namespace']
-    
+
     extras: Optional[Any] = None
     if 'extras' in machine_desc_model:
         extras = machine_desc_model['extras']
@@ -160,6 +202,13 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
     field_decoders = sorted(
         field_decoders, key=lambda field: field.start_bit, reverse=True)
 
+    # Create instruction decode conditions
+    if 'condition' in instruction_desc_model:
+        decode_conditions = [_create_instruction_decode_condition(
+            field, condition) for field, condition in instruction_desc_model['condition'].items()]
+    else:
+        decode_conditions = []
+
     # Create instruction decoder model
     extras: Optional[Any] = None
     if 'extras' in instruction_desc_model:
@@ -171,6 +220,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
         fixed_bits=fixed_bits,
         type_bit_size=_calc_type_bit_size(instruction_bit_size),
         field_decoders=field_decoders,
+        conditions=decode_conditions,
         extras=extras,
     )
 
@@ -295,6 +345,104 @@ def _parse_field_format(field_format: str) -> InstructionFieldFormat:
         bits_format=bits_format,
         bit_ranges=bit_ranges,
     )
+
+
+def _create_instruction_decode_condition(field: str, instruction_condition: str) -> InstructionDecodeCondition:
+    condition = _parse_instruction_condition(field, instruction_condition)
+    if condition.operator == 'in_range':
+        return InRangeInstructionDecodeCondition(field=field, value_start=condition.values[0], value_end=condition.values[1])
+    else:
+        return EqualityInstructionDecodeCondition(field=field, operator=condition.operator, value=condition.values[0])
+
+
+def _parse_instruction_condition(field: str, instruction_condition: str) -> InstructionCondition:
+    """Parse an instruction condition and returns a parsed condition"""
+    tokens = _tokenize_instruction_condition(instruction_condition)
+
+    # Must have 2 tokens at least
+    if len(tokens) < 2:
+        raise RuntimeError(
+            f'Unexpected condition expression: {instruction_condition}')
+
+    # The first token must be equality operator
+    if tokens[0].kind != 'equality':
+        raise RuntimeError(
+            f'Unexpected condition expression: {instruction_condition}')
+
+    operator = cast(str, tokens[0].value)
+
+    # Specific parsing for each operator
+    if operator == 'in_range':
+        # in_range condition must have 4 tokens(operator, value start, range operator and value end)
+        if len(tokens) != 4:
+            raise RuntimeError(
+                f'Unexpected condition expression: {instruction_condition}')
+
+        _, value_start_token, range_token, value_end_token = tokens
+
+        # Validate the token kinds
+        if value_start_token.kind != 'number' or range_token.kind != 'range' or value_end_token.kind != 'number':
+            raise RuntimeError(
+                f'Unexpected condition expression: {instruction_condition}')
+
+        values = [cast(int, value_start_token.value),
+                  cast(int, value_end_token.value)]
+
+    else:
+        # Other operators must have 2 tokens(operator and value)
+        if len(tokens) != 2:
+            raise RuntimeError(
+                f'Unexpected condition expression: {instruction_condition}')
+
+        _, value_token = tokens
+
+        # Validate the token kind
+        if value_token.kind != 'number':
+            raise RuntimeError(
+                f'Unexpected condition expression: {instruction_condition}')
+
+        values = [cast(int, value_token.value)]
+
+    # Create instruction condition
+    return InstructionCondition(field=field, operator=operator, values=values)
+
+
+def _tokenize_instruction_condition(instruction_condition: str) -> List[_InstructionConditionToken]:
+    # Define tokenizer specification
+    operator_keywords = ['in_range', ]
+    token_specification = [
+        ('id', r'[A-Za-z]\w*'),  # Identifiers
+        ('number', r'\d+'),  # Integer number
+        ('range', r'-'),  # Range operator
+        ('equality', r'!=|>|>=|<|<='),  # Equality operator
+        ('skip', r'\s+'),  # Skip over spaces and tabs
+        ('mismatch', r'.'),  # Any other character
+    ]
+
+    # Create tokenizer
+    tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
+
+    # Tokenize
+    tokens: List[_InstructionConditionToken] = []
+    for mo in re.finditer(tok_regex, instruction_condition):
+        kind = cast(str, mo.lastgroup)
+        value = mo.group()
+        if kind == 'id' and value in operator_keywords:
+            kind = 'equality'
+        elif kind == 'number':
+            value = int(value)
+        elif kind == 'range':
+            pass
+        elif kind == 'equality':
+            pass
+        elif kind == 'skip':
+            continue
+        elif kind == 'mismatch':
+            raise RuntimeError(f'{value!r} unexpected')
+
+        tokens.append(_InstructionConditionToken(kind=kind, value=value))
+
+    return tokens
 
 
 def _generate(mcdecoder_model: McDecoder) -> bool:

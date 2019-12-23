@@ -1,4 +1,5 @@
 from mcdecoder.generator import (
+    EqualityInstructionDecodeCondition, InRangeInstructionDecodeCondition,
     InstructionDecoder, InstructionFieldDecoder, InstructionSubfieldDecoder,
     MachineDecoder, McDecoder, _create_mcdecoder_model, _generate)
 
@@ -117,6 +118,31 @@ def test_create_mcdecoder_model_16bit_instructions() -> None:
     assert subfield_offset_1.end_bit_in_field == 6
 
 
+def test_create_mcdecoder_model_condition() -> None:
+    mcdecoder_model = _create_mcdecoder_model(
+        'test/arm.yaml')
+
+    add_conditions = mcdecoder_model.instruction_decoders[0].conditions
+    assert len(add_conditions) == 1
+
+    add_condition = add_conditions[0]
+    assert isinstance(add_condition, EqualityInstructionDecodeCondition)
+    assert add_condition.type == 'equality'
+    assert add_condition.field == 'cond'
+    assert add_condition.operator == '!='
+    assert add_condition.value == 15
+
+    push_conditions = mcdecoder_model.instruction_decoders[1].conditions
+    assert len(push_conditions) == 1
+
+    push_condition = push_conditions[0]
+    assert isinstance(push_condition, InRangeInstructionDecodeCondition)
+    assert push_condition.type == 'in_range'
+    assert push_condition.field == 'cond'
+    assert push_condition.value_start == 0
+    assert push_condition.value_end == 14
+
+
 def test_generate() -> None:
     mcdecoder_model = McDecoder(
         machine_decoder=MachineDecoder(namespace='ns', extras=None),
@@ -132,6 +158,8 @@ def test_generate() -> None:
                     InstructionFieldDecoder(name='S', start_bit=20, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(
                         index=0, mask=0x00100000, start_bit_in_instruction=20, end_bit_in_instruction=20, end_bit_in_field=0)]),
                 ],
+                conditions=[EqualityInstructionDecodeCondition(
+                    field='cond', operator='!=', value=0xf)],
                 extras=None,
             ),
             InstructionDecoder(
@@ -145,6 +173,22 @@ def test_generate() -> None:
                     InstructionFieldDecoder(name='register_list', start_bit=15, type_bit_size=16, subfield_decoders=[InstructionSubfieldDecoder(
                         index=0, mask=0x0000ffff, start_bit_in_instruction=15, end_bit_in_instruction=0, end_bit_in_field=0)]),
                 ],
+                conditions=[EqualityInstructionDecodeCondition(
+                    field='register_list', operator='>', value=0x1), InRangeInstructionDecodeCondition(field='cond', value_start=2, value_end=4)],
+                extras=None,
+            ),
+            InstructionDecoder(
+                name='push_2',
+                fixed_bits_mask=0x0fe00000,
+                fixed_bits=0x02800000,
+                type_bit_size=32,
+                field_decoders=[
+                    InstructionFieldDecoder(name='cond', start_bit=31, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(
+                        index=0, mask=0xf0000000, start_bit_in_instruction=31, end_bit_in_instruction=28, end_bit_in_field=0)]),
+                    InstructionFieldDecoder(name='register_list', start_bit=15, type_bit_size=16, subfield_decoders=[InstructionSubfieldDecoder(
+                        index=0, mask=0x0000ffff, start_bit_in_instruction=15, end_bit_in_instruction=0, end_bit_in_field=0)]),
+                ],
+                conditions=[],
                 extras=None,
             ),
         ],
