@@ -47,7 +47,7 @@ python3.8 -m venv env
 source env/bin/activate
 
 # Install python tools and libraries
-pip install pytest conan pyyaml jinja2
+pip install -r requirements.txt
 
 # Install mcdecoder
 pip install -e .
