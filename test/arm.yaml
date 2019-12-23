@@ -7,7 +7,11 @@ machine:
 instructions:
   - name: add_1
     format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxxxxxxxxxx:imm12
+    condition:
+      cond: '!= 15'
     extras:
       clocks: 10
   - name: push_1
     format: xxxx:cond|100100|1|0|1101|xxxxxxxxxxxxxxxx:register_list
+    condition:
+      cond: in_range 0-14

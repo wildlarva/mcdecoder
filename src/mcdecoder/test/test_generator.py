@@ -118,6 +118,31 @@ def test_create_mcdecoder_model_16bit_instructions() -> None:
     assert subfield_offset_1.end_bit_in_field == 6
 
 
+def test_create_mcdecoder_model_condition() -> None:
+    mcdecoder_model = _create_mcdecoder_model(
+        'test/arm.yaml')
+
+    add_conditions = mcdecoder_model.instruction_decoders[0].conditions
+    assert len(add_conditions) == 1
+
+    add_condition = add_conditions[0]
+    assert isinstance(add_condition, EqualityInstructionDecodeCondition)
+    assert add_condition.type == 'equality'
+    assert add_condition.field == 'cond'
+    assert add_condition.operator == '!='
+    assert add_condition.value == 15
+
+    push_conditions = mcdecoder_model.instruction_decoders[1].conditions
+    assert len(push_conditions) == 1
+
+    push_condition = push_conditions[0]
+    assert isinstance(push_condition, InRangeInstructionDecodeCondition)
+    assert push_condition.type == 'in_range'
+    assert push_condition.field == 'cond'
+    assert push_condition.value_start == 0
+    assert push_condition.value_end == 14
+
+
 def test_generate() -> None:
     mcdecoder_model = McDecoder(
         machine_decoder=MachineDecoder(namespace='ns', extras=None),

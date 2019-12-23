@@ -75,18 +75,46 @@ TEST(op_decode, should_decode_16bit_instructions)
   EXPECT_EQ(optype_addi.code_id, riscv_OpCodeId_c_addi_1);
   EXPECT_EQ(optype_addi.format_id, riscv_OP_CODE_FORMAT_c_addi_1);
   EXPECT_EQ(decoded_code_addi.type_id, riscv_OP_CODE_FORMAT_c_addi_1);
-  EXPECT_EQ(decoded_code_addi.code.c_addi_1.funct3, 0x00);            /* 15-13 bit */
+  EXPECT_EQ(decoded_code_addi.code.c_addi_1.funct3, 0x00);           /* 15-13 bit */
   EXPECT_EQ(decoded_code_addi.code.c_addi_1.imm, (0x1 << 5) | 0x10); /* 12, 6-2 bit */
-  EXPECT_EQ(decoded_code_addi.code.c_addi_1.dest, 0x02); /* 11-7 bit */
-  EXPECT_EQ(decoded_code_addi.code.c_addi_1.op, 0x01); /* 1-0 bit */
+  EXPECT_EQ(decoded_code_addi.code.c_addi_1.dest, 0x02);             /* 11-7 bit */
+  EXPECT_EQ(decoded_code_addi.code.c_addi_1.op, 0x01);               /* 1-0 bit */
 
   // sd
   EXPECT_EQ(result_sd, 0);
   EXPECT_EQ(optype_sd.code_id, riscv_OpCodeId_c_sd_1);
   EXPECT_EQ(optype_sd.format_id, riscv_OP_CODE_FORMAT_c_sd_1);
   EXPECT_EQ(decoded_code_sd.type_id, riscv_OP_CODE_FORMAT_c_sd_1);
-  EXPECT_EQ(decoded_code_sd.code.c_sd_1.funct3, 0x07);  /* 15-13 bit */
-  EXPECT_EQ(decoded_code_sd.code.c_sd_1.offset, (0x1 << 3) | (0x0 << 6));  /* 12-10, 9-7 bit */
-  EXPECT_EQ(decoded_code_sd.code.c_sd_1.src, 0x01);  /* 6-2 bit */
-  EXPECT_EQ(decoded_code_sd.code.c_sd_1.op, 0x02);  /* 1-0 bit */
+  EXPECT_EQ(decoded_code_sd.code.c_sd_1.funct3, 0x07);                    /* 15-13 bit */
+  EXPECT_EQ(decoded_code_sd.code.c_sd_1.offset, (0x1 << 3) | (0x0 << 6)); /* 12-10, 9-7 bit */
+  EXPECT_EQ(decoded_code_sd.code.c_sd_1.src, 0x01);                       /* 6-2 bit */
+  EXPECT_EQ(decoded_code_sd.code.c_sd_1.op, 0x02);                        /* 1-0 bit */
+}
+
+TEST(op_parse, should_not_decode_condition_unmatched_instructions)
+{
+  // constants
+  unsigned char machine_codes[] = {
+      0x00, 0x48, 0x2D, 0xF9, /* push    {fp, lr} */
+      0x04, 0xB0, 0x8D, 0xF2, /* add     fp, sp, #4 */
+  };
+
+  // actions
+  arm_OpDecodedCodeType decoded_code_push;
+  arm_OperationCodeType optype_push;
+  int result_push;
+
+  result_push = arm_op_parse((arm_uint16 *)&machine_codes[0], &decoded_code_push, &optype_push);
+
+  arm_OpDecodedCodeType decoded_code_add;
+  arm_OperationCodeType optype_add;
+  int result_add;
+  result_add = arm_op_parse((arm_uint16 *)&machine_codes[4], &decoded_code_add, &optype_add);
+
+  // assertions
+  // push
+  EXPECT_NE(result_push, 0);
+
+  // add
+  EXPECT_NE(result_add, 0);
 }
