@@ -17,7 +17,7 @@ class _Arguments:
 def run_app(argv: List[str]) -> int:
     # Create an argument parser
     parser = argparse.ArgumentParser(
-        prog='python -m mcdecoder', description='Generate a machine code decoder', add_help=True)
+        prog='mcdecoder', description='Generate a machine code decoder', add_help=True)
     subparsers = parser.add_subparsers(
         dest='command', metavar='command', required=True)
 
