@@ -2,14 +2,11 @@ from dataclasses import dataclass
 import importlib.resources
 import json
 import os
-import re
-from typing import (
-    Any, Dict, Iterable, List, NamedTuple, Optional, Tuple, TypedDict, Union,
-    cast)
+from typing import Any, Dict, List, Optional, Tuple, TypedDict, Union, cast
 
 import jinja2
 import jsonschema
-import mcdecoder
+import lark
 import yaml
 
 # MC description models loaded from yaml files
@@ -169,7 +166,7 @@ def _create_mcdecoder_model(mcfile_path: str) -> McDecoder:
 
 
 def _validate_mc_desc_model(mc_desc_model: McDescription) -> None:
-    with importlib.resources.open_text(mcdecoder, 'mc_schema.json') as file:
+    with importlib.resources.open_text('mcdecoder.schemas', 'mc_schema.json') as file:
         schema = json.load(file)
 
     jsonschema.validate(mc_desc_model, schema)
@@ -322,47 +319,48 @@ def _calc_type_bit_size(bit_size: int) -> int:
         return 32
 
 
+@lark.v_args(inline=True)
+class _InstructionFormatTransformer(lark.Transformer):
+    @lark.v_args(inline=False)
+    def instruction_format(self, field_formats: List[InstructionFieldFormat]) -> InstructionFormat:
+        return InstructionFormat(field_formats=field_formats)
+
+    def field_format(self, field_bits: str, field_name: str = None, field_bit_ranges: List[BitRange] = None) -> InstructionFieldFormat:
+        if field_bit_ranges is None:
+            field_bit_ranges = [BitRange(start=len(field_bits) - 1, end=0)]
+
+        return InstructionFieldFormat(name=field_name, bits_format=field_bits, bit_ranges=field_bit_ranges)
+
+    def field_bits(self, field_bits_tokens: List[lark.Token]) -> str:
+        return ''.join(field_bits_tokens)
+
+    @lark.v_args(inline=False)
+    def field_bit_ranges(self, field_bit_ranges: List[BitRange]) -> List[BitRange]:
+        return field_bit_ranges
+
+    def field_bit_range(self, subfield_start: int, subfield_end: int = None) -> BitRange:
+        if subfield_end is None:
+            subfield_end = subfield_start
+        return BitRange(start=subfield_start, end=subfield_end)
+
+    def id(self, id_token: lark.Token) -> str:
+        return str(id_token)
+
+    def number(self, number_token: lark.Token) -> int:
+        return int(number_token)
+
+    # NOTE: Pyright detects error without arguments for __init__
+    def __init__(self, dummy: Any) -> None:
+        pass
+
+
 def _parse_instruction_format(instruction_format: str) -> InstructionFormat:
     """Parse an instruction format and returns an array of field formats"""
-    field_formats = instruction_format.split('|')
-    return InstructionFormat(
-        field_formats=[_parse_field_format(field_format) for field_format in field_formats])
+    with importlib.resources.open_text('mcdecoder.grammars', 'instruction_format.lark') as file:
+        parser = lark.Lark(file, start='instruction_format')
 
-
-def _parse_field_format(field_format: str) -> InstructionFieldFormat:
-    """Parse an field format and returns an field format dictionary"""
-    # Parse each construct of field format
-    # <field_bits>:<field_name>[field_start:field_end, ...]
-    matched = re.match(r'([01x]+)(:(\w+)(\[([\d:,]+)\])?)?', field_format)
-
-    bits_format = matched.group(1)
-    field_name = matched.group(3)
-    field_bit_ranges_str = matched.group(5)
-
-    # Parse bit ranges
-    bit_ranges: List[BitRange] = []
-    if field_bit_ranges_str is not None:
-        field_bit_range_strs = field_bit_ranges_str.split(',')
-        for field_bit_range_str in field_bit_range_strs:
-            field_bit_start, field_bit_end = (
-                cast(List[Optional[str]], field_bit_range_str.split(':')) + [None, None])[:2]
-            if field_bit_end is not None:
-                bit_range = BitRange(
-                    start=int(cast(str, field_bit_start)), end=int(cast(str, field_bit_end)))
-            else:
-                bit_range = BitRange(start=int(cast(str, field_bit_start)), end=int(
-                    cast(str, field_bit_start)))
-            bit_ranges.append(bit_range)
-    else:
-        # If there are no bit ranges, treat as a single bit range
-        bit_ranges.append(BitRange(start=len(bits_format) - 1, end=0))
-
-    # Build field format model
-    return InstructionFieldFormat(
-        name=field_name,
-        bits_format=bits_format,
-        bit_ranges=bit_ranges,
-    )
+    parsed_tree = parser.parse(instruction_format)
+    return cast(InstructionFormat, _InstructionFormatTransformer(None).transform(parsed_tree))
 
 
 def _create_instruction_decode_condition(field: str, instruction_condition: str) -> InstructionDecodeCondition:
@@ -373,94 +371,34 @@ def _create_instruction_decode_condition(field: str, instruction_condition: str)
         return EqualityInstructionDecodeCondition(field=field, operator=condition.operator, value=condition.values[0])
 
 
+@lark.v_args(inline=True)
+class _InstructionConditionTransformer(lark.Transformer):
+    _field: str
+
+    def equality_condition(self, equality_op_token: str, value: int) -> InstructionCondition:
+        return InstructionCondition(field=self._field, operator=equality_op_token, values=[value])
+
+    def in_range_condition(self, value_start: int, value_end: int) -> InstructionCondition:
+        return InstructionCondition(field=self._field, operator='in_range', values=[value_start, value_end])
+
+    def equality_op(self, equality_op_token: lark.Token) -> str:
+        return str(equality_op_token)
+
+    def number(self, number_token: lark.Token) -> int:
+        return int(number_token)
+
+    def __init__(self, field: str) -> None:
+        self._field = field
+
+
 def _parse_instruction_condition(field: str, instruction_condition: str) -> InstructionCondition:
     """Parse an instruction condition and returns a parsed condition"""
-    tokens = _tokenize_instruction_condition(instruction_condition)
+    with importlib.resources.open_text('mcdecoder.grammars', 'instruction_condition.lark') as file:
+        parser = lark.Lark(file, start='condition')
 
-    # Must have 2 tokens at least
-    if len(tokens) < 2:
-        raise RuntimeError(
-            f'Unexpected condition expression: {instruction_condition}')
-
-    # The first token must be equality operator
-    if tokens[0].kind != 'equality':
-        raise RuntimeError(
-            f'Unexpected condition expression: {instruction_condition}')
-
-    operator = cast(str, tokens[0].value)
-
-    # Specific parsing for each operator
-    if operator == 'in_range':
-        # in_range condition must have 4 tokens(operator, value start, range operator and value end)
-        if len(tokens) != 4:
-            raise RuntimeError(
-                f'Unexpected condition expression: {instruction_condition}')
-
-        _, value_start_token, range_token, value_end_token = tokens
-
-        # Validate the token kinds
-        if value_start_token.kind != 'number' or range_token.kind != 'range' or value_end_token.kind != 'number':
-            raise RuntimeError(
-                f'Unexpected condition expression: {instruction_condition}')
-
-        values = [cast(int, value_start_token.value),
-                  cast(int, value_end_token.value)]
-
-    else:
-        # Other operators must have 2 tokens(operator and value)
-        if len(tokens) != 2:
-            raise RuntimeError(
-                f'Unexpected condition expression: {instruction_condition}')
-
-        _, value_token = tokens
-
-        # Validate the token kind
-        if value_token.kind != 'number':
-            raise RuntimeError(
-                f'Unexpected condition expression: {instruction_condition}')
-
-        values = [cast(int, value_token.value)]
-
-    # Create instruction condition
-    return InstructionCondition(field=field, operator=operator, values=values)
-
-
-def _tokenize_instruction_condition(instruction_condition: str) -> List[_InstructionConditionToken]:
-    # Define tokenizer specification
-    operator_keywords = ['in_range', ]
-    token_specification = [
-        ('id', r'[A-Za-z]\w*'),  # Identifiers
-        ('number', r'\d+'),  # Integer number
-        ('range', r'-'),  # Range operator
-        ('equality', r'!=|>|>=|<|<='),  # Equality operator
-        ('skip', r'\s+'),  # Skip over spaces and tabs
-        ('mismatch', r'.'),  # Any other character
-    ]
-
-    # Create tokenizer
-    tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
-
-    # Tokenize
-    tokens: List[_InstructionConditionToken] = []
-    for mo in re.finditer(tok_regex, instruction_condition):
-        kind = cast(str, mo.lastgroup)
-        value = mo.group()
-        if kind == 'id' and value in operator_keywords:
-            kind = 'equality'
-        elif kind == 'number':
-            value = int(value)
-        elif kind == 'range':
-            pass
-        elif kind == 'equality':
-            pass
-        elif kind == 'skip':
-            continue
-        elif kind == 'mismatch':
-            raise RuntimeError(f'{value!r} unexpected')
-
-        tokens.append(_InstructionConditionToken(kind=kind, value=value))
-
-    return tokens
+    parsed_tree = parser.parse(instruction_condition)
+    return cast(InstructionCondition, _InstructionConditionTransformer(
+        field).transform(parsed_tree))
 
 
 def _generate(mcdecoder_model: McDecoder) -> bool:

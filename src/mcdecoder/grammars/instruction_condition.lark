@@ -1,0 +1,10 @@
+?condition: EQUALITY_OP number -> equality_condition
+            | "in_range" number "-" number -> in_range_condition
+equality_op: EQUALITY_OP
+number: NUMBER
+
+NUMBER: /\d+/
+EQUALITY_OP: "!=" | ">" | ">=" | "<" | "<="
+
+%import common.WS
+%ignore WS

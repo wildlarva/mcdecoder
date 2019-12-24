@@ -1,5 +1,6 @@
 conan
 Jinja2
 jsonschema
+lark-parser
 pytest
 PyYAML

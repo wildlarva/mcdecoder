@@ -1,0 +1,14 @@
+instruction_format: field_format ("|" field_format)*
+field_format: field_bits (":" id ("[" field_bit_ranges "]")?)?
+field_bits: BIT_ARRAY+
+field_bit_ranges: field_bit_range ("," field_bit_range)*
+field_bit_range: number (":" number)?
+id: ID
+number: NUMBER
+
+BIT_ARRAY: /[01x]+/
+ID: /[A-Za-z]\w*/
+NUMBER: /\d+/
+
+%import common.WS
+%ignore WS

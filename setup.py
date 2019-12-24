@@ -11,7 +11,7 @@ setup(
     packages=find_packages(
         'src', exclude=['test', 'test.*', '*.test', '*.test.*']),
     package_dir={'': 'src'},
-    package_data={'': ['*.json'], 'mcdecoder': ['templates/*']},
+    package_data={'': ['*.json', '*.lark'], 'mcdecoder': ['templates/*']},
     python_requires='>=3.8',
-    install_requires=['jinja2', 'jsonschema', 'pyyaml'],
+    install_requires=['jinja2', 'jsonschema', 'lark-parser', 'pyyaml'],
 )
