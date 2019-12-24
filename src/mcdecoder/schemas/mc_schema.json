@@ -10,7 +10,7 @@
                     "properties": {
                         "namespace": {
                             "type": "string",
-                            "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
+                            "pattern": "^[A-Za-z]\\w*$"
                         }
                     }
                 },
@@ -25,18 +25,18 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
+                        "pattern": "^[A-Za-z]\\w*$"
                     },
                     "format": {
                         "type": "string",
-                        "pattern": "^[A-Za-z0-9_:\\[\\],|]*$"
+                        "pattern": "^[\\w\\s\\[\\]:,|]*$"
                     },
                     "condition": {
                         "type": "object",
                         "patternProperties": {
-                            "^[A-Za-z][A-Za-z0-9_]*$": {
+                            "^[A-Za-z]\\w*$": {
                                 "type": "string",
-                                "pattern": "^[A-Za-z0-9_\\-!=>< ]*$"
+                                "pattern": "^[\\w\\s\\-!=><]*$"
                             }
                         },
                         "additionalProperties": false

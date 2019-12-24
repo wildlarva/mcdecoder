@@ -42,7 +42,7 @@ instructions:
     #
     #   <subfield_end>: [optional] Subfield end bit position in the instruction field
     #     NOTE: This is an end bit position in a field, not in an instruction.
-    format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxxxxxxxxxx:imm12
+    format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12
 
     # [optional] Bit condition when the instruction applys
     #
@@ -78,12 +78,12 @@ instructions:
       clocks: 10
 
   - name: push_1
-    format: xxxx:cond|100100|1|0|1101|xxxxxxxxxxxxxxxx:register_list
+    format: xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list
     condition:
       cond: '!= 15'
 
   - name: c_addi_1
-    format: 000:funct3|x:imm[5]|xxxxx:dest|xxxxx:imm[4:0]|01:op
+    format: 000:funct3|x:imm[5]|xxxx x:dest|xxx xx:imm[4:0]|01:op
 
   - name: c_sd_1
-    format: 111:funct3|xxxxxx:offset[5:3,8:6]|xxxxx:src|10:op
+    format: 111:funct3|x xxxx x:offset[5:3,8:6]|xxx xx:src|10:op

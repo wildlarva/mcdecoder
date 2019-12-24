@@ -331,6 +331,7 @@ class _InstructionFormatTransformer(lark.Transformer):
 
         return InstructionFieldFormat(name=field_name, bits_format=field_bits, bit_ranges=field_bit_ranges)
 
+    @lark.v_args(inline=False)
     def field_bits(self, field_bits_tokens: List[lark.Token]) -> str:
         return ''.join(field_bits_tokens)
 
