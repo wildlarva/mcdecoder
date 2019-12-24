@@ -106,12 +106,6 @@ class InstructionCondition:
     values: List[int]
 
 
-@dataclass
-class _InstructionConditionToken:
-    kind: str
-    value: Union[int, str]
-
-
 # Instruction format
 @dataclass
 class BitRange:
