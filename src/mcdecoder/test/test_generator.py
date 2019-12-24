@@ -2,10 +2,14 @@ from mcdecoder.core import (
     EqualityInstructionDecodeCondition, InRangeInstructionDecodeCondition,
     InstructionDecoder, InstructionFieldDecoder, InstructionSubfieldDecoder,
     MachineDecoder, McDecoder)
-from mcdecoder.generator import _generate
+from mcdecoder.generator import _generate, generate
 
 
 def test_generate() -> None:
+    assert generate('test/arm.yaml') == True
+
+
+def test__generate() -> None:
     mcdecoder_model = McDecoder(
         machine_decoder=MachineDecoder(namespace_prefix='ns', extras=None),
         instruction_decoders=[
