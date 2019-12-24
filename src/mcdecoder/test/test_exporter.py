@@ -5,7 +5,7 @@ from mcdecoder.exporter import export
 
 
 def test_export_without_condition() -> None:
-    shutil.rmtree('out')
+    shutil.rmtree('out', ignore_errors=True)
 
     export('test/riscv.yaml', 'out/riscv.csv')
 
@@ -23,7 +23,7 @@ def test_export_without_condition() -> None:
 
 
 def test_export_with_condition() -> None:
-    shutil.rmtree('out')
+    shutil.rmtree('out', ignore_errors=True)
 
     export('test/arm.yaml', 'out/arm.csv')
 

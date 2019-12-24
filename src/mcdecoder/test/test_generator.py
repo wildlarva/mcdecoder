@@ -8,7 +8,7 @@ import os
 
 
 def test_generate() -> None:
-    shutil.rmtree('out')
+    shutil.rmtree('out', ignore_errors=True)
 
     assert generate('test/arm.yaml') == True
     assert os.path.isfile('out/arm_mcdecoder.c') == True
@@ -16,7 +16,7 @@ def test_generate() -> None:
 
 
 def test__generate() -> None:
-    shutil.rmtree('out')
+    shutil.rmtree('out', ignore_errors=True)
 
     mcdecoder_model = McDecoder(
         machine_decoder=MachineDecoder(namespace_prefix='ns_', extras=None),
