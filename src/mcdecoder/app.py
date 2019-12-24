@@ -5,14 +5,7 @@ from typing import List, Optional, cast
 from mcdecoder import exporter, generator
 
 
-@dataclass
-class _Arguments:
-    command: str
-    mcfile: Optional[str]
-    output_file: Optional[str]
-
-    def __init__(self) -> None:
-        pass
+# External functions
 
 
 def run_app(argv: List[str]) -> int:
@@ -60,3 +53,16 @@ def run_app(argv: List[str]) -> int:
 
 
     return 0
+
+
+# Internal classes
+
+
+@dataclass
+class _Arguments:
+    command: str
+    mcfile: Optional[str]
+    output_file: Optional[str]
+
+    def __init__(self) -> None:
+        pass

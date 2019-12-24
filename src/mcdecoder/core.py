@@ -7,6 +7,8 @@ import jsonschema
 import lark
 import yaml
 
+# External classes
+
 # MC description models loaded from yaml files
 
 
@@ -166,6 +168,65 @@ def parse_instruction_format(instruction_format: str) -> InstructionFormat:
 def calc_instruction_bit_size(instruction_format: InstructionFormat) -> int:
     return sum(map(lambda field_format: len(
         field_format.bits_format), instruction_format.field_formats))
+
+
+# Internal classes
+
+
+@lark.v_args(inline=True)
+class _InstructionFormatTransformer(lark.Transformer):
+    @lark.v_args(inline=False)
+    def instruction_format(self, field_formats: List[InstructionFieldFormat]) -> InstructionFormat:
+        return InstructionFormat(field_formats=field_formats)
+
+    def field_format(self, field_bits: str, field_name: str = None, field_bit_ranges: List[BitRange] = None) -> InstructionFieldFormat:
+        if field_bit_ranges is None:
+            field_bit_ranges = [BitRange(start=len(field_bits) - 1, end=0)]
+
+        return InstructionFieldFormat(name=field_name, bits_format=field_bits, bit_ranges=field_bit_ranges)
+
+    @lark.v_args(inline=False)
+    def field_bits(self, field_bits_tokens: List[lark.Token]) -> str:
+        return ''.join(field_bits_tokens)
+
+    @lark.v_args(inline=False)
+    def field_bit_ranges(self, field_bit_ranges: List[BitRange]) -> List[BitRange]:
+        return field_bit_ranges
+
+    def field_bit_range(self, subfield_start: int, subfield_end: int = None) -> BitRange:
+        if subfield_end is None:
+            subfield_end = subfield_start
+        return BitRange(start=subfield_start, end=subfield_end)
+
+    def id(self, id_token: lark.Token) -> str:
+        return str(id_token)
+
+    def number(self, number_token: lark.Token) -> int:
+        return int(number_token)
+
+    # NOTE: Pyright detects error without arguments for __init__
+    def __init__(self, dummy: Any) -> None:
+        pass
+
+
+@lark.v_args(inline=True)
+class _InstructionConditionTransformer(lark.Transformer):
+    _field: str
+
+    def equality_condition(self, equality_op: str, value: int) -> InstructionCondition:
+        return InstructionCondition(field=self._field, operator=equality_op, values=[value])
+
+    def in_range_condition(self, value_start: int, value_end: int) -> InstructionCondition:
+        return InstructionCondition(field=self._field, operator='in_range', values=[value_start, value_end])
+
+    def equality_op(self, equality_op_token: lark.Token) -> str:
+        return str(equality_op_token)
+
+    def number(self, number_token: lark.Token) -> int:
+        return int(number_token)
+
+    def __init__(self, field: str) -> None:
+        self._field = field
 
 
 # Internal functions
@@ -328,68 +389,12 @@ def _calc_type_bit_size(bit_size: int) -> int:
         return 32
 
 
-@lark.v_args(inline=True)
-class _InstructionFormatTransformer(lark.Transformer):
-    @lark.v_args(inline=False)
-    def instruction_format(self, field_formats: List[InstructionFieldFormat]) -> InstructionFormat:
-        return InstructionFormat(field_formats=field_formats)
-
-    def field_format(self, field_bits: str, field_name: str = None, field_bit_ranges: List[BitRange] = None) -> InstructionFieldFormat:
-        if field_bit_ranges is None:
-            field_bit_ranges = [BitRange(start=len(field_bits) - 1, end=0)]
-
-        return InstructionFieldFormat(name=field_name, bits_format=field_bits, bit_ranges=field_bit_ranges)
-
-    @lark.v_args(inline=False)
-    def field_bits(self, field_bits_tokens: List[lark.Token]) -> str:
-        return ''.join(field_bits_tokens)
-
-    @lark.v_args(inline=False)
-    def field_bit_ranges(self, field_bit_ranges: List[BitRange]) -> List[BitRange]:
-        return field_bit_ranges
-
-    def field_bit_range(self, subfield_start: int, subfield_end: int = None) -> BitRange:
-        if subfield_end is None:
-            subfield_end = subfield_start
-        return BitRange(start=subfield_start, end=subfield_end)
-
-    def id(self, id_token: lark.Token) -> str:
-        return str(id_token)
-
-    def number(self, number_token: lark.Token) -> int:
-        return int(number_token)
-
-    # NOTE: Pyright detects error without arguments for __init__
-    def __init__(self, dummy: Any) -> None:
-        pass
-
-
 def _create_instruction_decode_condition(field: str, instruction_condition: str) -> InstructionDecodeCondition:
     condition = _parse_instruction_condition(field, instruction_condition)
     if condition.operator == 'in_range':
         return InRangeInstructionDecodeCondition(field=field, value_start=condition.values[0], value_end=condition.values[1])
     else:
         return EqualityInstructionDecodeCondition(field=field, operator=condition.operator, value=condition.values[0])
-
-
-@lark.v_args(inline=True)
-class _InstructionConditionTransformer(lark.Transformer):
-    _field: str
-
-    def equality_condition(self, equality_op: str, value: int) -> InstructionCondition:
-        return InstructionCondition(field=self._field, operator=equality_op, values=[value])
-
-    def in_range_condition(self, value_start: int, value_end: int) -> InstructionCondition:
-        return InstructionCondition(field=self._field, operator='in_range', values=[value_start, value_end])
-
-    def equality_op(self, equality_op_token: lark.Token) -> str:
-        return str(equality_op_token)
-
-    def number(self, number_token: lark.Token) -> int:
-        return int(number_token)
-
-    def __init__(self, field: str) -> None:
-        self._field = field
 
 
 def _parse_instruction_condition(field: str, instruction_condition: str) -> InstructionCondition:
