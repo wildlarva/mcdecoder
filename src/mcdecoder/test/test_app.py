@@ -1,3 +1,6 @@
+import os
+import shutil
+
 from mcdecoder.app import run_app
 
 
@@ -14,4 +17,16 @@ def test_run_app_help() -> None:
 
 
 def test_run_app_generate() -> None:
+    shutil.rmtree('out')
+
     assert run_app(['mcdecoder', 'generate', 'test/arm.yaml']) == 0
+    assert os.path.isfile('out/arm_mcdecoder.c') == True
+    assert os.path.isfile('out/arm_mcdecoder.h') == True
+
+
+def test_run_app_export() -> None:
+    shutil.rmtree('out')
+
+    assert run_app(['mcdecoder', 'export', '--output',
+                    'out/arm.csv', 'test/arm.yaml']) == 0
+    assert os.path.isfile('out/arm.csv') == True

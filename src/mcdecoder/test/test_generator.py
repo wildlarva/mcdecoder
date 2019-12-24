@@ -3,15 +3,23 @@ from mcdecoder.core import (
     InstructionDecoder, InstructionFieldDecoder, InstructionSubfieldDecoder,
     MachineDecoder, McDecoder)
 from mcdecoder.generator import _generate, generate
+import shutil
+import os
 
 
 def test_generate() -> None:
+    shutil.rmtree('out')
+
     assert generate('test/arm.yaml') == True
+    assert os.path.isfile('out/arm_mcdecoder.c') == True
+    assert os.path.isfile('out/arm_mcdecoder.h') == True
 
 
 def test__generate() -> None:
+    shutil.rmtree('out')
+
     mcdecoder_model = McDecoder(
-        machine_decoder=MachineDecoder(namespace_prefix='ns', extras=None),
+        machine_decoder=MachineDecoder(namespace_prefix='ns_', extras=None),
         instruction_decoders=[
             InstructionDecoder(
                 name='add_1',
@@ -59,4 +67,7 @@ def test__generate() -> None:
             ),
         ],
     )
+
     assert _generate(mcdecoder_model) == True
+    assert os.path.isfile('out/ns_mcdecoder.c') == True
+    assert os.path.isfile('out/ns_mcdecoder.h') == True

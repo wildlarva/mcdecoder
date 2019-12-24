@@ -44,10 +44,11 @@ def export(mcfile: str, output_file: str) -> bool:
 
     # Make parent directory of output file
     output_dir = os.path.dirname(output_file)
-    if not os.path.exists(output_dir):
-        os.mkdir(output_dir)
-    elif not os.path.isdir(output_dir):
-        return False
+    if output_dir != '':
+        if not os.path.exists(output_dir):
+            os.mkdir(output_dir)
+        elif not os.path.isdir(output_dir):
+            return False
 
     # Export CSV
     with open(output_file, 'w') as file:
