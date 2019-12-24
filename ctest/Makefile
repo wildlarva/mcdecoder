@@ -23,7 +23,7 @@ build/conanbuildinfo.mak: conanfile.txt
 	conan install -if build .
 
 out/arm_mcdecoder.c out/arm_mcdecoder.h: ../test/arm.yaml
-	python3.8 -m mcdecoder $<
+	python3.8 -m mcdecoder generate $<
 
 out/riscv_mcdecoder.c out/riscv_mcdecoder.h: ../test/riscv.yaml
-	python3.8 -m mcdecoder $<
+	python3.8 -m mcdecoder generate $<

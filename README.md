@@ -19,19 +19,19 @@ python3.8 -m pip install .
 ```bash
 python3.8 -m mcdecoder <path-to-mc-description-file>
 
-ex. python3.8 -m mcdecoder test/arm.yaml
+ex. python3.8 -m mcdecoder generate test/arm.yaml
 ```
 
 MC decoder files are generated as
 
-* out/mcdecoder.c
-* out/mcdecoder.h
+- out/mcdecoder.c
+- out/mcdecoder.h
 
 See [the specification of machine code description file](doc/mc_desc_spec.yaml).
 
 ## For developers
 
-### Requirements
+### Requirements for development
 
 - Python 3.8 (with pip and venv)
 
