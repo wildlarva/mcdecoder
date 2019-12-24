@@ -366,8 +366,8 @@ def _create_instruction_decode_condition(field: str, instruction_condition: str)
 class _InstructionConditionTransformer(lark.Transformer):
     _field: str
 
-    def equality_condition(self, equality_op_token: str, value: int) -> InstructionCondition:
-        return InstructionCondition(field=self._field, operator=equality_op_token, values=[value])
+    def equality_condition(self, equality_op: str, value: int) -> InstructionCondition:
+        return InstructionCondition(field=self._field, operator=equality_op, values=[value])
 
     def in_range_condition(self, value_start: int, value_end: int) -> InstructionCondition:
         return InstructionCondition(field=self._field, operator='in_range', values=[value_start, value_end])
