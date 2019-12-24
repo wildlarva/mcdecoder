@@ -14,7 +14,7 @@ class _Arguments:
         pass
 
 
-def run_app(argv: List[str]) -> None:
+def run_app(argv: List[str]) -> int:
     # Create an argument parser
     parser = argparse.ArgumentParser(
         prog='python -m mcdecoder', description='Generate a machine code decoder', add_help=True)
@@ -28,8 +28,11 @@ def run_app(argv: List[str]) -> None:
         'mc_file', help='A path to a machine code descriptin file')
 
     # Parse an argument
-    args: _Arguments = cast(_Arguments, parser.parse_args(
-        argv[1:], namespace=_Arguments()))
+    try:
+        args: _Arguments = cast(_Arguments, parser.parse_args(
+            argv[1:], namespace=_Arguments()))
+    except SystemExit as se:
+        return se.code
 
     # Run an individual command
     if args.command == 'generate':
@@ -38,3 +41,5 @@ def run_app(argv: List[str]) -> None:
             print('Generated MC decoders.')
         else:
             print('Error occurred on generation.')
+
+    return 0

@@ -4,7 +4,7 @@ from mcdecoder import app
 
 
 def main() -> None:
-    app.run_app(sys.argv)
+    sys.exit(app.run_app(sys.argv))
 
 
 if __name__ == '__main__':
