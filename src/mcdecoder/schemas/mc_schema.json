@@ -12,7 +12,8 @@
                             "type": "string",
                             "pattern": "^[A-Za-z]\\w*$"
                         }
-                    }
+                    },
+                    "additionalProperties": false
                 },
                 "extras": {}
             },
