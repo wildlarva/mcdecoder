@@ -131,12 +131,7 @@ class InstructionFormat:
 def create_mcdecoder_model(mcfile_path: str) -> McDecoder:
     """Create a model which contains information of MC decoder"""
     # Load MC description
-    with open(mcfile_path, 'rb') as file:
-        mc_desc_model = cast(
-            McDescription, yaml.load(file, Loader=yaml.Loader))
-
-    # Validate
-    _validate_mc_desc_model(mc_desc_model)
+    mc_desc_model = load_mc_description_model(mcfile_path)
 
     # Create decoder model
     machine_decoder = _create_machine_decoder_model(mc_desc_model['machine'])
@@ -148,10 +143,35 @@ def create_mcdecoder_model(mcfile_path: str) -> McDecoder:
     )
 
 
+def load_mc_description_model(mcfile_path: str) -> McDescription:
+    # Load MC description
+    with open(mcfile_path, 'rb') as file:
+        mc_desc_model = yaml.load(file, Loader=yaml.Loader)
+
+    # Validate
+    _validate_mc_desc_model(mc_desc_model)
+
+    return cast(McDescription, mc_desc_model)
+
+
+def parse_instruction_format(instruction_format: str) -> InstructionFormat:
+    """Parse an instruction format and returns an array of field formats"""
+    with importlib.resources.open_text('mcdecoder.grammars', 'instruction_format.lark') as file:
+        parser = lark.Lark(file, start='instruction_format')
+
+    parsed_tree = parser.parse(instruction_format)
+    return cast(InstructionFormat, _InstructionFormatTransformer(None).transform(parsed_tree))
+
+
+def calc_instruction_bit_size(instruction_format: InstructionFormat) -> int:
+    return sum(map(lambda field_format: len(
+        field_format.bits_format), instruction_format.field_formats))
+
+
 # Internal functions
 
 
-def _validate_mc_desc_model(mc_desc_model: McDescription) -> None:
+def _validate_mc_desc_model(mc_desc_model: Any) -> None:
     with importlib.resources.open_text('mcdecoder.schemas', 'mc_schema.json') as file:
         schema = json.load(file)
 
@@ -179,10 +199,9 @@ def _make_namespace_prefix(namespace: Optional[str]) -> str:
 def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrition) -> InstructionDecoder:
     """Create a model which contains information of individual instruction decoder"""
     # Parse instruction format
-    instruction_format = _parse_instruction_format(
+    instruction_format = parse_instruction_format(
         instruction_desc_model['format'])
-    instruction_bit_size = sum(map(lambda field_format: len(
-        field_format.bits_format), instruction_format.field_formats))
+    instruction_bit_size = calc_instruction_bit_size(instruction_format)
 
     # Build fixed bits information
     fixed_bits_mask, fixed_bits = _build_fixed_bits_info(instruction_format)
@@ -343,15 +362,6 @@ class _InstructionFormatTransformer(lark.Transformer):
     # NOTE: Pyright detects error without arguments for __init__
     def __init__(self, dummy: Any) -> None:
         pass
-
-
-def _parse_instruction_format(instruction_format: str) -> InstructionFormat:
-    """Parse an instruction format and returns an array of field formats"""
-    with importlib.resources.open_text('mcdecoder.grammars', 'instruction_format.lark') as file:
-        parser = lark.Lark(file, start='instruction_format')
-
-    parsed_tree = parser.parse(instruction_format)
-    return cast(InstructionFormat, _InstructionFormatTransformer(None).transform(parsed_tree))
 
 
 def _create_instruction_decode_condition(field: str, instruction_condition: str) -> InstructionDecodeCondition:
