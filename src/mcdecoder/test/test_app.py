@@ -7,6 +7,9 @@ from mcdecoder.app import run_app
 def test_run_app_without_arguments() -> None:
     assert run_app(['mcdecoder']) == 2
     assert run_app(['mcdecoder', 'generate']) == 2
+    assert run_app(['mcdecoder', 'export']) == 2
+    assert run_app(['mcdecoder', 'export', 'test/arm.yaml']) == 2
+    assert run_app(['mcdecoder', 'export', '--output', 'out/arm.yaml']) == 2
 
 
 def test_run_app_help() -> None:

@@ -25,7 +25,7 @@ def run_app(argv: List[str]) -> int:
     export_parser = subparsers.add_parser(
         'export', help='Export a MC description as another format. Currently, mcdecoder only supports CSV format.')
     export_parser.add_argument(
-        '--output', dest='output_file', help='A path to a output file')
+        '--output', dest='output_file', required=True, help='A path to a output file')
     export_parser.add_argument(
         'mcfile', help='A path to a machine code descriptin file')
 
