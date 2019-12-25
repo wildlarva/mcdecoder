@@ -46,7 +46,7 @@ def export(mcfile: str, output_file: str) -> bool:
     output_dir = os.path.dirname(output_file)
     if output_dir != '':
         if not os.path.exists(output_dir):
-            os.mkdir(output_dir)
+            os.makedirs(output_dir)
         elif not os.path.isdir(output_dir):
             return False
 

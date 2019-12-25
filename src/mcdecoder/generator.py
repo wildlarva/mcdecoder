@@ -25,7 +25,7 @@ def _generate(mcdecoder_model: core.McDecoder) -> bool:
     decoder_source_template = env.get_template('mcdecoder.c')
 
     if not os.path.exists('out'):
-        os.mkdir('out')
+        os.makedirs('out')
     elif not os.path.isdir('out'):
         return False
 
