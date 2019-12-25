@@ -24,8 +24,8 @@ def test_run_app_generate_without_template_dir() -> None:
 
     assert run_app(['mcdecoder', 'generate', '--output',
                     'out', 'test/arm.yaml']) == 0
-    assert os.path.isfile('out/arm_mcdecoder.c') == True
-    assert os.path.isfile('out/arm_mcdecoder.h') == True
+    assert os.path.isfile('out/arm_mcdecoder.c') is True
+    assert os.path.isfile('out/arm_mcdecoder.h') is True
 
 
 def test_run_app_generate_with_template_dir() -> None:
@@ -33,8 +33,8 @@ def test_run_app_generate_with_template_dir() -> None:
 
     assert run_app(['mcdecoder', 'generate', '--output', 'out',
                     '--template', 'test/user_templates', 'test/arm.yaml']) == 0
-    assert os.path.isfile('out/arm_template.c') == True
-    assert os.path.isfile('out/arm_template.h') == True
+    assert os.path.isfile('out/arm_template.c') is True
+    assert os.path.isfile('out/arm_template.h') is True
 
 
 def test_run_app_generate_with_output_dir() -> None:
@@ -42,8 +42,8 @@ def test_run_app_generate_with_output_dir() -> None:
 
     assert run_app(['mcdecoder', 'generate', '--output',
                     'out/out2', 'test/arm.yaml']) == 0
-    assert os.path.isfile('out/out2/arm_mcdecoder.c') == True
-    assert os.path.isfile('out/out2/arm_mcdecoder.h') == True
+    assert os.path.isfile('out/out2/arm_mcdecoder.c') is True
+    assert os.path.isfile('out/out2/arm_mcdecoder.h') is True
 
 
 def test_run_app_export() -> None:
@@ -51,4 +51,4 @@ def test_run_app_export() -> None:
 
     assert run_app(['mcdecoder', 'export', '--output',
                     'out/arm.csv', 'test/arm.yaml']) == 0
-    assert os.path.isfile('out/arm.csv') == True
+    assert os.path.isfile('out/arm.csv') is True

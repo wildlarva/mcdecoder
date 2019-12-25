@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import importlib.resources
 import json
-from typing import Any, Dict, List, Optional, Tuple, TypedDict, Union, cast
+from typing import Any, Dict, List, Optional, Tuple, TypedDict, cast
 
 import jsonschema
 import lark
