@@ -1,22 +1,40 @@
+import os
+import shutil
+
+import jinja2
 from mcdecoder.core import (
     EqualityInstructionDecodeCondition, InRangeInstructionDecodeCondition,
     InstructionDecoder, InstructionFieldDecoder, InstructionSubfieldDecoder,
     MachineDecoder, McDecoder)
 from mcdecoder.generator import _generate, generate
-import shutil
-import os
 
 
-def test_generate() -> None:
+def test_generate_without_template_dir() -> None:
     shutil.rmtree('out', ignore_errors=True)
 
-    assert generate('test/arm.yaml') == True
+    assert generate('test/arm.yaml', output_directory='out') == True
     assert os.path.isfile('out/arm_mcdecoder.c') == True
     assert os.path.isfile('out/arm_mcdecoder.h') == True
 
 
-def test__generate() -> None:
+def test_generate_with_template_dir() -> None:
     shutil.rmtree('out', ignore_errors=True)
+
+    assert generate('test/arm.yaml', output_directory='out',
+                    template_directory='test/user_templates') == True
+    assert os.path.isfile('out/arm_template.c') == True
+    assert os.path.isfile('out/arm_template.h') == True
+
+
+def test_generate_with_output_dir() -> None:
+    shutil.rmtree('out', ignore_errors=True)
+
+    assert generate('test/arm.yaml', output_directory='out/out2') == True
+    assert os.path.isfile('out/out2/arm_mcdecoder.c') == True
+    assert os.path.isfile('out/out2/arm_mcdecoder.h') == True
+
+
+def test__generate() -> None:
 
     mcdecoder_model = McDecoder(
         machine_decoder=MachineDecoder(namespace_prefix='ns_', extras=None),
@@ -68,6 +86,9 @@ def test__generate() -> None:
         ],
     )
 
-    assert _generate(mcdecoder_model) == True
+    shutil.rmtree('out', ignore_errors=True)
+
+    assert _generate(mcdecoder_model, 'out', jinja2.PackageLoader(
+        'mcdecoder', 'templates/athrill')) == True
     assert os.path.isfile('out/ns_mcdecoder.c') == True
     assert os.path.isfile('out/ns_mcdecoder.h') == True

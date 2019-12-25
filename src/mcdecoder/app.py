@@ -19,6 +19,10 @@ def run_app(argv: List[str]) -> int:
     generate_parser = subparsers.add_parser(
         'generate', help='Generate a decoder or other codes to support a decoder')
     generate_parser.add_argument(
+        '--output', dest='output_directory', help='A path to a output directory')
+    generate_parser.add_argument(
+        '--template', dest='template_directory', help='A path to a directoy including user-defined template files')
+    generate_parser.add_argument(
         'mcfile', help='A path to a machine code descriptin file')
 
     # Create a subparser for the command 'export'
@@ -38,7 +42,8 @@ def run_app(argv: List[str]) -> int:
 
     # Run an individual command
     if args.command == 'generate':
-        result = generator.generate(args.mcfile)
+        result = generator.generate(
+            args.mcfile, output_directory=args.output_directory, template_directory=args.template_directory)
         if result:
             print('Generated MC decoders.')
         else:
@@ -51,7 +56,6 @@ def run_app(argv: List[str]) -> int:
         else:
             print('Error occurred on exporting.')
 
-
     return 0
 
 
@@ -62,7 +66,9 @@ def run_app(argv: List[str]) -> int:
 class _Arguments:
     command: str
     mcfile: Optional[str]
+    output_directory: Optional[str]
     output_file: Optional[str]
+    template_directory: Optional[str]
 
     def __init__(self) -> None:
         pass

@@ -17,17 +17,17 @@ python3.8 -m pip install .
 ### How to use
 
 ```bash
-mcdecoder generate <path-to-mc-description-file>
+mcdecoder generate --output <output-directory> <path-to-mc-description-file>
 # or
-python3.8 -m mcdecoder generate <path-to-mc-description-file>
+python3.8 -m mcdecoder generate --output <output-directory> <path-to-mc-description-file>
 
-ex. mcdecoder generate test/arm.yaml
+# ex. mcdecoder generate --output out test/arm.yaml
 ```
 
 MC decoder files are generated as
 
-- out/mcdecoder.c
-- out/mcdecoder.h
+- \<output-directory\>/mcdecoder.c
+- \<output-directory\>/mcdecoder.h
 
 See [the specification of machine code description file](doc/mc_desc_spec.yaml).
 

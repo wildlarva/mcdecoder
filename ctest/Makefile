@@ -23,7 +23,7 @@ build/conanbuildinfo.mak: conanfile.txt
 	conan install -if build .
 
 out/arm_mcdecoder.c: ../test/arm.yaml
-	mcdecoder generate $<
+	mcdecoder generate --output out $<
 
 out/riscv_mcdecoder.c: ../test/riscv.yaml
-	mcdecoder generate $<
+	mcdecoder generate --output out $<

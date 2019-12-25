@@ -7,30 +7,40 @@ from mcdecoder import core
 # External functions
 
 
-def generate(mcfile_path: str) -> bool:
+def generate(mcfile_path: str, output_directory: str = None, template_directory: str = None) -> bool:
     """Generate MC decoder files from MC description file"""
+    # Create decoder model
     mcdecoder_model = core.create_mcdecoder_model(mcfile_path)
-    return _generate(mcdecoder_model)
+
+    # Create template loader
+    if template_directory is None:
+        loader = jinja2.PackageLoader('mcdecoder', 'templates/athrill')
+    else:
+        loader = jinja2.FileSystemLoader(template_directory)
+
+    # Default output directory to the current
+    if output_directory is None:
+        output_directory = '.'
+
+    # Generate
+    return _generate(mcdecoder_model, output_directory, loader)
 
 
 # Internal functions
 
 
-def _generate(mcdecoder_model: core.McDecoder) -> bool:
+def _generate(mcdecoder_model: core.McDecoder, output_directory: str, template_loader: jinja2.BaseLoader) -> bool:
     """Generate MC decoder files from a MC decoder model"""
     # Make template arguments
-    ns_prefix = mcdecoder_model.machine_decoder.namespace_prefix
     template_args = {
         'mc_decoder': mcdecoder_model,
         'machine_decoder': mcdecoder_model.machine_decoder,
         'instruction_decoders': mcdecoder_model.instruction_decoders,
-        'ns': ns_prefix,
+        'ns': mcdecoder_model.machine_decoder.namespace_prefix,
     }
 
     # Find templates
-    env = jinja2.Environment(
-        loader=jinja2.PackageLoader('mcdecoder', 'templates/athrill')
-    )
+    env = jinja2.Environment(loader=template_loader)
     template_files = env.list_templates()
 
     # Generate files
@@ -39,7 +49,7 @@ def _generate(mcdecoder_model: core.McDecoder) -> bool:
         template = env.get_template(template_file)
 
         # Determine generating file path
-        output_file = os.path.join('out', jinja2.Template(
+        output_file = os.path.join(output_directory, jinja2.Template(
             template_file).render(template_args))
 
         # Make output directory

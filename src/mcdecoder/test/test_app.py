@@ -19,12 +19,31 @@ def test_run_app_help() -> None:
     assert run_app(['mcdecoder', 'generate', '-h']) == 0
 
 
-def test_run_app_generate() -> None:
+def test_run_app_generate_without_template_dir() -> None:
     shutil.rmtree('out', ignore_errors=True)
 
-    assert run_app(['mcdecoder', 'generate', 'test/arm.yaml']) == 0
+    assert run_app(['mcdecoder', 'generate', '--output',
+                    'out', 'test/arm.yaml']) == 0
     assert os.path.isfile('out/arm_mcdecoder.c') == True
     assert os.path.isfile('out/arm_mcdecoder.h') == True
+
+
+def test_run_app_generate_with_template_dir() -> None:
+    shutil.rmtree('out', ignore_errors=True)
+
+    assert run_app(['mcdecoder', 'generate', '--output', 'out',
+                    '--template', 'test/user_templates', 'test/arm.yaml']) == 0
+    assert os.path.isfile('out/arm_template.c') == True
+    assert os.path.isfile('out/arm_template.h') == True
+
+
+def test_run_app_generate_with_output_dir() -> None:
+    shutil.rmtree('out', ignore_errors=True)
+
+    assert run_app(['mcdecoder', 'generate', '--output',
+                    'out/out2', 'test/arm.yaml']) == 0
+    assert os.path.isfile('out/out2/arm_mcdecoder.c') == True
+    assert os.path.isfile('out/out2/arm_mcdecoder.h') == True
 
 
 def test_run_app_export() -> None:
