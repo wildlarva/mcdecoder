@@ -11,7 +11,7 @@ setup(
     packages=find_packages(
         'src', exclude=['test', 'test.*', '*.test', '*.test.*']),
     package_dir={'': 'src'},
-    package_data={'': ['*.json', '*.lark'], 'mcdecoder': ['templates/*']},
+    package_data={'': ['*.json', '*.lark'], 'mcdecoder': ['templates/*/*']},
     entry_points={
         'console_scripts': ['mcdecoder = mcdecoder.__main__:main']
     },
