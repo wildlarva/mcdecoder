@@ -18,17 +18,7 @@ def generate(mcfile_path: str) -> bool:
 
 def _generate(mcdecoder_model: core.McDecoder) -> bool:
     """Generate MC decoder files from a MC decoder model"""
-    env = jinja2.Environment(
-        loader=jinja2.PackageLoader('mcdecoder', 'templates')
-    )
-    decoder_header_template = env.get_template('mcdecoder.h')
-    decoder_source_template = env.get_template('mcdecoder.c')
-
-    if not os.path.exists('out'):
-        os.makedirs('out')
-    elif not os.path.isdir('out'):
-        return False
-
+    # Make template arguments
     ns_prefix = mcdecoder_model.machine_decoder.namespace_prefix
     template_args = {
         'mc_decoder': mcdecoder_model,
@@ -37,10 +27,30 @@ def _generate(mcdecoder_model: core.McDecoder) -> bool:
         'ns': ns_prefix,
     }
 
-    with open(f'out/{ns_prefix}mcdecoder.h', 'w') as file:
-        file.write(decoder_header_template.render(template_args))
+    # Find templates
+    env = jinja2.Environment(
+        loader=jinja2.PackageLoader('mcdecoder', 'templates/athrill')
+    )
+    template_files = env.list_templates()
 
-    with open(f'out/{ns_prefix}mcdecoder.c', 'w') as file:
-        file.write(decoder_source_template.render(template_args))
+    # Generate files
+    for template_file in template_files:
+        # Load template
+        template = env.get_template(template_file)
+
+        # Determine generating file path
+        output_file = os.path.join('out', jinja2.Template(
+            template_file).render(template_args))
+
+        # Make output directory
+        output_dir = os.path.dirname(output_file)
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        elif not os.path.isdir(output_dir):
+            return False
+
+        # Generate file
+        with open(output_file, 'w') as file:
+            file.write(template.render(template_args))
 
     return True
