@@ -19,17 +19,17 @@ def run_app(argv: List[str]) -> int:
     generate_parser = subparsers.add_parser(
         'generate', help='Generate a decoder or other codes to support a decoder')
     generate_parser.add_argument(
-        '--output', dest='output_directory', help='A path to a output directory')
+        '--output', metavar='outdir', dest='output_directory', help='A path to an output directory')
     generate_parser.add_argument(
-        '--template', dest='template_directory', help='A path to a directoy including user-defined template files')
+        '--template', metavar='templatedir', dest='template_directory', help='A path to a directoy including user-defined template files')
     generate_parser.add_argument(
         'mcfile', help='A path to a machine code description file')
 
     # Create a subparser for the command 'export'
     export_parser = subparsers.add_parser(
-        'export', help='Export a MC description as another format. Currently, mcdecoder only supports CSV format.')
+        'export', help='Export an MC description as another format. Currently, mcdecoder only supports CSV format.')
     export_parser.add_argument(
-        '--output', dest='output_file', required=True, help='A path to a output file')
+        '--output', metavar='outfile', dest='output_file', required=True, help='A path to an output file')
     export_parser.add_argument(
         'mcfile', help='A path to a machine code description file')
 
@@ -45,14 +45,14 @@ def run_app(argv: List[str]) -> int:
         result = generator.generate(
             args.mcfile, output_directory=args.output_directory, template_directory=args.template_directory)
         if result:
-            print('Generated MC decoders.')
+            print('Generated machine code decoders.')
         else:
             print('Error occurred on generation.')
 
     elif args.command == 'export':
         result = exporter.export(args.mcfile, args.output_file)
         if result:
-            print('Exported a MC description.')
+            print('Exported a machine code description.')
         else:
             print('Error occurred on exporting.')
 
