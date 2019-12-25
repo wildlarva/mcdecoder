@@ -23,7 +23,7 @@ def run_app(argv: List[str]) -> int:
     generate_parser.add_argument(
         '--template', dest='template_directory', help='A path to a directoy including user-defined template files')
     generate_parser.add_argument(
-        'mcfile', help='A path to a machine code descriptin file')
+        'mcfile', help='A path to a machine code description file')
 
     # Create a subparser for the command 'export'
     export_parser = subparsers.add_parser(
@@ -31,7 +31,7 @@ def run_app(argv: List[str]) -> int:
     export_parser.add_argument(
         '--output', dest='output_file', required=True, help='A path to a output file')
     export_parser.add_argument(
-        'mcfile', help='A path to a machine code descriptin file')
+        'mcfile', help='A path to a machine code description file')
 
     # Parse an argument
     try:
