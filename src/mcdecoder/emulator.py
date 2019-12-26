@@ -94,26 +94,76 @@ def _decode_instruction(context: _DecodeContext, instruction_decoder: core.Instr
 
     field_results: List[_InstructionFieldDecodeResult] = []
     for field_decoder in instruction_decoder.field_decoders:
-        # Decode field
-        value = 0
-        for sf_decoder in field_decoder.subfield_decoders:
-            value |= ((code & sf_decoder.mask) >>
-                      sf_decoder.end_bit_in_instruction) << sf_decoder.end_bit_in_field
-
+        value = _decode_field(code, field_decoder)
         field_results.append(_InstructionFieldDecodeResult(
             decoder=field_decoder, value=value))
 
     return _InstructionDecodeResult(decoder=instruction_decoder, field_results=field_results)
 
 
+def _decode_field(code: int, field_decoder: core.InstructionFieldDecoder) -> int:
+    value = 0
+    for sf_decoder in field_decoder.subfield_decoders:
+        value |= ((code & sf_decoder.mask) >>
+                  sf_decoder.end_bit_in_instruction) << sf_decoder.end_bit_in_field
+    return value
+
+
 def _find_matched_instructions(context: _DecodeContext) -> List[core.InstructionDecoder]:
     matched_decoders: List[core.InstructionDecoder] = []
+
     for instruction_decoder in context.mcdecoder.instruction_decoders:
         code = _get_appropriate_code(context, instruction_decoder)
-        if (code & instruction_decoder.fixed_bits_mask) == instruction_decoder.fixed_bits:
-            matched_decoders.append(instruction_decoder)
+        if (code & instruction_decoder.fixed_bits_mask) != instruction_decoder.fixed_bits:
+            continue
+        if not _test_instruction_conditions(code, instruction_decoder):
+            continue
+
+        matched_decoders.append(instruction_decoder)
 
     return matched_decoders
+
+
+def _test_instruction_conditions(code: int, instruction_decoder: core.InstructionDecoder) -> bool:
+    for condition in instruction_decoder.conditions:
+        if not _test_instruction_condition(code, condition, instruction_decoder):
+            return False
+
+    return True
+
+
+def _test_instruction_condition(code: int, condition: core.InstructionDecodeCondition, instruction_decoder: core.InstructionDecoder) -> bool:
+    if isinstance(condition, core.EqualityInstructionDecodeCondition):
+        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
+                              condition.field), None)
+        if field_decoder is None:
+            return False
+
+        value = _decode_field(code, field_decoder)
+        if condition.operator == '!=':
+            return value != condition.value
+        elif condition.operator == '<':
+            return value < condition.value
+        elif condition.operator == '<=':
+            return value <= condition.value
+        elif condition.operator == '>':
+            return value > condition.value
+        elif condition.operator == '>=':
+            return value >= condition.value
+        else:
+            return False
+
+    elif isinstance(condition, core.InRangeInstructionDecodeCondition):
+        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
+                              condition.field), None)
+        if field_decoder is None:
+            return False
+
+        value = _decode_field(code, field_decoder)
+        return value >= condition.value_start and value <= condition.value_end
+
+    else:
+        return False
 
 
 def _get_appropriate_code(context: _DecodeContext, instruction_decoder: core.InstructionDecoder) -> int:

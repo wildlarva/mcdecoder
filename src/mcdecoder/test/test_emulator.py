@@ -157,3 +157,15 @@ def test__emulate_excessive_bits_base16() -> None:
 
     assert field_register_list.decoder.name == 'register_list'
     assert field_register_list.value == 0x4800
+
+
+def test__emulate_mismatch_equality_condition() -> None:
+    instructions = _emulate(
+        'test/arm.yaml', 'f2 8d b0 04', 16, 'big')
+    assert len(instructions) == 0
+
+
+def test__emulate_mismatch_in_range_condition() -> None:
+    instructions = _emulate(
+        'test/arm.yaml', 'f9 2d 48 00', 16, 'big')
+    assert len(instructions) == 0
