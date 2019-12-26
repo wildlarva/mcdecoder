@@ -182,7 +182,7 @@ def _bit_pattern_to_int(bit_pattern: str, base: Literal[2, 16], byteorder: Liter
         byte_str_len = _string_length_for_byte(base)
 
         # Pad 0 if bit pattern is fragmented for a byte
-        pad_len = (int(len(bit_pattern) / byte_str_len) *
+        pad_len = (len(bit_pattern) // byte_str_len *
                    byte_str_len + byte_str_len - len(bit_pattern)) % byte_str_len
         padded_bit_pattern = '0' * pad_len + bit_pattern
 
