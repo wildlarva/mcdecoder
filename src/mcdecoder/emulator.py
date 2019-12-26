@@ -40,8 +40,8 @@ def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None, byteorde
 @dataclass
 class _DecodeContext:
     mcdecoder: core.McDecoder
-    code32: int
     code16: int
+    code32: int
 
 
 @dataclass
@@ -62,16 +62,23 @@ def _emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16], byteorder: Lit
     # Create MC decoder model
     mcdecoder = core.create_mcdecoder_model(mcfile)
 
-    # Parse bit_pattern
+    # Trim whitespaces
     trimmed_bit_pattern = re.sub(r'\s', '', bit_pattern)
-    int_bit_pattern = _bit_pattern_to_int(
-        trimmed_bit_pattern, base, byteorder)
+
+    # Pad 0 if bit pattern < 32 bits
+    byte_str_len = _string_length_for_byte(base)
+    pad_count = max(byte_str_len * 4 - len(trimmed_bit_pattern), 0)
+    padded_bit_pattern = trimmed_bit_pattern + '0' * pad_count
+
+    # Convert bit pattern to int based on the specified byteorder
+    code16 = _bit_pattern_to_int(
+        padded_bit_pattern[:byte_str_len * 2], base, byteorder)
+    code32 = _bit_pattern_to_int(
+        padded_bit_pattern[:byte_str_len * 4], base, byteorder)
 
     # Create decode context
-    code32 = int_bit_pattern & _make_mask(32)
-    code16 = int_bit_pattern & _make_mask(16)
     decode_context = _DecodeContext(
-        mcdecoder=mcdecoder, code32=code32, code16=code16)
+        mcdecoder=mcdecoder, code16=code16, code32=code32)
 
     # Emulate decoder
     return _emulate_decoder(decode_context)
@@ -122,17 +129,22 @@ def _bit_pattern_to_int(bit_pattern: str, base: Literal[2, 16], byteorder: Liter
         return int(bit_pattern, base)
     else:  # byteorder == 'little'
         # Character length that corresponds to a byte
-        byte_chars_len = 8 if base == 2 else 2
+        byte_str_len = _string_length_for_byte(base)
 
         # Pad 0 if bit pattern is fragmented for a byte
-        pad_len = len(bit_pattern) - (len(bit_pattern) % byte_chars_len)
+        pad_len = len(bit_pattern) - (len(bit_pattern) % byte_str_len)
         padded_bit_pattern = '0' * pad_len + bit_pattern
 
         # Little endian to big endian
-        converted_bit_pattern = ''.join(bit_pattern[pos:pos+byte_chars_len]
-                                        for pos in range(len(padded_bit_pattern) - byte_chars_len, -1, -byte_chars_len))
+        converted_bit_pattern = ''.join(bit_pattern[pos:pos+byte_str_len]
+                                        for pos in range(len(padded_bit_pattern) - byte_str_len, -1, -byte_str_len))
 
         return int(converted_bit_pattern, base)
+
+
+def _string_length_for_byte(base: Literal[2, 16]) -> int:
+    """Calculate a string length that corresponds to a byte"""
+    return 8 if base == 2 else 2
 
 
 def _make_mask(bit_size: int) -> int:

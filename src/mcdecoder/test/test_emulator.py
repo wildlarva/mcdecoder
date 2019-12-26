@@ -89,3 +89,71 @@ def test__emulate_with_base16_little_endian() -> None:
 
     assert field_register_list.decoder.name == 'register_list'
     assert field_register_list.value == 0x4800
+
+
+def test__emulate_insufficient_bits_base2() -> None:
+    instructions = _emulate(
+        'test/arm.yaml', '1110 1001 0010 1101 0100 1000 0000 000', 2, 'big')
+    assert len(instructions) == 1
+
+    (instruction_push,) = instructions
+    assert instruction_push.decoder.name == 'push_1'
+    assert len(instruction_push.field_results) == 2
+
+    field_cond, field_register_list = instruction_push.field_results
+    assert field_cond.decoder.name == 'cond'
+    assert field_cond.value == 0x0e
+
+    assert field_register_list.decoder.name == 'register_list'
+    assert field_register_list.value == 0x4800
+
+
+def test__emulate_insufficient_bits_base16() -> None:
+    instructions = _emulate(
+        'test/arm.yaml', 'e9 2d 48 0', 16, 'big')
+    assert len(instructions) == 1
+
+    (instruction_push,) = instructions
+    assert instruction_push.decoder.name == 'push_1'
+    assert len(instruction_push.field_results) == 2
+
+    field_cond, field_register_list = instruction_push.field_results
+    assert field_cond.decoder.name == 'cond'
+    assert field_cond.value == 0x0e
+
+    assert field_register_list.decoder.name == 'register_list'
+    assert field_register_list.value == 0x4800
+
+
+def test__emulate_excessive_bits_base2() -> None:
+    instructions = _emulate(
+        'test/arm.yaml', '1110 1001 0010 1101 0100 1000 0000 0000 1', 2, 'big')
+    assert len(instructions) == 1
+
+    (instruction_push,) = instructions
+    assert instruction_push.decoder.name == 'push_1'
+    assert len(instruction_push.field_results) == 2
+
+    field_cond, field_register_list = instruction_push.field_results
+    assert field_cond.decoder.name == 'cond'
+    assert field_cond.value == 0x0e
+
+    assert field_register_list.decoder.name == 'register_list'
+    assert field_register_list.value == 0x4800
+
+
+def test__emulate_excessive_bits_base16() -> None:
+    instructions = _emulate(
+        'test/arm.yaml', 'e9 2d 48 00 1', 16, 'big')
+    assert len(instructions) == 1
+
+    (instruction_push,) = instructions
+    assert instruction_push.decoder.name == 'push_1'
+    assert len(instruction_push.field_results) == 2
+
+    field_cond, field_register_list = instruction_push.field_results
+    assert field_cond.decoder.name == 'cond'
+    assert field_cond.value == 0x0e
+
+    assert field_register_list.decoder.name == 'register_list'
+    assert field_register_list.value == 0x4800
