@@ -6,20 +6,30 @@ def test_create_mcdecoder_model_namespace() -> None:
     mcdecoder_model = create_mcdecoder_model(
         'test/arm.yaml')
 
-    mcdecoder_model.machine_decoder.namespace_prefix == 'arm_'
+    mcdecoder_model.namespace_prefix == 'arm_'
 
 
 def test_create_mcdecoder_model_extras() -> None:
     mcdecoder_model = create_mcdecoder_model(
         'test/arm.yaml')
+    assert mcdecoder_model.extras is not None
+    assert mcdecoder_model.extras['compiler'] == 'gcc'
 
-    machine_extras = mcdecoder_model.machine_decoder.extras
-    assert machine_extras is not None
-    assert machine_extras['arch_type'] == 'arm'
+    machine = mcdecoder_model.machine_decoder
+    assert machine.extras is not None
+    assert machine.extras['arch_type'] == 'arm'
 
-    instruction_extras = mcdecoder_model.instruction_decoders[0].extras
-    assert instruction_extras is not None
-    assert instruction_extras['clocks'] == 10
+    instruction_add = mcdecoder_model.instruction_decoders[0]
+    assert instruction_add.extras is not None
+    assert instruction_add.extras['clocks'] == 10
+
+    _, _, field_Rn, field_Rd, field_imm12 = instruction_add.field_decoders
+    assert field_Rn.extras is not None
+    assert field_Rn.extras['type'] == 'register'
+    assert field_Rd.extras is not None
+    assert field_Rd.extras['type'] == 'register'
+    assert field_imm12.extras is not None
+    assert field_imm12.extras['type'] == 'immediate'
 
 
 def test_create_mcdecoder_model_32bit_instructions() -> None:

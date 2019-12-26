@@ -1,6 +1,4 @@
 machine:
-  decoder:
-    namespace: arm
   extras:
     arch_type: arm
 instructions:
@@ -10,7 +8,15 @@ instructions:
       cond: '!= 15'
     extras:
       clocks: 10
+    field_extras:
+      Rn: {type: register}
+      Rd: {type: register}
+      imm12: {type: immediate}
   - name: push_1
     format: xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list
     condition:
       cond: in_range 0-14
+decoder:
+  namespace: arm
+extras:
+  compiler: gcc

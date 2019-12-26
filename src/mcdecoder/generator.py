@@ -33,10 +33,12 @@ def _generate(mcdecoder_model: core.McDecoder, output_directory: str, template_l
     """Generate MC decoder files from a MC decoder model"""
     # Make template arguments
     template_args = {
-        'mc_decoder': mcdecoder_model,
+        'mcdecoder': mcdecoder_model,
         'machine_decoder': mcdecoder_model.machine_decoder,
         'instruction_decoders': mcdecoder_model.instruction_decoders,
-        'ns': mcdecoder_model.machine_decoder.namespace_prefix,
+        # Shorthand for machine_decoder.namespace_prefix
+        'ns': mcdecoder_model.namespace_prefix,
+        'extras': mcdecoder_model.extras,  # Shorthand for mcdecoder.extras
     }
 
     # Find templates

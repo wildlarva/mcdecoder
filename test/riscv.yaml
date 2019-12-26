@@ -1,8 +1,8 @@
-machine:
-  decoder:
-    namespace: riscv
+machine: {}
 instructions:
   - name: c_addi_1
     format: 000:funct3|x:imm[5]|xxxx x:dest|xxx xx:imm[4:0]|01:op
   - name: c_sd_1
     format: 111:funct3|x xxxx x:offset[5:3,8:6]|xxx xx:src|10:op
+decoder:
+  namespace: riscv

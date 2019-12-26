@@ -5,16 +5,6 @@
         "machine": {
             "type": "object",
             "properties": {
-                "decoder": {
-                    "type": "object",
-                    "properties": {
-                        "namespace": {
-                            "type": "string",
-                            "pattern": "^[A-Za-z]\\w*$"
-                        }
-                    },
-                    "additionalProperties": false
-                },
                 "extras": {}
             },
             "additionalProperties": false
@@ -42,7 +32,14 @@
                         },
                         "additionalProperties": false
                     },
-                    "extras": {}
+                    "extras": {},
+                    "field_extras": {
+                        "type": "object",
+                        "patternProperties": {
+                            "^[A-Za-z]\\w*$": {}
+                        },
+                        "additionalProperties": false
+                    }
                 },
                 "additionalProperties": false,
                 "required": [
@@ -50,7 +47,18 @@
                     "format"
                 ]
             }
-        }
+        },
+        "decoder": {
+            "type": "object",
+            "properties": {
+                "namespace": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z]\\w*$"
+                }
+            },
+            "additionalProperties": false
+        },
+        "extras": {}
     },
     "additionalProperties": false,
     "required": [

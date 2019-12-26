@@ -17,20 +17,22 @@ class InstructionDescrition(TypedDict):
     format: str
     condition: Optional[Dict[str, str]]
     extras: Optional[Any]
-
-
-class MachineDecoderDescription(TypedDict):
-    namespace: Optional[str]
+    field_extras: Dict[str, Any]
 
 
 class MachineDescription(TypedDict):
-    decoder: Optional[MachineDecoderDescription]
     extras: Optional[Any]
+
+
+class McDecoderDescription(TypedDict):
+    namespace: Optional[str]
 
 
 class McDescription(TypedDict):
     machine: MachineDescription
     instructions: List[InstructionDescrition]
+    decoder: Optional[McDecoderDescription]
+    extras: Optional[Any]
 
 
 # Decoder models
@@ -49,6 +51,7 @@ class InstructionFieldDecoder:
     start_bit: int
     type_bit_size: int
     subfield_decoders: List[InstructionSubfieldDecoder]
+    extras: Optional[Any]
 
 
 @dataclass
@@ -90,14 +93,15 @@ class InstructionDecoder:
 
 @dataclass
 class MachineDecoder:
-    namespace_prefix: str
     extras: Optional[Any]
 
 
 @dataclass
 class McDecoder:
+    namespace_prefix: str
     machine_decoder: MachineDecoder
     instruction_decoders: List[InstructionDecoder]
+    extras: Optional[Any]
 
 
 # Instruction condition
@@ -135,13 +139,24 @@ def create_mcdecoder_model(mcfile_path: str) -> McDecoder:
     # Load MC description
     mc_desc_model = load_mc_description_model(mcfile_path)
 
-    # Create decoder model
+    # Create machine and instruction decoders
     machine_decoder = _create_machine_decoder_model(mc_desc_model['machine'])
     instruction_decoders = [_create_instruction_decoder_model(
         instruction_desc_model) for instruction_desc_model in mc_desc_model['instructions']]
+
+    # Create MC decoder
+    namespace: Optional[str] = None
+    if 'decoder' in mc_desc_model:
+        decoder_desc_model = mc_desc_model['decoder']
+        if 'namespace' in decoder_desc_model:
+            namespace = decoder_desc_model['namespace']
+
+    extras = mc_desc_model['extras'] if 'extras' in mc_desc_model else None
     return McDecoder(
+        namespace_prefix=_make_namespace_prefix(namespace),
         machine_decoder=machine_decoder,
         instruction_decoders=instruction_decoders,
+        extras=extras,
     )
 
 
@@ -240,17 +255,11 @@ def _validate_mc_desc_model(mc_desc_model: Any) -> None:
 
 
 def _create_machine_decoder_model(machine_desc_model: MachineDescription) -> MachineDecoder:
-    namespace: Optional[str] = None
-    if 'decoder' in machine_desc_model:
-        decoder_desc_model = machine_desc_model['decoder']
-        if 'namespace' in decoder_desc_model:
-            namespace = decoder_desc_model['namespace']
-
     extras: Optional[Any] = None
     if 'extras' in machine_desc_model:
         extras = machine_desc_model['extras']
 
-    return MachineDecoder(namespace_prefix=_make_namespace_prefix(namespace), extras=extras)
+    return MachineDecoder(extras=extras)
 
 
 def _make_namespace_prefix(namespace: Optional[str]) -> str:
@@ -280,8 +289,15 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
     # Create field decoders
     field_names = set(map(lambda field: cast(str, field.name), filter(
         lambda field: field.name is not None, instruction_format.field_formats)))
-    field_decoders = [_create_field_decoder(
-        field_name, instruction_format, ff_index_to_start_bit) for field_name in field_names]
+    field_extras_dict: Dict[str,
+                            Any] = instruction_desc_model['field_extras'] if 'field_extras' in instruction_desc_model else {}
+    field_decoders = []
+
+    for field_name in field_names:
+        field_extras = field_extras_dict[field_name] if field_name in field_extras_dict else None
+        field_decoder = _create_field_decoder(
+            field_name, field_extras, instruction_format, ff_index_to_start_bit)
+        field_decoders.append(field_decoder)
 
     # Sort field decoders according to start bit position
     field_decoders = sorted(
@@ -295,9 +311,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
         decode_conditions = []
 
     # Create instruction decoder model
-    extras: Optional[Any] = None
-    if 'extras' in instruction_desc_model:
-        extras = instruction_desc_model['extras']
+    instruction_extras = instruction_desc_model['extras'] if 'extras' in instruction_desc_model else None
 
     return InstructionDecoder(
         name=instruction_desc_model['name'],
@@ -306,7 +320,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
         type_bit_size=_calc_type_bit_size(instruction_bit_size),
         field_decoders=field_decoders,
         conditions=decode_conditions,
-        extras=extras,
+        extras=instruction_extras,
     )
 
 
@@ -327,7 +341,7 @@ def _build_fixed_bits_info(instruction_format: InstructionFormat) -> Tuple[int, 
     return fixed_bits_mask, fixed_bits
 
 
-def _create_field_decoder(field_name: str, instruction_format: InstructionFormat, ff_index_to_start_bit: Dict[int, int]) -> InstructionFieldDecoder:
+def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruction_format: InstructionFormat, ff_index_to_start_bit: Dict[int, int]) -> InstructionFieldDecoder:
     """Create a model which contains information of a instruction field decoder"""
     # Find related field formats
     field_formats = filter(lambda field: field.name ==
@@ -376,7 +390,8 @@ def _create_field_decoder(field_name: str, instruction_format: InstructionFormat
         name=field_name,
         start_bit=field_start_bit_in_instruction,
         type_bit_size=_calc_type_bit_size(start_bit_in_field + 1),
-        subfield_decoders=sf_decoders)
+        subfield_decoders=sf_decoders,
+        extras=field_extras)
 
 
 def _calc_type_bit_size(bit_size: int) -> int:
