@@ -29,7 +29,7 @@ def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None, byteorde
             # Output about fields
             for field_result in instruction_result.field_results:
                 print(
-                    f'{field_result.decoder.name}: {field_result.value}(0x{field_result.value:x})')
+                    f'{field_result.decoder.name}: {field_result.value}, {field_result.value:#x}, {field_result.value:#b}')
     else:
         print('No instructions detected.')
 
