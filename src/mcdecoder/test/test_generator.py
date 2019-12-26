@@ -12,7 +12,7 @@ from mcdecoder.generator import _generate, generate
 def test_generate_without_template_dir() -> None:
     shutil.rmtree('out', ignore_errors=True)
 
-    assert generate('test/arm.yaml', output_directory='out') is True
+    assert generate('test/arm.yaml', output_directory='out') == 0
     assert os.path.isfile('out/arm_mcdecoder.c') is True
     assert os.path.isfile('out/arm_mcdecoder.h') is True
 
@@ -21,7 +21,7 @@ def test_generate_with_template_dir() -> None:
     shutil.rmtree('out', ignore_errors=True)
 
     assert generate('test/arm.yaml', output_directory='out',
-                    template_directory='test/user_templates') is True
+                    template_directory='test/user_templates') == 0
     assert os.path.isfile('out/arm_template.c') is True
     assert os.path.isfile('out/arm_template.h') is True
 
@@ -29,7 +29,7 @@ def test_generate_with_template_dir() -> None:
 def test_generate_with_output_dir() -> None:
     shutil.rmtree('out', ignore_errors=True)
 
-    assert generate('test/arm.yaml', output_directory='out/out2') is True
+    assert generate('test/arm.yaml', output_directory='out/out2') == 0
     assert os.path.isfile('out/out2/arm_mcdecoder.c') is True
     assert os.path.isfile('out/out2/arm_mcdecoder.h') is True
 

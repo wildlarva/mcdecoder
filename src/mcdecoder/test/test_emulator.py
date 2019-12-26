@@ -2,25 +2,27 @@ from mcdecoder.emulator import _emulate, emulate
 
 
 def test_emulate_without_base_and_byteorder() -> None:
-    emulate('test/arm.yaml', '1110 1001 0010 1101 0100 1000 0000 0000')
+    assert emulate('test/arm.yaml',
+                   '1110 1001 0010 1101 0100 1000 0000 0000') == 0
 
 
 def test_emulate_with_base2() -> None:
-    emulate('test/arm.yaml', '1110 1001 0010 1101 0100 1000 0000 0000', base=2)
+    assert emulate('test/arm.yaml',
+                   '1110 1001 0010 1101 0100 1000 0000 0000', base=2) == 0
 
 
 def test_emulate_with_base16() -> None:
-    emulate('test/arm.yaml', 'e9 2d 48 00', base=16)
+    assert emulate('test/arm.yaml', 'e9 2d 48 00', base=16) == 0
 
 
 def test_emulate_with_big_endian() -> None:
-    emulate('test/arm.yaml',
-            '1110 1001 0010 1101 0100 1000 0000 0000', byteorder='big')
+    assert emulate('test/arm.yaml',
+                   '1110 1001 0010 1101 0100 1000 0000 0000', byteorder='big') == 0
 
 
 def test_emulate_with_little_endian() -> None:
-    emulate('test/arm.yaml', '0000 0000 0100 1000 0010 1101 1110 1001',
-            byteorder='little')
+    assert emulate('test/arm.yaml', '0000 0000 0100 1000 0010 1101 1110 1001',
+                   byteorder='little') == 0
 
 
 def test__emulate_with_base2_big_endian() -> None:

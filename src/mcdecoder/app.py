@@ -54,22 +54,14 @@ def run_app(argv: List[str]) -> int:
 
     # Run an individual command
     if args.command == 'generate':
-        result = generator.generate(
+        return generator.generate(
             args.mcfile, output_directory=args.output_directory, template_directory=args.template_directory)
-        if result:
-            print('Generated machine code decoders.')
-        else:
-            print('Error occurred on generation.')
 
     elif args.command == 'export':
-        result = exporter.export(args.mcfile, args.output_file)
-        if result:
-            print('Exported a machine code description.')
-        else:
-            print('Error occurred on exporting.')
+        return exporter.export(args.mcfile, args.output_file)
 
     elif args.command == 'emulate':
-        emulator.emulate(args.mcfile, args.bit_pattern,
+        return emulator.emulate(args.mcfile, args.bit_pattern,
                          base=args.base, byteorder=args.byteorder)
 
     return 0

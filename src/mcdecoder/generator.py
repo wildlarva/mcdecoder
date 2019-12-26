@@ -7,7 +7,7 @@ from mcdecoder import core
 # External functions
 
 
-def generate(mcfile_path: str, output_directory: str = None, template_directory: str = None) -> bool:
+def generate(mcfile_path: str, output_directory: str = None, template_directory: str = None) -> int:
     """Generate MC decoder files from MC description file"""
     # Create decoder model
     mcdecoder_model = core.create_mcdecoder_model(mcfile_path)
@@ -23,7 +23,13 @@ def generate(mcfile_path: str, output_directory: str = None, template_directory:
         output_directory = '.'
 
     # Generate
-    return _generate(mcdecoder_model, output_directory, loader)
+    result = _generate(mcdecoder_model, output_directory, loader)
+    if result:
+        print('Generated machine code decoders.')
+        return 0
+    else:
+        print('Error occurred on generation.')
+        return 1
 
 
 # Internal functions

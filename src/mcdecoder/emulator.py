@@ -6,7 +6,7 @@ from mcdecoder import core
 # External functions
 
 
-def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None, byteorder: Literal['big', 'little'] = None):
+def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None, byteorder: Literal['big', 'little'] = None) -> int:
     # Default
     if base is None:
         base = 2
@@ -32,6 +32,8 @@ def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None, byteorde
                     f'{field_result.decoder.name}: {field_result.value}, {field_result.value:#x}, {field_result.value:#b}')
     else:
         print('No instructions detected.')
+    
+    return 0
 
 
 # Internal classes

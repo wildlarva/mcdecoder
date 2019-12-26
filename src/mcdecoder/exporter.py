@@ -8,7 +8,27 @@ from mcdecoder import core
 # External functions
 
 
-def export(mcfile: str, output_file: str) -> bool:
+def export(mcfile: str, output_file: str) -> int:
+    result = _export(mcfile, output_file)
+    if result:
+        print('Exported a machine code description.')
+        return 0
+    else:
+        print('Error occurred on exporting.')
+        return 1
+
+
+# Internal classes
+
+@dataclass
+class _InstructionInfo:
+    instruction: core.InstructionDescrition
+    format: core.InstructionFormat
+
+
+# Internal functions
+
+def _export(mcfile: str, output_file: str) -> bool:
     # Load MC description
     mc_desc = core.load_mc_description_model(mcfile)
 
@@ -57,11 +77,3 @@ def export(mcfile: str, output_file: str) -> bool:
         writer.writerows(rows)
 
     return True
-
-
-# Internal classes
-
-@dataclass
-class _InstructionInfo:
-    instruction: core.InstructionDescrition
-    format: core.InstructionFormat
