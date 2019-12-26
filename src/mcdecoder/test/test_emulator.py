@@ -1,7 +1,7 @@
 from mcdecoder.emulator import _emulate, emulate
 
 
-def test_emulate_without_base() -> None:
+def test_emulate_without_base_and_byteorder() -> None:
     emulate('test/arm.yaml', '1110 1001 0010 1101 0100 1000 0000 0000')
 
 
@@ -10,7 +10,7 @@ def test_emulate_with_base2() -> None:
 
 
 def test_emulate_with_base16() -> None:
-    emulate('test/arm.yaml', '1110 1001 0010 1101 0100 1000 0000 0000', base=16)
+    emulate('test/arm.yaml', 'e9 2d 48 00', base=16)
 
 
 def test_emulate_with_big_endian() -> None:

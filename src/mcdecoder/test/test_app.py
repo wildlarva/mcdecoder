@@ -10,6 +10,8 @@ def test_run_app_without_arguments() -> None:
     assert run_app(['mcdecoder', 'export']) == 2
     assert run_app(['mcdecoder', 'export', 'test/arm.yaml']) == 2
     assert run_app(['mcdecoder', 'export', '--output', 'out/arm.yaml']) == 2
+    assert run_app(['mcdecoder', 'emulate']) == 2
+    assert run_app(['mcdecoder', 'emulate', 'test/arm.yaml']) == 2
 
 
 def test_run_app_help() -> None:
@@ -52,3 +54,16 @@ def test_run_app_export() -> None:
     assert run_app(['mcdecoder', 'export', '--output',
                     'out/arm.csv', 'test/arm.yaml']) == 0
     assert os.path.isfile('out/arm.csv') is True
+
+
+def test_run_app_emulate() -> None:
+    assert run_app(['mcdecoder', 'emulate', '--pattern',
+                    '1110 1001 0010 1101 0100 1000 0000 0000', 'test/arm.yaml']) == 0
+    assert run_app(['mcdecoder', 'emulate', '--pattern',
+                    '1110 1001 0010 1101 0100 1000 0000 0000', '--base', '2', 'test/arm.yaml']) == 0
+    assert run_app(['mcdecoder', 'emulate', '--pattern',
+                    'e9 2d 48 00', '--base', '16', 'test/arm.yaml']) == 0
+    assert run_app(['mcdecoder', 'emulate', '--pattern',
+                    '1110 1001 0010 1101 0100 1000 0000 0000', '--byteorder', 'big', 'test/arm.yaml']) == 0
+    assert run_app(['mcdecoder', 'emulate', '--pattern',
+                    '0000 0000 0100 1000 0010 1101 1110 1001', '--byteorder', 'little', 'test/arm.yaml']) == 0

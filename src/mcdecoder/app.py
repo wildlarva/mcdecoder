@@ -1,8 +1,8 @@
 import argparse
 from dataclasses import dataclass
-from typing import List, Optional, cast
+from typing import List, Literal, Optional, cast
 
-from mcdecoder import exporter, generator
+from mcdecoder import emulator, exporter, generator
 
 
 # External functions
@@ -33,6 +33,18 @@ def run_app(argv: List[str]) -> int:
     export_parser.add_argument(
         'mcfile', help='A path to a machine code description file')
 
+    # Create a subparser for the command 'emulate'
+    emulate_parser = subparsers.add_parser(
+        'emulate', help='Emulate a decoder.')
+    emulate_parser.add_argument(
+        '--pattern', metavar='bits', dest='bit_pattern', required=True, help='A bit pattern as a input for a decoder')
+    emulate_parser.add_argument(
+        '--base', choices=[2, 16], type=int, help='The base of a bit pattern')
+    emulate_parser.add_argument(
+        '--byteorder', choices=['big', 'little'], help='The byte order of a bit pattern')
+    emulate_parser.add_argument(
+        'mcfile', help='A path to a machine code description file')
+
     # Parse an argument
     try:
         args: _Arguments = cast(_Arguments, parser.parse_args(
@@ -56,6 +68,10 @@ def run_app(argv: List[str]) -> int:
         else:
             print('Error occurred on exporting.')
 
+    elif args.command == 'emulate':
+        emulator.emulate(args.mcfile, args.bit_pattern,
+                         base=args.base, byteorder=args.byteorder)
+
     return 0
 
 
@@ -64,11 +80,14 @@ def run_app(argv: List[str]) -> int:
 
 @dataclass
 class _Arguments:
-    command: str
+    command: Literal['generate', 'export', 'emulate']
     mcfile: Optional[str]
     output_directory: Optional[str]
     output_file: Optional[str]
     template_directory: Optional[str]
+    bit_pattern: Optional[str]
+    base: Optional[Literal[2, 16]]
+    byteorder: Optional[Literal['big', 'little']]
 
     def __init__(self) -> None:
         pass

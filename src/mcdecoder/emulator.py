@@ -1,12 +1,18 @@
 from dataclasses import dataclass
 import re
-from typing import List
+from typing import List, Literal
 
 from mcdecoder import core
 # External functions
 
 
-def emulate(mcfile: str, bit_pattern: str, base: int = 2, byteorder: str = 'big'):
+def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None, byteorder: Literal['big', 'little'] = None):
+    # Default
+    if base is None:
+        base = 2
+    if byteorder is None:
+        byteorder = 'big'
+
     # Emulate
     instruction_results = _emulate(mcfile, bit_pattern, base, byteorder)
 
@@ -52,7 +58,7 @@ class _InstructionDecodeResult:
 
 # Internal functions
 
-def _emulate(mcfile: str, bit_pattern: str, base: int, byteorder: str) -> List[_InstructionDecodeResult]:
+def _emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16], byteorder: Literal['big', 'little']) -> List[_InstructionDecodeResult]:
     # Create MC decoder model
     mcdecoder = core.create_mcdecoder_model(mcfile)
 
@@ -110,7 +116,7 @@ def _get_appropriate_code(context: _DecodeContext, instruction_decoder: core.Ins
         return context.code32
 
 
-def _bit_pattern_to_int(bit_pattern: str, base: int, byteorder: str) -> int:
+def _bit_pattern_to_int(bit_pattern: str, base: Literal[2, 16], byteorder: Literal['big', 'little']) -> int:
     # Convert bit pattern to int
     if byteorder == 'big':
         return int(bit_pattern, base)
