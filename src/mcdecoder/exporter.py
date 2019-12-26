@@ -1,9 +1,8 @@
 import csv
 from dataclasses import dataclass
-import os
 from typing import List
 
-from mcdecoder import core
+from mcdecoder import common, core
 
 # External functions
 
@@ -39,7 +38,8 @@ def _export(mcfile: str, output_file: str) -> bool:
         lambda info: core.calc_instruction_bit_size(info.format), instruction_infos))
 
     # Make columns
-    bit_columns = [f'b{bit}' for bit in range(max_instruction_bit_size - 1, -1, -1)]
+    bit_columns = [f'b{bit}' for bit in range(
+        max_instruction_bit_size - 1, -1, -1)]
     columns = ['name'] + bit_columns + ['condition']
 
     # Make rows
@@ -63,12 +63,8 @@ def _export(mcfile: str, output_file: str) -> bool:
         rows.append(row)
 
     # Make parent directory of output file
-    output_dir = os.path.dirname(output_file)
-    if output_dir != '':
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        elif not os.path.isdir(output_dir):
-            return False
+    if not common.make_parent_directories(output_file):
+        return False
 
     # Export CSV
     with open(output_file, 'w') as file:

@@ -131,6 +131,28 @@ class InstructionFormat:
     field_formats: List[InstructionFieldFormat]
 
 
+# Decode emulation
+
+
+@dataclass
+class DecodeContext:
+    mcdecoder: McDecoder
+    code16: int
+    code32: int
+
+
+@dataclass
+class InstructionFieldDecodeResult:
+    decoder: InstructionFieldDecoder
+    value: int
+
+
+@dataclass
+class InstructionDecodeResult:
+    decoder: InstructionDecoder
+    field_results: List[InstructionFieldDecodeResult]
+
+
 # External functions
 
 
@@ -183,6 +205,33 @@ def parse_instruction_format(instruction_format: str) -> InstructionFormat:
 def calc_instruction_bit_size(instruction_format: InstructionFormat) -> int:
     return sum(map(lambda field_format: len(
         field_format.bits_format), instruction_format.field_formats))
+
+
+def find_matched_instructions(context: DecodeContext) -> List[InstructionDecoder]:
+    matched_decoders: List[InstructionDecoder] = []
+
+    for instruction_decoder in context.mcdecoder.instruction_decoders:
+        code = _get_appropriate_code(context, instruction_decoder)
+        if (code & instruction_decoder.fixed_bits_mask) != instruction_decoder.fixed_bits:
+            continue
+        if not _test_instruction_conditions(code, instruction_decoder):
+            continue
+
+        matched_decoders.append(instruction_decoder)
+
+    return matched_decoders
+
+
+def decode_instruction(context: DecodeContext, instruction_decoder: InstructionDecoder) -> InstructionDecodeResult:
+    code = _get_appropriate_code(context, instruction_decoder)
+
+    field_results: List[InstructionFieldDecodeResult] = []
+    for field_decoder in instruction_decoder.field_decoders:
+        value = _decode_field(code, field_decoder)
+        field_results.append(InstructionFieldDecodeResult(
+            decoder=field_decoder, value=value))
+
+    return InstructionDecodeResult(decoder=instruction_decoder, field_results=field_results)
 
 
 # Internal classes
@@ -420,3 +469,60 @@ def _parse_instruction_condition(field: str, instruction_condition: str) -> Inst
     parsed_tree = parser.parse(instruction_condition)
     return cast(InstructionCondition, _InstructionConditionTransformer(
         field).transform(parsed_tree))
+
+
+def _test_instruction_conditions(code: int, instruction_decoder: InstructionDecoder) -> bool:
+    for condition in instruction_decoder.conditions:
+        if not _test_instruction_condition(code, condition, instruction_decoder):
+            return False
+
+    return True
+
+
+def _test_instruction_condition(code: int, condition: InstructionDecodeCondition, instruction_decoder: InstructionDecoder) -> bool:
+    if isinstance(condition, EqualityInstructionDecodeCondition):
+        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
+                              condition.field), None)
+        if field_decoder is None:
+            return False
+
+        value = _decode_field(code, field_decoder)
+        if condition.operator == '!=':
+            return value != condition.value
+        elif condition.operator == '<':
+            return value < condition.value
+        elif condition.operator == '<=':
+            return value <= condition.value
+        elif condition.operator == '>':
+            return value > condition.value
+        elif condition.operator == '>=':
+            return value >= condition.value
+        else:
+            return False
+
+    elif isinstance(condition, InRangeInstructionDecodeCondition):
+        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
+                              condition.field), None)
+        if field_decoder is None:
+            return False
+
+        value = _decode_field(code, field_decoder)
+        return value >= condition.value_start and value <= condition.value_end
+
+    else:
+        return False
+
+
+def _decode_field(code: int, field_decoder: InstructionFieldDecoder) -> int:
+    value = 0
+    for sf_decoder in field_decoder.subfield_decoders:
+        value |= ((code & sf_decoder.mask) >>
+                  sf_decoder.end_bit_in_instruction) << sf_decoder.end_bit_in_field
+    return value
+
+
+def _get_appropriate_code(context: DecodeContext, instruction_decoder: InstructionDecoder) -> int:
+    if instruction_decoder.type_bit_size == 16:
+        return context.code16
+    else:
+        return context.code32

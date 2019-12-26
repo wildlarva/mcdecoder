@@ -10,6 +10,51 @@ from mcdecoder import emulator, exporter, generator
 
 def run_app(argv: List[str]) -> int:
     # Create an argument parser
+    parser = _create_parser()
+
+    # Parse an argument
+    try:
+        args = cast(_Arguments, parser.parse_args(
+            argv[1:], namespace=_Arguments()))
+    except SystemExit as se:
+        return se.code
+
+    # Run an individual command
+    if args.command == 'generate':
+        return generator.generate(
+            args.mcfile, output_directory=args.output_directory, template_directory=args.template_directory)
+
+    elif args.command == 'export':
+        return exporter.export(args.mcfile, args.output_file)
+
+    elif args.command == 'emulate':
+        return emulator.emulate(args.mcfile, args.bit_pattern,
+                                base=args.base, byteorder=args.byteorder)
+
+    return 0
+
+
+# Internal classes
+
+
+@dataclass
+class _Arguments:
+    command: Literal['generate', 'export', 'emulate']
+    mcfile: Optional[str]
+    output_directory: Optional[str]
+    output_file: Optional[str]
+    template_directory: Optional[str]
+    bit_pattern: Optional[str]
+    base: Optional[Literal[2, 16]]
+    byteorder: Optional[Literal['big', 'little']]
+
+    def __init__(self) -> None:
+        pass
+
+
+# Internal functions
+def _create_parser() -> argparse.ArgumentParser:
+    # Create an argument parser
     parser = argparse.ArgumentParser(
         prog='mcdecoder', description='Generate a machine code decoder', add_help=True)
     subparsers = parser.add_subparsers(
@@ -45,41 +90,4 @@ def run_app(argv: List[str]) -> int:
     emulate_parser.add_argument(
         'mcfile', help='A path to a machine code description file')
 
-    # Parse an argument
-    try:
-        args: _Arguments = cast(_Arguments, parser.parse_args(
-            argv[1:], namespace=_Arguments()))
-    except SystemExit as se:
-        return se.code
-
-    # Run an individual command
-    if args.command == 'generate':
-        return generator.generate(
-            args.mcfile, output_directory=args.output_directory, template_directory=args.template_directory)
-
-    elif args.command == 'export':
-        return exporter.export(args.mcfile, args.output_file)
-
-    elif args.command == 'emulate':
-        return emulator.emulate(args.mcfile, args.bit_pattern,
-                         base=args.base, byteorder=args.byteorder)
-
-    return 0
-
-
-# Internal classes
-
-
-@dataclass
-class _Arguments:
-    command: Literal['generate', 'export', 'emulate']
-    mcfile: Optional[str]
-    output_directory: Optional[str]
-    output_file: Optional[str]
-    template_directory: Optional[str]
-    bit_pattern: Optional[str]
-    base: Optional[Literal[2, 16]]
-    byteorder: Optional[Literal['big', 'little']]
-
-    def __init__(self) -> None:
-        pass
+    return parser

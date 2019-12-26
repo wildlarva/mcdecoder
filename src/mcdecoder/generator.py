@@ -1,7 +1,7 @@
 import os
 
 import jinja2
-from mcdecoder import core
+from mcdecoder import common, core
 
 
 # External functions
@@ -61,10 +61,7 @@ def _generate(mcdecoder_model: core.McDecoder, output_directory: str, template_l
             template_file).render(template_args))
 
         # Make output directory
-        output_dir = os.path.dirname(output_file)
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        elif not os.path.isdir(output_dir):
+        if not common.make_parent_directories(output_file):
             return False
 
         # Generate file
