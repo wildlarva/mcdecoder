@@ -9,6 +9,10 @@ from mcdecoder import common, core
 
 def generate(mcfile_path: str, output_directory: str = None, template_directory: str = None) -> int:
     """Generate MC decoder files from MC description file"""
+    # Default output directory to the current
+    if output_directory is None:
+        output_directory = '.'
+
     # Create decoder model
     mcdecoder_model = core.create_mcdecoder_model(mcfile_path)
 
@@ -17,10 +21,6 @@ def generate(mcfile_path: str, output_directory: str = None, template_directory:
         loader = jinja2.PackageLoader('mcdecoder', 'templates/athrill')
     else:
         loader = jinja2.FileSystemLoader(template_directory)
-
-    # Default output directory to the current
-    if output_directory is None:
-        output_directory = '.'
 
     # Generate
     result = _generate(mcdecoder_model, output_directory, loader)
@@ -42,7 +42,7 @@ def _generate(mcdecoder_model: core.McDecoder, output_directory: str, template_l
         'mcdecoder': mcdecoder_model,
         'machine_decoder': mcdecoder_model.machine_decoder,
         'instruction_decoders': mcdecoder_model.instruction_decoders,
-        # Shorthand for machine_decoder.namespace_prefix
+        # Shorthand for mcdecoder.namespace_prefix
         'ns': mcdecoder_model.namespace_prefix,
         'extras': mcdecoder_model.extras,  # Shorthand for mcdecoder.extras
     }
