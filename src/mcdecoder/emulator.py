@@ -7,7 +7,7 @@ from mcdecoder import common, core
 def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None, byteorder: Literal['big', 'little'] = None) -> int:
     # Default
     if base is None:
-        base = 2
+        base = 16
     if byteorder is None:
         byteorder = 'big'
 

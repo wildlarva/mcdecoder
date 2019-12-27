@@ -3,7 +3,7 @@ from mcdecoder.emulator import _emulate, emulate
 
 def test_emulate_without_base_and_byteorder() -> None:
     assert emulate('test/arm.yaml',
-                   '1110 1001 0010 1101 0100 1000 0000 0000') == 0
+                   'e9 2d 48 00') == 0
 
 
 def test_emulate_with_base2() -> None:
@@ -17,11 +17,11 @@ def test_emulate_with_base16() -> None:
 
 def test_emulate_with_big_endian() -> None:
     assert emulate('test/arm.yaml',
-                   '1110 1001 0010 1101 0100 1000 0000 0000', byteorder='big') == 0
+                   'e9 2d 48 00', byteorder='big') == 0
 
 
 def test_emulate_with_little_endian() -> None:
-    assert emulate('test/arm.yaml', '0000 0000 0100 1000 0010 1101 1110 1001',
+    assert emulate('test/arm.yaml', '00 48 2d e9',
                    byteorder='little') == 0
 
 
