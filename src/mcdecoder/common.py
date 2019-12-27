@@ -33,8 +33,13 @@ def pad_trailing_zeros(bits: str, base: Literal[2, 16], expected_bit_size: int) 
 
 
 def string_length_for_byte(base: Literal[2, 16]) -> int:
-    """Calculate a string length that corresponds to a byte"""
+    """Calculate a string length that corresponds to one byte"""
     return 8 if base == 2 else 2
+
+
+def bit_length_of_character(base: Literal[2, 16]) -> int:
+    """Calculate a bit length that corresponds to one character"""
+    return 1 if base == 2 else 4
 
 
 def trim_whitespace(s: str) -> str:
