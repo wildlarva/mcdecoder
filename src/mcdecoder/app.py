@@ -67,7 +67,7 @@ def _create_parser() -> argparse.ArgumentParser:
     generate_parser = subparsers.add_parser(
         'generate', help='Generate a decoder or other codes to support a decoder')
     generate_parser.add_argument(
-        '--output', metavar='outdir', dest='output_directory', help='A path to an output directory')
+        '--output', metavar='outdir', dest='output_directory', help='A path to an output directory. Default: .')
     generate_parser.add_argument(
         '--template', metavar='templatedir', dest='template_directory', help='A path to a directoy including user-defined template files')
     generate_parser.add_argument(
@@ -87,9 +87,9 @@ def _create_parser() -> argparse.ArgumentParser:
     emulate_parser.add_argument(
         '--pattern', metavar='bits', dest='bit_pattern', required=True, help='A bit pattern as a input for a decoder')
     emulate_parser.add_argument(
-        '--base', choices=[2, 16], type=int, help='The base of a bit pattern')
+        '--base', choices=[2, 16], type=int, help='The base of a bit pattern. Default: 2')
     emulate_parser.add_argument(
-        '--byteorder', choices=['big', 'little'], help='The byte order of a bit pattern')
+        '--byteorder', choices=['big', 'little'], help='The byte order of a bit pattern. Default: big')
     emulate_parser.add_argument(
         'mcfile', help='A path to a machine code description file')
 
