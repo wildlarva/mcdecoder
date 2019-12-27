@@ -1,10 +1,11 @@
-# External functions
-
-
 from dataclasses import dataclass
-from typing import Iterable, List, Literal, Optional
-from mcdecoder import common, core
 import re
+from typing import Iterable, List, Literal, Optional
+
+from mcdecoder import common, core
+
+
+# External functions
 
 
 def check(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None) -> int:
@@ -63,7 +64,7 @@ def _check(mcfile: str, bit_pattern: str, base: Literal[2, 16]) -> Iterable[_Err
 
     # TODO Convert byteorder
     byte_str_len = common.string_length_for_byte(base)
-    converted_bit_pattern = padded_bit_pattern[:32]
+    converted_bit_pattern = padded_bit_pattern[:byte_str_len * 4]
 
     # Parse bit pattern
     parsed_bit_pattern = _create_bit_pattern(converted_bit_pattern, base)

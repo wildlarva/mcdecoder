@@ -2,7 +2,7 @@ import argparse
 from dataclasses import dataclass
 from typing import List, Literal, Optional, cast
 
-from mcdecoder import emulator, exporter, generator
+from mcdecoder import checker, emulator, exporter, generator
 
 
 # External functions
@@ -22,14 +22,17 @@ def run_app(argv: List[str]) -> int:
     # Run an individual command
     if args.command == 'generate':
         return generator.generate(
-            args.mcfile, output_directory=args.output_directory, template_directory=args.template_directory)
+            cast(str, args.mcfile), output_directory=args.output_directory, template_directory=args.template_directory)
 
     elif args.command == 'export':
-        return exporter.export(args.mcfile, args.output_file)
+        return exporter.export(cast(str, args.mcfile), cast(str, args.output_file))
 
     elif args.command == 'emulate':
-        return emulator.emulate(args.mcfile, args.bit_pattern,
+        return emulator.emulate(cast(str, args.mcfile), cast(str, args.bit_pattern),
                                 base=args.base, byteorder=args.byteorder)
+
+    elif args.command == 'check':
+        return checker.check(cast(str, args.mcfile), cast(str, args.bit_pattern), base=args.base)
 
     return 0
 
@@ -39,7 +42,7 @@ def run_app(argv: List[str]) -> int:
 
 @dataclass
 class _Arguments:
-    command: Literal['generate', 'export', 'emulate']
+    command: Literal['generate', 'export', 'emulate', 'check']
     mcfile: Optional[str]
     output_directory: Optional[str]
     output_file: Optional[str]
@@ -87,6 +90,16 @@ def _create_parser() -> argparse.ArgumentParser:
         '--base', choices=[2, 16], type=int, help='The base of a bit pattern')
     emulate_parser.add_argument(
         '--byteorder', choices=['big', 'little'], help='The byte order of a bit pattern')
+    emulate_parser.add_argument(
+        'mcfile', help='A path to a machine code description file')
+
+    # Create a subparser for the command 'check'
+    emulate_parser = subparsers.add_parser(
+        'check', help='Check instructions to detect problems.')
+    emulate_parser.add_argument(
+        '--pattern', metavar='bits', dest='bit_pattern', required=True, help='A bit pattern as a input for a decoder')
+    emulate_parser.add_argument(
+        '--base', choices=[2, 16], type=int, help='The base of a bit pattern')
     emulate_parser.add_argument(
         'mcfile', help='A path to a machine code description file')
 

@@ -67,3 +67,12 @@ def test_run_app_emulate() -> None:
                     '1110 1001 0010 1101 0100 1000 0000 0000', '--byteorder', 'big', 'test/arm.yaml']) == 0
     assert run_app(['mcdecoder', 'emulate', '--pattern',
                     '0000 0000 0100 1000 0010 1101 1110 1001', '--byteorder', 'little', 'test/arm.yaml']) == 0
+
+
+def test_run_app_emulate() -> None:
+    assert run_app(['mcdecoder', 'check', '--pattern',
+                    'ex xd 48 00', 'test/arm.yaml']) == 0
+    assert run_app(['mcdecoder', 'check', '--pattern',
+                    '111x x001 0010 1101 0100 1000 0000 000x', '--base', '2', 'test/arm.yaml']) == 0
+    assert run_app(['mcdecoder', 'check', '--pattern',
+                    'ex xd 48 00', '--base', '16', 'test/arm.yaml']) == 0
