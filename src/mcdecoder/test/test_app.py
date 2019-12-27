@@ -66,10 +66,10 @@ def test_run_app_emulate() -> None:
     assert run_app(['mcdecoder', 'emulate', '--pattern',
                     'e9 2d 48 00', '--byteorder', 'big', 'test/arm.yaml']) == 0
     assert run_app(['mcdecoder', 'emulate', '--pattern',
-                    '00 48 2d e9', '--byteorder', 'little', 'test/arm.yaml'])
+                    '00 48 2d e9', '--byteorder', 'little', 'test/arm.yaml']) == 0
 
 
-def test_run_app_emulate() -> None:
+def test_run_app_check() -> None:
     assert run_app(['mcdecoder', 'check', '--pattern',
                     'ex xd 48 00', 'test/arm.yaml']) == 0
     assert run_app(['mcdecoder', 'check', '--pattern',
