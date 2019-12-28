@@ -1,9 +1,9 @@
 import argparse
 from dataclasses import dataclass
+import textwrap
 from typing import List, Literal, Optional, cast
 
 from mcdecoder import checker, emulator, exporter, generator
-
 
 # External functions
 
@@ -59,15 +59,23 @@ class _Arguments:
 def _create_parser() -> argparse.ArgumentParser:
     # Create an argument parser
     parser = argparse.ArgumentParser(
-        prog='mcdecoder', description='Generate a machine code decoder', add_help=True)
+        prog='mcdecoder', add_help=True, formatter_class=argparse.RawTextHelpFormatter, description='A toolset for a machine code decoder')
     subparsers = parser.add_subparsers(
         dest='command', metavar='command', required=True)
 
     # Create a subparser for the command 'generate'
     generate_parser = subparsers.add_parser(
-        'generate', help='Generate a decoder or other codes to support a decoder')
+        'generate', formatter_class=argparse.RawTextHelpFormatter, help='Generate a decoder or other codes to support a decoder', description='Generate a decoder or other codes to support a decoder', epilog=textwrap.dedent('''\
+            Usage::
+              
+              # Generate a decoder to 'out' directory
+              mcdecoder generate --output out mc.csv mc.yaml
+              
+              # Generate codes according to user-defined template files in 'user_templates' directory
+              mcdecoder generate --output out --template user_templates mc.yaml
+            '''))
     generate_parser.add_argument(
-        '--output', metavar='outdir', dest='output_directory', help='A path to an output directory. Default: .')
+        '--output', metavar='outdir', dest='output_directory', default='.', help='A path to an output directory (default: .)')
     generate_parser.add_argument(
         '--template', metavar='templatedir', dest='template_directory', help='A path to a directoy including user-defined template files')
     generate_parser.add_argument(
@@ -75,7 +83,12 @@ def _create_parser() -> argparse.ArgumentParser:
 
     # Create a subparser for the command 'export'
     export_parser = subparsers.add_parser(
-        'export', help='Export an MC description as another format. Currently, mcdecoder only supports CSV format.')
+        'export', formatter_class=argparse.RawTextHelpFormatter, help='Export an MC description as another format. Currently, mcdecoder only supports CSV format', description='Export an MC description as another format. Currently, mcdecoder only supports CSV format', epilog=textwrap.dedent('''\
+            Usage::
+              
+              # Export a MC description as CSV format
+              mcdecoder export --output mc.csv mc.yaml
+            '''))
     export_parser.add_argument(
         '--output', metavar='outfile', dest='output_file', required=True, help='A path to an output file')
     export_parser.add_argument(
@@ -83,23 +96,55 @@ def _create_parser() -> argparse.ArgumentParser:
 
     # Create a subparser for the command 'emulate'
     emulate_parser = subparsers.add_parser(
-        'emulate', help='Emulate a decoder.')
+        'emulate', formatter_class=argparse.RawTextHelpFormatter, help='Emulate a decoder by inputting binary data', description='Emulate a decoder by inputting binary data', epilog=textwrap.dedent('''\
+            Usage::
+              
+              # Emulate a decoder when inputting e92d4800
+              mcdecoder emulate --pattern e92d4800 mc.yaml
+              
+              # Emulate a decoder when inputting '1110 1001 0010 1101 0100 1000 0000 0000'
+              mcdecoder emulate --base 2 --pattern '1110 1001 0010 1101 0100 1000 0000 0000' mc.yaml
+              
+              # Emulate a decoder when inputting e92d4800 as little endian
+              mcdecoder emulate --pattern 00482de9 --byteorder little mc.yaml
+            '''))
     emulate_parser.add_argument(
-        '--pattern', metavar='bits', dest='bit_pattern', required=True, help='A bit pattern as a input for a decoder')
+        '--pattern', metavar='pattern', dest='bit_pattern', required=True, help=textwrap.dedent('A binary/hex string as a input binary data for a decoder'))
     emulate_parser.add_argument(
-        '--base', choices=[2, 16], type=int, help='The base of a bit pattern. Default: 2')
+        '--base', choices=[2, 16], default=16, type=int, help='The base of a binary/hex string (default: 16)')
     emulate_parser.add_argument(
-        '--byteorder', choices=['big', 'little'], help='The byte order of a bit pattern. Default: big')
+        '--byteorder', choices=['big', 'little'], default='big', help='The byte order of a binary/hex string (default: big)')
     emulate_parser.add_argument(
         'mcfile', help='A path to a machine code description file')
 
     # Create a subparser for the command 'check'
     emulate_parser = subparsers.add_parser(
-        'check', help='Check instructions to detect problems.')
+        'check', formatter_class=argparse.RawTextHelpFormatter, help='Check the instruction validity of an MC description by inputting binary data', description='Check the instruction validity of MC description by inputting binary data to a decoder', epilog=textwrap.dedent('''\
+            Notes:
+
+              This command detects following problems:
+
+              * No instructions are defined for a certain binary data.
+              * Duplicate instructions are defined for a certain binary data
+
+            Usage::
+              
+              # Check by inputting the range from 092d4800 to f92d4800 to a decoder
+              mcdecoder check --pattern x92d4800 mc.yaml
+              
+              # Check by inputting the range from '1010 1001 0010 1101 0100 1000 0000 0000' to '1110 1001 0010 1101 0100 1000 0000 0000' to a decoder
+              mcdecoder check --base 2 --pattern '1x10 1001 0010 1101 0100 1000 0000 0000' mc.yaml
+              
+              # Check by inputting the range from 002d4800 to ff2d4800 to a decoder
+              mcdecoder check --pattern xx2d4800 mc.yaml
+            '''))
     emulate_parser.add_argument(
-        '--pattern', metavar='bits', dest='bit_pattern', required=True, help='A bit pattern as a input for a decoder')
+        '--pattern', metavar='pattern', dest='bit_pattern', required=True, help=textwrap.dedent('''\
+            A binary/hex string as a input binary data for a decoder.
+            'x' character acts as a wildcard which corresponds to a range 0-1 for binary and 0-f for hex
+            '''))
     emulate_parser.add_argument(
-        '--base', choices=[2, 16], type=int, help='The base of a bit pattern')
+        '--base', choices=[2, 16], default=16, type=int, help='The base of a binary/hex string (default: 16)')
     emulate_parser.add_argument(
         'mcfile', help='A path to a machine code description file')
 
