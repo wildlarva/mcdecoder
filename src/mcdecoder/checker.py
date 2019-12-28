@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 import itertools
 import re
-from typing import Callable, FrozenSet, Iterable, List, Literal, Optional, Set
+import textwrap
+from typing import Callable, FrozenSet, List, Literal, Optional, Set
 
 from mcdecoder import common, core
 
@@ -10,27 +11,47 @@ from mcdecoder import common, core
 
 
 def check(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None) -> int:
+    """
+    Implementation of check sub-command.
+    NOTE Currently, mcdecoder does not support little endian bit pattern
+    """
     # Default
     if base is None:
         base = 16
 
-    # Check and output results
+    # Check and output progress
     print('-' * 80)
     print('Checking instructions...')
     result = _check(mcfile, bit_pattern, base, _output_error)
     print('Done.')
 
+    # Sort duplicate instruction pairs
+    sorted_instruction_pairs = sorted(sorted(pair)
+                                      for pair in result.duplicate_instruction_pairs)
+
+    # Output check results
     print('-' * 80)
     print('Check result')
     print('-' * 80)
-    print(f'''Count of bit patters with undefined instructions: {result.undefined_error_count:,}
-Count of bit patters with duplicate instructions: {result.duplicate_error_count:,}
-Count of duplicate instruction pairs: {len(result.duplicate_instruction_pairs):,}
-Duplicate instructions:''')
+    print(textwrap.dedent(f'''\
+        Count of bit patterns:
+          Undefined: {result.undefined_error_count:,} (with no instructions)
+          Duplicate: {result.duplicate_error_count:,} (with duplicate instructions)
+          No error: {result.no_error_count:,}
+        Count of duplicate instruction pairs: {len(result.duplicate_instruction_pairs):,}
+        Duplicate instructions:\
+        '''))
 
-    for instruction_pair in result.duplicate_instruction_pairs:
-        instruction1, instruction2 = instruction_pair
-        print(f'  {instruction1} - {instruction2}')
+    if len(sorted_instruction_pairs) > 0:
+        for instruction_pair in sorted_instruction_pairs:
+            if len(instruction_pair) >= 2:
+                instruction1, instruction2 = instruction_pair
+            else:
+                (instruction1,) = (instruction2,) = instruction_pair
+
+            print(textwrap.indent(f'{instruction1} - {instruction2}', ' ' * 2))
+    else:
+        print(textwrap.indent('None', ' ' * 2))
 
     return 0
 
@@ -40,6 +61,8 @@ Duplicate instructions:''')
 
 @dataclass
 class _CheckResult:
+    """Final result of checking"""
+    no_error_count: int
     undefined_error_count: int
     duplicate_error_count: int
     duplicate_instruction_pairs: Set[FrozenSet[str]]
@@ -47,6 +70,7 @@ class _CheckResult:
 
 @dataclass
 class _Error:
+    """Error reported while checking"""
     type: Literal['undefined', 'duplicate']
     bits_start: int
     bits_end: int
@@ -54,12 +78,14 @@ class _Error:
 
 @dataclass
 class _VariableBitRange:
+    """Variable bit range information in a bit pattern"""
     mask: int
     shift: int
 
 
 @dataclass
 class _BitPattern:
+    """Bit pattern to be checked"""
     fixed_bits: int
     variable_bit_size: int
     variable_bit_ranges: List[_VariableBitRange]
@@ -78,6 +104,7 @@ def _output_error(error: _Error) -> None:
 
 
 def _check(mcfile: str, bit_pattern: str, base: Literal[2, 16], callback: Callable[[_Error], None]) -> _CheckResult:
+    """Testable implementation of check sub-command"""
     # Create MC decoder model
     mcdecoder = core.create_mcdecoder_model(mcfile)
 
@@ -88,7 +115,7 @@ def _check(mcfile: str, bit_pattern: str, base: Literal[2, 16], callback: Callab
     padded_bit_pattern = common.pad_trailing_zeros(
         trimmed_bit_pattern, base, 32)
 
-    # TODO Convert byteorder
+    # Strip to 32 bits
     byte_str_len = common.string_length_for_byte(base)
     converted_bit_pattern = padded_bit_pattern[:byte_str_len * 4]
 
@@ -100,6 +127,12 @@ def _check(mcfile: str, bit_pattern: str, base: Literal[2, 16], callback: Callab
 
 
 def _check_instructions(mcdecoder: core.McDecoder, bit_pattern: _BitPattern, callback: Callable[[_Error], None]) -> _CheckResult:
+    """
+    Check instructions if they have any errors.
+    Errors are reported through callback while checking.
+    """
+    total_count = 1 << bit_pattern.variable_bit_size
+
     undefined_count = 0
     duplicate_count = 0
     duplicate_instruction_pairs: Set[FrozenSet[str]] = set()
@@ -114,9 +147,12 @@ def _check_instructions(mcdecoder: core.McDecoder, bit_pattern: _BitPattern, cal
     prev_bits = 0
     prev_step = 0
 
-    for step in range(0, 1 << bit_pattern.variable_bit_size):
+    for step in range(0, total_count):
         # Make bits to test
-        bits = _make_bits(bit_pattern, step)
+        bits = bit_pattern.fixed_bits
+        for bit_range in bit_pattern.variable_bit_ranges:
+            bits |= (step & bit_range.mask) << bit_range.shift
+
         decode_context.code32 = bits
         decode_context.code16 = bits >> 16
 
@@ -128,7 +164,7 @@ def _check_instructions(mcdecoder: core.McDecoder, bit_pattern: _BitPattern, cal
             current_error = 'undefined'
         elif len(instruction_decoders) >= 2:
             current_error = 'duplicate'
-            # TODO Save duplicate instruction pair
+            # Save duplicate instruction pair
             for instruction_pair in itertools.combinations((instruction.name for instruction in instruction_decoders), 2):
                 duplicate_instruction_pairs.add(frozenset(instruction_pair))
         else:
@@ -162,10 +198,13 @@ def _check_instructions(mcdecoder: core.McDecoder, bit_pattern: _BitPattern, cal
             duplicate_count += prev_step - error_step_start + 1
 
     # Create result
-    return _CheckResult(undefined_error_count=undefined_count, duplicate_error_count=duplicate_count, duplicate_instruction_pairs=duplicate_instruction_pairs)
+    no_error_count = total_count - undefined_count - duplicate_count
+
+    return _CheckResult(no_error_count=no_error_count, undefined_error_count=undefined_count, duplicate_error_count=duplicate_count, duplicate_instruction_pairs=duplicate_instruction_pairs)
 
 
 def _create_bit_pattern(bit_pattern: str, base: Literal[2, 16]) -> _BitPattern:
+    """Parse bit pattern"""
     char_bit_len = common.bit_length_of_character(base)
     fixed_bits = int(bit_pattern.replace('x', '0'), base)
 
@@ -198,10 +237,3 @@ def _create_bit_pattern(bit_pattern: str, base: Literal[2, 16]) -> _BitPattern:
 
     # Create bit pattern
     return _BitPattern(fixed_bits=fixed_bits, variable_bit_size=variable_bit_size, variable_bit_ranges=variable_bit_ranges)
-
-
-def _make_bits(bit_pattern: _BitPattern, step: int) -> int:
-    bits = bit_pattern.fixed_bits
-    for bit_range in bit_pattern.variable_bit_ranges:
-        bits |= (step & bit_range.mask) << bit_range.shift
-    return bits

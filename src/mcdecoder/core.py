@@ -211,12 +211,20 @@ def find_matched_instructions(context: DecodeContext) -> List[InstructionDecoder
     matched_decoders: List[InstructionDecoder] = []
 
     for instruction_decoder in context.mcdecoder.instruction_decoders:
-        code = _get_appropriate_code(context, instruction_decoder)
+        # Get appripriate code
+        # Do not use _get_appropriate_code() for performance
+        if instruction_decoder.type_bit_size == 16:
+            code = context.code16
+        else:
+            code = context.code32
+        
+        # Test if instruction is matched to code
         if (code & instruction_decoder.fixed_bits_mask) != instruction_decoder.fixed_bits:
             continue
         if not _test_instruction_conditions(code, instruction_decoder):
             continue
 
+        # Add matched instruction
         matched_decoders.append(instruction_decoder)
 
     return matched_decoders
