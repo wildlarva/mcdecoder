@@ -1,0 +1,10 @@
+machine: {}
+instructions:
+  - name: duplicate_instruction_1
+    format: xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list
+  - name: duplicate_instruction_2
+    format: xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list
+decoder:
+  namespace: arm
+extras:
+  compiler: gcc

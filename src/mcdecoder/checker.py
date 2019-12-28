@@ -1,6 +1,7 @@
 from dataclasses import dataclass
+import itertools
 import re
-from typing import Iterable, List, Literal, Optional
+from typing import Callable, FrozenSet, Iterable, List, Literal, Optional, Set
 
 from mcdecoder import common, core
 
@@ -14,18 +15,34 @@ def check(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None) -> int:
         base = 16
 
     # Check and output results
-    for error in _check(mcfile, bit_pattern, base):
-        if error.type == 'undefined':
-            print(
-                f'Instruction undefined for {error.bits_start:#x}-{error.bits_end:#x}')
-        elif error.type == 'duplicate':
-            print(
-                f'Duplicate instructions for {error.bits_start:#x}-{error.bits_end:#x}')
+    print('-' * 80)
+    print('Checking instructions...')
+    result = _check(mcfile, bit_pattern, base, _output_error)
+    print('Done.')
+
+    print('-' * 80)
+    print('Check result')
+    print('-' * 80)
+    print(f'''Count of bit patters with undefined instructions: {result.undefined_error_count:,}
+Count of bit patters with duplicate instructions: {result.duplicate_error_count:,}
+Count of duplicate instruction pairs: {len(result.duplicate_instruction_pairs):,}
+Duplicate instructions:''')
+
+    for instruction_pair in result.duplicate_instruction_pairs:
+        instruction1, instruction2 = instruction_pair
+        print(f'  {instruction1} - {instruction2}')
 
     return 0
 
 
 # Internal classes
+
+
+@dataclass
+class _CheckResult:
+    undefined_error_count: int
+    duplicate_error_count: int
+    duplicate_instruction_pairs: Set[FrozenSet[str]]
 
 
 @dataclass
@@ -51,7 +68,16 @@ class _BitPattern:
 # Internal functions
 
 
-def _check(mcfile: str, bit_pattern: str, base: Literal[2, 16]) -> Iterable[_Error]:
+def _output_error(error: _Error) -> None:
+    if error.type == 'undefined':
+        print(
+            f'{error.bits_start:#010x} - {error.bits_end:#010x}: Undefined (has no instructions)')
+    elif error.type == 'duplicate':
+        print(
+            f'{error.bits_start:#010x} - {error.bits_end:#010x}: Duplicate (has duplicate instructions)')
+
+
+def _check(mcfile: str, bit_pattern: str, base: Literal[2, 16], callback: Callable[[_Error], None]) -> _CheckResult:
     # Create MC decoder model
     mcdecoder = core.create_mcdecoder_model(mcfile)
 
@@ -69,16 +95,28 @@ def _check(mcfile: str, bit_pattern: str, base: Literal[2, 16]) -> Iterable[_Err
     # Parse bit pattern
     parsed_bit_pattern = _create_bit_pattern(converted_bit_pattern, base)
 
+    # Check instructions
+    return _check_instructions(mcdecoder, parsed_bit_pattern, callback)
+
+
+def _check_instructions(mcdecoder: core.McDecoder, bit_pattern: _BitPattern, callback: Callable[[_Error], None]) -> _CheckResult:
+    undefined_count = 0
+    duplicate_count = 0
+    duplicate_instruction_pairs: Set[FrozenSet[str]] = set()
+
     # Iterate over variable bits and emulate decoder
     decode_context = core.DecodeContext(
         mcdecoder=mcdecoder, code16=0, code32=0)
 
     ongoing_error: Optional[Literal['undefined', 'duplicate']] = None
+    error_step_start = 0
     error_bits_start = 0
     prev_bits = 0
-    for i in range(0, 1 << parsed_bit_pattern.variable_bit_size):
+    prev_step = 0
+
+    for step in range(0, 1 << bit_pattern.variable_bit_size):
         # Make bits to test
-        bits = _make_bits(parsed_bit_pattern, i)
+        bits = _make_bits(bit_pattern, step)
         decode_context.code32 = bits
         decode_context.code16 = bits >> 16
 
@@ -91,25 +129,40 @@ def _check(mcfile: str, bit_pattern: str, base: Literal[2, 16]) -> Iterable[_Err
         elif len(instruction_decoders) >= 2:
             current_error = 'duplicate'
             # TODO Save duplicate instruction pair
+            for instruction_pair in itertools.combinations((instruction.name for instruction in instruction_decoders), 2):
+                duplicate_instruction_pairs.add(frozenset(instruction_pair))
         else:
             current_error = None
 
-        # Yield error if error status is changed
+        # Callback error if error status is changed
         if current_error != ongoing_error:
             if ongoing_error is not None:
-                yield _Error(type=ongoing_error, bits_start=error_bits_start, bits_end=prev_bits)
+                callback(_Error(type=ongoing_error,
+                                bits_start=error_bits_start, bits_end=prev_bits))
+                if ongoing_error == 'undefined':
+                    undefined_count += prev_step - error_step_start + 1
+                elif ongoing_error == 'duplicate':
+                    duplicate_count += prev_step - error_step_start + 1
 
             ongoing_error = current_error
+            error_step_start = step
             error_bits_start = bits
 
-        # Save Previous bits
+        # Save Previous status
+        prev_step = step
         prev_bits = bits
 
-    # Yield error if error left not reported
+    # Callback error if error left not reported
     if ongoing_error is not None:
-        yield _Error(type=ongoing_error, bits_start=error_bits_start, bits_end=prev_bits)
+        callback(_Error(type=ongoing_error,
+                        bits_start=error_bits_start, bits_end=prev_bits))
+        if ongoing_error == 'undefined':
+            undefined_count += prev_step - error_step_start + 1
+        elif ongoing_error == 'duplicate':
+            duplicate_count += prev_step - error_step_start + 1
 
-    yield from ()
+    # Create result
+    return _CheckResult(undefined_error_count=undefined_count, duplicate_error_count=duplicate_count, duplicate_instruction_pairs=duplicate_instruction_pairs)
 
 
 def _create_bit_pattern(bit_pattern: str, base: Literal[2, 16]) -> _BitPattern:
@@ -147,8 +200,8 @@ def _create_bit_pattern(bit_pattern: str, base: Literal[2, 16]) -> _BitPattern:
     return _BitPattern(fixed_bits=fixed_bits, variable_bit_size=variable_bit_size, variable_bit_ranges=variable_bit_ranges)
 
 
-def _make_bits(bit_pattern: _BitPattern, count: int) -> int:
+def _make_bits(bit_pattern: _BitPattern, step: int) -> int:
     bits = bit_pattern.fixed_bits
     for bit_range in bit_pattern.variable_bit_ranges:
-        bits |= (count & bit_range.mask) << bit_range.shift
+        bits |= (step & bit_range.mask) << bit_range.shift
     return bits
