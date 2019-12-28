@@ -38,20 +38,32 @@ class McDescription(TypedDict):
 # Decoder models
 @dataclass
 class InstructionSubfieldDecoder:
+    """Decoder for a instruction subfield"""
     index: int
+    """Index number of a subfield in a field: 0th to (n-1)th"""
     mask: int
+    """Mask of a subfield in an instruction"""
     start_bit_in_instruction: int
+    """MSB of a subfield in an instruction"""
     end_bit_in_instruction: int
+    """LSB of a subfield in an instruction"""
     end_bit_in_field: int
+    """LSB of a subfield in a field"""
 
 
 @dataclass
 class InstructionFieldDecoder:
+    """Decoder for an instruction field"""
     name: str
+    """Name of a field"""
     start_bit: int
+    """MSB of a field"""
     type_bit_size: int
+    """Bit size of data type used for a field"""
     subfield_decoders: List[InstructionSubfieldDecoder]
+    """Subfield decoders"""
     extras: Optional[Any]
+    """User-defined data for a field"""
 
 
 @dataclass
@@ -66,42 +78,65 @@ class InstructionDecodeCondition:
 class EqualityInstructionDecodeCondition(InstructionDecodeCondition):
     """An equality condition subclass for InstructionDecodeCondition to express a field value's equality to a value like !=, >, >=, <, <=, etc."""
     field: str
+    """Name of a field to be tested"""
     operator: str
+    """Operator to test"""
     value: int
+    """Value to be tested with"""
     type: str = 'equality'
+    """Type of InstructionDecodeCondition"""
 
 
 @dataclass
 class InRangeInstructionDecodeCondition(InstructionDecodeCondition):
     """An in-range condition subclass for InstructionDecodeCondition to express an instruction field is in a value range(inclusive)"""
     field: str
+    """Name of a field to be tested"""
     value_start: int
+    """Start of a value range a field must be in"""
     value_end: int
+    """End of a value range a field must be in"""
     type: str = 'in_range'
+    """Type of InstructionDecodeCondition"""
 
 
 @dataclass
 class InstructionDecoder:
+    """Decoder for an instruction"""
     name: str
+    """Name of an instruction"""
     fixed_bits_mask: int
+    """Mask of fixed bit positions of an instruction"""
     fixed_bits: int
+    """Fixed bits of an instruction"""
     type_bit_size: int
+    """Bit size of a data type used for an instruction"""
     conditions: List[InstructionDecodeCondition]
+    """Conditions an instruction must be satisfy"""
     field_decoders: List[InstructionFieldDecoder]
+    """Field decoders"""
     extras: Optional[Any]
+    """User-defined data for an instruction"""
 
 
 @dataclass
 class MachineDecoder:
+    """Decoder for a machine"""
     extras: Optional[Any]
+    """User-defined data for a machine"""
 
 
 @dataclass
 class McDecoder:
+    """Decoder itself. The root model element of MC decoder model"""
     namespace_prefix: str
+    """Namespace prefix of generated codes"""
     machine_decoder: MachineDecoder
+    """Machine decoder"""
     instruction_decoders: List[InstructionDecoder]
+    """Instruction decoders"""
     extras: Optional[Any]
+    """User-defined data not related to a machine, an instruction and a field"""
 
 
 # Instruction condition
@@ -217,7 +252,7 @@ def find_matched_instructions(context: DecodeContext) -> List[InstructionDecoder
             code = context.code16
         else:
             code = context.code32
-        
+
         # Test if instruction is matched to code
         if (code & instruction_decoder.fixed_bits_mask) != instruction_decoder.fixed_bits:
             continue

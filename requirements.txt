@@ -4,3 +4,4 @@ jsonschema
 lark-parser
 pytest
 PyYAML
+Sphinx
