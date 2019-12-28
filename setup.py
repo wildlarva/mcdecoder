@@ -7,7 +7,7 @@ if sys.version_info < (3, 8):
 
 setup(
     name='mcdecoder',
-    version='0.1a3',
+    version='0.1a4.dev1',
     packages=find_packages(
         'src', exclude=['test', 'test.*', '*.test', '*.test.*']),
     package_dir={'': 'src'},
