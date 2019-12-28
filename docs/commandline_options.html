@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Command line options &#8212; mcdecoder  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MC description specification" href="mc_description.html" />
+    <link rel="prev" title="Specifications" href="specifications.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mc_description.html" title="MC description specification"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="specifications.html" title="Specifications"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">mcdecoder  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="specifications.html" accesskey="U">Specifications</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="command-line-options">
+<h1>Command line options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h1>
+<p><p>A toolset for a machine code decoder</p>
+</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">mcdecoder</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">command</span> <span class="o">...</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments">
+<h2>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="option-list">
+<dt><kbd>command</kbd></dt>
+<dd><p>Possible choices: generate, export, emulate, check</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Sub-commands:">
+<h2>Sub-commands:<a class="headerlink" href="#Sub-commands:" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="generate">
+<h3>generate<a class="headerlink" href="#generate" title="Permalink to this headline">¶</a></h3>
+<p>Generate a decoder or other codes to support a decoder</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mcdecoder</span> <span class="n">generate</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">output</span> <span class="n">outdir</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">template</span> <span class="n">templatedir</span><span class="p">]</span> <span class="n">mcfile</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat1">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat1" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>mcfile</kbd></dt>
+<dd><p>A path to a machine code description file</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--output</kbd></dt>
+<dd><p>A path to an output directory (default: .)</p>
+<p>Default: “.”</p>
+</dd>
+<dt><kbd>--template</kbd></dt>
+<dd><p>A path to a directoy including user-defined template files</p>
+</dd>
+</dl>
+</div>
+<p>Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a decoder to &#39;out&#39; directory</span>
+<span class="n">mcdecoder</span> <span class="n">generate</span> <span class="o">--</span><span class="n">output</span> <span class="n">out</span> <span class="n">mc</span><span class="o">.</span><span class="n">csv</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+
+<span class="c1"># Generate codes according to user-defined template files in &#39;user_templates&#39; directory</span>
+<span class="n">mcdecoder</span> <span class="n">generate</span> <span class="o">--</span><span class="n">output</span> <span class="n">out</span> <span class="o">--</span><span class="n">template</span> <span class="n">user_templates</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="export">
+<h3>export<a class="headerlink" href="#export" title="Permalink to this headline">¶</a></h3>
+<p>Export an MC description as another format. Currently, mcdecoder only supports CSV format</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mcdecoder</span> <span class="n">export</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">output</span> <span class="n">outfile</span> <span class="n">mcfile</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat2">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat2" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>mcfile</kbd></dt>
+<dd><p>A path to a machine code description file</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat1">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat1" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--output</kbd></dt>
+<dd><p>A path to an output file</p>
+</dd>
+</dl>
+</div>
+<p>Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Export a MC description as CSV format</span>
+<span class="n">mcdecoder</span> <span class="n">export</span> <span class="o">--</span><span class="n">output</span> <span class="n">mc</span><span class="o">.</span><span class="n">csv</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="emulate">
+<h3>emulate<a class="headerlink" href="#emulate" title="Permalink to this headline">¶</a></h3>
+<p>Emulate a decoder by inputting binary data</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mcdecoder</span> <span class="n">emulate</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">pattern</span> <span class="n">pattern</span> <span class="p">[</span><span class="o">--</span><span class="n">base</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">byteorder</span> <span class="p">{</span><span class="n">big</span><span class="p">,</span><span class="n">little</span><span class="p">}]</span> <span class="n">mcfile</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat3">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat3" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>mcfile</kbd></dt>
+<dd><p>A path to a machine code description file</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat2">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat2" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--pattern</kbd></dt>
+<dd><p>A binary/hex string as a input binary data for a decoder</p>
+</dd>
+<dt><kbd>--base</kbd></dt>
+<dd><p>Possible choices: 2, 16</p>
+<p>The base of a binary/hex string (default: 16)</p>
+<p>Default: 16</p>
+</dd>
+<dt><kbd>--byteorder</kbd></dt>
+<dd><p>Possible choices: big, little</p>
+<p>The byte order of a binary/hex string (default: big)</p>
+<p>Default: “big”</p>
+</dd>
+</dl>
+</div>
+<p>Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Emulate a decoder when inputting e92d4800</span>
+<span class="n">mcdecoder</span> <span class="n">emulate</span> <span class="o">--</span><span class="n">pattern</span> <span class="n">e92d4800</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+
+<span class="c1"># Emulate a decoder when inputting &#39;1110 1001 0010 1101 0100 1000 0000 0000&#39;</span>
+<span class="n">mcdecoder</span> <span class="n">emulate</span> <span class="o">--</span><span class="n">base</span> <span class="mi">2</span> <span class="o">--</span><span class="n">pattern</span> <span class="s1">&#39;1110 1001 0010 1101 0100 1000 0000 0000&#39;</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+
+<span class="c1"># Emulate a decoder when inputting e92d4800 as little endian</span>
+<span class="n">mcdecoder</span> <span class="n">emulate</span> <span class="o">--</span><span class="n">pattern</span> <span class="mi">00482</span><span class="n">de9</span> <span class="o">--</span><span class="n">byteorder</span> <span class="n">little</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="check">
+<h3>check<a class="headerlink" href="#check" title="Permalink to this headline">¶</a></h3>
+<p>Check the instruction validity of MC description by inputting binary data to a decoder</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mcdecoder</span> <span class="n">check</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">pattern</span> <span class="n">pattern</span> <span class="p">[</span><span class="o">--</span><span class="n">base</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">}]</span> <span class="n">mcfile</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat4">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat4" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>mcfile</kbd></dt>
+<dd><p>A path to a machine code description file</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat3">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat3" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--pattern</kbd></dt>
+<dd><p>A binary/hex string as a input binary data for a decoder.
+‘x’ character acts as a wildcard which corresponds to a range 0-1 for binary and 0-f for hex</p>
+</dd>
+<dt><kbd>--base</kbd></dt>
+<dd><p>Possible choices: 2, 16</p>
+<p>The base of a binary/hex string (default: 16)</p>
+<p>Default: 16</p>
+</dd>
+</dl>
+</div>
+<p>Notes:</p>
+<blockquote>
+<div><p>This command detects following problems:</p>
+<ul class="simple">
+<li><p>No instructions are defined for a certain binary data.</p></li>
+<li><p>Duplicate instructions are defined for a certain binary data</p></li>
+</ul>
+</div></blockquote>
+<p>Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check by inputting the range from 092d4800 to f92d4800 to a decoder</span>
+<span class="n">mcdecoder</span> <span class="n">check</span> <span class="o">--</span><span class="n">pattern</span> <span class="n">x92d4800</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+
+<span class="c1"># Check by inputting the range from &#39;1010 1001 0010 1101 0100 1000 0000 0000&#39; to &#39;1110 1001 0010 1101 0100 1000 0000 0000&#39; to a decoder</span>
+<span class="n">mcdecoder</span> <span class="n">check</span> <span class="o">--</span><span class="n">base</span> <span class="mi">2</span> <span class="o">--</span><span class="n">pattern</span> <span class="s1">&#39;1x10 1001 0010 1101 0100 1000 0000 0000&#39;</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+
+<span class="c1"># Check by inputting the range from 002d4800 to ff2d4800 to a decoder</span>
+<span class="n">mcdecoder</span> <span class="n">check</span> <span class="o">--</span><span class="n">pattern</span> <span class="n">xx2d4800</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Command line options</a><ul>
+<li><a class="reference internal" href="#Positional Arguments">Positional Arguments</a></li>
+<li><a class="reference internal" href="#Sub-commands:">Sub-commands:</a><ul>
+<li><a class="reference internal" href="#generate">generate</a><ul>
+<li><a class="reference internal" href="#Positional Arguments_repeat1">Positional Arguments</a></li>
+<li><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#export">export</a><ul>
+<li><a class="reference internal" href="#Positional Arguments_repeat2">Positional Arguments</a></li>
+<li><a class="reference internal" href="#Named Arguments_repeat1">Named Arguments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#emulate">emulate</a><ul>
+<li><a class="reference internal" href="#Positional Arguments_repeat3">Positional Arguments</a></li>
+<li><a class="reference internal" href="#Named Arguments_repeat2">Named Arguments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#check">check</a><ul>
+<li><a class="reference internal" href="#Positional Arguments_repeat4">Positional Arguments</a></li>
+<li><a class="reference internal" href="#Named Arguments_repeat3">Named Arguments</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="specifications.html"
+                        title="previous chapter">Specifications</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mc_description.html"
+                        title="next chapter">MC description specification</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/commandline_options.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="mc_description.html" title="MC description specification"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="specifications.html" title="Specifications"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">mcdecoder  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="specifications.html" >Specifications</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, wildlarva.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+    </div>
+  </body>
+</html>

@@ -5,30 +5,36 @@
   <head>
     <meta charset="utf-8" />
     <title>MC decoder model refernece &#8212; mcdecoder  documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="MC description specification" href="mc_description.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="prev" title="MC description specification" href="mc_description.html" /> 
   </head><body>
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mc_description.html" title="MC description specification"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">mcdecoder  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="specifications.html" accesskey="U">Specifications</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <div class="section" id="mc-decoder-model-refernece">
@@ -127,76 +133,6 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="mcdecoder.core.InRangeInstructionDecodeCondition">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InRangeInstructionDecodeCondition</code><span class="sig-paren">(</span><em class="sig-param">field: str</em>, <em class="sig-param">value_start: int</em>, <em class="sig-param">value_end: int</em>, <em class="sig-param">type: str = 'in_range'</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InRangeInstructionDecodeCondition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#mcdecoder.core.InstructionDecodeCondition" title="mcdecoder.core.InstructionDecodeCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecodeCondition</span></code></a></p>
-<p>An in-range condition subclass for InstructionDecodeCondition to express an instruction field is in a value range(inclusive)</p>
-<dl class="attribute">
-<dt id="mcdecoder.core.InRangeInstructionDecodeCondition.field">
-<code class="sig-name descname">field</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionDecodeCondition.field" title="Permalink to this definition">¶</a></dt>
-<dd><p>Name of a field to be tested</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="mcdecoder.core.InRangeInstructionDecodeCondition.type">
-<code class="sig-name descname">type</code><em class="property"> = 'in_range'</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionDecodeCondition.type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Type of InstructionDecodeCondition</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="mcdecoder.core.InRangeInstructionDecodeCondition.value_end">
-<code class="sig-name descname">value_end</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionDecodeCondition.value_end" title="Permalink to this definition">¶</a></dt>
-<dd><p>End of a value range a field must be in</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="mcdecoder.core.InRangeInstructionDecodeCondition.value_start">
-<code class="sig-name descname">value_start</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionDecodeCondition.value_start" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start of a value range a field must be in</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="mcdecoder.core.EqualityInstructionDecodeCondition">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">EqualityInstructionDecodeCondition</code><span class="sig-paren">(</span><em class="sig-param">field: str</em>, <em class="sig-param">operator: str</em>, <em class="sig-param">value: int</em>, <em class="sig-param">type: str = 'equality'</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.EqualityInstructionDecodeCondition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#mcdecoder.core.InstructionDecodeCondition" title="mcdecoder.core.InstructionDecodeCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecodeCondition</span></code></a></p>
-<p>An equality condition subclass for InstructionDecodeCondition to express a field value’s equality to a value like !=, &gt;, &gt;=, &lt;, &lt;=, etc.</p>
-<dl class="attribute">
-<dt id="mcdecoder.core.EqualityInstructionDecodeCondition.field">
-<code class="sig-name descname">field</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionDecodeCondition.field" title="Permalink to this definition">¶</a></dt>
-<dd><p>Name of a field to be tested</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="mcdecoder.core.EqualityInstructionDecodeCondition.operator">
-<code class="sig-name descname">operator</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionDecodeCondition.operator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Operator to test</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="mcdecoder.core.EqualityInstructionDecodeCondition.type">
-<code class="sig-name descname">type</code><em class="property"> = 'equality'</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionDecodeCondition.type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Type of InstructionDecodeCondition</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="mcdecoder.core.EqualityInstructionDecodeCondition.value">
-<code class="sig-name descname">value</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionDecodeCondition.value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Value to be tested with</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="mcdecoder.core.InstructionDecodeCondition">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDecodeCondition</code><a class="headerlink" href="#mcdecoder.core.InstructionDecodeCondition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A condition of instruction encoding when an instruction applys.
-Each subclass must have a string attribute ‘type’ to express the type of a subclass.</p>
-</dd></dl>
-
-<dl class="class">
 <dt id="mcdecoder.core.InstructionFieldDecoder">
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionFieldDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, start_bit: int, type_bit_size: int, subfield_decoders: List[mcdecoder.core.InstructionSubfieldDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -270,46 +206,94 @@ Each subclass must have a string attribute ‘type’ to express the type of a s
 
 </dd></dl>
 
+<dl class="class">
+<dt id="mcdecoder.core.InstructionDecodeCondition">
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDecodeCondition</code><a class="headerlink" href="#mcdecoder.core.InstructionDecodeCondition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A condition of instruction encoding when an instruction applys.
+Each subclass must have a string attribute ‘type’ to express the type of a subclass.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="mcdecoder.core.EqualityInstructionDecodeCondition">
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">EqualityInstructionDecodeCondition</code><span class="sig-paren">(</span><em class="sig-param">field: str</em>, <em class="sig-param">operator: str</em>, <em class="sig-param">value: int</em>, <em class="sig-param">type: str = 'equality'</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.EqualityInstructionDecodeCondition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mcdecoder.core.InstructionDecodeCondition" title="mcdecoder.core.InstructionDecodeCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecodeCondition</span></code></a></p>
+<p>An equality condition subclass for InstructionDecodeCondition to express a field value’s equality to a value like !=, &gt;, &gt;=, &lt;, &lt;=, etc.</p>
+<dl class="attribute">
+<dt id="mcdecoder.core.EqualityInstructionDecodeCondition.field">
+<code class="sig-name descname">field</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionDecodeCondition.field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of a field to be tested</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.EqualityInstructionDecodeCondition.operator">
+<code class="sig-name descname">operator</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionDecodeCondition.operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Operator to test</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.EqualityInstructionDecodeCondition.type">
+<code class="sig-name descname">type</code><em class="property"> = 'equality'</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionDecodeCondition.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of InstructionDecodeCondition</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.EqualityInstructionDecodeCondition.value">
+<code class="sig-name descname">value</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionDecodeCondition.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value to be tested with</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="mcdecoder.core.InRangeInstructionDecodeCondition">
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InRangeInstructionDecodeCondition</code><span class="sig-paren">(</span><em class="sig-param">field: str</em>, <em class="sig-param">value_start: int</em>, <em class="sig-param">value_end: int</em>, <em class="sig-param">type: str = 'in_range'</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InRangeInstructionDecodeCondition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mcdecoder.core.InstructionDecodeCondition" title="mcdecoder.core.InstructionDecodeCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecodeCondition</span></code></a></p>
+<p>An in-range condition subclass for InstructionDecodeCondition to express an instruction field is in a value range(inclusive)</p>
+<dl class="attribute">
+<dt id="mcdecoder.core.InRangeInstructionDecodeCondition.field">
+<code class="sig-name descname">field</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionDecodeCondition.field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of a field to be tested</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.InRangeInstructionDecodeCondition.type">
+<code class="sig-name descname">type</code><em class="property"> = 'in_range'</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionDecodeCondition.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of InstructionDecodeCondition</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.InRangeInstructionDecodeCondition.value_end">
+<code class="sig-name descname">value_end</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionDecodeCondition.value_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>End of a value range a field must be in</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.InRangeInstructionDecodeCondition.value_start">
+<code class="sig-name descname">value_start</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionDecodeCondition.value_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start of a value range a field must be in</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">mcdecoder</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_templates.html">User templates</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="specifications.html">Specifications</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="mc_description.html">MC description specification</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">MC decoder model refernece</a></li>
-</ul>
-</li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="specifications.html">Specifications</a><ul>
-      <li>Previous: <a href="mc_description.html" title="previous chapter">MC description specification</a></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mc_description.html"
+                        title="previous chapter">MC description specification</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/decoder_model_reference.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -320,32 +304,26 @@ Each subclass must have a string attribute ‘type’ to express the type of a s
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2019, wildlarva.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/decoder_model_reference.rst.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="mc_description.html" title="MC description specification"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">mcdecoder  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="specifications.html" >Specifications</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, wildlarva.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+    </div>
   </body>
 </html>
