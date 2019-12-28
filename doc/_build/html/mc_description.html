@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>MC description specification &#8212; mcdecoder  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Specifications" href="specifications.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="mc-description-specification">
+<span id="mc-description"></span><h1>MC description specification<a class="headerlink" href="#mc-description-specification" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="c1"># Specification of machine code description file</span>
+<span class="c1">#</span>
+<span class="c1"># Machine code description file needs to be a YAML format.</span>
+
+<span class="c1"># Describes a machine</span>
+<span class="nt">machine</span><span class="p">:</span>
+  <span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] Container of user-defined data for the machine</span>
+    <span class="c1"># Any structure can be defined here</span>
+    <span class="nt">arch_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">arm</span>
+
+<span class="c1"># Describes instructions</span>
+<span class="c1">#</span>
+<span class="c1"># Each list element represents an instruction.</span>
+<span class="nt">instructions</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_1</span> <span class="c1"># Name of the instruction</span>
+
+    <span class="c1"># Encoding format of the instruction</span>
+    <span class="c1">#</span>
+    <span class="c1"># Instruction fields are separated by bar symbol(|).</span>
+    <span class="c1"># Expression: &lt;field_bits&gt;:&lt;field_name&gt;[&lt;field_bit_ranges&gt;]|...</span>
+    <span class="c1">#</span>
+    <span class="c1"># where</span>
+    <span class="c1">#   &lt;field_bits&gt;: Encoding format of an instruction field</span>
+    <span class="c1">#     It takes an array of 0, 1 or x.</span>
+    <span class="c1">#     &#39;0&#39; or &#39;1&#39; represents a fixed bit of the instruction field. &#39;x&#39; represents any bit.</span>
+    <span class="c1">#</span>
+    <span class="c1">#   &lt;field_name&gt;: [optional] Name of the instruction field</span>
+    <span class="c1">#     NOTE: One field name can be used multiple times in one instruction.</span>
+    <span class="c1">#           This constructs subfields of a field split into several bit ranges.</span>
+    <span class="c1">#</span>
+    <span class="c1">#   &lt;field_bit_ranges&gt;: [optional] Field bit ranges of an instruction field</span>
+    <span class="c1">#     Each bit range expresses a subfield of the field.</span>
+    <span class="c1">#     Subfields are separated by comma symbol(,).</span>
+    <span class="c1">#     Expression: &lt;subfield_start&gt;:&lt;subfield_end&gt;,...</span>
+    <span class="c1">#</span>
+    <span class="c1">#   &lt;subfield_start&gt;: Subfield start bit position in the instruction field</span>
+    <span class="c1">#     NOTE: This is a start bit position in a field, not in an instruction.</span>
+    <span class="c1">#</span>
+    <span class="c1">#   &lt;subfield_end&gt;: [optional] Subfield end bit position in the instruction field</span>
+    <span class="c1">#     NOTE: This is an end bit position in a field, not in an instruction.</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
+
+    <span class="c1"># [optional] Bit condition when the instruction applys</span>
+    <span class="c1">#</span>
+    <span class="c1"># Each mapping key represents a field used for a condition and its value represents the condition itself.</span>
+    <span class="c1"># If multiple field conditions are defined, they&#39;re combined with AND operator.</span>
+    <span class="c1">#</span>
+    <span class="c1"># The following condition types are supported.</span>
+    <span class="c1"># - Equality: The equality between a field value and a given value.</span>
+    <span class="c1">#     Expression: &lt;operator&gt; &lt;value&gt;</span>
+    <span class="c1"># - In Range: A field value is in a given value range(inclusive) or not.</span>
+    <span class="c1">#     Expression: in_range &lt;value_start&gt;-&lt;value_end&gt;</span>
+    <span class="c1">#</span>
+    <span class="c1"># where</span>
+    <span class="c1">#   &lt;operator&gt;: An equality operator to test</span>
+    <span class="c1">#     It can be !=, &lt;, &lt;=, &gt; or &gt;=.</span>
+    <span class="c1">#</span>
+    <span class="c1">#   &lt;value&gt;: A value to test the equality to</span>
+    <span class="c1">#     10-base integer values like 1, 2, 10, etc.</span>
+    <span class="c1">#</span>
+    <span class="c1">#   &lt;value_start&gt;: The start of a value range(inclusive)</span>
+    <span class="c1">#     10-base integer values like 1, 2, 10, etc.</span>
+    <span class="c1">#</span>
+    <span class="c1">#   &lt;value_end&gt;: The end of a value range(inclusive)</span>
+    <span class="c1">#     10-base integer values like 1, 2, 10, etc.</span>
+    <span class="c1">#</span>
+    <span class="c1"># NOTE: You have to wrap your conditional expression with quotes when you use &#39;!&#39; or &#39;&gt;&#39; as the first letter of a condition.</span>
+    <span class="c1">#       This is a restriction of YAML format.</span>
+    <span class="nt">condition</span><span class="p">:</span>
+      <span class="nt">cond</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">in_range 0-14</span>
+
+    <span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] Container of user-defined data for the instruction</span>
+      <span class="c1"># Any structure can be defined here</span>
+      <span class="nt">clocks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+    
+    <span class="c1"># [optional] Container of user-defined data for each field</span>
+    <span class="c1"># </span>
+    <span class="c1"># Each mapping key represents a field defining user-defined data and its value holds user-defined data for the field</span>
+    <span class="nt">field_extras</span><span class="p">:</span>
+      <span class="nt">Rn</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span> <span class="nv">register</span><span class="p p-Indicator">}</span> <span class="c1"># Any structure can be defined in a mapping value</span>
+      <span class="nt">Rd</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span> <span class="nv">register</span><span class="p p-Indicator">}</span>
+      <span class="nt">imm12</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span> <span class="nv">immediate</span><span class="p p-Indicator">}</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">push_1</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list</span>
+    <span class="nt">condition</span><span class="p">:</span>
+      <span class="nt">cond</span><span class="p">:</span> <span class="s">&#39;!=</span><span class="nv"> </span><span class="s">15&#39;</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">c_addi_1</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">000:funct3|x:imm[5]|xxxx x:dest|xxx xx:imm[4:0]|01:op</span>
+
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">c_sd_1</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">111:funct3|x xxxx x:offset[5:3,8:6]|xxx xx:src|10:op</span>
+
+<span class="nt">decoder</span><span class="p">:</span> <span class="c1"># [optional] Decoder information that isn&#39;t related to a machine, an instruction and a field</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ns</span> <span class="c1"># [optional] Namespace for the symbols of a generated decoder</span>
+
+<span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] Container of user-defined data that isn&#39;t related to a machine, an instruction and a field</span>
+    <span class="c1"># Any structure can be defined here</span>
+    <span class="nt">compiler</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gcc</span>
+</pre></div>
+</div>
+<p>TBD</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">mcdecoder</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_templates.html">User templates</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="specifications.html">Specifications</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MC description specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decoder_model_reference.html">MC decoder model refernece</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="specifications.html">Specifications</a><ul>
+      <li>Previous: <a href="specifications.html" title="previous chapter">Specifications</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, wildlarva.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/mc_description.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
