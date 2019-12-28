@@ -2,6 +2,7 @@ conan
 Jinja2
 jsonschema
 lark-parser
+m2r
 pytest
 PyYAML
 Sphinx

@@ -29,7 +29,7 @@ MC decoder files are generated as
 - \<output-directory\>/mcdecoder.c
 - \<output-directory\>/mcdecoder.h
 
-See [the specification of machine code description file](doc/mc_desc_spec.yaml).
+See [documentation](https://wildlarva.github.io/mcdecoder/).
 
 ## For developers
 
