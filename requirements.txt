@@ -6,3 +6,4 @@ m2r
 pytest
 PyYAML
 Sphinx
+sphinx-argparse
