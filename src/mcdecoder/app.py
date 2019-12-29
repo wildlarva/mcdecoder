@@ -69,10 +69,10 @@ def _create_parser() -> argparse.ArgumentParser:
             Usage::
               
               # Generate a decoder to 'out' directory
-              mcdecoder generate --output out mc.csv mc.yaml
+              mcdecoder generate --output out mc.yaml
               
               # Generate codes according to user-defined template files in 'user_templates' directory
-              mcdecoder generate --output out --template user_templates mc.yaml
+              mcdecoder generate --template user_templates --output out mc.yaml
             '''))
     generate_parser.add_argument(
         '--output', metavar='outdir', dest='output_directory', default='.', help='A path to an output directory (default: .)')
@@ -106,10 +106,10 @@ def _create_parser() -> argparse.ArgumentParser:
               mcdecoder emulate --base 2 --pattern '1110 1001 0010 1101 0100 1000 0000 0000' mc.yaml
               
               # Emulate a decoder when inputting e92d4800 as little endian
-              mcdecoder emulate --pattern 00482de9 --byteorder little mc.yaml
+              mcdecoder emulate --byteorder little --pattern 00482de9 mc.yaml
             '''))
     emulate_parser.add_argument(
-        '--pattern', metavar='pattern', dest='bit_pattern', required=True, help=textwrap.dedent('A binary/hex string as a input binary data for a decoder'))
+        '--pattern', metavar='pattern', dest='bit_pattern', required=True, help=textwrap.dedent('A binary/hex string as input binary data for a decoder'))
     emulate_parser.add_argument(
         '--base', choices=[2, 16], default=16, type=int, help='The base of a binary/hex string (default: 16)')
     emulate_parser.add_argument(
@@ -140,7 +140,7 @@ def _create_parser() -> argparse.ArgumentParser:
             '''))
     emulate_parser.add_argument(
         '--pattern', metavar='pattern', dest='bit_pattern', required=True, help=textwrap.dedent('''\
-            A binary/hex string as a input binary data for a decoder.
+            A binary/hex string as input binary data for a decoder.
             'x' character acts as a wildcard which corresponds to a range 0-1 for binary and 0-f for hex
             '''))
     emulate_parser.add_argument(
