@@ -1,5 +1,6 @@
 from ..core import (
-    EqualityInstructionDecodeCondition, InRangeInstructionDecodeCondition, create_mcdecoder_model)
+    EqualityInstructionDecodeCondition, InRangeInstructionDecodeCondition,
+    create_mcdecoder_model)
 
 
 def test_create_mcdecoder_model_namespace() -> None:

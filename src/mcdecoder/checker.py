@@ -1,7 +1,7 @@
+from dataclasses import dataclass
 import itertools
 import re
 import textwrap
-from dataclasses import dataclass
 from typing import Callable, FrozenSet, List, Literal, Optional, Set, Tuple
 
 import numpy as np
