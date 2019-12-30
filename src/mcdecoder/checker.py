@@ -1,11 +1,12 @@
-from dataclasses import dataclass
 import itertools
 import re
 import textwrap
+from dataclasses import dataclass
 from typing import Callable, FrozenSet, List, Literal, Optional, Set, Tuple
 
-from mcdecoder import common, core
 import numpy as np
+
+from . import common, core
 
 # External functions
 

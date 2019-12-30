@@ -2,11 +2,12 @@ import os
 import shutil
 
 import jinja2
-from mcdecoder.core import (
+
+from ..core import (
     EqualityInstructionDecodeCondition, InRangeInstructionDecodeCondition,
     InstructionDecoder, InstructionFieldDecoder, InstructionSubfieldDecoder,
     MachineDecoder, McDecoder)
-from mcdecoder.generator import _generate, generate
+from ..generator import _generate, generate
 
 
 def test_generate_without_template_dir() -> None:

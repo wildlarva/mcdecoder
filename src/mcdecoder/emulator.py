@@ -1,6 +1,7 @@
 from typing import List, Literal
 
-from mcdecoder import common, core
+from . import common, core
+
 # External functions
 
 

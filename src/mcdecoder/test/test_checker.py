@@ -1,4 +1,4 @@
-from mcdecoder.checker import _check, check
+from ..checker import _check, check
 
 
 def test_check() -> None:

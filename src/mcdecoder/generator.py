@@ -1,7 +1,7 @@
 import os
 
 import jinja2
-from mcdecoder import common, core
+from . import common, core
 
 
 # External functions

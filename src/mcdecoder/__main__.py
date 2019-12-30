@@ -1,6 +1,6 @@
 import sys
 
-from mcdecoder import app
+from . import app
 
 
 def main() -> int:

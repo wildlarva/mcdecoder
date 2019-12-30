@@ -1,4 +1,4 @@
-from mcdecoder.emulator import _emulate, emulate
+from ..emulator import _emulate, emulate
 
 
 def test_emulate_without_base_and_byteorder() -> None:

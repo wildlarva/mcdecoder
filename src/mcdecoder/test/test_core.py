@@ -1,4 +1,4 @@
-from mcdecoder.core import (
+from ..core import (
     EqualityInstructionDecodeCondition, InRangeInstructionDecodeCondition, create_mcdecoder_model)
 
 

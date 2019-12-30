@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import textwrap
 from typing import List, Literal, Optional, cast
 
-from mcdecoder import checker, emulator, exporter, generator
+from . import checker, emulator, exporter, generator
 
 # External functions
 

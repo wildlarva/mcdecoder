@@ -2,7 +2,7 @@ import csv
 from dataclasses import dataclass
 from typing import List
 
-from mcdecoder import common, core
+from . import common, core
 
 # External functions
 

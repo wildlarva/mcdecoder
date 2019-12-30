@@ -1,7 +1,7 @@
 import csv
 import shutil
 
-from mcdecoder.exporter import export
+from ..exporter import export
 
 
 def test_export_without_condition() -> None:
