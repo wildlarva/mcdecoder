@@ -285,22 +285,26 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
     :return: N x M matrix of codes(N) and instructions(M). Each element holds the boolean result whether a code is matched for an instruction.
     """
     # Vectorize the attributes of instruction decoders
-    instruction_fields_mat = np.array([(instruction.type_bit_size, instruction.fixed_bits_mask, instruction.fixed_bits) for instruction in context.mcdecoder.instruction_decoders])
+    instruction_fields_mat = np.array([(instruction.type_bit_size, instruction.fixed_bits_mask,
+                                        instruction.fixed_bits) for instruction in context.mcdecoder.instruction_decoders])
 
     type_bit_size_vec = instruction_fields_mat[:, 0]
     fixed_bits_mask_vec = instruction_fields_mat[:, 1]
     fixed_bits_vec = instruction_fields_mat[:, 2]
 
     # N x M matrix of codes and instructions holding code values
-    code_mat: np.ndarray = np.where(type_bit_size_vec == 16, context.code16_vec.reshape(context.code16_vec.shape[0], 1), context.code32_vec.reshape(context.code32_vec.shape[0], 1))
+    code_mat: np.ndarray = np.where(type_bit_size_vec == 16, context.code16_vec.reshape(
+        context.code16_vec.shape[0], 1), context.code32_vec.reshape(context.code32_vec.shape[0], 1))
 
     # N x M matrix of codes and instructions holding fixed bits test boolean values
     fb_test_mat = (code_mat & fixed_bits_mask_vec) == fixed_bits_vec
 
     test_mat = fb_test_mat
     for i, instruction_decoder in enumerate(context.mcdecoder.instruction_decoders):
-        test_vec = _test_instruction_conditions_vectorized(code_mat[:, i], instruction_decoder)
-        test_mat[:, i] = np.logical_and(test_mat[:, i], test_vec)
+        test_vec = _test_instruction_conditions_vectorized(
+            code_mat[:, i], instruction_decoder)
+        test_mat[:, i] = np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
+            test_mat[:, i], test_vec)
 
     return test_mat
 
@@ -614,8 +618,10 @@ def _get_appropriate_code(context: DecodeContext, instruction_decoder: Instructi
 def _test_instruction_conditions_vectorized(code_vec: np.ndarray, instruction_decoder: InstructionDecoder) -> np.ndarray:
     total_test_vec = np.full((code_vec.shape[0]), True)
     for condition in instruction_decoder.conditions:
-        test_vec: np.ndarray = _test_instruction_condition_vectorized(code_vec, condition, instruction_decoder)
-        total_test_vec = np.logical_and(total_test_vec, test_vec)
+        test_vec: np.ndarray = _test_instruction_condition_vectorized(
+            code_vec, condition, instruction_decoder)
+        total_test_vec = np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
+            total_test_vec, test_vec)
 
     return total_test_vec
 
@@ -648,7 +654,9 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
             return np.full((code_vec.shape[0]), False)
 
         value = _decode_field_vectorized(code_vec, field_decoder)
-        return np.logical_and(value >= condition.value_start, value <= condition.value_end)
+
+        return np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
+            value >= condition.value_start, value <= condition.value_end)
 
     else:
         return np.full((code_vec.shape[0]), False)

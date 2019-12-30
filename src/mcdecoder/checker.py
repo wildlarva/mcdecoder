@@ -325,7 +325,7 @@ def _detect_duplicate_errors(context: _CheckContext, header_mat: np.ndarray, tes
         # Save duplicate instruction pairs
         duplicate_test_mat = test_mat[matched_instruction_count_vec >= 2]
         duplicate_instruction_mat = np.unique(
-            duplicate_test_mat, axis=0) == 1
+            duplicate_test_mat, axis=0)
         context.duplicate_instruction_mat = np.vstack(
             (context.duplicate_instruction_mat, duplicate_instruction_mat))
 

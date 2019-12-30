@@ -1,8 +1,5 @@
 {
     "python.pythonPath": "env/bin/python",
-    "python.testing.pytestArgs": [
-        "src"
-    ],
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
@@ -17,7 +14,6 @@
             "url": "http://json-schema.org/draft-07/schema"
         }
     ],
-    "remote.WSL.fileWatcher.polling": true,
     "restructuredtext.confPath": "${workspaceFolder}/doc",
-    "pyright.useLibraryCodeForTypes": true
+    "pyright.useLibraryCodeForTypes": true,
 }
