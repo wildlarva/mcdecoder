@@ -2,7 +2,7 @@ from dataclasses import dataclass
 import itertools
 import re
 import textwrap
-from typing import Callable, FrozenSet, List, Literal, Optional, Set
+from typing import Callable, FrozenSet, List, Literal, Optional, Set, Tuple
 
 from mcdecoder import common, core
 import numpy as np
@@ -25,10 +25,6 @@ def check(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None) -> int:
     result = _check(mcfile, bit_pattern, base, _output_error)
     print('Done.')
 
-    # Sort duplicate instruction pairs
-    sorted_instruction_pairs = sorted(sorted(pair)
-                                      for pair in result.duplicate_instruction_pairs)
-
     # Output check results
     print('-' * 80)
     print('Check result')
@@ -42,8 +38,8 @@ def check(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None) -> int:
         Duplicate instructions:\
         '''))
 
-    if len(sorted_instruction_pairs) > 0:
-        for instruction_pair in sorted_instruction_pairs:
+    if len(result.duplicate_instruction_pairs) > 0:
+        for instruction_pair in result.duplicate_instruction_pairs:
             if len(instruction_pair) >= 2:
                 instruction1, instruction2 = instruction_pair
             else:
@@ -60,23 +56,6 @@ def check(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None) -> int:
 
 
 @dataclass
-class _CheckResult:
-    """Final result of checking"""
-    no_error_count: int
-    undefined_error_count: int
-    duplicate_error_count: int
-    duplicate_instruction_pairs: Set[FrozenSet[str]]
-
-
-@dataclass
-class _Error:
-    """Error reported while checking"""
-    type: Literal['undefined', 'duplicate']
-    bits_start: int
-    bits_end: int
-
-
-@dataclass
 class _VariableBitRange:
     """Variable bit range information in a bit pattern"""
     mask: int
@@ -89,6 +68,55 @@ class _BitPattern:
     fixed_bits: int
     variable_bit_size: int
     variable_bit_ranges: List[_VariableBitRange]
+
+
+@dataclass
+class _CheckContext:
+    """A context information while checking"""
+    bit_pattern: _BitPattern
+    """Bit pattern to be checked"""
+    decode_context: core.DecodeContextVectorized
+    """A context information while decoding"""
+    duplicate_instruction_mat: np.ndarray
+    """
+    N x M matrix of duplicate detections and instructions.
+    Each row expresses a detection instance.
+    Each element holds a bool test result whether an instruction is matched for a code
+
+    NOTE The first row is a dummy to keep a dimension of a matrix.
+    """
+    undefined_count: int = 0
+    """Detected count of undefined instructions"""
+    duplicate_count: int = 0
+    """Detected count of duplicate instructions"""
+    ongoing_undefined_range_vec: Optional[np.ndarray] = None
+    """Ongoing detection range of an undefined instruction. This is 4-vector of step start, bits start, step end and bits end"""
+    ongoing_duplicate_range_vec: Optional[np.ndarray] = None
+    """Ongoing detection range of a duplicate instruction. This is 4-vector of step start, bits start, step end and bits end"""
+
+
+@dataclass
+class _CheckResult:
+    """Final result of checking"""
+    no_error_count: int
+    undefined_error_count: int
+    duplicate_error_count: int
+    duplicate_instruction_pairs: List[List[str]]
+
+
+@dataclass
+class _Error:
+    """Error reported while checking"""
+    type: Literal['undefined', 'duplicate']
+    bits_start: int
+    bits_end: int
+
+
+# Global variables
+
+
+_VEC_SIZE = 1 << 16
+"""Max size of vectors and rows of matrices used for checking"""
 
 
 # Internal functions
@@ -132,125 +160,52 @@ def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitP
     Check instructions if they have any errors.
     Errors are reported through callback while checking.
     """
-    VEC_SIZE = 1 << 16
     total_count = 1 << bit_pattern.variable_bit_size
 
-    undefined_count = 0
-    duplicate_count = 0
-
-    # Iterate over variable bits and emulate decoder
+    # Create check context
     decode_context = core.DecodeContextVectorized(
         mcdecoder=mcdecoder, code16_vec=np.empty(()), code32_vec=np.empty(()))
 
     # N x M matrix of detected duplicates and instructions holding boolean whether an instruction is matched
-    total_duplicate_instruction_mat = np.full(
+    duplicate_instruction_mat = np.full(
         (1, len(mcdecoder.instruction_decoders)), False)
 
-    ongoing_undefined_range: Optional[np.ndarray] = None
-    ongoing_duplicate_range: Optional[np.ndarray] = None
+    context = _CheckContext(bit_pattern=bit_pattern, decode_context=decode_context,
+                            duplicate_instruction_mat=duplicate_instruction_mat)
 
-    for step in range(0, total_count, VEC_SIZE):
+    # Iterate over variable bits and emulate decoder
+    for step_start in range(0, total_count, _VEC_SIZE):
+        step_end = min(step_start + _VEC_SIZE, total_count) - 1
+
         # Make bits to test
-        step_end = min(step + VEC_SIZE, total_count) - 1
-        step_vec = np.arange(step, step_end + 1)
-        bits_vec = np.full((step_vec.shape[0]), bit_pattern.fixed_bits)
-        for bit_range in bit_pattern.variable_bit_ranges:
-            bits_vec |= (step_vec & bit_range.mask) << bit_range.shift
+        step_vec = np.arange(step_start, step_end + 1)
+        bits_vec = _make_bits(context, step_vec)
 
-        decode_context.code32_vec = bits_vec
-        decode_context.code16_vec = bits_vec >> 16
+        context.decode_context.code32_vec = bits_vec
+        context.decode_context.code16_vec = bits_vec >> 16
 
         # Emulate decode matching
-        test_matrix = core.find_matched_instructions_vectorized(decode_context)
-        matched_instruction_count_vec = np.sum(test_matrix, axis=1)
+        test_mat = core.find_matched_instructions_vectorized(
+            context.decode_context)
+        matched_instruction_count_vec = np.sum(test_mat, axis=1)
 
         # Combine step, bits and test result
-        # N x (M+2) matrix of codes x (step, bits, test_result)
-        test_matrix_with_header = np.hstack((step_vec.reshape(
-            step_vec.shape[0], 1), bits_vec.reshape(bits_vec.shape[0], 1), test_matrix))
+        # N x 2 matrix of codes x (step, bits)
+        header_mat = np.hstack((step_vec.reshape(
+            step_vec.shape[0], 1), bits_vec.reshape(bits_vec.shape[0], 1)))
 
         # Collect errors
         errors: List[_Error] = []
 
         # Find undefined
-        undefined_matrix = test_matrix_with_header[matched_instruction_count_vec == 0]
-        undefined_ranges: Optional[List[np.ndarray]] = None
-        if len(undefined_matrix) > 0:
-            # Split ranges
-            undefined_ranges = np.split(undefined_matrix, np.where(
-                np.diff(undefined_matrix[:, 0]) != 1)[0]+1)
-
-            # Concatenate ongoing undefined range
-            if ongoing_undefined_range is not None:
-                if undefined_ranges[0][0, 0] == ongoing_undefined_range[-1, 0] + 1:
-                    undefined_ranges[0] = np.vstack(
-                        (ongoing_undefined_range, undefined_ranges[0]))
-                else:
-                    undefined_ranges.insert(0, ongoing_undefined_range)
-
-                ongoing_undefined_range = None
-        else:
-            # Use ongoing undefined range
-            if ongoing_undefined_range is not None:
-                undefined_ranges = [ongoing_undefined_range]
-                ongoing_undefined_range = None
-
-        if undefined_ranges is not None:
-            # Save ongoing undefined range
-            if undefined_ranges[-1][-1, 0] == step_end:
-                ongoing_undefined_range = undefined_ranges[-1]
-                undefined_ranges = undefined_ranges[:-1]
-
-            # Create errors
-            for undefined_range in undefined_ranges:
-                error_step_start, error_bits_start = undefined_range[0, 0:2]
-                error_step_end, error_bits_end = undefined_range[-1, 0:2]
-                undefined_count += error_step_end - error_step_start + 1
-                errors.append(
-                    _Error(type='undefined', bits_start=error_bits_start, bits_end=error_bits_end))
+        undefined_errors = _detect_undefined_errors(
+            context, header_mat, matched_instruction_count_vec, step_end)
+        errors.extend(undefined_errors)
 
         # Find duplicates
-        duplicate_matrix = test_matrix_with_header[matched_instruction_count_vec >= 2]
-        duplicate_ranges: Optional[List[np.ndarray]] = None
-        if len(duplicate_matrix) > 0:
-            # Save duplicate instruction pairs
-            duplicate_instruction_matrix = np.unique(
-                duplicate_matrix[:, 2:], axis=0) == 1
-            total_duplicate_instruction_mat = np.vstack(
-                (total_duplicate_instruction_mat, duplicate_instruction_matrix))
-
-            # Split ranges
-            duplicate_ranges = np.split(duplicate_matrix, np.where(
-                np.diff(duplicate_matrix[:, 0]) != 1)[0]+1)
-
-            # Concatenate ongoing duplicate range
-            if ongoing_duplicate_range is not None:
-                if duplicate_ranges[0][0, 0] == ongoing_duplicate_range[-1, 0] + 1:
-                    duplicate_ranges[0] = np.vstack(
-                        (ongoing_duplicate_range, duplicate_ranges[0]))
-                else:
-                    duplicate_ranges.insert(0, ongoing_duplicate_range)
-
-                ongoing_duplicate_range = None
-        else:
-            # Use ongoing duplicate range
-            if ongoing_duplicate_range is not None:
-                duplicate_ranges = [ongoing_duplicate_range]
-                ongoing_duplicate_range = None
-
-        if duplicate_ranges is not None:
-            # Save ongoing duplicate range
-            if duplicate_ranges[-1][-1, 0] == step_end:
-                ongoing_duplicate_range = duplicate_ranges[-1]
-                duplicate_ranges = duplicate_ranges[:-1]
-
-            # Create errors
-            for duplicate_range in duplicate_ranges:
-                error_step_start, error_bits_start = duplicate_range[0, 0:2]
-                error_step_end, error_bits_end = duplicate_range[-1, 0:2]
-                duplicate_count += error_step_end - error_step_start + 1
-                errors.append(
-                    _Error(type='duplicate', bits_start=error_bits_start, bits_end=error_bits_end))
+        duplicate_errors = _detect_duplicate_errors(
+            context, header_mat, test_mat, matched_instruction_count_vec, step_end)
+        errors.extend(duplicate_errors)
 
         # Report errors
         if len(errors) > 0:
@@ -258,25 +213,7 @@ def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitP
             callback(errors)
 
     # Handle left errors
-    errors = []
-
-    # Handle left undefined errors
-    if ongoing_undefined_range is not None:
-        # Create errors
-        error_step_start, error_bits_start = ongoing_undefined_range[0, 0:2]
-        error_step_end, error_bits_end = ongoing_undefined_range[-1, 0:2]
-        undefined_count += error_step_end - error_step_start + 1
-        errors.append(
-            _Error(type='undefined', bits_start=error_bits_start, bits_end=error_bits_end))
-
-    # Handle left duplicate errors
-    if ongoing_duplicate_range is not None:
-        # Create errors
-        error_step_start, error_bits_start = ongoing_duplicate_range[0, 0:2]
-        error_step_end, error_bits_end = ongoing_duplicate_range[-1, 0:2]
-        duplicate_count += error_step_end - error_step_start + 1
-        errors.append(
-            _Error(type='duplicate', bits_start=error_bits_start, bits_end=error_bits_end))
+    errors = _create_left_errors(context)
 
     # Report errors
     if len(errors) > 0:
@@ -284,24 +221,12 @@ def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitP
         callback(errors)
 
     # Find duplicate instruction pairs
-    duplicate_instruction_pairs: Set[FrozenSet[str]] = set()
-
-    total_duplicate_instruction_mat = total_duplicate_instruction_mat[1:]
-    if len(total_duplicate_instruction_mat) > 0:
-        total_duplicate_instruction_mat = np.unique(
-            total_duplicate_instruction_mat, axis=0)
-        instruction_name_vec = np.array(
-            [instruction.name for instruction in mcdecoder.instruction_decoders])
-
-        for matched_instruction_vec in total_duplicate_instruction_mat:
-            instructions = instruction_name_vec[matched_instruction_vec]
-            for instruction_pair in itertools.combinations(instructions, 2):
-                duplicate_instruction_pairs.add(frozenset(instruction_pair))
+    duplicate_instruction_pairs = _detect_duplicate_instruction_pairs(context)
 
     # Create result
-    no_error_count = total_count - undefined_count - duplicate_count
+    no_error_count = total_count - context.undefined_count - context.duplicate_count
 
-    return _CheckResult(no_error_count=no_error_count, undefined_error_count=undefined_count, duplicate_error_count=duplicate_count, duplicate_instruction_pairs=duplicate_instruction_pairs)
+    return _CheckResult(no_error_count=no_error_count, undefined_error_count=context.undefined_count, duplicate_error_count=context.duplicate_count, duplicate_instruction_pairs=duplicate_instruction_pairs)
 
 
 def _create_bit_pattern(bit_pattern: str, base: Literal[2, 16]) -> _BitPattern:
@@ -338,3 +263,166 @@ def _create_bit_pattern(bit_pattern: str, base: Literal[2, 16]) -> _BitPattern:
 
     # Create bit pattern
     return _BitPattern(fixed_bits=fixed_bits, variable_bit_size=variable_bit_size, variable_bit_ranges=variable_bit_ranges)
+
+
+def _detect_undefined_errors(context: _CheckContext, header_mat: np.ndarray, matched_instruction_count_vec: np.ndarray, step_end: int) -> List[_Error]:
+    errors = []
+
+    undefined_header_mat = header_mat[matched_instruction_count_vec == 0]
+    # N x M matrix of ranges x (step start, bits start, step end and bits end). Each row expresses a range
+    undefined_range_mat: Optional[np.ndarray] = None
+    if len(undefined_header_mat) > 0:
+        # Split ranges
+        start_index_vec = np.hstack((np.array([0]), np.where(
+            np.diff(undefined_header_mat[:, 0]) != 1)[0] + 1))
+        end_index_vec = np.hstack(
+            (np.where(np.diff(undefined_header_mat[:, 0]) != 1)[0], np.array([-1])))
+        undefined_range_mat = np.hstack(
+            (undefined_header_mat[start_index_vec], undefined_header_mat[end_index_vec]))
+
+        # Concatenate ongoing undefined range
+        if context.ongoing_undefined_range_vec is not None:
+            if undefined_range_mat[0, 0] == context.ongoing_undefined_range_vec[2] + 1:
+                undefined_range_mat[0,
+                                    0:2] = context.ongoing_undefined_range_vec[0:2]
+            else:
+                undefined_range_mat = np.vstack(
+                    (context.ongoing_undefined_range_vec, undefined_range_mat))
+
+            context.ongoing_undefined_range_vec = None
+
+    else:
+        # Use ongoing undefined range
+        if context.ongoing_undefined_range_vec is not None:
+            undefined_range_mat = context.ongoing_undefined_range_vec.reshape(
+                1, 4)
+            context.ongoing_undefined_range_vec = None
+
+    if undefined_range_mat is not None:
+        # Save ongoing undefined range
+        if undefined_range_mat[-1, 2] == step_end:
+            context.ongoing_undefined_range_vec = undefined_range_mat[-1]
+            undefined_range_mat = undefined_range_mat[:-1]
+
+        # Create errors
+        for undefined_range_vec in undefined_range_mat:
+            error_step_start, error_bits_start = undefined_range_vec[0:2]
+            error_step_end, error_bits_end = undefined_range_vec[2:4]
+            context.undefined_count += error_step_end - error_step_start + 1
+            errors.append(
+                _Error(type='undefined', bits_start=error_bits_start, bits_end=error_bits_end))
+
+    return errors
+
+
+def _detect_duplicate_errors(context: _CheckContext, header_mat: np.ndarray, test_mat: np.ndarray, matched_instruction_count_vec: np.ndarray, step_end: int) -> List[_Error]:
+    errors = []
+
+    duplicate_header_mat = header_mat[matched_instruction_count_vec >= 2]
+    # N x M matrix of ranges x (step start, bits start, step end and bits end). Each row expresses a range
+    duplicate_range_mat: Optional[np.ndarray] = None
+    if len(duplicate_header_mat) > 0:
+        # Save duplicate instruction pairs
+        duplicate_test_mat = test_mat[matched_instruction_count_vec >= 2]
+        duplicate_instruction_mat = np.unique(
+            duplicate_test_mat, axis=0) == 1
+        context.duplicate_instruction_mat = np.vstack(
+            (context.duplicate_instruction_mat, duplicate_instruction_mat))
+
+        # Split ranges
+        start_index_vec = np.hstack((np.array([0]), np.where(
+            np.diff(duplicate_header_mat[:, 0]) != 1)[0] + 1))
+        end_index_vec = np.hstack(
+            (np.where(np.diff(duplicate_header_mat[:, 0]) != 1)[0], np.array([-1])))
+        duplicate_range_mat = np.hstack(
+            (duplicate_header_mat[start_index_vec], duplicate_header_mat[end_index_vec]))
+
+        # Concatenate ongoing duplicate range
+        if context.ongoing_duplicate_range_vec is not None:
+            if duplicate_range_mat[0, 0] == context.ongoing_duplicate_range_vec[2] + 1:
+                duplicate_range_mat[0,
+                                    0:2] = context.ongoing_duplicate_range_vec[0:2]
+            else:
+                duplicate_range_mat = np.vstack(
+                    (context.ongoing_duplicate_range_vec, duplicate_range_mat))
+
+            context.ongoing_duplicate_range_vec = None
+
+    else:
+        # Use ongoing duplicate range
+        if context.ongoing_duplicate_range_vec is not None:
+            duplicate_range_mat = context.ongoing_duplicate_range_vec.reshape(
+                1, 4)
+            context.ongoing_duplicate_range_vec = None
+
+    if duplicate_range_mat is not None:
+        # Save ongoing duplicate range
+        if duplicate_range_mat[-1, 2] == step_end:
+            context.ongoing_duplicate_range_vec = duplicate_range_mat[-1]
+            duplicate_range_mat = duplicate_range_mat[:-1]
+
+        # Create errors
+        for duplicate_range_vec in duplicate_range_mat:
+            error_step_start, error_bits_start = duplicate_range_vec[0:2]
+            error_step_end, error_bits_end = duplicate_range_vec[2:4]
+            context.duplicate_count += error_step_end - error_step_start + 1
+            errors.append(
+                _Error(type='duplicate', bits_start=error_bits_start, bits_end=error_bits_end))
+
+    return errors
+
+
+def _create_left_errors(context: _CheckContext) -> List[_Error]:
+    errors = []
+
+    # Handle left undefined errors
+    if context.ongoing_undefined_range_vec is not None:
+        # Create error
+        error_step_start, error_bits_start = context.ongoing_undefined_range_vec[0:2]
+        error_step_end, error_bits_end = context.ongoing_undefined_range_vec[2:4]
+        context.undefined_count += error_step_end - error_step_start + 1
+        errors.append(
+            _Error(type='undefined', bits_start=error_bits_start, bits_end=error_bits_end))
+
+    # Handle left duplicate errors
+    if context.ongoing_duplicate_range_vec is not None:
+        # Create error
+        error_step_start, error_bits_start = context.ongoing_duplicate_range_vec[0:2]
+        error_step_end, error_bits_end = context.ongoing_duplicate_range_vec[2:4]
+        context.duplicate_count += error_step_end - error_step_start + 1
+        errors.append(
+            _Error(type='duplicate', bits_start=error_bits_start, bits_end=error_bits_end))
+
+    return errors
+
+
+def _make_bits(context: _CheckContext, step_vec: np.ndarray) -> np.ndarray:
+    bits_vec = np.full((step_vec.shape[0]), context.bit_pattern.fixed_bits)
+    for bit_range in context.bit_pattern.variable_bit_ranges:
+        bits_vec |= (step_vec & bit_range.mask) << bit_range.shift
+    return bits_vec
+
+
+def _detect_duplicate_instruction_pairs(context: _CheckContext) -> List[List[str]]:
+    duplicate_instruction_pairs: Set[FrozenSet[str]] = set()
+
+    # Remove the dummy row
+    duplicate_instruction_mat = context.duplicate_instruction_mat[1:]
+
+    # Make unique instruction pair combinations
+    if len(duplicate_instruction_mat) > 0:
+        instruction_name_vec = np.array(
+            [instruction.name for instruction in context.decode_context.mcdecoder.instruction_decoders])
+
+        duplicate_instruction_mat = np.unique(
+            duplicate_instruction_mat, axis=0)
+
+        for matched_instruction_vec in duplicate_instruction_mat:
+            instructions = instruction_name_vec[matched_instruction_vec]
+            for instruction_pair in itertools.combinations(instructions, 2):
+                duplicate_instruction_pairs.add(frozenset(instruction_pair))
+
+    # Sort duplicate instruction pairs
+    sorted_instruction_pairs = sorted(sorted(pair)
+                                      for pair in duplicate_instruction_pairs)
+    return sorted_instruction_pairs

@@ -18,5 +18,6 @@
         }
     ],
     "remote.WSL.fileWatcher.polling": true,
-    "restructuredtext.confPath": "${workspaceFolder}/doc"
+    "restructuredtext.confPath": "${workspaceFolder}/doc",
+    "pyright.useLibraryCodeForTypes": true
 }

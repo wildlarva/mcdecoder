@@ -212,8 +212,8 @@ def test__check_duplicate() -> None:
     assert errors1[2].bits_start == 0xe93d4800
     assert errors1[2].bits_end == 0xeffd4800
 
-    assert {'duplicate_instruction_1',
-            'duplicate_instruction_2'} in result1.duplicate_instruction_pairs
+    assert ['duplicate_instruction_1',
+            'duplicate_instruction_2'] in result1.duplicate_instruction_pairs
 
     errors2 = []
     result2 = _check('test/duplicate_instructions.yaml',
@@ -239,5 +239,5 @@ def test__check_duplicate() -> None:
     assert errors2[3].bits_start == 0xf92d4800
     assert errors2[3].bits_end == 0xf92d4800
 
-    assert {'duplicate_instruction_1',
-            'duplicate_instruction_2'} in result2.duplicate_instruction_pairs
+    assert ['duplicate_instruction_1',
+            'duplicate_instruction_2'] in result2.duplicate_instruction_pairs

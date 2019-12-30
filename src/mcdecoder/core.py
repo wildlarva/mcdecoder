@@ -179,6 +179,7 @@ class DecodeContext:
 
 @dataclass
 class DecodeContextVectorized:
+    """A context information while decoding"""
     mcdecoder: McDecoder
     """McDecoder used for decoding"""
     code16_vec: np.ndarray
@@ -284,14 +285,14 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
     :return: N x M matrix of codes(N) and instructions(M). Each element holds the boolean result whether a code is matched for an instruction.
     """
     # Vectorize the attributes of instruction decoders
-    instruction_fields_matrix = np.array([(instruction.type_bit_size, instruction.fixed_bits_mask, instruction.fixed_bits) for instruction in context.mcdecoder.instruction_decoders])
+    instruction_fields_mat = np.array([(instruction.type_bit_size, instruction.fixed_bits_mask, instruction.fixed_bits) for instruction in context.mcdecoder.instruction_decoders])
 
-    type_bit_size_vec = instruction_fields_matrix[:, 0]
-    fixed_bits_mask_vec = instruction_fields_matrix[:, 1]
-    fixed_bits_vec = instruction_fields_matrix[:, 2]
+    type_bit_size_vec = instruction_fields_mat[:, 0]
+    fixed_bits_mask_vec = instruction_fields_mat[:, 1]
+    fixed_bits_vec = instruction_fields_mat[:, 2]
 
     # N x M matrix of codes and instructions holding code values
-    code_mat: np.ndarray = np.where(type_bit_size_vec == 16, context.code16_vec.reshape(context.code16_vec.shape[0], 1), context.code32_vec.reshape(context.code16_vec.shape[0], 1))
+    code_mat: np.ndarray = np.where(type_bit_size_vec == 16, context.code16_vec.reshape(context.code16_vec.shape[0], 1), context.code32_vec.reshape(context.code32_vec.shape[0], 1))
 
     # N x M matrix of codes and instructions holding fixed bits test boolean values
     fb_test_mat = (code_mat & fixed_bits_mask_vec) == fixed_bits_vec
