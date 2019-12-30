@@ -3,6 +3,7 @@ Jinja2
 jsonschema
 lark-parser
 m2r
+numpy
 pytest
 PyYAML
 Sphinx

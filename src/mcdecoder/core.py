@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Optional, Tuple, TypedDict, cast
 
 import jsonschema
 import lark
+import numpy as np
 import yaml
 
 # External classes
@@ -177,6 +178,16 @@ class DecodeContext:
 
 
 @dataclass
+class DecodeContextVectorized:
+    mcdecoder: McDecoder
+    """McDecoder used for decoding"""
+    code16_vec: np.ndarray
+    """N-vector of 16-bit codes. The length of this code16 and code32 must be the same"""
+    code32_vec: np.ndarray
+    """N-vector of 32-bit codes. The length of this code16 and code32 must be the same"""
+
+
+@dataclass
 class InstructionFieldDecodeResult:
     decoder: InstructionFieldDecoder
     value: int
@@ -263,6 +274,34 @@ def find_matched_instructions(context: DecodeContext) -> List[InstructionDecoder
         matched_decoders.append(instruction_decoder)
 
     return matched_decoders
+
+
+def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np.ndarray:
+    """
+    Find all the matched instructions to vectorized codes and return matched instructin matrix.
+
+    :param context: context information of matching instructions
+    :return: N x M matrix of codes(N) and instructions(M). Each element holds the boolean result whether a code is matched for an instruction.
+    """
+    # Vectorize the attributes of instruction decoders
+    instruction_fields_matrix = np.array([(instruction.type_bit_size, instruction.fixed_bits_mask, instruction.fixed_bits) for instruction in context.mcdecoder.instruction_decoders])
+
+    type_bit_size_vec = instruction_fields_matrix[:, 0]
+    fixed_bits_mask_vec = instruction_fields_matrix[:, 1]
+    fixed_bits_vec = instruction_fields_matrix[:, 2]
+
+    # N x M matrix of codes and instructions holding code values
+    code_mat: np.ndarray = np.where(type_bit_size_vec == 16, context.code16_vec.reshape(context.code16_vec.shape[0], 1), context.code32_vec.reshape(context.code16_vec.shape[0], 1))
+
+    # N x M matrix of codes and instructions holding fixed bits test boolean values
+    fb_test_mat = (code_mat & fixed_bits_mask_vec) == fixed_bits_vec
+
+    test_mat = fb_test_mat
+    for i, instruction_decoder in enumerate(context.mcdecoder.instruction_decoders):
+        test_vec = _test_instruction_conditions_vectorized(code_mat[:, i], instruction_decoder)
+        test_mat[:, i] = np.logical_and(test_mat[:, i], test_vec)
+
+    return test_mat
 
 
 def decode_instruction(context: DecodeContext, instruction_decoder: InstructionDecoder) -> InstructionDecodeResult:
@@ -569,3 +608,54 @@ def _get_appropriate_code(context: DecodeContext, instruction_decoder: Instructi
         return context.code16
     else:
         return context.code32
+
+
+def _test_instruction_conditions_vectorized(code_vec: np.ndarray, instruction_decoder: InstructionDecoder) -> np.ndarray:
+    total_test_vec = np.full((code_vec.shape[0]), True)
+    for condition in instruction_decoder.conditions:
+        test_vec: np.ndarray = _test_instruction_condition_vectorized(code_vec, condition, instruction_decoder)
+        total_test_vec = np.logical_and(total_test_vec, test_vec)
+
+    return total_test_vec
+
+
+def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: InstructionDecodeCondition, instruction_decoder: InstructionDecoder) -> np.ndarray:
+    if isinstance(condition, EqualityInstructionDecodeCondition):
+        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
+                              condition.field), None)
+        if field_decoder is None:
+            return np.full((code_vec.shape[0]), False)
+
+        value = _decode_field_vectorized(code_vec, field_decoder)
+        if condition.operator == '!=':
+            return value != condition.value
+        elif condition.operator == '<':
+            return value < condition.value
+        elif condition.operator == '<=':
+            return value <= condition.value
+        elif condition.operator == '>':
+            return value > condition.value
+        elif condition.operator == '>=':
+            return value >= condition.value
+        else:
+            return np.full((code_vec.shape[0]), False)
+
+    elif isinstance(condition, InRangeInstructionDecodeCondition):
+        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
+                              condition.field), None)
+        if field_decoder is None:
+            return np.full((code_vec.shape[0]), False)
+
+        value = _decode_field_vectorized(code_vec, field_decoder)
+        return np.logical_and(value >= condition.value_start, value <= condition.value_end)
+
+    else:
+        return np.full((code_vec.shape[0]), False)
+
+
+def _decode_field_vectorized(code_vec: np.ndarray, field_decoder: InstructionFieldDecoder) -> np.ndarray:
+    value = np.zeros(code_vec.shape[0], dtype=int)
+    for sf_decoder in field_decoder.subfield_decoders:
+        value |= ((code_vec & sf_decoder.mask) >>
+                  sf_decoder.end_bit_in_instruction) << sf_decoder.end_bit_in_field
+    return value

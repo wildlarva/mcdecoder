@@ -23,7 +23,7 @@ def test__check_one_character_mask() -> None:
     # First letter
     errors1 = []
     result1 = _check('test/arm.yaml', 'x9 2d 48 00', 16,
-                     lambda error: errors1.append(error))
+                     lambda error: errors1.extend(error))
     assert len(errors1) == 1
     assert result1.undefined_error_count == 1
     assert result1.duplicate_error_count == 0
@@ -42,7 +42,7 @@ def test__check_one_character_mask() -> None:
     # Halfway
     errors3 = []
     result3 = _check('test/arm.yaml', 'ex 2d 48 00', 16,
-                     lambda error: errors3.append(error))
+                     lambda error: errors3.extend(error))
     assert len(errors3) == 2
     assert result3.undefined_error_count == 15
     assert result3.duplicate_error_count == 0
@@ -58,7 +58,7 @@ def test__check_one_character_mask() -> None:
 
     errors4 = []
     result4 = _check('test/arm.yaml', '111x 1001 0010 1101 0100 1000 0000 0000',
-                     2, lambda error: errors4.append(error))
+                     2, lambda error: errors4.extend(error))
     assert len(errors4) == 1
     assert result4.undefined_error_count == 1
     assert result4.duplicate_error_count == 0
@@ -84,7 +84,7 @@ def test__check_one_character_mask() -> None:
 def test__check_sequential_mask() -> None:
     errors1 = []
     result1 = _check('test/arm.yaml', 'ex xd 48 00', 16,
-                     lambda error: errors1.append(error))
+                     lambda error: errors1.extend(error))
     assert len(errors1) == 3
     assert result1.undefined_error_count == 40 + 104 + 109
     assert result1.duplicate_error_count == 0
@@ -104,7 +104,7 @@ def test__check_sequential_mask() -> None:
 
     errors2 = []
     result2 = _check('test/arm.yaml', '111x x001 0010 1101 0100 1000 0000 0000',
-                     2, lambda error: errors2.append(error))
+                     2, lambda error: errors2.extend(error))
     assert len(errors2) == 2
     assert result2.undefined_error_count == 3
     assert result2.duplicate_error_count == 0
@@ -122,7 +122,7 @@ def test__check_sequential_mask() -> None:
 def test__check_split_mask() -> None:
     errors1 = []
     result1 = _check('test/arm.yaml', 'ex 2x 48 00', 16,
-                     lambda error: errors1.append(error))
+                     lambda error: errors1.extend(error))
     assert len(errors1) == 2
     assert result1.undefined_error_count == 157 + 98
     assert result1.duplicate_error_count == 0
@@ -138,7 +138,7 @@ def test__check_split_mask() -> None:
 
     errors2 = []
     result2 = _check('test/arm.yaml', '111x 100x 0010 1101 0100 1000 0000 0000',
-                     2, lambda error: errors2.append(error))
+                     2, lambda error: errors2.extend(error))
     assert len(errors2) == 2
     assert result2.undefined_error_count == 3
     assert result2.duplicate_error_count == 0
@@ -156,7 +156,7 @@ def test__check_split_mask() -> None:
 def test__check_undefined() -> None:
     errors1 = []
     result1 = _check('test/arm.yaml', 'ex xd 48 00', 16,
-                     lambda error: errors1.append(error))
+                     lambda error: errors1.extend(error))
     assert len(errors1) == 3
     assert result1.undefined_error_count == 40 + 104 + 109
     assert result1.duplicate_error_count == 0
@@ -176,7 +176,7 @@ def test__check_undefined() -> None:
 
     errors2 = []
     result2 = _check('test/arm.yaml', '111x x001 0010 1101 0100 1000 0000 0000',
-                     2, lambda error: errors2.append(error))
+                     2, lambda error: errors2.extend(error))
     assert len(errors2) == 2
     assert result2.undefined_error_count == 3
     assert result2.duplicate_error_count == 0
@@ -194,7 +194,7 @@ def test__check_undefined() -> None:
 def test__check_duplicate() -> None:
     errors1 = []
     result1 = _check('test/duplicate_instructions.yaml',
-                     'ex xd 48 00', 16, lambda error: errors1.append(error))
+                     'ex xd 48 00', 16, lambda error: errors1.extend(error))
     assert len(errors1) == 3
     assert result1.undefined_error_count == 146 + 109
     assert result1.duplicate_error_count == 1
@@ -217,7 +217,7 @@ def test__check_duplicate() -> None:
 
     errors2 = []
     result2 = _check('test/duplicate_instructions.yaml',
-                     '111x x001 0010 1101 0100 1000 0000 0000', 2, lambda error: errors2.append(error))
+                     '111x x001 0010 1101 0100 1000 0000 0000', 2, lambda error: errors2.extend(error))
     assert len(errors2) == 4
     assert result2.undefined_error_count == 2
     assert result2.duplicate_error_count == 2
