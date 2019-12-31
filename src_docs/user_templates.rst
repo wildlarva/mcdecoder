@@ -1,5 +1,3 @@
-.. _user-templates:
-
 User templates
 ==========================
 

@@ -1,5 +1,3 @@
-.. _mc_description:
-
 MC description specification
 ============================
 

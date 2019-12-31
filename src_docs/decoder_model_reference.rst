@@ -1,6 +1,4 @@
-.. _decoder-model-reference:
-
-MC decoder model refernece
+MC decoder model reference
 ==========================
 
 .. autoclass:: mcdecoder.core.McDecoder
