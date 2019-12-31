@@ -58,11 +58,11 @@ class InstructionFieldDecoder:
     name: str
     """Name of a field"""
     start_bit: int
-    """MSB of a field"""
+    """MSB of a field in an instruction"""
     type_bit_size: int
-    """Bit size of data type used for a field"""
+    """Bit size of a data type used for a field"""
     subfield_decoders: List[InstructionSubfieldDecoder]
-    """Subfield decoders"""
+    """Child InstructionSubfieldDecoders"""
     extras: Optional[Any]
     """User-defined data for a field"""
 
@@ -83,9 +83,9 @@ class EqualityInstructionDecodeCondition(InstructionDecodeCondition):
     operator: str
     """Operator to test"""
     value: int
-    """Value to be tested with"""
+    """Value to test with"""
     type: str = 'equality'
-    """Type of InstructionDecodeCondition"""
+    """Type of InstructionDecodeCondition. It's always 'equality' for EqualityInstructionDecodeCondition"""
 
 
 @dataclass
@@ -98,7 +98,7 @@ class InRangeInstructionDecodeCondition(InstructionDecodeCondition):
     value_end: int
     """End of a value range a field must be in"""
     type: str = 'in_range'
-    """Type of InstructionDecodeCondition"""
+    """Type of InstructionDecodeCondition. It's always 'in_range' for InRangeInstructionDecodeCondition"""
 
 
 @dataclass
@@ -113,9 +113,9 @@ class InstructionDecoder:
     type_bit_size: int
     """Bit size of a data type used for an instruction"""
     conditions: List[InstructionDecodeCondition]
-    """Conditions an instruction must be satisfy"""
+    """Conditions an instruction must satisfy"""
     field_decoders: List[InstructionFieldDecoder]
-    """Field decoders"""
+    """Child InstructionFieldDecoders"""
     extras: Optional[Any]
     """User-defined data for an instruction"""
 
@@ -133,9 +133,9 @@ class McDecoder:
     namespace_prefix: str
     """Namespace prefix of generated codes"""
     machine_decoder: MachineDecoder
-    """Machine decoder"""
+    """Child MachineDecoder"""
     instruction_decoders: List[InstructionDecoder]
-    """Instruction decoders"""
+    """Child InstructionDecoders"""
     extras: Optional[Any]
     """User-defined data not related to a machine, an instruction and a field"""
 
