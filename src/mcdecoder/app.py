@@ -124,7 +124,7 @@ def _create_parser() -> argparse.ArgumentParser:
 
               This command detects following problems:
 
-              * No instructions are defined for a certain binary data.
+              * No instructions are defined for a certain binary data
               * Duplicate instructions are defined for a certain binary data
 
             Usage::
@@ -141,7 +141,7 @@ def _create_parser() -> argparse.ArgumentParser:
     emulate_parser.add_argument(
         '--pattern', metavar='pattern', dest='bit_pattern', required=True, help=textwrap.dedent('''\
             A binary/hex string as input binary data for a decoder.
-            'x' character acts as a wildcard which corresponds to a range 0-1 for binary and 0-f for hex
+            'x' character acts as a wildcard which corresponds to a range 0-1 for binary or 0-f for hex
             '''))
     emulate_parser.add_argument(
         '--base', choices=[2, 16], default=16, type=int, help='The base of a binary/hex string (default: 16)')
