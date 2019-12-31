@@ -1,45 +1,169 @@
 
-<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta charset="utf-8" />
-    <title>Command line options &#8212; mcdecoder  documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Command line options &mdash; mcdecoder  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
     
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="MC description specification" href="mc_description.html" />
     <link rel="prev" title="Specifications" href="specifications.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="mc_description.html" title="MC description specification"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="specifications.html" title="Specifications"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">mcdecoder  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="specifications.html" accesskey="U">Specifications</a> &#187;</li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> mcdecoder
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="specifications.html">Specifications</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Command line options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Positional Arguments">Positional Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Sub-commands:">Sub-commands:</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#generate">generate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#export">export</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#emulate">emulate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#check">check</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mc_description.html">MC description specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decoder_model_reference.html">MC decoder model refernece</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mcdecoder</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="specifications.html">Specifications</a> &raquo;</li>
+        
+      <li>Command line options</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/commandline_options.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="command-line-options">
 <h1>Command line options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h1>
@@ -86,10 +210,10 @@
 </div>
 <p>Usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a decoder to &#39;out&#39; directory</span>
-<span class="n">mcdecoder</span> <span class="n">generate</span> <span class="o">--</span><span class="n">output</span> <span class="n">out</span> <span class="n">mc</span><span class="o">.</span><span class="n">csv</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">mcdecoder</span> <span class="n">generate</span> <span class="o">--</span><span class="n">output</span> <span class="n">out</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
 
 <span class="c1"># Generate codes according to user-defined template files in &#39;user_templates&#39; directory</span>
-<span class="n">mcdecoder</span> <span class="n">generate</span> <span class="o">--</span><span class="n">output</span> <span class="n">out</span> <span class="o">--</span><span class="n">template</span> <span class="n">user_templates</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">mcdecoder</span> <span class="n">generate</span> <span class="o">--</span><span class="n">template</span> <span class="n">user_templates</span> <span class="o">--</span><span class="n">output</span> <span class="n">out</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
 </pre></div>
 </div>
 </div>
@@ -139,7 +263,7 @@
 <h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat2" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--pattern</kbd></dt>
-<dd><p>A binary/hex string as a input binary data for a decoder</p>
+<dd><p>A binary/hex string as input binary data for a decoder</p>
 </dd>
 <dt><kbd>--base</kbd></dt>
 <dd><p>Possible choices: 2, 16</p>
@@ -161,7 +285,7 @@
 <span class="n">mcdecoder</span> <span class="n">emulate</span> <span class="o">--</span><span class="n">base</span> <span class="mi">2</span> <span class="o">--</span><span class="n">pattern</span> <span class="s1">&#39;1110 1001 0010 1101 0100 1000 0000 0000&#39;</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
 
 <span class="c1"># Emulate a decoder when inputting e92d4800 as little endian</span>
-<span class="n">mcdecoder</span> <span class="n">emulate</span> <span class="o">--</span><span class="n">pattern</span> <span class="mi">00482</span><span class="n">de9</span> <span class="o">--</span><span class="n">byteorder</span> <span class="n">little</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">mcdecoder</span> <span class="n">emulate</span> <span class="o">--</span><span class="n">byteorder</span> <span class="n">little</span> <span class="o">--</span><span class="n">pattern</span> <span class="mi">00482</span><span class="n">de9</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
 </pre></div>
 </div>
 </div>
@@ -183,7 +307,7 @@
 <h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat3" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--pattern</kbd></dt>
-<dd><p>A binary/hex string as a input binary data for a decoder.
+<dd><p>A binary/hex string as input binary data for a decoder.
 ‘x’ character acts as a wildcard which corresponds to a range 0-1 for binary and 0-f for hex</p>
 </dd>
 <dt><kbd>--base</kbd></dt>
@@ -217,88 +341,52 @@
 </div>
 
 
+           </div>
+           
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Command line options</a><ul>
-<li><a class="reference internal" href="#Positional Arguments">Positional Arguments</a></li>
-<li><a class="reference internal" href="#Sub-commands:">Sub-commands:</a><ul>
-<li><a class="reference internal" href="#generate">generate</a><ul>
-<li><a class="reference internal" href="#Positional Arguments_repeat1">Positional Arguments</a></li>
-<li><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#export">export</a><ul>
-<li><a class="reference internal" href="#Positional Arguments_repeat2">Positional Arguments</a></li>
-<li><a class="reference internal" href="#Named Arguments_repeat1">Named Arguments</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#emulate">emulate</a><ul>
-<li><a class="reference internal" href="#Positional Arguments_repeat3">Positional Arguments</a></li>
-<li><a class="reference internal" href="#Named Arguments_repeat2">Named Arguments</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#check">check</a><ul>
-<li><a class="reference internal" href="#Positional Arguments_repeat4">Positional Arguments</a></li>
-<li><a class="reference internal" href="#Named Arguments_repeat3">Named Arguments</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="mc_description.html" class="btn btn-neutral float-right" title="MC description specification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="specifications.html" class="btn btn-neutral float-left" title="Specifications" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="specifications.html"
-                        title="previous chapter">Specifications</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="mc_description.html"
-                        title="next chapter">MC description specification</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/commandline_options.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, wildlarva
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="mc_description.html" title="MC description specification"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="specifications.html" title="Specifications"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">mcdecoder  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="specifications.html" >Specifications</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, wildlarva.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
 </html>

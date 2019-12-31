@@ -24,10 +24,13 @@ python3.8 -m mcdecoder generate --output <output-directory> <path-to-mc-descript
 # ex. mcdecoder generate --output out test/arm.yaml
 ```
 
-MC decoder files are generated as
+MC decoder files are generated as:
 
-- \<output-directory\>/mcdecoder.c
-- \<output-directory\>/mcdecoder.h
+- `<output-directory>/`
+  - `mcdecoder.c`
+  - `mcdecoder.h`
+
+### More details about usage
 
 See [documentation](https://wildlarva.github.io/mcdecoder/).
 
@@ -44,7 +47,7 @@ See [documentation](https://wildlarva.github.io/mcdecoder/).
 git clone https://github.com/wildlarva/mcdecoder.git
 
 # Create virtual environment and switch to it
-cd <path-to-cloned-directory>
+cd mcdecoder
 python3.8 -m venv env
 source env/bin/activate
 
@@ -78,3 +81,7 @@ source env/bin/activate
 # Run tests
 make -C ctest clean test
 ```
+
+### More details about development
+
+See [documentation](https://wildlarva.github.io/mcdecoder/).

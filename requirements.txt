@@ -8,3 +8,5 @@ pytest
 PyYAML
 Sphinx
 sphinx-argparse
+sphinx-jsonschema
+sphinx_rtd_theme
