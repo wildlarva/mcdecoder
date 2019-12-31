@@ -10,7 +10,7 @@
 
 ```bash
 git clone https://github.com/wildlarva/mcdecoder.git
-cd <path-to-cloned-directory>
+cd mcdecoder
 python3.8 -m pip install .
 ```
 
