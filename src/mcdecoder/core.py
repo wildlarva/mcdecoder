@@ -242,10 +242,7 @@ def load_mc_description_model(mcfile_path: str) -> McDescription:
 
 def parse_instruction_format(instruction_format: str) -> InstructionFormat:
     """Parse an instruction format and returns an array of field formats"""
-    with importlib.resources.open_text('mcdecoder.grammars', 'instruction_format.lark') as file:
-        parser = lark.Lark(file, start='instruction_format')
-
-    parsed_tree = parser.parse(instruction_format)
+    parsed_tree = _instruction_format_parser.parse(instruction_format)
     return cast(InstructionFormat, _InstructionFormatTransformer(None).transform(parsed_tree))
 
 
@@ -388,6 +385,11 @@ def _validate_mc_desc_model(mc_desc_model: Any) -> None:
         schema = json.load(file)
 
     jsonschema.validate(mc_desc_model, schema)
+
+
+def _create_instruction_format_parser() -> lark.Lark:
+    with importlib.resources.open_text('mcdecoder.grammars', 'instruction_format.lark') as file:
+        return lark.Lark(file, start='instruction_format', parser='lalr')
 
 
 def _create_machine_decoder_model(machine_desc_model: MachineDescription) -> MachineDecoder:
@@ -550,12 +552,14 @@ def _create_instruction_decode_condition(field: str, instruction_condition: str)
 
 def _parse_instruction_condition(field: str, instruction_condition: str) -> InstructionCondition:
     """Parse an instruction condition and returns a parsed condition"""
-    with importlib.resources.open_text('mcdecoder.grammars', 'instruction_condition.lark') as file:
-        parser = lark.Lark(file, start='condition')
-
-    parsed_tree = parser.parse(instruction_condition)
+    parsed_tree = _instruction_condition_parser.parse(instruction_condition)
     return cast(InstructionCondition, _InstructionConditionTransformer(
         field).transform(parsed_tree))
+
+
+def _create_instruction_condition_parser() -> lark.Lark:
+    with importlib.resources.open_text('mcdecoder.grammars', 'instruction_condition.lark') as file:
+        return lark.Lark(file, start='condition', parser='lalr')
 
 
 def _test_instruction_conditions(code: int, instruction_decoder: InstructionDecoder) -> bool:
@@ -668,3 +672,9 @@ def _decode_field_vectorized(code_vec: np.ndarray, field_decoder: InstructionFie
         value |= ((code_vec & sf_decoder.mask) >>
                   sf_decoder.end_bit_in_instruction) << sf_decoder.end_bit_in_field
     return value
+
+
+# Internal variables
+
+_instruction_format_parser: lark.Lark = _create_instruction_format_parser()
+_instruction_condition_parser: lark.Lark = _create_instruction_condition_parser()
