@@ -1,8 +1,14 @@
-?condition: EQUALITY_OP number -> equality_condition
-            | "in_range" number "-" number -> in_range_condition
+?condition: or_condition
+or_condition: and_condition ("or" and_condition)*
+and_condition: atom_condition ("and" atom_condition)*
+?atom_condition: "(" or_condition ")"
+                | id EQUALITY_OP number -> equality_condition
+                | id "in_range" number "-" number -> in_range_condition
 equality_op: EQUALITY_OP
+id: ID
 number: NUMBER
 
+ID: /[A-Za-z]\w*/
 NUMBER: /\d+/
 EQUALITY_OP: "!=" | ">" | ">=" | "<" | "<="
 
