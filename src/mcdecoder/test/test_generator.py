@@ -53,8 +53,6 @@ def test__generate() -> None:
                     InstructionFieldDecoder(name='S', start_bit=20, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(
                         index=0, mask=0x00100000, start_bit_in_instruction=20, end_bit_in_instruction=20, end_bit_in_field=0)], extras=None),
                 ],
-                conditions=cast(List[InstructionDecodeCondition], [EqualityInstructionDecodeCondition(
-                    field='cond', operator='!=', value=0xf)]),
                 match_condition=EqualityInstructionDecodeCondition(
                     field='cond', operator='!=', value=0xf),
                 unmatch_condition=None,
@@ -71,8 +69,6 @@ def test__generate() -> None:
                     InstructionFieldDecoder(name='register_list', start_bit=15, type_bit_size=16, subfield_decoders=[InstructionSubfieldDecoder(
                         index=0, mask=0x0000ffff, start_bit_in_instruction=15, end_bit_in_instruction=0, end_bit_in_field=0)], extras=None),
                 ],
-                conditions=cast(List[InstructionDecodeCondition], [EqualityInstructionDecodeCondition(
-                    field='register_list', operator='>', value=0x1), InRangeInstructionDecodeCondition(field='cond', value_start=2, value_end=4)]),
                 match_condition=AndInstructionDecodeCondition(conditions=cast(List[InstructionDecodeCondition], [EqualityInstructionDecodeCondition(
                     field='register_list', operator='>', value=0x1), InRangeInstructionDecodeCondition(field='cond', value_start=2, value_end=4)])),
                 unmatch_condition=None,
@@ -89,7 +85,6 @@ def test__generate() -> None:
                     InstructionFieldDecoder(name='register_list', start_bit=15, type_bit_size=16, subfield_decoders=[InstructionSubfieldDecoder(
                         index=0, mask=0x0000ffff, start_bit_in_instruction=15, end_bit_in_instruction=0, end_bit_in_field=0)], extras=None),
                 ],
-                conditions=[],
                 match_condition=None,
                 unmatch_condition=None,
                 extras=None,

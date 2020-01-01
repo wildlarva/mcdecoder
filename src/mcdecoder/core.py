@@ -16,8 +16,6 @@ import yaml
 class InstructionDescrition(TypedDict):
     name: str
     format: str
-    condition: Optional[Dict[str, str]]
-    """Deprecated"""
     match_condition: Optional[str]
     """Condition an instruction must satisfy"""
     unmatch_condition: Optional[str]
@@ -132,12 +130,6 @@ class InstructionDecoder:
     """Fixed bits of an instruction"""
     type_bit_size: int
     """Bit size of a data type used for an instruction"""
-    conditions: List[InstructionDecodeCondition]
-    """
-    Conditions an instruction must satisfy
-
-    *Deprecated
-    """
     match_condition: Optional[InstructionDecodeCondition]
     """Conditions an instruction must satisfy"""
     unmatch_condition: Optional[InstructionDecodeCondition]
@@ -503,12 +495,9 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
 
     # Create instruction decode conditions
     if 'match_condition' in instruction_desc_model:
-        decode_conditions = []
-        decode_condition = _parse_and_create_instruction_decode_condition(
+        match_condition = _parse_and_create_instruction_decode_condition(
             cast(str, instruction_desc_model['match_condition']))
-        match_condition = decode_condition
     else:
-        decode_conditions = []
         match_condition = None
 
     # Create instruction decoder model
@@ -520,7 +509,6 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
         fixed_bits=fixed_bits,
         type_bit_size=_calc_type_bit_size(instruction_bit_size),
         field_decoders=field_decoders,
-        conditions=decode_conditions,
         match_condition=match_condition,
         unmatch_condition=None,
         extras=instruction_extras,

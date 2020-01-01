@@ -22,16 +22,6 @@
                         "type": "string",
                         "pattern": "^[\\w\\s\\[\\]:,|]*$"
                     },
-                    "condition": {
-                        "type": "object",
-                        "patternProperties": {
-                            "^[A-Za-z]\\w*$": {
-                                "type": "string",
-                                "pattern": "^[\\w\\s\\-!=><]*$"
-                            }
-                        },
-                        "additionalProperties": false
-                    },
                     "match_condition": {
                         "type": "string",
                         "pattern": "^[\\w\\s\\-!=><]*$"

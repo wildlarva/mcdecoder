@@ -4,8 +4,6 @@ machine:
 instructions:
   - name: add_1
     format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12
-    condition:
-      cond: '!= 15'
     match_condition: cond != 15
     extras:
       clocks: 10
@@ -15,8 +13,6 @@ instructions:
       imm12: {type: immediate}
   - name: push_1
     format: xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list
-    condition:
-      cond: in_range 0-14
     match_condition: cond in_range 0-14
 decoder:
   namespace: arm

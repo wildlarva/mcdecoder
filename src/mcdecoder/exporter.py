@@ -1,6 +1,6 @@
 import csv
 from dataclasses import dataclass
-from typing import List
+from typing import List, cast
 
 from . import common, core
 
@@ -55,8 +55,11 @@ def _export(mcfile: str, output_file: str) -> bool:
         bits = unrelated_bits + related_bits
 
         # Make condition string
-        condition = '\n'.join(map(lambda pair: f'{pair[0]} {pair[1]}', info.instruction['condition'].items(
-        ))) if 'condition' in info.instruction else ''
+        condition = ''
+        if 'match_condition' in info.instruction:
+            condition = cast(str, info.instruction['match_condition'])
+        elif 'unmatch_condition' in info.instruction:
+            condition = f"not ({info.instruction['unmatch_condition']})"
 
         # Append row
         row = [info.instruction['name']] + list(bits) + [condition]
