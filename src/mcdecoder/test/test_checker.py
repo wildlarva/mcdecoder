@@ -241,3 +241,177 @@ def test__check_duplicate() -> None:
 
     assert ['duplicate_instruction_1',
             'duplicate_instruction_2'] in result2.duplicate_instruction_pairs
+
+
+def test__check_match_equality_condition() -> None:
+    result = _check(
+        'test/primitive_condition.yaml', '10 00 00 00', 16, lambda error: None)
+    assert result.no_error_count == 1
+    assert result.undefined_error_count == 0
+    assert result.duplicate_error_count == 0
+
+
+def test__check_unmatch_equality_condition() -> None:
+    result1 = _check(
+        'test/primitive_condition.yaml', '00 00 00 00', 16, lambda error: None)
+    assert result1.no_error_count == 0
+    assert result1.undefined_error_count == 1
+    assert result1.duplicate_error_count == 0
+
+    result2 = _check(
+        'test/primitive_condition.yaml', '20 00 00 00', 16, lambda error: None)
+    assert result2.no_error_count == 0
+    assert result2.undefined_error_count == 1
+    assert result2.duplicate_error_count == 0
+
+
+def test__check_match_in_condition() -> None:
+    result1 = _check(
+        'test/primitive_condition.yaml', '10 00 00 01', 16, lambda error: None)
+    assert result1.no_error_count == 1
+    assert result1.undefined_error_count == 0
+    assert result1.duplicate_error_count == 0
+
+    result2 = _check(
+        'test/primitive_condition.yaml', '30 00 00 01', 16, lambda error: None)
+    assert result2.no_error_count == 1
+    assert result2.undefined_error_count == 0
+    assert result2.duplicate_error_count == 0
+
+
+def test__check_unmatch_in_condition() -> None:
+    result1 = _check(
+        'test/primitive_condition.yaml', '00 00 00 01', 16, lambda error: None)
+    assert result1.no_error_count == 0
+    assert result1.undefined_error_count == 1
+    assert result1.duplicate_error_count == 0
+
+    result2 = _check(
+        'test/primitive_condition.yaml', '20 00 00 01', 16, lambda error: None)
+    assert result2.no_error_count == 0
+    assert result2.undefined_error_count == 1
+    assert result2.duplicate_error_count == 0
+
+
+def test__check_match_in_range_condition() -> None:
+    result1 = _check(
+        'test/primitive_condition.yaml', '00 00 00 02', 16, lambda error: None)
+    assert result1.no_error_count == 1
+    assert result1.undefined_error_count == 0
+    assert result1.duplicate_error_count == 0
+
+    result2 = _check(
+        'test/primitive_condition.yaml', '30 00 00 02', 16, lambda error: None)
+    assert result2.no_error_count == 1
+    assert result2.undefined_error_count == 0
+    assert result2.duplicate_error_count == 0
+
+
+def test__check_unmatch_in_range_condition() -> None:
+    result1 = _check(
+        'test/primitive_condition.yaml', '10 00 00 02', 16, lambda error: None)
+    assert result1.no_error_count == 0
+    assert result1.undefined_error_count == 1
+    assert result1.duplicate_error_count == 0
+
+    result2 = _check(
+        'test/primitive_condition.yaml', '20 00 00 02', 16, lambda error: None)
+    assert result2.no_error_count == 0
+    assert result2.undefined_error_count == 1
+    assert result2.duplicate_error_count == 0
+
+
+def test__check_match_and_condition() -> None:
+    result1 = _check(
+        'test/complex_condition.yaml', '12 00 00 00', 16, lambda error: None)
+    assert result1.no_error_count == 1
+    assert result1.undefined_error_count == 0
+    assert result1.duplicate_error_count == 0
+
+
+def test__check_unmatch_and_condition() -> None:
+    result1 = _check(
+        'test/complex_condition.yaml', '11 00 00 00', 16, lambda error: None)
+    assert result1.no_error_count == 0
+    assert result1.undefined_error_count == 1
+    assert result1.duplicate_error_count == 0
+
+    result2 = _check(
+        'test/complex_condition.yaml', '22 00 00 00', 16, lambda error: None)
+    assert result2.no_error_count == 0
+    assert result2.undefined_error_count == 1
+    assert result2.duplicate_error_count == 0
+
+
+def test__check_match_or_condition() -> None:
+    result1 = _check(
+        'test/complex_condition.yaml', '21 00 00 01', 16, lambda error: None)
+    assert result1.no_error_count == 1
+    assert result1.undefined_error_count == 0
+    assert result1.duplicate_error_count == 0
+
+
+def test__check_unmatch_or_condition() -> None:
+    result1 = _check(
+        'test/complex_condition.yaml', '02 00 00 01', 16, lambda error: None)
+    assert result1.no_error_count == 0
+    assert result1.undefined_error_count == 1
+    assert result1.duplicate_error_count == 0
+
+    result2 = _check(
+        'test/complex_condition.yaml', '10 00 00 01', 16, lambda error: None)
+    assert result2.no_error_count == 0
+    assert result2.undefined_error_count == 1
+    assert result2.duplicate_error_count == 0
+
+
+def test__check_match_andor_condition() -> None:
+    result1 = _check(
+        'test/complex_condition.yaml', '12 00 00 02', 16, lambda error: None)
+    assert result1.no_error_count == 1
+    assert result1.undefined_error_count == 0
+    assert result1.duplicate_error_count == 0
+
+    result2 = _check(
+        'test/complex_condition.yaml', '30 00 00 02', 16, lambda error: None)
+    assert result2.no_error_count == 1
+    assert result2.undefined_error_count == 0
+    assert result2.duplicate_error_count == 0
+
+    result3 = _check(
+        'test/complex_condition.yaml', '11 00 00 03', 16, lambda error: None)
+    assert result3.no_error_count == 1
+    assert result3.undefined_error_count == 0
+    assert result3.duplicate_error_count == 0
+
+    result4 = _check(
+        'test/complex_condition.yaml', '22 00 00 03', 16, lambda error: None)
+    assert result4.no_error_count == 1
+    assert result4.undefined_error_count == 0
+    assert result4.duplicate_error_count == 0
+
+
+def test__check_unmatch_andor_condition() -> None:
+    result1 = _check(
+        'test/complex_condition.yaml', '11 00 00 02', 16, lambda error: None)
+    assert result1.no_error_count == 0
+    assert result1.undefined_error_count == 1
+    assert result1.duplicate_error_count == 0
+
+    result2 = _check(
+        'test/complex_condition.yaml', '22 00 00 02', 16, lambda error: None)
+    assert result2.no_error_count == 0
+    assert result2.undefined_error_count == 1
+    assert result2.duplicate_error_count == 0
+
+    result3 = _check(
+        'test/complex_condition.yaml', '12 00 00 03', 16, lambda error: None)
+    assert result3.no_error_count == 0
+    assert result3.undefined_error_count == 1
+    assert result3.duplicate_error_count == 0
+
+    result4 = _check(
+        'test/complex_condition.yaml', '30 00 00 03', 16, lambda error: None)
+    assert result4.no_error_count == 0
+    assert result4.undefined_error_count == 1
+    assert result4.duplicate_error_count == 0

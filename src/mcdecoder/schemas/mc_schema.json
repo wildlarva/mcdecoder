@@ -24,11 +24,11 @@
                     },
                     "match_condition": {
                         "type": "string",
-                        "pattern": "^[\\w\\s\\-!=><]*$"
+                        "pattern": "^[\\w\\s\\-\\[\\],!=><()]*$"
                     },
                     "unmatch_condition": {
                         "type": "string",
-                        "pattern": "^[\\w\\s\\-!=><]*$"
+                        "pattern": "^[\\w\\s\\-\\[\\],!=><()]*$"
                     },
                     "extras": {},
                     "field_extras": {

@@ -1,0 +1,16 @@
+machine: {}
+instructions:
+  - name: and_condition
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0000
+    match_condition: cond1 == 1 and cond2 == 2
+  - name: or_condition
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0001
+    unmatch_condition: cond1 == 1 or cond2 == 2
+  - name: and_or_condition1
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0010
+    match_condition: cond1 == 1 and cond2 == 2 or cond1 == 3
+  - name: and_or_condition2
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0011
+    unmatch_condition: (cond1 == 1 and cond2 == 2) or cond1 == 3
+decoder:
+  namespace: complex_condition

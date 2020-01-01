@@ -95,7 +95,7 @@ class OrInstructionDecodeCondition(InstructionDecodeCondition):
 
 @dataclass
 class EqualityInstructionDecodeCondition(InstructionDecodeCondition):
-    """An equality condition subclass for InstructionDecodeCondition to express a field value's equality to a value like !=, >, >=, <, <=, etc."""
+    """An equality condition subclass for InstructionDecodeCondition to test a field value's equality with a value like !=, >, >=, <, <=, etc."""
     field: str
     """Name of a field to be tested"""
     operator: str
@@ -107,8 +107,19 @@ class EqualityInstructionDecodeCondition(InstructionDecodeCondition):
 
 
 @dataclass
+class InInstructionDecodeCondition(InstructionDecodeCondition):
+    """An in condition subclass for InstructionDecodeCondition to test an instruction field is in a value set"""
+    field: str
+    """Name of a field to be tested"""
+    values: List[int]
+    """End of a value range a field must be in"""
+    type: str = 'in'
+    """Type of InstructionDecodeCondition. It's always 'in' for InInstructionDecodeCondition"""
+
+
+@dataclass
 class InRangeInstructionDecodeCondition(InstructionDecodeCondition):
-    """An in-range condition subclass for InstructionDecodeCondition to express an instruction field is in a value range(inclusive)"""
+    """An in-range condition subclass for InstructionDecodeCondition to test an instruction field is in a value range(inclusive)"""
     field: str
     """Name of a field to be tested"""
     value_start: int
@@ -397,33 +408,40 @@ class _InstructionFormatTransformer(lark.Transformer):
 @lark.v_args(inline = True)
 class _InstructionConditionTransformer(lark.Transformer):
     @lark.v_args(inline = False)
-    def or_condition(self, and_conditions: List[InstructionCondition]):
+    def or_condition(self, and_conditions: List[InstructionCondition]) -> InstructionCondition:
         if len(and_conditions) == 1:
             return and_conditions[0]
         else:
             return LogicalInstructionCondition(operator = 'or', conditions =and_conditions)
 
     @lark.v_args(inline = False)
-    def and_condition(self, atom_conditions: List[InstructionCondition]):
+    def and_condition(self, atom_conditions: List[InstructionCondition]) -> InstructionCondition:
         if len(atom_conditions) == 1:
             return atom_conditions[0]
         else:
             return LogicalInstructionCondition(operator = 'and', conditions =atom_conditions)
 
-    def equality_condition(self, field: str, equality_op: str, value: int) -> InstructionCondition:
+    def equality_condition(self, field: str, equality_op: str, value: int) -> PrimitiveInstructionCondition:
         return PrimitiveInstructionCondition(field = field, operator =equality_op, values=[value])
 
-    def in_range_condition(self, field: str, value_start: int, value_end: int) -> InstructionCondition:
+    def in_condition(self, field: str, values: List[int]) -> PrimitiveInstructionCondition:
+        return PrimitiveInstructionCondition(field = field, operator ='in', values=values)
+
+    def in_range_condition(self, field: str, value_start: int, value_end: int) -> PrimitiveInstructionCondition:
         return PrimitiveInstructionCondition(field = field, operator ='in_range', values=[value_start, value_end])
 
-    def equality_op(self, equality_op_token: lark.Token) -> str:
-        return str(equality_op_token)
+    @lark.v_args(inline = False)
+    def number_array(self, numbers: List[int]) -> List[int]:
+        return numbers
 
     def id(self, id_token: lark.Token) -> str:
         return str(id_token)
 
     def number(self, number_token: lark.Token) -> int:
         return int(number_token)
+
+    def equality_op(self, equality_op_token: lark.Token) -> str:
+        return str(equality_op_token)
 
     def __init__(self, dummy: Any) -> None:
         pass
@@ -614,11 +632,15 @@ def _create_instruction_decode_condition(condition: InstructionCondition) -> Ins
             return AndInstructionDecodeCondition(conditions=child_decode_conditions)
         else:  # condition.operator == 'or'
             return OrInstructionDecodeCondition(conditions=child_decode_conditions)
+
     elif isinstance(condition, PrimitiveInstructionCondition):
-        if condition.operator == 'in_range':
+        if condition.operator == 'in':
+            return InInstructionDecodeCondition(field=condition.field, values=condition.values)
+        elif condition.operator == 'in_range':
             return InRangeInstructionDecodeCondition(field=condition.field, value_start=condition.values[0], value_end=condition.values[1])
         else:
             return EqualityInstructionDecodeCondition(field=condition.field, operator=condition.operator, value=condition.values[0])
+
     else:
         raise RuntimeError(f'Unknown condition type: {condition}')
 
@@ -680,6 +702,15 @@ def _test_instruction_condition(code: int, condition: InstructionDecodeCondition
             return value >= condition.value
         else:
             return False
+
+    elif isinstance(condition, InInstructionDecodeCondition):
+        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
+                              condition.field), None)
+        if field_decoder is None:
+            return False
+
+        value = _decode_field(code, field_decoder)
+        return value in condition.values
 
     elif isinstance(condition, InRangeInstructionDecodeCondition):
         field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
@@ -751,6 +782,16 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
             return value >= condition.value
         else:
             return np.full((code_vec.shape[0]), False)
+
+    elif isinstance(condition, InInstructionDecodeCondition):
+        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
+                              condition.field), None)
+        if field_decoder is None:
+            return np.full((code_vec.shape[0]), False)
+
+        value = _decode_field_vectorized(code_vec, field_decoder)
+
+        return np.isin(value, condition.values)
 
     elif isinstance(condition, InRangeInstructionDecodeCondition):
         field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==

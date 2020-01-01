@@ -1,17 +1,22 @@
 {# Renders a decode condition recursively #}
 {% macro instruction_condition(instruction, condition) -%}
     {%- if condition.type == 'and' -%}
-        {% for child_condition in condition.conditions recursive %}
+        {% for child_condition in condition.conditions %}
             {%- if not loop.first %} && {% endif -%}
             ({{ instruction_condition(instruction, child_condition) }})
         {% endfor %}
     {%- elif condition.type == 'or' -%}
-        {% for child_condition in condition.conditions recursive %}
+        {% for child_condition in condition.conditions %}
             {%- if not loop.first %} || {% endif -%}
             ({{ instruction_condition(instruction, child_condition) }})
         {% endfor %}
     {%- elif condition.type == 'equality' -%}
         context->decoded_code->code.{{ instruction.name }}.{{ condition.field }} {{ condition.operator }} {{ condition.value }}
+    {%- elif condition.type == 'in' -%}
+        {% for value in condition.values %}
+            {%- if not loop.first %} || {% endif -%}
+            context->decoded_code->code.{{ instruction.name }}.{{ condition.field }} == {{ value }}
+        {% endfor %}
     {%- elif condition.type == 'in_range' -%}
         context->decoded_code->code.{{ instruction.name }}.{{ condition.field }} >= {{ condition.value_start }} && context->decoded_code->code.{{ instruction.name }}.{{ condition.field }} <= {{ condition.value_end }}
     {%- endif %}

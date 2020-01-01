@@ -161,13 +161,158 @@ def test__emulate_excessive_bits_base16() -> None:
     assert field_register_list.value == 0x4800
 
 
-def test__emulate_mismatch_equality_condition() -> None:
+def test__emulate_match_equality_condition() -> None:
     instructions = _emulate(
-        'test/arm.yaml', 'f2 8d b0 04', 16, 'big')
-    assert len(instructions) == 0
+        'test/primitive_condition.yaml', '10 00 00 00', 16, 'big')
+    assert len(instructions) == 1
+
+    (instruction,) = instructions
+    assert instruction.decoder.name == 'equality_condition'
 
 
-def test__emulate_mismatch_in_range_condition() -> None:
-    instructions = _emulate(
-        'test/arm.yaml', 'f9 2d 48 00', 16, 'big')
-    assert len(instructions) == 0
+def test__emulate_unmatch_equality_condition() -> None:
+    instructions1 = _emulate(
+        'test/primitive_condition.yaml', '00 00 00 00', 16, 'big')
+    assert len(instructions1) == 0
+
+    instructions2 = _emulate(
+        'test/primitive_condition.yaml', '20 00 00 00', 16, 'big')
+    assert len(instructions2) == 0
+
+
+def test__emulate_match_in_condition() -> None:
+    instructions1 = _emulate(
+        'test/primitive_condition.yaml', '10 00 00 01', 16, 'big')
+    assert len(instructions1) == 1
+
+    (instruction1,) = instructions1
+    assert instruction1.decoder.name == 'in_condition'
+
+    instructions2 = _emulate(
+        'test/primitive_condition.yaml', '30 00 00 01', 16, 'big')
+    assert len(instructions2) == 1
+
+    (instruction2,) = instructions1
+    assert instruction2.decoder.name == 'in_condition'
+
+
+def test__emulate_unmatch_in_condition() -> None:
+    instructions1 = _emulate(
+        'test/primitive_condition.yaml', '00 00 00 01', 16, 'big')
+    assert len(instructions1) == 0
+
+    instructions2 = _emulate(
+        'test/primitive_condition.yaml', '20 00 00 01', 16, 'big')
+    assert len(instructions2) == 0
+
+
+def test__emulate_match_in_range_condition() -> None:
+    instructions1 = _emulate(
+        'test/primitive_condition.yaml', '00 00 00 02', 16, 'big')
+    assert len(instructions1) == 1
+
+    (instruction1,) = instructions1
+    assert instruction1.decoder.name == 'in_range_condition'
+
+    instructions2 = _emulate(
+        'test/primitive_condition.yaml', '30 00 00 02', 16, 'big')
+    assert len(instructions2) == 1
+
+    (instruction2,) = instructions1
+    assert instruction2.decoder.name == 'in_range_condition'
+
+
+def test__emulate_unmatch_in_range_condition() -> None:
+    instructions1 = _emulate(
+        'test/primitive_condition.yaml', '10 00 00 02', 16, 'big')
+    assert len(instructions1) == 0
+
+    instructions2 = _emulate(
+        'test/primitive_condition.yaml', '20 00 00 02', 16, 'big')
+    assert len(instructions2) == 0
+
+
+def test__emulate_match_and_condition() -> None:
+    instructions1 = _emulate(
+        'test/complex_condition.yaml', '12 00 00 00', 16, 'big')
+    assert len(instructions1) == 1
+
+    (instruction1,) = instructions1
+    assert instruction1.decoder.name == 'and_condition'
+
+
+def test__emulate_unmatch_and_condition() -> None:
+    instructions1 = _emulate(
+        'test/complex_condition.yaml', '11 00 00 00', 16, 'big')
+    assert len(instructions1) == 0
+
+    instructions2 = _emulate(
+        'test/complex_condition.yaml', '22 00 00 00', 16, 'big')
+    assert len(instructions2) == 0
+
+
+def test__emulate_match_or_condition() -> None:
+    instructions1 = _emulate(
+        'test/complex_condition.yaml', '21 00 00 01', 16, 'big')
+    assert len(instructions1) == 1
+
+    (instruction1,) = instructions1
+    assert instruction1.decoder.name == 'or_condition'
+
+
+def test__emulate_unmatch_or_condition() -> None:
+    instructions1 = _emulate(
+        'test/complex_condition.yaml', '02 00 00 01', 16, 'big')
+    assert len(instructions1) == 0
+
+    instructions2 = _emulate(
+        'test/complex_condition.yaml', '10 00 00 01', 16, 'big')
+    assert len(instructions2) == 0
+
+
+def test__emulate_match_andor_condition() -> None:
+    instructions1 = _emulate(
+        'test/complex_condition.yaml', '12 00 00 02', 16, 'big')
+    assert len(instructions1) == 1
+
+    (instruction1,) = instructions1
+    assert instruction1.decoder.name == 'and_or_condition1'
+
+    instructions2 = _emulate(
+        'test/complex_condition.yaml', '30 00 00 02', 16, 'big')
+    assert len(instructions2) == 1
+
+    (instruction2,) = instructions2
+    assert instruction2.decoder.name == 'and_or_condition1'
+
+    instructions3 = _emulate(
+        'test/complex_condition.yaml', '11 00 00 03', 16, 'big')
+    assert len(instructions3) == 1
+
+    (instruction3,) = instructions3
+    assert instruction3.decoder.name == 'and_or_condition2'
+
+    instructions4 = _emulate(
+        'test/complex_condition.yaml', '22 00 00 03', 16, 'big')
+    assert len(instructions4) == 1
+
+    (instruction4,) = instructions4
+    assert instruction4.decoder.name == 'and_or_condition2'
+
+
+def test__emulate_unmatch_andor_condition() -> None:
+    instructions1 = _emulate(
+        'test/complex_condition.yaml', '11 00 00 02', 16, 'big')
+    assert len(instructions1) == 0
+
+    instructions2 = _emulate(
+        'test/complex_condition.yaml', '22 00 00 02', 16, 'big')
+    assert len(instructions2) == 0
+
+    instructions3 = _emulate(
+        'test/complex_condition.yaml', '12 00 00 03', 16, 'big')
+    assert len(instructions3) == 0
+
+    instructions4 = _emulate(
+        'test/complex_condition.yaml', '30 00 00 03', 16, 'big')
+    assert len(instructions4) == 0

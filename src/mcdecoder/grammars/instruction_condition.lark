@@ -2,11 +2,13 @@
 or_condition: and_condition ("or" and_condition)*
 and_condition: atom_condition ("and" atom_condition)*
 ?atom_condition: "(" or_condition ")"
-                | id EQUALITY_OP number -> equality_condition
+                | id equality_op number -> equality_condition
+                | id "in" number_array -> in_condition
                 | id "in_range" number "-" number -> in_range_condition
-equality_op: EQUALITY_OP
+number_array: "[" number ("," number)* "]"
 id: ID
 number: NUMBER
+equality_op: EQUALITY_OP
 
 ID: /[A-Za-z]\w*/
 NUMBER: /\d+/
