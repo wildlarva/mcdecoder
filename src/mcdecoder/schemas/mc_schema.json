@@ -32,6 +32,14 @@
                         },
                         "additionalProperties": false
                     },
+                    "match_condition": {
+                        "type": "string",
+                        "pattern": "^[\\w\\s\\-!=><]*$"
+                    },
+                    "unmatch_condition": {
+                        "type": "string",
+                        "pattern": "^[\\w\\s\\-!=><]*$"
+                    },
                     "extras": {},
                     "field_extras": {
                         "type": "object",

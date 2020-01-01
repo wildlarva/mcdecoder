@@ -17,6 +17,11 @@ class InstructionDescrition(TypedDict):
     name: str
     format: str
     condition: Optional[Dict[str, str]]
+    """Deprecated"""
+    match_condition: Optional[str]
+    """Condition an instruction must satisfy"""
+    unmatch_condition: Optional[str]
+    """Condition an instruction must not satisfy"""
     extras: Optional[Any]
     field_extras: Dict[str, Any]
 
