@@ -68,9 +68,7 @@ typedef struct {
             }
         {% endif %}
         {% if inst.unmatch_condition %}
-            if (
-                {{ instruction_condition(inst, inst.match_condition) }}
-            ) {
+            if ({{ instruction_condition(inst, inst.unmatch_condition) }}) {
                 return 1;
             }
         {% endif %}

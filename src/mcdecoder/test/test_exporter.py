@@ -37,6 +37,6 @@ def test_export_with_condition() -> None:
     assert header_row == ['name'] + \
         [f'b{bit}' for bit in range(31, -1, -1)] + ['condition']
     assert add_row == ['add_1'] + \
-        list('xxxx0010100xxxxxxxxxxxxxxxxxxxxx') + ['cond != 15']
+        list('xxxx0010100xxxxxxxxxxxxxxxxxxxxx') + ['not (cond == 15)']
     assert push_row == [
         'push_1'] + list('xxxx100100101101xxxxxxxxxxxxxxxx') + ['cond in_range 0-14']

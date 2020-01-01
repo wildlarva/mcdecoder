@@ -500,6 +500,12 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
     else:
         match_condition = None
 
+    if 'unmatch_condition' in instruction_desc_model:
+        unmatch_condition = _parse_and_create_instruction_decode_condition(
+            cast(str, instruction_desc_model['unmatch_condition']))
+    else:
+        unmatch_condition = None
+
     # Create instruction decoder model
     instruction_extras = instruction_desc_model['extras'] if 'extras' in instruction_desc_model else None
 
@@ -510,7 +516,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
         type_bit_size=_calc_type_bit_size(instruction_bit_size),
         field_decoders=field_decoders,
         match_condition=match_condition,
-        unmatch_condition=None,
+        unmatch_condition=unmatch_condition,
         extras=instruction_extras,
     )
 
@@ -660,7 +666,9 @@ def _test_instruction_condition(code: int, condition: InstructionDecodeCondition
             return False
 
         value = _decode_field(code, field_decoder)
-        if condition.operator == '!=':
+        if condition.operator == '==':
+            return value == condition.value
+        elif condition.operator == '!=':
             return value != condition.value
         elif condition.operator == '<':
             return value < condition.value
@@ -729,7 +737,9 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
             return np.full((code_vec.shape[0]), False)
 
         value = _decode_field_vectorized(code_vec, field_decoder)
-        if condition.operator == '!=':
+        if condition.operator == '==':
+            return value == condition.value
+        elif condition.operator == '!=':
             return value != condition.value
         elif condition.operator == '<':
             return value < condition.value

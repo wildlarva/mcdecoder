@@ -131,11 +131,11 @@ def test_create_mcdecoder_model_condition() -> None:
     mcdecoder_model = create_mcdecoder_model(
         'test/arm.yaml')
 
-    add_condition = mcdecoder_model.instruction_decoders[0].match_condition
+    add_condition = mcdecoder_model.instruction_decoders[0].unmatch_condition
     assert isinstance(add_condition, EqualityInstructionDecodeCondition)
     assert add_condition.type == 'equality'
     assert add_condition.field == 'cond'
-    assert add_condition.operator == '!='
+    assert add_condition.operator == '=='
     assert add_condition.value == 15
 
     push_condition = mcdecoder_model.instruction_decoders[1].match_condition

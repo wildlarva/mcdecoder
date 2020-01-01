@@ -10,7 +10,7 @@ number: NUMBER
 
 ID: /[A-Za-z]\w*/
 NUMBER: /\d+/
-EQUALITY_OP: "!=" | ">" | ">=" | "<" | "<="
+EQUALITY_OP: "==" | "!=" | ">" | ">=" | "<" | "<="
 
 %import common.WS
 %ignore WS

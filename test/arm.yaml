@@ -4,7 +4,7 @@ machine:
 instructions:
   - name: add_1
     format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12
-    match_condition: cond != 15
+    unmatch_condition: cond == 15
     extras:
       clocks: 10
     field_extras:
