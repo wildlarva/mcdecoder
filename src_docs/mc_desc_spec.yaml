@@ -50,7 +50,7 @@ instructions:
     # - In a range: A field value is in a given value range(inclusive).
     #     Expression: <field> in_range <value_start>-<value_end>
     #
-    # These conditions can be combined with logical operators 'and' or 'or'.
+    # These conditions can be combined with a logical operator 'and' or 'or'.
     # You can also use '(' and ')' for readability.
     #
     # where

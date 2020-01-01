@@ -156,9 +156,9 @@ class InstructionDecoder:
     type_bit_size: int
     """Bit size of a data type used for an instruction"""
     match_condition: Optional[InstructionDecodeCondition]
-    """Conditions an instruction must satisfy"""
+    """Condition an instruction must satisfy"""
     unmatch_condition: Optional[InstructionDecodeCondition]
-    """Conditions an instruction must not satisfy"""
+    """Condition an instruction must not satisfy"""
     field_decoders: List[InstructionFieldDecoder]
     """Child InstructionFieldDecoders"""
     extras: Optional[Any]
