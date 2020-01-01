@@ -126,7 +126,7 @@ class InInstructionDecodeCondition(InstructionDecodeCondition):
     field: str
     """Name of a field to be tested"""
     values: List[int]
-    """End of a value range a field must be in"""
+    """Value set a field must be in"""
     type: str = 'in'
     """Type of InstructionDecodeCondition. It's always 'in' for InInstructionDecodeCondition"""
 
