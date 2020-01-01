@@ -215,7 +215,7 @@ def test__emulate_match_in_range_condition() -> None:
     assert instruction1.decoder.name == 'in_range_condition'
 
     instructions2 = _emulate(
-        'test/primitive_condition.yaml', '30 00 00 02', 16, 'big')
+        'test/primitive_condition.yaml', 'b0 00 00 02', 16, 'big')
     assert len(instructions2) == 1
 
     (instruction2,) = instructions1
@@ -228,7 +228,7 @@ def test__emulate_unmatch_in_range_condition() -> None:
     assert len(instructions1) == 0
 
     instructions2 = _emulate(
-        'test/primitive_condition.yaml', '20 00 00 02', 16, 'big')
+        'test/primitive_condition.yaml', 'a0 00 00 02', 16, 'big')
     assert len(instructions2) == 0
 
 

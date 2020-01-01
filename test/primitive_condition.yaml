@@ -5,9 +5,9 @@ instructions:
     match_condition: cond1 == 1
   - name: in_condition
     format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0001
-    match_condition: cond1 in [1, 3]
+    match_condition: cond1 in [1, 0b11]
   - name: in_range_condition
     format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0010
-    unmatch_condition: cond1 in_range 1-2
+    unmatch_condition: cond1 in_range 1-0xa
 decoder:
   namespace: simple_condition

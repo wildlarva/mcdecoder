@@ -7,11 +7,15 @@ and_condition: atom_condition ("and" atom_condition)*
                 | id "in_range" number "-" number -> in_range_condition
 number_array: "[" number ("," number)* "]"
 id: ID
-number: NUMBER
+?number: DECIMAL_NUMBER -> decimal_number
+        | HEX_NUMBER -> hex_number
+        | BINARY_NUMBER -> binary_number
 equality_op: EQUALITY_OP
 
 ID: /[A-Za-z]\w*/
-NUMBER: /\d+/
+DECIMAL_NUMBER: /\d+/
+HEX_NUMBER: /0x[\dA-Fa-f]+/
+BINARY_NUMBER: /0b[01]+/
 EQUALITY_OP: "==" | "!=" | ">" | ">=" | "<" | "<="
 
 %import common.WS

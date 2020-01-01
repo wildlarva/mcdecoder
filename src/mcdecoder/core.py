@@ -437,8 +437,14 @@ class _InstructionConditionTransformer(lark.Transformer):
     def id(self, id_token: lark.Token) -> str:
         return str(id_token)
 
-    def number(self, number_token: lark.Token) -> int:
+    def decimal_number(self, number_token: lark.Token) -> int:
         return int(number_token)
+
+    def hex_number(self, number_token: lark.Token) -> int:
+        return int(number_token, 16)
+
+    def binary_number(self, number_token: lark.Token) -> int:
+        return int(number_token, 2)
 
     def equality_op(self, equality_op_token: lark.Token) -> str:
         return str(equality_op_token)

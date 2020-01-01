@@ -301,7 +301,7 @@ def test__check_match_in_range_condition() -> None:
     assert result1.duplicate_error_count == 0
 
     result2 = _check(
-        'test/primitive_condition.yaml', '30 00 00 02', 16, lambda error: None)
+        'test/primitive_condition.yaml', 'b0 00 00 02', 16, lambda error: None)
     assert result2.no_error_count == 1
     assert result2.undefined_error_count == 0
     assert result2.duplicate_error_count == 0
@@ -315,7 +315,7 @@ def test__check_unmatch_in_range_condition() -> None:
     assert result1.duplicate_error_count == 0
 
     result2 = _check(
-        'test/primitive_condition.yaml', '20 00 00 02', 16, lambda error: None)
+        'test/primitive_condition.yaml', 'a0 00 00 02', 16, lambda error: None)
     assert result2.no_error_count == 0
     assert result2.undefined_error_count == 1
     assert result2.duplicate_error_count == 0
