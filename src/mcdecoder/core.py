@@ -15,28 +15,40 @@ import yaml
 
 class InstructionDescrition(TypedDict):
     name: str
+    """Name of an instruction"""
     format: str
+    """Encoding format of an instruction"""
     match_condition: Optional[str]
     """Condition an instruction must satisfy"""
     unmatch_condition: Optional[str]
     """Condition an instruction must not satisfy"""
     extras: Optional[Any]
-    field_extras: Dict[str, Any]
+    """Container of user-defined data for an instruction"""
+    field_extras: Optional[Dict[str, Any]]
+    """Container of user-defined data for each field"""
 
 
 class MachineDescription(TypedDict):
+    """Describes a machine"""
     extras: Optional[Any]
-
+    """Container of user-defined data for a machine"""
 
 class McDecoderDescription(TypedDict):
+    """Decoder information that isn't related to a machine, an instruction and a field"""
     namespace: Optional[str]
+    """Namespace for the symbols of a generated decoder"""
 
 
 class McDescription(TypedDict):
+    """Describes a machine code specification. The root element of MC description model"""
     machine: MachineDescription
+    """Child MachineDescription"""
     instructions: List[InstructionDescrition]
+    """Child InstructionDescritions"""
     decoder: Optional[McDecoderDescription]
+    """Child McDecoderDescription"""
     extras: Optional[Any]
+    """User-defined data not related to a machine, an instruction and a field"""
 
 
 # Decoder models
@@ -82,6 +94,7 @@ class InstructionDecodeCondition:
 @dataclass
 class AndInstructionDecodeCondition(InstructionDecodeCondition):
     conditions: List[InstructionDecodeCondition]
+    """Child InstructionDecodeConditions combined with AND operation"""
     type: str = 'and'
     """Type of InstructionDecodeCondition. It's always 'and' for AndInstructionDecodeCondition"""
 
@@ -89,6 +102,7 @@ class AndInstructionDecodeCondition(InstructionDecodeCondition):
 @dataclass
 class OrInstructionDecodeCondition(InstructionDecodeCondition):
     conditions: List[InstructionDecodeCondition]
+    """Child InstructionDecodeConditions combined with AND operation"""
     type: str = 'or'
     """Type of InstructionDecodeCondition. It's always 'or' for OrInstructionDecodeCondition"""
 
@@ -504,7 +518,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
     field_names=set(map(lambda field: cast(str, field.name), filter(
         lambda field: field.name is not None, instruction_format.field_formats)))
     field_extras_dict: Dict[str,
-                            Any]= instruction_desc_model['field_extras'] if 'field_extras' in instruction_desc_model else {}
+                            Any]= cast(Dict[str, Any], instruction_desc_model['field_extras']) if 'field_extras' in instruction_desc_model else {}
     field_decoders= []
 
     for field_name in field_names:
