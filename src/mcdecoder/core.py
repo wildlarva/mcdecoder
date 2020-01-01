@@ -308,26 +308,13 @@ def calc_instruction_bit_size(instruction_format: InstructionFormat) -> int:
 
 
 def find_matched_instructions(context: DecodeContext) -> List[InstructionDecoder]:
-    matched_decoders: List[InstructionDecoder] = []
+    context_vectorized = DecodeContextVectorized(mcdecoder=context.mcdecoder, code16_vec=np.array([
+                                                 context.code16]), code32_vec=np.array([context.code32]))
+    test_mat = find_matched_instructions_vectorized(context_vectorized)
 
-    for instruction_decoder in context.mcdecoder.instruction_decoders:
-        # Get appripriate code
-        # Do not use _get_appropriate_code() for performance
-        if instruction_decoder.type_bit_size == 16:
-            code = context.code16
-        else:
-            code = context.code32
-
-        # Test if instruction is matched to code
-        if (code & instruction_decoder.fixed_bits_mask) != instruction_decoder.fixed_bits:
-            continue
-        if not _test_instruction_conditions(code, instruction_decoder):
-            continue
-
-        # Add matched instruction
-        matched_decoders.append(instruction_decoder)
-
-    return matched_decoders
+    instruction_vec = np.array(
+        context.mcdecoder.instruction_decoders, dtype=np.object)
+    return list(instruction_vec[test_mat[0]])
 
 
 def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np.ndarray:
@@ -674,75 +661,6 @@ def _parse_instruction_condition(instruction_condition: str) -> InstructionCondi
 def _create_instruction_condition_parser() -> lark.Lark:
     with importlib.resources.open_text('mcdecoder.grammars', 'instruction_condition.lark') as file:
         return lark.Lark(file, start='condition', parser='lalr')
-
-
-def _test_instruction_conditions(code: int, instruction_decoder: InstructionDecoder) -> bool:
-    if instruction_decoder.match_condition is not None:
-        return _test_instruction_condition(code, instruction_decoder.match_condition, instruction_decoder)
-
-    if instruction_decoder.unmatch_condition is not None:
-        return not _test_instruction_condition(code, instruction_decoder.unmatch_condition, instruction_decoder)
-
-    return True
-
-
-def _test_instruction_condition(code: int, condition: InstructionDecodeCondition, instruction_decoder: InstructionDecoder) -> bool:
-    if isinstance(condition, AndInstructionDecodeCondition):
-        for child_condition in condition.conditions:
-            if not _test_instruction_condition(code, child_condition, instruction_decoder):
-                return False
-
-        return True
-
-    elif isinstance(condition, OrInstructionDecodeCondition):
-        for child_condition in condition.conditions:
-            if _test_instruction_condition(code, child_condition, instruction_decoder):
-                return True
-
-        return False
-
-    elif isinstance(condition, EqualityInstructionDecodeCondition):
-        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
-                              condition.field), None)
-        if field_decoder is None:
-            return False
-
-        value = _decode_field(code, field_decoder)
-        if condition.operator == '==':
-            return value == condition.value
-        elif condition.operator == '!=':
-            return value != condition.value
-        elif condition.operator == '<':
-            return value < condition.value
-        elif condition.operator == '<=':
-            return value <= condition.value
-        elif condition.operator == '>':
-            return value > condition.value
-        elif condition.operator == '>=':
-            return value >= condition.value
-        else:
-            return False
-
-    elif isinstance(condition, InInstructionDecodeCondition):
-        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
-                              condition.field), None)
-        if field_decoder is None:
-            return False
-
-        value = _decode_field(code, field_decoder)
-        return value in condition.values
-
-    elif isinstance(condition, InRangeInstructionDecodeCondition):
-        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
-                              condition.field), None)
-        if field_decoder is None:
-            return False
-
-        value = _decode_field(code, field_decoder)
-        return value >= condition.value_start and value <= condition.value_end
-
-    else:
-        return False
 
 
 def _decode_field(code: int, field_decoder: InstructionFieldDecoder) -> int:
