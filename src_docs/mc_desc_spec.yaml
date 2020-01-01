@@ -2,19 +2,19 @@
 #
 # Machine code description file needs to be a YAML format.
 
-# Describes a machine
+# matchine: Describes a machine
 machine:
   extras: # [optional] Container of user-defined data for the machine
     # Any structure can be defined here
     arch_type: arm
 
-# Describes instructions
+# instructions: Describes instructions
 #
 # Each list element represents an instruction.
 instructions:
   - name: add_1 # Name of the instruction
 
-    # Encoding format of the instruction
+    # format: Encoding format of the instruction
     #
     # Instruction fields are separated by bar symbol(|).
     # Expression: <field_bits>:<field_name>[<field_bit_ranges>]|...
@@ -40,7 +40,7 @@ instructions:
     #     NOTE: This is an end bit position in a field, not in an instruction.
     format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12
 
-    # [optional] Bit condition when the instruction applys
+    # match_condition: [optional] Bit condition when the instruction applys
     #
     # The following condition types are supported.
     # - Equality: The equality between a field value and a given value.
@@ -73,7 +73,7 @@ instructions:
     #     Base 2, 10 or 16 integer values like 15, 0b1111, 0xf, etc.
     match_condition: (cond in_range 0-14 and S == 1) or cond == 15
 
-    # [optional] Bit condition when the instruction does not apply
+    # unmatch_condition: [optional] Bit condition when the instruction does not apply
     #
     # The expression is the same as that of match_condition.
     # unmatch_condition is mutually exclusive with match_condition.
@@ -83,11 +83,12 @@ instructions:
       # Any structure can be defined here
       clocks: 10
     
-    # [optional] Container of user-defined data for each field
+    # field_extras: [optional] Container of user-defined data for each field
     # 
     # Each mapping key represents a field defining user-defined data and its value holds user-defined data for the field
     field_extras:
-      Rn: {type: register} # Any structure can be defined in a mapping value
+      # Any structure can be defined in a mapping value
+      Rn: {type: register}
       Rd: {type: register}
       imm12: {type: immediate}
 
