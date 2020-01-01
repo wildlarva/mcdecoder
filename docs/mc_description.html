@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="MC decoder model refernece" href="decoder_model_reference.html" />
+    <link rel="next" title="MC decoder model reference" href="decoder_model_reference.html" />
     <link rel="prev" title="Command line options" href="commandline_options.html" /> 
 </head>
 
@@ -87,10 +87,10 @@
 <li class="toctree-l2"><a class="reference internal" href="commandline_options.html">Command line options</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">MC description specification</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#structure-specification">Structure specification</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#json-schema-specification">JSON Schema specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#schema-specification">Schema specification</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="decoder_model_reference.html">MC decoder model refernece</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decoder_model_reference.html">MC decoder model reference</a></li>
 </ul>
 </li>
 </ul>
@@ -160,7 +160,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="mc-description-specification">
-<span id="mc-description"></span><h1>MC description specification<a class="headerlink" href="#mc-description-specification" title="Permalink to this headline">¶</a></h1>
+<h1>MC description specification<a class="headerlink" href="#mc-description-specification" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="structure-specification">
 <h2>Structure specification<a class="headerlink" href="#structure-specification" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="c1"># Specification of machine code description file</span>
@@ -207,32 +207,42 @@
 
     <span class="c1"># [optional] Bit condition when the instruction applys</span>
     <span class="c1">#</span>
-    <span class="c1"># Each mapping key represents a field used for a condition and its value represents the condition itself.</span>
-    <span class="c1"># If multiple field conditions are defined, they&#39;re combined with AND operator.</span>
-    <span class="c1">#</span>
     <span class="c1"># The following condition types are supported.</span>
     <span class="c1"># - Equality: The equality between a field value and a given value.</span>
-    <span class="c1">#     Expression: &lt;operator&gt; &lt;value&gt;</span>
-    <span class="c1"># - In Range: A field value is in a given value range(inclusive) or not.</span>
-    <span class="c1">#     Expression: in_range &lt;value_start&gt;-&lt;value_end&gt;</span>
+    <span class="c1">#     Expression: &lt;field&gt; &lt;operator&gt; &lt;value&gt;</span>
+    <span class="c1"># - In a set: A field value is in a given value set.</span>
+    <span class="c1">#     Expression: &lt;field&gt; in &lt;values&gt;</span>
+    <span class="c1"># - In a range: A field value is in a given value range(inclusive).</span>
+    <span class="c1">#     Expression: &lt;field&gt; in_range &lt;value_start&gt;-&lt;value_end&gt;</span>
+    <span class="c1">#</span>
+    <span class="c1"># These conditions can be combined with logical operators &#39;and&#39; or &#39;or&#39;.</span>
+    <span class="c1"># You can also use &#39;(&#39; and &#39;)&#39; for readability.</span>
     <span class="c1">#</span>
     <span class="c1"># where</span>
+    <span class="c1">#   &lt;field&gt;: A field name to be tested</span>
+    <span class="c1">#</span>
     <span class="c1">#   &lt;operator&gt;: An equality operator to test</span>
-    <span class="c1">#     It can be !=, &lt;, &lt;=, &gt; or &gt;=.</span>
+    <span class="c1">#     It can be ==, !=, &lt;, &lt;=, &gt; or &gt;=.</span>
+    <span class="c1">#</span>
+    <span class="c1">#   &lt;values&gt;: A value set to test with</span>
+    <span class="c1">#     Expression: [&lt;value&gt;,...]</span>
+    <span class="c1">#     It takes multiple values with the separator &#39;,&#39;(comma symbol).</span>
     <span class="c1">#</span>
     <span class="c1">#   &lt;value&gt;: A value to test the equality to</span>
-    <span class="c1">#     10-base integer values like 1, 2, 10, etc.</span>
+    <span class="c1">#     Base 2, 10 or 16 integer values like 15, 0b1111, 0xf, etc.</span>
     <span class="c1">#</span>
     <span class="c1">#   &lt;value_start&gt;: The start of a value range(inclusive)</span>
-    <span class="c1">#     10-base integer values like 1, 2, 10, etc.</span>
+    <span class="c1">#     Base 2, 10 or 16 integer values like 15, 0b1111, 0xf, etc.</span>
     <span class="c1">#</span>
     <span class="c1">#   &lt;value_end&gt;: The end of a value range(inclusive)</span>
-    <span class="c1">#     10-base integer values like 1, 2, 10, etc.</span>
+    <span class="c1">#     Base 2, 10 or 16 integer values like 15, 0b1111, 0xf, etc.</span>
+    <span class="nt">match_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(cond in_range 0-14 and S == 1) or cond == 15</span>
+
+    <span class="c1"># [optional] Bit condition when the instruction does not apply</span>
     <span class="c1">#</span>
-    <span class="c1"># NOTE: You have to wrap your conditional expression with quotes when you use &#39;!&#39; or &#39;&gt;&#39; as the first letter of a condition.</span>
-    <span class="c1">#       This is a restriction of YAML format.</span>
-    <span class="nt">condition</span><span class="p">:</span>
-      <span class="nt">cond</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">in_range 0-14</span>
+    <span class="c1"># The expression is the same as that of match_condition.</span>
+    <span class="c1"># unmatch_condition is mutually exclusive with match_condition.</span>
+    <span class="nt">unmatch_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond == 15</span>
 
     <span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] Container of user-defined data for the instruction</span>
       <span class="c1"># Any structure can be defined here</span>
@@ -248,8 +258,7 @@
 
   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">push_1</span>
     <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list</span>
-    <span class="nt">condition</span><span class="p">:</span>
-      <span class="nt">cond</span><span class="p">:</span> <span class="s">&#39;!=</span><span class="nv"> </span><span class="s">15&#39;</span>
+    <span class="nt">match_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond != 15</span>
 
   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">c_addi_1</span>
     <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">000:funct3|x:imm[5]|xxxx x:dest|xxx xx:imm[4:0]|01:op</span>
@@ -266,51 +275,125 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="json-schema-specification">
-<h2>JSON Schema specification<a class="headerlink" href="#json-schema-specification" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="schema-specification">
+<h2>Schema specification<a class="headerlink" href="#schema-specification" title="Permalink to this headline">¶</a></h2>
+<p>The schema is defined with JSON Schema and explained with the terms of it.</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 17%" />
-<col style="width: 17%" />
-<col style="width: 17%" />
-<col style="width: 17%" />
-<col style="width: 17%" />
-<col style="width: 17%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p>type</p></td>
-<td colspan="5"><p><em>object</em></p></td>
+<td colspan="4"><p><em>object</em></p></td>
 </tr>
-<tr class="row-even"><td colspan="6"><p>properties</p></td>
+<tr class="row-even"><td colspan="5"><p>properties</p></td>
 </tr>
 <tr class="row-odd"><td rowspan="4"><ul class="simple">
 <li><p><strong>machine</strong></p></li>
 </ul>
 </td>
 <td><p>type</p></td>
-<td colspan="4"><p><em>object</em></p></td>
+<td colspan="3"><p><em>object</em></p></td>
 </tr>
-<tr class="row-even"><td colspan="5"><p>properties</p></td>
+<tr class="row-even"><td colspan="4"><p>properties</p></td>
 </tr>
-<tr class="row-odd"><td colspan="5"><ul class="simple">
+<tr class="row-odd"><td colspan="4"><ul class="simple">
 <li><p>extras</p></li>
 </ul>
 </td>
 </tr>
 <tr class="row-even"><td><p>additionalProperties</p></td>
-<td colspan="4"><p>False</p></td>
+<td colspan="3"><p>False</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="19"><ul class="simple">
+<tr class="row-odd"><td rowspan="18"><ul class="simple">
 <li><p><strong>instructions</strong></p></li>
 </ul>
 </td>
 <td><p>type</p></td>
-<td colspan="4"><p><em>array</em></p></td>
+<td colspan="3"><p><em>array</em></p></td>
 </tr>
-<tr class="row-even"><td colspan="5"><p>items</p></td>
+<tr class="row-even"><td colspan="4"><p>items</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="17"><ul class="simple">
+<tr class="row-odd"><td rowspan="16"><ul class="simple">
 <li></li>
+</ul>
+</td>
+<td><p>type</p></td>
+<td colspan="2"><p><em>object</em></p></td>
+</tr>
+<tr class="row-even"><td colspan="3"><p>properties</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="simple">
+<li><p><strong>name</strong></p></li>
+</ul>
+</td>
+<td><p>type</p></td>
+<td><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>pattern</p></td>
+<td><p>^[A-Za-z]w*$</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="simple">
+<li><p><strong>format</strong></p></li>
+</ul>
+</td>
+<td><p>type</p></td>
+<td><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>pattern</p></td>
+<td><p>^[ws[]:,|]*$</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="simple">
+<li><p>match_condition</p></li>
+</ul>
+</td>
+<td><p>type</p></td>
+<td><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>pattern</p></td>
+<td><p>^[ws-[],!=&gt;&lt;()]*$</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="simple">
+<li><p>unmatch_condition</p></li>
+</ul>
+</td>
+<td><p>type</p></td>
+<td><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>pattern</p></td>
+<td><p>^[ws-[],!=&gt;&lt;()]*$</p></td>
+</tr>
+<tr class="row-odd"><td colspan="3"><ul class="simple">
+<li><p>extras</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td rowspan="4"><ul class="simple">
+<li><p>field_extras</p></li>
+</ul>
+</td>
+<td><p>type</p></td>
+<td><p><em>object</em></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>patternProperties</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><ul class="simple">
+<li><p>^[A-Za-z]w*$</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>additionalProperties</p></td>
+<td><p>False</p></td>
+</tr>
+<tr class="row-even"><td><p>additionalProperties</p></td>
+<td colspan="2"><p>False</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="5"><ul class="simple">
+<li><p>decoder</p></li>
 </ul>
 </td>
 <td><p>type</p></td>
@@ -319,7 +402,7 @@
 <tr class="row-even"><td colspan="4"><p>properties</p></td>
 </tr>
 <tr class="row-odd"><td rowspan="2"><ul class="simple">
-<li><p><strong>name</strong></p></li>
+<li><p>namespace</p></li>
 </ul>
 </td>
 <td><p>type</p></td>
@@ -328,92 +411,16 @@
 <tr class="row-even"><td><p>pattern</p></td>
 <td colspan="2"><p>^[A-Za-z]w*$</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="2"><ul class="simple">
-<li><p><strong>format</strong></p></li>
-</ul>
-</td>
-<td><p>type</p></td>
-<td colspan="2"><p><em>string</em></p></td>
-</tr>
-<tr class="row-even"><td><p>pattern</p></td>
-<td colspan="2"><p>^[ws[]:,|]*$</p></td>
-</tr>
-<tr class="row-odd"><td rowspan="5"><ul class="simple">
-<li><p>condition</p></li>
-</ul>
-</td>
-<td><p>type</p></td>
-<td colspan="2"><p><em>object</em></p></td>
-</tr>
-<tr class="row-even"><td colspan="3"><p>patternProperties</p></td>
-</tr>
-<tr class="row-odd"><td rowspan="2"><ul class="simple">
-<li><p>^[A-Za-z]w*$</p></li>
-</ul>
-</td>
-<td><p>type</p></td>
-<td><p><em>string</em></p></td>
-</tr>
-<tr class="row-even"><td><p>pattern</p></td>
-<td><p>^[ws-!=&gt;&lt;]*$</p></td>
-</tr>
-<tr class="row-odd"><td><p>additionalProperties</p></td>
-<td colspan="2"><p>False</p></td>
-</tr>
-<tr class="row-even"><td colspan="4"><ul class="simple">
-<li><p>extras</p></li>
-</ul>
-</td>
-</tr>
-<tr class="row-odd"><td rowspan="4"><ul class="simple">
-<li><p>field_extras</p></li>
-</ul>
-</td>
-<td><p>type</p></td>
-<td colspan="2"><p><em>object</em></p></td>
-</tr>
-<tr class="row-even"><td colspan="3"><p>patternProperties</p></td>
-</tr>
-<tr class="row-odd"><td colspan="3"><ul class="simple">
-<li><p>^[A-Za-z]w*$</p></li>
-</ul>
-</td>
-</tr>
-<tr class="row-even"><td><p>additionalProperties</p></td>
-<td colspan="2"><p>False</p></td>
-</tr>
 <tr class="row-odd"><td><p>additionalProperties</p></td>
 <td colspan="3"><p>False</p></td>
 </tr>
-<tr class="row-even"><td rowspan="5"><ul class="simple">
-<li><p>decoder</p></li>
-</ul>
-</td>
-<td><p>type</p></td>
-<td colspan="4"><p><em>object</em></p></td>
-</tr>
-<tr class="row-odd"><td colspan="5"><p>properties</p></td>
-</tr>
-<tr class="row-even"><td rowspan="2"><ul class="simple">
-<li><p>namespace</p></li>
-</ul>
-</td>
-<td><p>type</p></td>
-<td colspan="3"><p><em>string</em></p></td>
-</tr>
-<tr class="row-odd"><td><p>pattern</p></td>
-<td colspan="3"><p>^[A-Za-z]w*$</p></td>
-</tr>
-<tr class="row-even"><td><p>additionalProperties</p></td>
-<td colspan="4"><p>False</p></td>
-</tr>
-<tr class="row-odd"><td colspan="6"><ul class="simple">
+<tr class="row-even"><td colspan="5"><ul class="simple">
 <li><p>extras</p></li>
 </ul>
 </td>
 </tr>
-<tr class="row-even"><td><p>additionalProperties</p></td>
-<td colspan="5"><p>False</p></td>
+<tr class="row-odd"><td><p>additionalProperties</p></td>
+<td colspan="4"><p>False</p></td>
 </tr>
 </tbody>
 </table>
@@ -428,7 +435,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="decoder_model_reference.html" class="btn btn-neutral float-right" title="MC decoder model refernece" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="decoder_model_reference.html" class="btn btn-neutral float-right" title="MC decoder model reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="commandline_options.html" class="btn btn-neutral float-left" title="Command line options" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

@@ -149,7 +149,8 @@
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
- <a href="#C"><strong>C</strong></a>
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#C"><strong>C</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#I"><strong>I</strong></a>
@@ -158,14 +159,27 @@
  | <a href="#O"><strong>O</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  
 </div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="decoder_model_reference.html#mcdecoder.core.AndInstructionDecodeCondition">AndInstructionDecodeCondition (class in mcdecoder.core)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="decoder_model_reference.html#mcdecoder.core.InstructionDecoder.conditions">conditions (mcdecoder.core.InstructionDecoder attribute)</a>
+      <li><a href="decoder_model_reference.html#mcdecoder.core.AndInstructionDecodeCondition.conditions">conditions (mcdecoder.core.AndInstructionDecodeCondition attribute)</a>
+
+      <ul>
+        <li><a href="decoder_model_reference.html#mcdecoder.core.OrInstructionDecodeCondition.conditions">(mcdecoder.core.OrInstructionDecodeCondition attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -199,6 +213,8 @@
       <li><a href="decoder_model_reference.html#mcdecoder.core.EqualityInstructionDecodeCondition.field">field (mcdecoder.core.EqualityInstructionDecodeCondition attribute)</a>
 
       <ul>
+        <li><a href="decoder_model_reference.html#mcdecoder.core.InInstructionDecodeCondition.field">(mcdecoder.core.InInstructionDecodeCondition attribute)</a>
+</li>
         <li><a href="decoder_model_reference.html#mcdecoder.core.InRangeInstructionDecodeCondition.field">(mcdecoder.core.InRangeInstructionDecodeCondition attribute)</a>
 </li>
       </ul></li>
@@ -217,6 +233,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="decoder_model_reference.html#mcdecoder.core.InstructionSubfieldDecoder.index">index (mcdecoder.core.InstructionSubfieldDecoder attribute)</a>
+</li>
+      <li><a href="decoder_model_reference.html#mcdecoder.core.InInstructionDecodeCondition">InInstructionDecodeCondition (class in mcdecoder.core)</a>
 </li>
       <li><a href="decoder_model_reference.html#mcdecoder.core.InRangeInstructionDecodeCondition">InRangeInstructionDecodeCondition (class in mcdecoder.core)</a>
 </li>
@@ -246,6 +264,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="decoder_model_reference.html#mcdecoder.core.InstructionSubfieldDecoder.mask">mask (mcdecoder.core.InstructionSubfieldDecoder attribute)</a>
 </li>
+      <li><a href="decoder_model_reference.html#mcdecoder.core.InstructionDecoder.match_condition">match_condition (mcdecoder.core.InstructionDecoder attribute)</a>
+</li>
       <li><a href="decoder_model_reference.html#mcdecoder.core.McDecoder">McDecoder (class in mcdecoder.core)</a>
 </li>
   </ul></td>
@@ -273,6 +293,10 @@
       <li><a href="decoder_model_reference.html#mcdecoder.core.EqualityInstructionDecodeCondition.operator">operator (mcdecoder.core.EqualityInstructionDecodeCondition attribute)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="decoder_model_reference.html#mcdecoder.core.OrInstructionDecodeCondition">OrInstructionDecodeCondition (class in mcdecoder.core)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
@@ -292,10 +316,16 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="decoder_model_reference.html#mcdecoder.core.EqualityInstructionDecodeCondition.type">type (mcdecoder.core.EqualityInstructionDecodeCondition attribute)</a>
+      <li><a href="decoder_model_reference.html#mcdecoder.core.AndInstructionDecodeCondition.type">type (mcdecoder.core.AndInstructionDecodeCondition attribute)</a>
 
       <ul>
+        <li><a href="decoder_model_reference.html#mcdecoder.core.EqualityInstructionDecodeCondition.type">(mcdecoder.core.EqualityInstructionDecodeCondition attribute)</a>
+</li>
+        <li><a href="decoder_model_reference.html#mcdecoder.core.InInstructionDecodeCondition.type">(mcdecoder.core.InInstructionDecodeCondition attribute)</a>
+</li>
         <li><a href="decoder_model_reference.html#mcdecoder.core.InRangeInstructionDecodeCondition.type">(mcdecoder.core.InRangeInstructionDecodeCondition attribute)</a>
+</li>
+        <li><a href="decoder_model_reference.html#mcdecoder.core.OrInstructionDecodeCondition.type">(mcdecoder.core.OrInstructionDecodeCondition attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -309,16 +339,26 @@
   </ul></td>
 </tr></table>
 
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="decoder_model_reference.html#mcdecoder.core.InstructionDecoder.unmatch_condition">unmatch_condition (mcdecoder.core.InstructionDecoder attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="decoder_model_reference.html#mcdecoder.core.EqualityInstructionDecodeCondition.value">value (mcdecoder.core.EqualityInstructionDecodeCondition attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="decoder_model_reference.html#mcdecoder.core.InRangeInstructionDecodeCondition.value_end">value_end (mcdecoder.core.InRangeInstructionDecodeCondition attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="decoder_model_reference.html#mcdecoder.core.InRangeInstructionDecodeCondition.value_start">value_start (mcdecoder.core.InRangeInstructionDecodeCondition attribute)</a>
+</li>
+      <li><a href="decoder_model_reference.html#mcdecoder.core.InInstructionDecodeCondition.values">values (mcdecoder.core.InInstructionDecodeCondition attribute)</a>
 </li>
   </ul></td>
 </tr></table>

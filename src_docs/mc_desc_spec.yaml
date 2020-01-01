@@ -93,8 +93,7 @@ instructions:
 
   - name: push_1
     format: xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list
-    condition:
-      cond: '!= 15'
+    match_condition: cond != 15
 
   - name: c_addi_1
     format: 000:funct3|x:imm[5]|xxxx x:dest|xxx xx:imm[4:0]|01:op

@@ -94,7 +94,7 @@ class InstructionDecodeCondition:
 @dataclass
 class AndInstructionDecodeCondition(InstructionDecodeCondition):
     conditions: List[InstructionDecodeCondition]
-    """Child InstructionDecodeConditions combined with AND operation"""
+    """Child InstructionDecodeConditions combined with logical AND operation"""
     type: str = 'and'
     """Type of InstructionDecodeCondition. It's always 'and' for AndInstructionDecodeCondition"""
 
@@ -102,14 +102,14 @@ class AndInstructionDecodeCondition(InstructionDecodeCondition):
 @dataclass
 class OrInstructionDecodeCondition(InstructionDecodeCondition):
     conditions: List[InstructionDecodeCondition]
-    """Child InstructionDecodeConditions combined with AND operation"""
+    """Child InstructionDecodeConditions combined with logical OR operation"""
     type: str = 'or'
     """Type of InstructionDecodeCondition. It's always 'or' for OrInstructionDecodeCondition"""
 
 
 @dataclass
 class EqualityInstructionDecodeCondition(InstructionDecodeCondition):
-    """An equality condition subclass for InstructionDecodeCondition to test a field value's equality with a value like !=, >, >=, <, <=, etc."""
+    """An equality condition subclass for InstructionDecodeCondition to test a field value's equality with a value. Supported operators are ==, !=, >, >=, < and <=."""
     field: str
     """Name of a field to be tested"""
     operator: str
