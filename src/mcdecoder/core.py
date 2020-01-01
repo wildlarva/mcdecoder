@@ -73,6 +73,21 @@ class InstructionDecodeCondition:
     A condition of instruction encoding when an instruction applys.
     Each subclass must have a string attribute 'type' to express the type of a subclass.
     """
+    pass
+
+
+@dataclass
+class AndInstructionDecodeCondition(InstructionDecodeCondition):
+    conditions: List[InstructionDecodeCondition]
+    type: str = 'and'
+    """Type of InstructionDecodeCondition. It's always 'and' for AndInstructionDecodeCondition"""
+
+
+@dataclass
+class OrInstructionDecodeCondition(InstructionDecodeCondition):
+    conditions: List[InstructionDecodeCondition]
+    type: str = 'or'
+    """Type of InstructionDecodeCondition. It's always 'or' for OrInstructionDecodeCondition"""
 
 
 @dataclass
@@ -113,7 +128,15 @@ class InstructionDecoder:
     type_bit_size: int
     """Bit size of a data type used for an instruction"""
     conditions: List[InstructionDecodeCondition]
+    """
+    Conditions an instruction must satisfy
+
+    *Deprecated
+    """
+    match_condition: Optional[InstructionDecodeCondition]
     """Conditions an instruction must satisfy"""
+    unmatch_condition: Optional[InstructionDecodeCondition]
+    """Conditions an instruction must not satisfy"""
     field_decoders: List[InstructionFieldDecoder]
     """Child InstructionFieldDecoders"""
     extras: Optional[Any]
@@ -445,8 +468,14 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
     if 'condition' in instruction_desc_model:
         decode_conditions = [_create_instruction_decode_condition(
             field, condition) for field, condition in instruction_desc_model['condition'].items()]
+        if len(decode_conditions) == 1:
+            match_condition = decode_conditions[0]
+        else:
+            match_condition = AndInstructionDecodeCondition(
+                conditions=decode_conditions)
     else:
         decode_conditions = []
+        match_condition = None
 
     # Create instruction decoder model
     instruction_extras = instruction_desc_model['extras'] if 'extras' in instruction_desc_model else None
@@ -458,6 +487,8 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
         type_bit_size=_calc_type_bit_size(instruction_bit_size),
         field_decoders=field_decoders,
         conditions=decode_conditions,
+        match_condition=match_condition,
+        unmatch_condition=None,
         extras=instruction_extras,
     )
 

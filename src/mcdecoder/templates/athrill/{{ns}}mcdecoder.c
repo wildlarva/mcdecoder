@@ -1,3 +1,22 @@
+{# Renders a decode condition recursively #}
+{% macro instruction_condition(instruction, condition) -%}
+    {%- if condition.type == 'and' -%}
+        {% for child_condition in condition.conditions recursive %}
+            {%- if not loop.first %} && {% endif -%}
+            ({{ instruction_condition(instruction, child_condition) }})
+        {% endfor %}
+    {%- elif condition.type == 'or' -%}
+        {% for child_condition in condition.conditions recursive %}
+            {%- if not loop.first %} || {% endif -%}
+            ({{ instruction_condition(instruction, child_condition) }})
+        {% endfor %}
+    {%- elif condition.type == 'equality' -%}
+        context->decoded_code->code.{{ instruction.name }}.{{ condition.field }} {{ condition.operator }} {{ condition.value }}
+    {%- elif condition.type == 'in_range' -%}
+        context->decoded_code->code.{{ instruction.name }}.{{ condition.field }} >= {{ condition.value_start }} && context->decoded_code->code.{{ instruction.name }}.{{ condition.field }} <= {{ condition.value_end }}
+    {%- endif %}
+{%- endmacro %}
+
 #include "{{ ns }}mcdecoder.h"
 
 typedef struct {
@@ -41,17 +60,17 @@ typedef struct {
             {% endfor %}
         {% endfor %}
 
-        {% if inst.conditions %}
+        {% if inst.match_condition %}
             if (!(
-                {% for cond in inst.conditions %}
-                    {%- if not loop.first %} && {% endif -%}
-                    {%- if cond.type == 'equality' -%}
-                        context->decoded_code->code.{{ inst.name }}.{{ cond.field }} {{ cond.operator }} {{ cond.value }}
-                    {%- elif cond.type == 'in_range' -%}
-                        context->decoded_code->code.{{ inst.name }}.{{ cond.field }} >= {{ cond.value_start }} && context->decoded_code->code.{{ inst.name }}.{{ cond.field }} <= {{ cond.value_end }}
-                    {%- endif %}
-                {% endfor %}
+                {{ instruction_condition(inst, inst.match_condition) }}
             )) {
+                return 1;
+            }
+        {% endif %}
+        {% if inst.unmatch_condition %}
+            if (
+                {{ instruction_condition(inst, inst.match_condition) }}
+            ) {
                 return 1;
             }
         {% endif %}
