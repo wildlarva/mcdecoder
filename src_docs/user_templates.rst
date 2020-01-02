@@ -101,13 +101,13 @@ Template variables
 ==================== =========================== ===================================================
 Variable name        Type                        Description
 ==================== =========================== ===================================================
-mcdecoder            :code:`McDecoder`           Root element of decoder model
+mcdecoder            :code:`McDecoder`           Root element of decoder model.
 machine_decoder      :code:`MachineDecoder`      Decoding information about machine
 instruction_decoders Sequence of                 Decoding information about instructions
                      :code:`InstructionDecoder`
-ns                   string                      Namespace prefix for generated codes
+ns                   string                      Namespace prefix for generated codes.
                                                  Shorthand for :code:`mcdecoder.namespace_prefix`
-extras               any (user-specific)         User-defined data for the global scope
+extras               any (user-specific)         User-defined data for the global scope.
                                                  Shorthand for :code:`mcdecoder.extras`
 ==================== =========================== ===================================================
 
