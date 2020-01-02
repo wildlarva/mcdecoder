@@ -24,7 +24,7 @@ python3.8 -m mcdecoder generate --output <output-directory> <path-to-mc-descript
 # ex. mcdecoder generate --output out test/arm.yaml
 ```
 
-MC decoder files are generated as:
+MC decoder files will be generated as:
 
 - `<output-directory>/`
   - `mcdecoder.c`

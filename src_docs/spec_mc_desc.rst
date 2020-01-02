@@ -27,7 +27,7 @@ The behavior depends on the types of the contents of files included:
 
 * Sequence: Produce one sequence consisting of the elements of all sequences.
 * Mapping: Produce one mapping consisting of the elements of all mappings.
-* Scalar: Produce one list consisting of scalars.
+* Scalar: Produce one sequence consisting of scalars.
 * Mixture: Prompt an error.
 
 Expression: :code:`!include <path-included>`
