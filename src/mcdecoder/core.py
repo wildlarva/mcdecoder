@@ -33,6 +33,7 @@ class MachineDescription(TypedDict):
     extras: Optional[Any]
     """Container of user-defined data for a machine"""
 
+
 class McDecoderDescription(TypedDict):
     """Decoder information that isn't related to a machine, an instruction and a field"""
     namespace: Optional[str]
@@ -342,12 +343,13 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
     test_mat = fb_test_mat
     for i, instruction_decoder in enumerate(context.mcdecoder.instruction_decoders):
         if instruction_decoder.match_condition is not None:
-            test_vec = _test_instruction_condition_vectorized(code_mat[:, i], instruction_decoder.match_condition, instruction_decoder)
+            test_vec = _test_instruction_condition_vectorized(
+                code_mat[:, i], instruction_decoder.match_condition, instruction_decoder)
             test_mat[:, i] = np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
                 test_mat[:, i], test_vec)
 
         elif instruction_decoder.unmatch_condition is not None:
-            test_vec = np.logical_not( # type: ignore # TODO pyright can't recognize numpy.logical_not
+            test_vec = np.logical_not(  # type: ignore # TODO pyright can't recognize numpy.logical_not
                 _test_instruction_condition_vectorized(code_mat[:, i], instruction_decoder.unmatch_condition, instruction_decoder))
             test_mat[:, i] = np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
                 test_mat[:, i], test_vec)
@@ -356,44 +358,44 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
 
 
 def decode_instruction(context: DecodeContext, instruction_decoder: InstructionDecoder) -> InstructionDecodeResult:
-    code=_get_appropriate_code(context, instruction_decoder)
+    code = _get_appropriate_code(context, instruction_decoder)
 
-    field_results: List[InstructionFieldDecodeResult]=[]
+    field_results: List[InstructionFieldDecodeResult] = []
     for field_decoder in instruction_decoder.field_decoders:
-        value=_decode_field(code, field_decoder)
+        value = _decode_field(code, field_decoder)
         field_results.append(InstructionFieldDecodeResult(
             decoder=field_decoder, value=value))
 
-    return InstructionDecodeResult(decoder = instruction_decoder, field_results =field_results)
+    return InstructionDecodeResult(decoder=instruction_decoder, field_results=field_results)
 
 
 # Internal classes
 
 
-@lark.v_args(inline = True)
+@lark.v_args(inline=True)
 class _InstructionFormatTransformer(lark.Transformer):
-    @lark.v_args(inline = False)
+    @lark.v_args(inline=False)
     def instruction_format(self, field_formats: List[InstructionFieldFormat]) -> InstructionFormat:
-        return InstructionFormat(field_formats = field_formats)
+        return InstructionFormat(field_formats=field_formats)
 
     def field_format(self, field_bits: str, field_name: str = None, field_bit_ranges: List[BitRange] = None) -> InstructionFieldFormat:
         if field_bit_ranges is None:
-            field_bit_ranges = [BitRange(start = len(field_bits) - 1, end =0)]
+            field_bit_ranges = [BitRange(start=len(field_bits) - 1, end=0)]
 
-        return InstructionFieldFormat(name = field_name, bits_format =field_bits, bit_ranges=field_bit_ranges)
+        return InstructionFieldFormat(name=field_name, bits_format=field_bits, bit_ranges=field_bit_ranges)
 
-    @lark.v_args(inline = False)
+    @lark.v_args(inline=False)
     def field_bits(self, field_bits_tokens: List[lark.Token]) -> str:
         return ''.join(field_bits_tokens)
 
-    @lark.v_args(inline = False)
+    @lark.v_args(inline=False)
     def field_bit_ranges(self, field_bit_ranges: List[BitRange]) -> List[BitRange]:
         return field_bit_ranges
 
     def field_bit_range(self, subfield_start: int, subfield_end: int = None) -> BitRange:
         if subfield_end is None:
-            subfield_end=subfield_start
-        return BitRange(start = subfield_start, end =subfield_end)
+            subfield_end = subfield_start
+        return BitRange(start=subfield_start, end=subfield_end)
 
     def id(self, id_token: lark.Token) -> str:
         return str(id_token)
@@ -406,32 +408,32 @@ class _InstructionFormatTransformer(lark.Transformer):
         pass
 
 
-@lark.v_args(inline = True)
+@lark.v_args(inline=True)
 class _InstructionConditionTransformer(lark.Transformer):
-    @lark.v_args(inline = False)
+    @lark.v_args(inline=False)
     def or_condition(self, and_conditions: List[InstructionCondition]) -> InstructionCondition:
         if len(and_conditions) == 1:
             return and_conditions[0]
         else:
-            return LogicalInstructionCondition(operator = 'or', conditions =and_conditions)
+            return LogicalInstructionCondition(operator='or', conditions=and_conditions)
 
-    @lark.v_args(inline = False)
+    @lark.v_args(inline=False)
     def and_condition(self, atom_conditions: List[InstructionCondition]) -> InstructionCondition:
         if len(atom_conditions) == 1:
             return atom_conditions[0]
         else:
-            return LogicalInstructionCondition(operator = 'and', conditions =atom_conditions)
+            return LogicalInstructionCondition(operator='and', conditions=atom_conditions)
 
     def equality_condition(self, field: str, equality_op: str, value: int) -> PrimitiveInstructionCondition:
-        return PrimitiveInstructionCondition(field = field, operator =equality_op, values=[value])
+        return PrimitiveInstructionCondition(field=field, operator=equality_op, values=[value])
 
     def in_condition(self, field: str, values: List[int]) -> PrimitiveInstructionCondition:
-        return PrimitiveInstructionCondition(field = field, operator ='in', values=values)
+        return PrimitiveInstructionCondition(field=field, operator='in', values=values)
 
     def in_range_condition(self, field: str, value_start: int, value_end: int) -> PrimitiveInstructionCondition:
-        return PrimitiveInstructionCondition(field = field, operator ='in_range', values=[value_start, value_end])
+        return PrimitiveInstructionCondition(field=field, operator='in_range', values=[value_start, value_end])
 
-    @lark.v_args(inline = False)
+    @lark.v_args(inline=False)
     def number_array(self, numbers: List[int]) -> List[int]:
         return numbers
 
@@ -459,22 +461,22 @@ class _InstructionConditionTransformer(lark.Transformer):
 
 def _validate_mc_desc_model(mc_desc_model: Any) -> None:
     with importlib.resources.open_text('mcdecoder.schemas', 'mc_schema.json') as file:
-        schema=json.load(file)
+        schema = json.load(file)
 
     jsonschema.validate(mc_desc_model, schema)
 
 
 def _create_instruction_format_parser() -> lark.Lark:
     with importlib.resources.open_text('mcdecoder.grammars', 'instruction_format.lark') as file:
-        return lark.Lark(file, start = 'instruction_format', parser ='lalr')
+        return lark.Lark(file, start='instruction_format', parser='lalr')
 
 
 def _create_machine_decoder_model(machine_desc_model: MachineDescription) -> MachineDecoder:
-    extras: Optional[Any]=None
+    extras: Optional[Any] = None
     if 'extras' in machine_desc_model:
-        extras=machine_desc_model['extras']
+        extras = machine_desc_model['extras']
 
-    return MachineDecoder(extras = extras)
+    return MachineDecoder(extras=extras)
 
 
 def _make_namespace_prefix(namespace: Optional[str]) -> str:
@@ -484,33 +486,33 @@ def _make_namespace_prefix(namespace: Optional[str]) -> str:
 def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrition) -> InstructionDecoder:
     """Create a model which contains information of individual instruction decoder"""
     # Parse instruction format
-    instruction_format=parse_instruction_format(
+    instruction_format = parse_instruction_format(
         instruction_desc_model['format'])
-    instruction_bit_size=calc_instruction_bit_size(instruction_format)
+    instruction_bit_size = calc_instruction_bit_size(instruction_format)
 
     # Build fixed bits information
-    fixed_bits_mask, fixed_bits=_build_fixed_bits_info(instruction_format)
+    fixed_bits_mask, fixed_bits = _build_fixed_bits_info(instruction_format)
 
     # Save the start bit positions of field formats
-    ff_start_bit_in_instruction=instruction_bit_size - 1
-    ff_index_to_start_bit: Dict[int, int]={}
+    ff_start_bit_in_instruction = instruction_bit_size - 1
+    ff_index_to_start_bit: Dict[int, int] = {}
 
     for field_format in instruction_format.field_formats:
-        field_bit_size=len(field_format.bits_format)
+        field_bit_size = len(field_format.bits_format)
         ff_index_to_start_bit[instruction_format.field_formats.index(
-            field_format)]=ff_start_bit_in_instruction
+            field_format)] = ff_start_bit_in_instruction
         ff_start_bit_in_instruction -= field_bit_size
 
     # Create field decoders
-    field_names=set(map(lambda field: cast(str, field.name), filter(
+    field_names = set(map(lambda field: cast(str, field.name), filter(
         lambda field: field.name is not None, instruction_format.field_formats)))
     field_extras_dict: Dict[str,
-                            Any]= cast(Dict[str, Any], instruction_desc_model['field_extras']) if 'field_extras' in instruction_desc_model else {}
-    field_decoders= []
+                            Any] = cast(Dict[str, Any], instruction_desc_model['field_extras']) if 'field_extras' in instruction_desc_model else {}
+    field_decoders = []
 
     for field_name in field_names:
-        field_extras= field_extras_dict[field_name] if field_name in field_extras_dict else None
-        field_decoder= _create_field_decoder(
+        field_extras = field_extras_dict[field_name] if field_name in field_extras_dict else None
+        field_decoder = _create_field_decoder(
             field_name, field_extras, instruction_format, ff_index_to_start_bit)
         field_decoders.append(field_decoder)
 
