@@ -47,7 +47,7 @@ You can use template variables in your template, such as
 :code:`instruction_decoders` (decoder information about instructions)
 or :code:`ns` (namespace prefix)
 to access information about decoders and user-defined data.
-See :ref:`template_variables` for more details.
+See :doc:`spec_template_var` for more details.
 
 You need to make a directory and put your template files in it.
 Generated files will have the same names as those of template files.
@@ -91,25 +91,3 @@ And the generated files will be:
    :caption: out/arm_constants.c
 
 You can see :download:`example files in this tutorial in github <https://github.com/wildlarva/mcdecoder/blob/master/examples/user_templates>`.
-
-.. _template_variables:
-
-***********************
-Template variables
-***********************
-
-==================== =========================== ===================================================
-Variable name        Type                        Description
-==================== =========================== ===================================================
-mcdecoder            :code:`McDecoder`           Root element of decoder model.
-machine_decoder      :code:`MachineDecoder`      Decoding information about machine
-instruction_decoders Sequence of                 Decoding information about instructions
-                     :code:`InstructionDecoder`
-ns                   string                      Namespace prefix for generated codes.
-                                                 Shorthand for :code:`mcdecoder.namespace_prefix`
-extras               any (user-specific)         User-defined data for the global scope.
-                                                 Shorthand for :code:`mcdecoder.extras`
-==================== =========================== ===================================================
-
-See :doc:`spec_mcdecoder_model`
-to understand the types of template variables.
