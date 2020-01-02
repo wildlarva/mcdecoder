@@ -78,7 +78,7 @@ Run the command below:
 
 .. code-block:: bash
 
-   mcdecoder --template templates --output out arm.yaml
+   mcdecoder generate --template templates --output out arm.yaml
 
 And the generated files will be:
 
