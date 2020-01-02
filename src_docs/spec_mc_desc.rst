@@ -8,7 +8,7 @@ MC description specification
 Basic specification
 ***********************
 
-.. literalinclude:: mc_desc_spec.yaml
+.. literalinclude:: spec_mc_desc.yaml
 
 *************************
 Additional specifications

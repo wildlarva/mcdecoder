@@ -27,7 +27,7 @@ If you don't need any additional information than MC description specification,
 you can skip this step.
 You can use :code:`extras` or :code:`field_extras` to define user-defined data.
 They take any structure, so you can define the structure of your own.
-See :doc:`mc_description` for more details.
+See :doc:`spec_mc_desc` for more details.
 
 Make :code:`arm.yaml` that contains the following content.
 
@@ -111,5 +111,5 @@ extras               any (user-specific)         User-defined data for the globa
                                                  Shorthand for :code:`mcdecoder.extras`
 ==================== =========================== ===================================================
 
-See :doc:`decoder_model_reference`
+See :doc:`spec_mcdecoder_model`
 to understand the types of template variables.

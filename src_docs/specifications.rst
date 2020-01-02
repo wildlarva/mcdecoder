@@ -6,7 +6,7 @@ Specifications
     :caption: Contents:
 
     commandline_options
-    mc_description
-    decoder_model_reference
+    spec_mc_desc
+    spec_mcdecoder_model
 
 TBD
