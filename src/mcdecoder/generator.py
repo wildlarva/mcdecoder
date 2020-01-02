@@ -26,7 +26,7 @@ def generate(mcfile_path: str, output_directory: str = None, template_directory:
     # Generate
     result = _generate(mcdecoder_model, output_directory, loader)
     if result:
-        print('Generated machine code decoders.')
+        print('Generated codes.')
         return 0
     else:
         print('Error occurred on generation.')
