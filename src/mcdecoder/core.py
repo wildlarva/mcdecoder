@@ -6,7 +6,14 @@ from typing import Any, Dict, List, Literal, Optional, Tuple, TypedDict, cast
 import jsonschema
 import lark
 import numpy as np
+from numpy.core.multiarray import result_type
 import yaml
+import yamlinclude
+import os.path
+import glob
+
+from os.path import isfile
+import itertools
 
 # External classes
 
@@ -288,6 +295,7 @@ def create_mcdecoder_model(mcfile_path: str) -> McDecoder:
 
 def load_mc_description_model(mcfile_path: str) -> McDescription:
     # Load MC description
+    _yaml_include_context.base_dir = os.path.dirname(mcfile_path)
     with open(mcfile_path, 'rb') as file:
         mc_desc_model = yaml.load(file, Loader=yaml.Loader)
 
@@ -370,6 +378,13 @@ def decode_instruction(context: DecodeContext, instruction_decoder: InstructionD
 
 
 # Internal classes
+
+
+@dataclass
+class _YamlIncludeContext:
+    """Context information for YAML !include tag"""
+    base_dir: str
+    """Base directory for !include tag"""
 
 
 @lark.v_args(inline=True)
@@ -457,6 +472,50 @@ class _InstructionConditionTransformer(lark.Transformer):
 
 
 # Internal functions
+
+
+def _yaml_include_constructor(loader: yaml.Loader, node: yaml.Node) -> Any:
+    """Constructor for YAML !include tag"""
+    if not isinstance(node, yaml.ScalarNode):
+        raise TypeError(f'Unsupported type for !include: {node}')
+
+    # Make path pattern
+    path_pattern = loader.construct_scalar(node)
+    if _yaml_include_context.base_dir is not None:
+        path_pattern = os.path.join(
+            _yaml_include_context.base_dir, path_pattern)
+
+    # Load included yamls
+    results = []
+    paths = (path for path in glob.iglob(path_pattern) if isfile(path))
+    for path in paths:
+        with open(path, 'r') as file:
+            results.append(yaml.load(file, Loader=yaml.Loader))
+
+    result_types = list(set(type(result) for result in results))
+    if len(result_types) == 0:
+        return None
+
+    if len(result_types) > 1:
+        raise RuntimeError(
+            f'The result of !include cannot be combinations of multiple types: {result_types}')
+
+    # Combine included data
+    result_type = result_types[0]
+    if issubclass(result_type, list):
+        return list(itertools.chain.from_iterable(results))
+    elif issubclass(result_type, dict):
+        result_dict = {}
+        for result in results:
+            result_dict.update(cast(dict, result))
+        return result_dict
+    else:
+        return results
+
+
+def _add_yaml_include_constructor() -> None:
+    """Add !include constructor to PyYAML"""
+    yaml.add_constructor('!include', _yaml_include_constructor)
 
 
 def _validate_mc_desc_model(mc_desc_model: Any) -> None:
@@ -757,6 +816,10 @@ def _decode_field_vectorized(code_vec: np.ndarray, field_decoder: InstructionFie
 
 
 # Internal variables
-
+_yaml_include_context: _YamlIncludeContext = _YamlIncludeContext(base_dir='')
 _instruction_format_parser: lark.Lark = _create_instruction_format_parser()
 _instruction_condition_parser: lark.Lark = _create_instruction_condition_parser()
+
+
+# Global executions
+_add_yaml_include_constructor()

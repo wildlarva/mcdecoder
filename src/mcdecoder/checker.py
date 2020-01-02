@@ -113,7 +113,7 @@ class _Error:
     bits_end: int
 
 
-# Global variables
+# Internal global variables
 
 
 _VEC_SIZE = 1 << 16

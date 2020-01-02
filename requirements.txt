@@ -6,6 +6,7 @@ m2r
 numpy
 pytest
 PyYAML
+pyyaml-include
 Sphinx
 sphinx-argparse
 sphinx-jsonschema

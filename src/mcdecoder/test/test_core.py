@@ -1,6 +1,6 @@
 from ..core import (
     EqualityInstructionDecodeCondition, InRangeInstructionDecodeCondition,
-    create_mcdecoder_model)
+    create_mcdecoder_model, load_mc_description_model)
 
 
 def test_create_mcdecoder_model_namespace() -> None:
@@ -144,3 +144,21 @@ def test_create_mcdecoder_model_condition() -> None:
     assert push_condition.field == 'cond'
     assert push_condition.value_start == 0
     assert push_condition.value_end == 14
+
+
+def test_load_mc_description_model_include() -> None:
+    mc_desc = load_mc_description_model('test/include.yaml')
+
+    included_list = mc_desc['extras']['included_list']
+    assert len(included_list) == 4
+    assert included_list[0] == 1
+    assert included_list[1] == 2
+    assert included_list[2] == 3
+    assert included_list[3] == 4
+
+    included_mapping = mc_desc['extras']['included_mapping']
+    assert len(included_mapping) == 4
+    assert included_mapping['a'] == 1
+    assert included_mapping['b'] == 2
+    assert included_mapping['c'] == 3
+    assert included_mapping['d'] == 4
