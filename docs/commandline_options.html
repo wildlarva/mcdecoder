@@ -169,7 +169,7 @@
 <h1>Command line options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h1>
 <p><p>A toolset for a machine code decoder</p>
 </p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">mcdecoder</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">command</span> <span class="o">...</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>usage: mcdecoder <span class="o">[</span>-h<span class="o">]</span> <span class="nb">command</span> ...
 </pre></div>
 </div>
 <div class="section" id="Positional Arguments">
@@ -185,7 +185,7 @@
 <div class="section" id="generate">
 <h3>generate<a class="headerlink" href="#generate" title="Permalink to this headline">¶</a></h3>
 <p>Generate a decoder or other codes to support a decoder</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mcdecoder</span> <span class="n">generate</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">output</span> <span class="n">outdir</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">template</span> <span class="n">templatedir</span><span class="p">]</span> <span class="n">mcfile</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder generate <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--output outdir<span class="o">]</span> <span class="o">[</span>--template templatedir<span class="o">]</span> mcfile
 </pre></div>
 </div>
 <div class="section" id="Positional Arguments_repeat1">
@@ -209,18 +209,18 @@
 </dl>
 </div>
 <p>Usage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a decoder to &#39;out&#39; directory</span>
-<span class="n">mcdecoder</span> <span class="n">generate</span> <span class="o">--</span><span class="n">output</span> <span class="n">out</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a decoder to &#39;out&#39; directory</span>
+mcdecoder generate --output out mc.yaml
 
 <span class="c1"># Generate codes according to user-defined template files in &#39;user_templates&#39; directory</span>
-<span class="n">mcdecoder</span> <span class="n">generate</span> <span class="o">--</span><span class="n">template</span> <span class="n">user_templates</span> <span class="o">--</span><span class="n">output</span> <span class="n">out</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+mcdecoder generate --template user_templates --output out mc.yaml
 </pre></div>
 </div>
 </div>
 <div class="section" id="export">
 <h3>export<a class="headerlink" href="#export" title="Permalink to this headline">¶</a></h3>
 <p>Export an MC description as another format. Currently, mcdecoder only supports CSV format</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mcdecoder</span> <span class="n">export</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">output</span> <span class="n">outfile</span> <span class="n">mcfile</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder <span class="nb">export</span> <span class="o">[</span>-h<span class="o">]</span> --output outfile mcfile
 </pre></div>
 </div>
 <div class="section" id="Positional Arguments_repeat2">
@@ -240,15 +240,15 @@
 </dl>
 </div>
 <p>Usage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Export a MC description as CSV format</span>
-<span class="n">mcdecoder</span> <span class="n">export</span> <span class="o">--</span><span class="n">output</span> <span class="n">mc</span><span class="o">.</span><span class="n">csv</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Export a MC description as CSV format</span>
+mcdecoder <span class="nb">export</span> --output mc.csv mc.yaml
 </pre></div>
 </div>
 </div>
 <div class="section" id="emulate">
 <h3>emulate<a class="headerlink" href="#emulate" title="Permalink to this headline">¶</a></h3>
 <p>Emulate a decoder by inputting binary data</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mcdecoder</span> <span class="n">emulate</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">pattern</span> <span class="n">pattern</span> <span class="p">[</span><span class="o">--</span><span class="n">base</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">byteorder</span> <span class="p">{</span><span class="n">big</span><span class="p">,</span><span class="n">little</span><span class="p">}]</span> <span class="n">mcfile</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder emulate <span class="o">[</span>-h<span class="o">]</span> --pattern pattern <span class="o">[</span>--base <span class="o">{</span><span class="m">2</span>,16<span class="o">}]</span> <span class="o">[</span>--byteorder <span class="o">{</span>big,little<span class="o">}]</span> mcfile
 </pre></div>
 </div>
 <div class="section" id="Positional Arguments_repeat3">
@@ -278,21 +278,21 @@
 </dl>
 </div>
 <p>Usage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Emulate a decoder when inputting e92d4800</span>
-<span class="n">mcdecoder</span> <span class="n">emulate</span> <span class="o">--</span><span class="n">pattern</span> <span class="n">e92d4800</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Emulate a decoder when inputting e92d4800</span>
+mcdecoder emulate --pattern e92d4800 mc.yaml
 
 <span class="c1"># Emulate a decoder when inputting &#39;1110 1001 0010 1101 0100 1000 0000 0000&#39;</span>
-<span class="n">mcdecoder</span> <span class="n">emulate</span> <span class="o">--</span><span class="n">base</span> <span class="mi">2</span> <span class="o">--</span><span class="n">pattern</span> <span class="s1">&#39;1110 1001 0010 1101 0100 1000 0000 0000&#39;</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+mcdecoder emulate --base <span class="m">2</span> --pattern <span class="s1">&#39;1110 1001 0010 1101 0100 1000 0000 0000&#39;</span> mc.yaml
 
 <span class="c1"># Emulate a decoder when inputting e92d4800 as little endian</span>
-<span class="n">mcdecoder</span> <span class="n">emulate</span> <span class="o">--</span><span class="n">byteorder</span> <span class="n">little</span> <span class="o">--</span><span class="n">pattern</span> <span class="mi">00482</span><span class="n">de9</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+mcdecoder emulate --byteorder little --pattern 00482de9 mc.yaml
 </pre></div>
 </div>
 </div>
 <div class="section" id="check">
 <h3>check<a class="headerlink" href="#check" title="Permalink to this headline">¶</a></h3>
 <p>Check the instruction validity of MC description by inputting binary data to a decoder</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mcdecoder</span> <span class="n">check</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">pattern</span> <span class="n">pattern</span> <span class="p">[</span><span class="o">--</span><span class="n">base</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">}]</span> <span class="n">mcfile</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder check <span class="o">[</span>-h<span class="o">]</span> --pattern pattern <span class="o">[</span>--base <span class="o">{</span><span class="m">2</span>,16<span class="o">}]</span> mcfile
 </pre></div>
 </div>
 <div class="section" id="Positional Arguments_repeat4">
@@ -326,14 +326,14 @@
 </ul>
 </div></blockquote>
 <p>Usage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check by inputting the range from 092d4800 to f92d4800 to a decoder</span>
-<span class="n">mcdecoder</span> <span class="n">check</span> <span class="o">--</span><span class="n">pattern</span> <span class="n">x92d4800</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check by inputting the range from 092d4800 to f92d4800 to a decoder</span>
+mcdecoder check --pattern x92d4800 mc.yaml
 
 <span class="c1"># Check by inputting the range from &#39;1010 1001 0010 1101 0100 1000 0000 0000&#39; to &#39;1110 1001 0010 1101 0100 1000 0000 0000&#39; to a decoder</span>
-<span class="n">mcdecoder</span> <span class="n">check</span> <span class="o">--</span><span class="n">base</span> <span class="mi">2</span> <span class="o">--</span><span class="n">pattern</span> <span class="s1">&#39;1x10 1001 0010 1101 0100 1000 0000 0000&#39;</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+mcdecoder check --base <span class="m">2</span> --pattern <span class="s1">&#39;1x10 1001 0010 1101 0100 1000 0000 0000&#39;</span> mc.yaml
 
 <span class="c1"># Check by inputting the range from 002d4800 to ff2d4800 to a decoder</span>
-<span class="n">mcdecoder</span> <span class="n">check</span> <span class="o">--</span><span class="n">pattern</span> <span class="n">xx2d4800</span> <span class="n">mc</span><span class="o">.</span><span class="n">yaml</span>
+mcdecoder check --pattern xx2d4800 mc.yaml
 </pre></div>
 </div>
 </div>

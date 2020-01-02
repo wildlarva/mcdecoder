@@ -86,7 +86,11 @@
 <li class="toctree-l1 current"><a class="reference internal" href="specifications.html">Specifications</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="commandline_options.html">Command line options</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">MC description specification</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#structure-specification">Structure specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#basic-specification">Basic specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additional-specifications">Additional specifications</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#split-a-description-into-multiple-files">Split a description into multiple files</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#schema-specification">Schema specification</a></li>
 </ul>
 </li>
@@ -161,25 +165,25 @@
             
   <div class="section" id="mc-description-specification">
 <h1>MC description specification<a class="headerlink" href="#mc-description-specification" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="structure-specification">
-<h2>Structure specification<a class="headerlink" href="#structure-specification" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-YAML notranslate"><div class="highlight"><pre><span></span><span class="c1"># Specification of machine code description file</span>
+<div class="section" id="basic-specification">
+<h2>Basic specification<a class="headerlink" href="#basic-specification" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Specification of machine code description file</span>
 <span class="c1">#</span>
 <span class="c1"># Machine code description file needs to be a YAML format.</span>
 
-<span class="c1"># Describes a machine</span>
+<span class="c1"># matchine: Describes a machine</span>
 <span class="nt">machine</span><span class="p">:</span>
   <span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] Container of user-defined data for the machine</span>
     <span class="c1"># Any structure can be defined here</span>
     <span class="nt">arch_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">arm</span>
 
-<span class="c1"># Describes instructions</span>
+<span class="c1"># instructions: Describes instructions</span>
 <span class="c1">#</span>
 <span class="c1"># Each list element represents an instruction.</span>
 <span class="nt">instructions</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_1</span> <span class="c1"># Name of the instruction</span>
 
-    <span class="c1"># Encoding format of the instruction</span>
+    <span class="c1"># format: Encoding format of the instruction</span>
     <span class="c1">#</span>
     <span class="c1"># Instruction fields are separated by bar symbol(|).</span>
     <span class="c1"># Expression: &lt;field_bits&gt;:&lt;field_name&gt;[&lt;field_bit_ranges&gt;]|...</span>
@@ -205,7 +209,7 @@
     <span class="c1">#     NOTE: This is an end bit position in a field, not in an instruction.</span>
     <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
 
-    <span class="c1"># [optional] Bit condition when the instruction applys</span>
+    <span class="c1"># match_condition: [optional] Bit condition when the instruction applys</span>
     <span class="c1">#</span>
     <span class="c1"># The following condition types are supported.</span>
     <span class="c1"># - Equality: The equality between a field value and a given value.</span>
@@ -215,7 +219,7 @@
     <span class="c1"># - In a range: A field value is in a given value range(inclusive).</span>
     <span class="c1">#     Expression: &lt;field&gt; in_range &lt;value_start&gt;-&lt;value_end&gt;</span>
     <span class="c1">#</span>
-    <span class="c1"># These conditions can be combined with logical operators &#39;and&#39; or &#39;or&#39;.</span>
+    <span class="c1"># These conditions can be combined with a logical operator &#39;and&#39; or &#39;or&#39;.</span>
     <span class="c1"># You can also use &#39;(&#39; and &#39;)&#39; for readability.</span>
     <span class="c1">#</span>
     <span class="c1"># where</span>
@@ -238,7 +242,7 @@
     <span class="c1">#     Base 2, 10 or 16 integer values like 15, 0b1111, 0xf, etc.</span>
     <span class="nt">match_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(cond in_range 0-14 and S == 1) or cond == 15</span>
 
-    <span class="c1"># [optional] Bit condition when the instruction does not apply</span>
+    <span class="c1"># unmatch_condition: [optional] Bit condition when the instruction does not apply</span>
     <span class="c1">#</span>
     <span class="c1"># The expression is the same as that of match_condition.</span>
     <span class="c1"># unmatch_condition is mutually exclusive with match_condition.</span>
@@ -248,11 +252,12 @@
       <span class="c1"># Any structure can be defined here</span>
       <span class="nt">clocks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
     
-    <span class="c1"># [optional] Container of user-defined data for each field</span>
+    <span class="c1"># field_extras: [optional] Container of user-defined data for each field</span>
     <span class="c1"># </span>
     <span class="c1"># Each mapping key represents a field defining user-defined data and its value holds user-defined data for the field</span>
     <span class="nt">field_extras</span><span class="p">:</span>
-      <span class="nt">Rn</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span> <span class="nv">register</span><span class="p p-Indicator">}</span> <span class="c1"># Any structure can be defined in a mapping value</span>
+      <span class="c1"># Any structure can be defined in a mapping value</span>
+      <span class="nt">Rn</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span> <span class="nv">register</span><span class="p p-Indicator">}</span>
       <span class="nt">Rd</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span> <span class="nv">register</span><span class="p p-Indicator">}</span>
       <span class="nt">imm12</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span> <span class="nv">immediate</span><span class="p p-Indicator">}</span>
 
@@ -273,6 +278,46 @@
     <span class="c1"># Any structure can be defined here</span>
     <span class="nt">compiler</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gcc</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="additional-specifications">
+<h2>Additional specifications<a class="headerlink" href="#additional-specifications" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="split-a-description-into-multiple-files">
+<h3>Split a description into multiple files<a class="headerlink" href="#split-a-description-into-multiple-files" title="Permalink to this headline">¶</a></h3>
+<p>You can split a description into multiple parts by using <code class="code docutils literal notranslate"><span class="pre">!include</span></code> tag.</p>
+<p>Expression: <code class="code docutils literal notranslate"><span class="pre">!include</span> <span class="pre">&lt;path-included&gt;</span></code></p>
+<p>where</p>
+<dl class="simple">
+<dt>&lt;path-included&gt;</dt><dd><p>A path to files included.
+You can use wildcard character <code class="code docutils literal notranslate"><span class="pre">*</span></code> (asterisk symbol).</p>
+</dd>
+</dl>
+<div class="section" id="example">
+<h4>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><p>arm.yaml</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+<span class="nt">instructions</span><span class="p">:</span> <span class="kt">!include</span> <span class="l l-Scalar l-Scalar-Plain">instructions/*_instructions.yaml</span>
+</pre></div>
+</div>
+</li>
+<li><p>instructions/add_instructions.yaml</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_1</span>
+  <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
+  <span class="nt">unmatch_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond == 15</span>
+</pre></div>
+</div>
+</li>
+<li><p>instructions/push_instructions.yaml</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">push_1</span>
+  <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list</span>
+  <span class="nt">match_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond in_range 0-14</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>You can see this <a class="reference download external" download="" href="https://github.com/wildlarva/mcdecoder/blob/master/sample/sample_descs/include"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">in</span> <span class="pre">github</span></code></a>.</p>
+</div>
 </div>
 </div>
 <div class="section" id="schema-specification">
