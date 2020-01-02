@@ -1,0 +1,3 @@
+- name: add_1
+  format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12
+  unmatch_condition: cond == 15

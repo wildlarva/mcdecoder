@@ -1,0 +1,2 @@
+machine: {}
+instructions: !include instructions/*_instructions.yaml
