@@ -284,39 +284,52 @@
 <h2>Additional specifications<a class="headerlink" href="#additional-specifications" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="split-a-description-into-multiple-files">
 <h3>Split a description into multiple files<a class="headerlink" href="#split-a-description-into-multiple-files" title="Permalink to this headline">¶</a></h3>
-<p>You can split a description into multiple parts by using <code class="code docutils literal notranslate"><span class="pre">!include</span></code> tag.</p>
+<p>You can split a description into multiple files by using <code class="code docutils literal notranslate"><span class="pre">!include</span></code> tag.
+You can use it anywhere in a description and
+the contents of specified files will be inserted into the place
+where the tag is.
+If multiple files are specified, the contents will be combined.
+The behavior depends on the types of the contents of files included:</p>
+<ul class="simple">
+<li><p>Sequence: Produce one sequence consisting of the elements of all sequences.</p></li>
+<li><p>Mapping: Produce one mapping consisting of the elements of all mappings.</p></li>
+<li><p>Scalar: Produce one list consisting of scalars.</p></li>
+<li><p>Mixture: Prompt an error.</p></li>
+</ul>
 <p>Expression: <code class="code docutils literal notranslate"><span class="pre">!include</span> <span class="pre">&lt;path-included&gt;</span></code></p>
 <p>where</p>
 <dl class="simple">
 <dt>&lt;path-included&gt;</dt><dd><p>A path to files included.
-You can use wildcard character <code class="code docutils literal notranslate"><span class="pre">*</span></code> (asterisk symbol).</p>
+You can use the wildcard character <code class="code docutils literal notranslate"><span class="pre">*</span></code> (asterisk symbol)
+to specify multiple files.</p>
 </dd>
 </dl>
 <div class="section" id="example">
 <h4>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h4>
-<ul>
-<li><p>arm.yaml</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">arm.yaml</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
 <span class="nt">instructions</span><span class="p">:</span> <span class="kt">!include</span> <span class="l l-Scalar l-Scalar-Plain">instructions/*_instructions.yaml</span>
 </pre></div>
 </div>
-</li>
-<li><p>instructions/add_instructions.yaml</p>
+</div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">instructions/add_instructions.yaml</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_1</span>
   <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
   <span class="nt">unmatch_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond == 15</span>
 </pre></div>
 </div>
-</li>
-<li><p>instructions/push_instructions.yaml</p>
+</div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">instructions/push_instructions.yaml</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">push_1</span>
   <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list</span>
   <span class="nt">match_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond in_range 0-14</span>
 </pre></div>
 </div>
-</li>
-</ul>
-<p>You can see this <a class="reference download external" download="" href="https://github.com/wildlarva/mcdecoder/blob/master/sample/sample_descs/include"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">in</span> <span class="pre">github</span></code></a>.</p>
+</div>
+<p>You can see this <a class="reference download external" download="" href="https://github.com/wildlarva/mcdecoder/blob/master/examples/include"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">in</span> <span class="pre">github</span></code></a>.</p>
 </div>
 </div>
 </div>

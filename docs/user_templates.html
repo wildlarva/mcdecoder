@@ -34,7 +34,9 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Specifications" href="specifications.html" />
+    <link rel="prev" title="Machine Code Decoder Generator(mcdecoder)" href="README.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -79,8 +81,18 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User templates</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#add-user-defined-data-to-an-mc-description">1. Add user-defined data to an MC description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-user-defined-template-files">2. Create user-defined template files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-codes-with-the-created-template">3. Generate codes with the created template</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#template-variables">Template variables</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
 </ul>
 
@@ -148,9 +160,214 @@
             
   <div class="section" id="user-templates">
 <h1>User templates<a class="headerlink" href="#user-templates" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
+<p>Sometimes, a user needs user-specific decoder codes or
+some codes to support decoders like constant tables.
+mcdecoder allows users to define user-specific code templates
+to generate those codes.
+This is called user templates.</p>
+<div class="section" id="tutorial">
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h2>
+<p>To use user templates, follow the steps below:</p>
+<ol class="arabic simple">
+<li><p>Add user-defined data to an MC description</p></li>
+<li><p>Create user-defined template files</p></li>
+<li><p>Generate codes with the created template</p></li>
+</ol>
+<div class="section" id="add-user-defined-data-to-an-mc-description">
+<h3>1. Add user-defined data to an MC description<a class="headerlink" href="#add-user-defined-data-to-an-mc-description" title="Permalink to this headline">¶</a></h3>
+<p>First, you may need to add some user-specific data to your MC description file.
+If you don’t need any additional information than MC description specification,
+you can skip this step.
+You can use <code class="code docutils literal notranslate"><span class="pre">extras</span></code> or <code class="code docutils literal notranslate"><span class="pre">field_extras</span></code> to define user-defined data.
+They take any structure, so you can define the structure of your own.
+See <a class="reference internal" href="mc_description.html"><span class="doc">MC description specification</span></a> for more details.</p>
+<p>Make <code class="code docutils literal notranslate"><span class="pre">arm.yaml</span></code> that contains the following content.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">arm.yaml</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span>
+  <span class="nt">extras</span><span class="p">:</span>
+    <span class="c1"># User-defined data for the machine</span>
+    <span class="nt">arch_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">arm</span>
+<span class="nt">instructions</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_1</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
+    <span class="nt">unmatch_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond == 15</span>
+    <span class="nt">extras</span><span class="p">:</span>
+      <span class="c1"># User-defined data for the instruction &#39;add_1&#39;</span>
+      <span class="nt">clocks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+    <span class="nt">field_extras</span><span class="p">:</span>
+      <span class="nt">Rn</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span> <span class="nv">register</span><span class="p p-Indicator">}</span> <span class="c1"># User-defined data for the field &#39;Rn&#39;</span>
+      <span class="nt">Rd</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span> <span class="nv">register</span><span class="p p-Indicator">}</span> <span class="c1"># User-defined data for the field &#39;Rd&#39;</span>
+      <span class="nt">imm12</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span> <span class="nv">immediate</span><span class="p p-Indicator">}</span> <span class="c1"># User-defined data for the field &#39;imm12&#39;</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">push_1</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list</span>
+    <span class="nt">match_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond in_range 0-14</span>
+    <span class="c1"># No user-defined data are defined for the instruction &#39;push_1&#39;</span>
+<span class="nt">decoder</span><span class="p">:</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">arm</span>
+<span class="nt">extras</span><span class="p">:</span>
+  <span class="c1"># User-defined data for the global scope</span>
+  <span class="nt">compiler</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gcc</span>
+</pre></div>
 </div>
-<p>TBD</p>
+</div>
+</div>
+<div class="section" id="create-user-defined-template-files">
+<h3>2. Create user-defined template files<a class="headerlink" href="#create-user-defined-template-files" title="Permalink to this headline">¶</a></h3>
+<p>Second, you must define user-defined templates.
+mcdecoder uses <a class="reference download external" download="" href="https://jinja.palletsprojects.com/"><code class="xref download docutils literal notranslate"><span class="pre">Jinja2</span></code></a> syntax for templates.
+See <a class="reference download external" download="" href="https://jinja.palletsprojects.com/templates/"><code class="xref download docutils literal notranslate"><span class="pre">Template</span> <span class="pre">Designer</span> <span class="pre">Documentation</span></code></a> to understand the template syntax.</p>
+<p>You can use template variables in your template, such as
+<code class="code docutils literal notranslate"><span class="pre">instruction_decoders</span></code> (decoder information about instructions)
+or <code class="code docutils literal notranslate"><span class="pre">ns</span></code> (namespace prefix)
+to access information about decoders and user-defined data.
+See <a class="reference internal" href="#template-variables"><span class="std std-ref">Template variables</span></a> for more details.</p>
+<p>You need to make a directory and put your template files in it.
+Generated files will have the same names as those of template files.
+If you use template variables in the names of template files,
+the names will be generated in the same way as the contents of generated files.</p>
+<p>This time, make <code class="code docutils literal notranslate"><span class="pre">templates</span></code> directory and
+create the following template files.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">templates/{{ns}}constants.h</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="c">{# Example usage of user-defined data for the global scope and the machine #}</span><span class="x"></span>
+<span class="x">/*</span>
+<span class="x"> * This file is generated for:</span>
+<span class="x"> *   - Compiler: </span><span class="cp">{{</span> <span class="nv">extras.compiler</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x"> *   - Architecture: </span><span class="cp">{{</span> <span class="nv">machine_decoder.extras.arch_type</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x"> */</span>
+
+<span class="cp">{%</span>- <span class="k">for</span> <span class="nv">inst</span> <span class="k">in</span> <span class="nv">instruction_decoders</span> -<span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{%</span>- <span class="k">for</span> <span class="nv">field</span> <span class="k">in</span> <span class="nv">inst.field_decoders</span> -<span class="cp">%}</span><span class="x"></span>
+<span class="x">        </span><span class="c">{# Example usage of user-defined data for fields #}</span><span class="x"></span>
+<span class="x">        </span><span class="c">{# Check if the attribute &#39;type&#39; exists #}</span><span class="x"></span>
+<span class="x">        </span><span class="cp">{%</span>- <span class="k">if</span> <span class="nv">field.extras.type</span> -<span class="cp">%}</span><span class="x"></span>
+<span class="x">            #define FIELD_REG_TYPE_</span><span class="cp">{{</span> <span class="nv">inst.name</span> <span class="cp">}}</span><span class="x">_</span><span class="cp">{{</span> <span class="nv">field.name</span> <span class="cp">}}</span><span class="x"> &quot;</span><span class="cp">{{</span><span class="nv">field.extras.type</span><span class="cp">}}</span><span class="x">&quot;</span>
+<span class="x">        </span><span class="cp">{%</span>- <span class="k">endif</span> -<span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{%</span>- <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span>- <span class="k">endfor</span> -<span class="cp">%}</span><span class="x"></span>
+
+<span class="x">extern uint8 CLOCKS[];</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">templates/{{ns}}constants.c</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="c">{# Example usage of user-defined data for the global scope and the machine #}</span><span class="x"></span>
+<span class="x">/*</span>
+<span class="x"> * This file is generated for:</span>
+<span class="x"> *   - Compiler: </span><span class="cp">{{</span> <span class="nv">extras.compiler</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x"> *   - Architecture: </span><span class="cp">{{</span> <span class="nv">machine_decoder.extras.arch_type</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x"> */</span>
+<span class="x">#include &quot;</span><span class="cp">{{</span> <span class="nv">ns</span> <span class="cp">}}</span><span class="x">constants.h&quot;</span>
+
+<span class="x">const uint8 CLOCKS[] = {</span>
+<span class="x">    </span><span class="cp">{%</span>- <span class="k">for</span> <span class="nv">inst</span> <span class="k">in</span> <span class="nv">instruction_decoders</span> -<span class="cp">%}</span><span class="x"></span>
+<span class="x">        </span><span class="c">{# Example usage of user-defined data for instructions #}</span><span class="x"></span>
+<span class="x">        </span><span class="c">{# Check if the attribute &#39;clocks&#39; exists #}</span><span class="x"></span>
+<span class="x">        </span><span class="cp">{%</span>- <span class="k">if</span> <span class="nv">inst.extras.clocks</span> -<span class="cp">%}</span><span class="x"></span>
+<span class="x">            </span><span class="cp">{{</span> <span class="nv">inst.extras.clocks</span> <span class="cp">}}</span><span class="x">, /* </span><span class="cp">{{</span> <span class="nv">inst.name</span> <span class="cp">}}</span><span class="x"> */</span>
+<span class="x">        </span><span class="cp">{%</span>- <span class="k">else</span> -<span class="cp">%}</span><span class="x"></span>
+<span class="x">            0, /* </span><span class="cp">{{</span> <span class="nv">inst.name</span> <span class="cp">}}</span><span class="x"> */</span>
+<span class="x">        </span><span class="cp">{%</span>- <span class="k">endif</span> -<span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{%</span>- <span class="k">endfor</span> <span class="cp">%}</span><span class="x"></span>
+<span class="x">};</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="generate-codes-with-the-created-template">
+<h3>3. Generate codes with the created template<a class="headerlink" href="#generate-codes-with-the-created-template" title="Permalink to this headline">¶</a></h3>
+<p>Finally, you must run a command to generate with the template.
+Use <code class="code docutils literal notranslate"><span class="pre">mcdecoder</span> <span class="pre">generate</span></code> command and
+<code class="code docutils literal notranslate"><span class="pre">--template</span></code> option to specify the template.
+See <a class="reference internal" href="commandline_options.html"><span class="doc">Command line options</span></a> for more details.</p>
+<p>Run the command below:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder --template templates --output out arm.yaml
+</pre></div>
+</div>
+<p>And the generated files will be:</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">out/arm_constants.h</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm"> * This file is generated for:</span>
+<span class="cm"> *   - Compiler: gcc</span>
+<span class="cm"> *   - Architecture: arm</span>
+<span class="cm"> */</span>
+        
+        
+        <span class="cp">#define FIELD_REG_TYPE_add_1_Rn &quot;register&quot;</span>
+        <span class="cp">#define FIELD_REG_TYPE_add_1_Rd &quot;register&quot;</span>
+        <span class="cp">#define FIELD_REG_TYPE_add_1_imm12 &quot;immediate&quot;</span>
+        
+        <span class="k">extern</span> <span class="n">uint8</span> <span class="n">CLOCKS</span><span class="p">[];</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">out/arm_constants.c</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm"> * This file is generated for:</span>
+<span class="cm"> *   - Compiler: gcc</span>
+<span class="cm"> *   - Architecture: arm</span>
+<span class="cm"> */</span>
+<span class="cp">#include</span> <span class="cpf">&quot;arm_constants.h&quot;</span><span class="cp"></span>
+
+<span class="k">const</span> <span class="n">uint8</span> <span class="n">CLOCKS</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">10</span><span class="p">,</span> <span class="cm">/* add_1 */</span>
+        <span class="mi">0</span><span class="p">,</span> <span class="cm">/* push_1 */</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+<p>You can see <a class="reference download external" download="" href="https://github.com/wildlarva/mcdecoder/blob/master/examples/user_templates"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">files</span> <span class="pre">in</span> <span class="pre">this</span> <span class="pre">tutorial</span> <span class="pre">in</span> <span class="pre">github</span></code></a>.</p>
+</div>
+</div>
+<div class="section" id="template-variables">
+<span id="id1"></span><h2>Template variables<a class="headerlink" href="#template-variables" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 28%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mcdecoder</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">McDecoder</span></code></p></td>
+<td><p>Root element of decoder model</p></td>
+</tr>
+<tr class="row-odd"><td><p>machine_decoder</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">MachineDecoder</span></code></p></td>
+<td><p>Decoding information about machine</p></td>
+</tr>
+<tr class="row-even"><td><p>instruction_decoders</p></td>
+<td><p>Sequence of
+<code class="code docutils literal notranslate"><span class="pre">InstructionDecoder</span></code></p></td>
+<td><p>Decoding information about instructions</p></td>
+</tr>
+<tr class="row-odd"><td><p>ns</p></td>
+<td><p>string</p></td>
+<td><p>Namespace prefix for generated codes
+Shorthand for <code class="code docutils literal notranslate"><span class="pre">mcdecoder.namespace_prefix</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>extras</p></td>
+<td><p>any (user-specific)</p></td>
+<td><p>User-defined data for the global scope
+Shorthand for <code class="code docutils literal notranslate"><span class="pre">mcdecoder.extras</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference internal" href="decoder_model_reference.html"><span class="doc">MC decoder model reference</span></a>
+to understand the types of template variables.</p>
+</div>
 </div>
 
 
@@ -158,6 +375,15 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="specifications.html" class="btn btn-neutral float-right" title="Specifications" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="README.html" class="btn btn-neutral float-left" title="Machine Code Decoder Generator(mcdecoder)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

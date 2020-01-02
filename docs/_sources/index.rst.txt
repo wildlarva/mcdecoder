@@ -6,14 +6,15 @@ mcdecoder documentation
     :caption: Contents:
 
     README <README>
+    user_templates
     specifications
 
 .. tutorial
-.. user_templates
 
-Indices and tables
+Indices
 ------------------
 
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+
+.. * :ref:`modindex`
+.. * :ref:`search`
