@@ -1,4 +1,13 @@
-# Machine Code Decoder Generator(mcdecoder)
+# README: mcdecoder
+
+mcdecoder (Machine Code Decoder) is a set of tools to:
+
+- Generate machine code decoder codes for a user-defined machine code specification
+- Emulate a machine code decoder for a bit pattern and show decoded result
+- Check instructions if there are inconsistent instructions such as:
+  - Some bit patterns do not have matching instructions
+  - Multiple instructions are defined for a certain bit pattern
+- etc.
 
 ## For users
 
