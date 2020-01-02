@@ -1,19 +1,16 @@
 from dataclasses import dataclass
+import glob
 import importlib.resources
+import itertools
 import json
+import os.path
+from os.path import isfile
 from typing import Any, Dict, List, Literal, Optional, Tuple, TypedDict, cast
 
 import jsonschema
 import lark
 import numpy as np
-from numpy.core.multiarray import result_type
 import yaml
-import yamlinclude
-import os.path
-import glob
-
-from os.path import isfile
-import itertools
 
 # External classes
 
