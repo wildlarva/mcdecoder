@@ -43,16 +43,16 @@ where
 Example
 --------
 
-.. literalinclude:: ../sample/sample_descs/include/arm.yaml
+.. literalinclude:: ../examples/include/arm.yaml
     :caption: arm.yaml
 
-.. literalinclude:: ../sample/sample_descs/include/instructions/add_instructions.yaml
+.. literalinclude:: ../examples/include/instructions/add_instructions.yaml
     :caption: instructions/add_instructions.yaml
 
-.. literalinclude:: ../sample/sample_descs/include/instructions/push_instructions.yaml
+.. literalinclude:: ../examples/include/instructions/push_instructions.yaml
     :caption: instructions/push_instructions.yaml
 
-You can see this :download:`example in github <https://github.com/wildlarva/mcdecoder/blob/master/sample/sample_descs/include>`.
+You can see this :download:`example in github <https://github.com/wildlarva/mcdecoder/blob/master/examples/include>`.
 
 *************************
 Schema specification

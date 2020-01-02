@@ -1,7 +1,7 @@
 include build/conanbuildinfo.mak
 
 #----------------------------------------
-#	 Make variables for a sample App
+#	 Make variables
 #----------------------------------------
 
 CXX_SRCS = \
