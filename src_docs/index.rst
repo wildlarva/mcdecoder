@@ -11,9 +11,10 @@ mcdecoder documentation
 .. tutorial
 .. user_templates
 
-Indices and tables
+Indices
 ------------------
 
 * :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+
+.. * :ref:`modindex`
+.. * :ref:`search`
