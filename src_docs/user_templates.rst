@@ -72,7 +72,7 @@ create the following template files.
 Finally, you must run a command to generate with the template.
 Use :code:`mcdecoder generate` command and
 :code:`--template` option to specify the template.
-See :doc:`commandline_options` for more details.
+See :doc:`spec_commandline_options` for more details.
 
 Run the command below:
 

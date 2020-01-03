@@ -113,7 +113,7 @@ Its output will be...
 
 Fine. It looks working.
 
-See :doc:`commandline_options` for more information
+See :doc:`spec_commandline_options` for more information
 about :code:`emulate` sub-command if you'd like.
 
 *********************************************************************
@@ -135,7 +135,7 @@ You'll get generated files below:
     ├── mcdecoder.c
     └── mcdecoder.h
 
-See :doc:`commandline_options` for more details
+See :doc:`spec_commandline_options` for more details
 about :code:`generate` sub-command if you'd like.
 
 *********************************************************************
@@ -189,8 +189,8 @@ What's next?
 
 * :doc:`More details about MC description <spec_mc_desc>`
 * :doc:`More details about mcdecoder emulate and generate
-  <commandline_options>`
-* :doc:`Other useful mcdecoder commands <commandline_options>`
+  <spec_commandline_options>`
+* :doc:`Other useful mcdecoder commands <spec_commandline_options>`
 
   * :code:`mcdecoder check`: Check the integrity of your MC description
 
