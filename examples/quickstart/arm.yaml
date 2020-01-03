@@ -1,0 +1,6 @@
+machine: {}
+instructions:
+  - name: add_immediate_a1
+    format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12
+  - name: push_a1
+    format: xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list
