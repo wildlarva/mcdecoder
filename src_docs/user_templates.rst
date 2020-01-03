@@ -2,7 +2,7 @@
 User templates
 ############################
 
-Sometimes, a user needs user-specific decoder codes or
+Some users need user-specific decoder codes or
 some codes to support decoders like constant tables.
 mcdecoder allows users to define user-specific code templates
 to generate those codes.

@@ -13,7 +13,7 @@ The guide steps of the tutorial are:
 2. Write an MC description to express the encoding
 3. Check if the MC description is working
 4. Generate a decoder from the MC description
-5. Run the decoder from C client code
+5. Run the decoder from a C client code
 
 *********************************************************************
 1. Introduce an example instruction encoding to be decoded
@@ -139,7 +139,7 @@ See :doc:`spec_commandline_options` for more details
 about :code:`generate` sub-command if you'd like.
 
 *********************************************************************
-5. Run the decoder from C client code
+5. Run the decoder from a C client code
 *********************************************************************
 
 Create a C client code to test the function of the generated decoder.
@@ -207,5 +207,5 @@ What's next?
 
 * :doc:`User templates: Create your own template <user_templates>`
 
-  * if you need your custom decoder or you need additional codes
+  * If you need your custom decoder or additional codes
     to support your decoder, you can create your own templates.
