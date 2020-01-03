@@ -1,5 +1,5 @@
-MC decoder model reference
-==========================
+MC decoder model specification
+==============================
 
 .. autoclass:: mcdecoder.core.McDecoder
 .. autoclass:: mcdecoder.core.MachineDecoder

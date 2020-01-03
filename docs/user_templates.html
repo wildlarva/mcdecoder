@@ -33,10 +33,11 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Specifications" href="specifications.html" />
-    <link rel="prev" title="Machine Code Decoder Generator(mcdecoder)" href="README.html" /> 
+    <link rel="prev" title="Quickstart tutorial" href="quickstart.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,6 +84,7 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart tutorial</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">User templates</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#add-user-defined-data-to-an-mc-description">1. Add user-defined data to an MC description</a></li>
@@ -90,7 +92,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#generate-codes-with-the-created-template">3. Generate codes with the created template</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#template-variables">Template variables</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
@@ -180,10 +181,10 @@ If you don’t need any additional information than MC description specification
 you can skip this step.
 You can use <code class="code docutils literal notranslate"><span class="pre">extras</span></code> or <code class="code docutils literal notranslate"><span class="pre">field_extras</span></code> to define user-defined data.
 They take any structure, so you can define the structure of your own.
-See <a class="reference internal" href="mc_description.html"><span class="doc">MC description specification</span></a> for more details.</p>
+See <a class="reference internal" href="spec_mc_desc.html"><span class="doc">MC description specification</span></a> for more details.</p>
 <p>Make <code class="code docutils literal notranslate"><span class="pre">arm.yaml</span></code> that contains the following content.</p>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">arm.yaml</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">arm.yaml</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span>
   <span class="nt">extras</span><span class="p">:</span>
     <span class="c1"># User-defined data for the machine</span>
@@ -221,15 +222,15 @@ See <a class="reference download external" download="" href="https://jinja.palle
 <code class="code docutils literal notranslate"><span class="pre">instruction_decoders</span></code> (decoder information about instructions)
 or <code class="code docutils literal notranslate"><span class="pre">ns</span></code> (namespace prefix)
 to access information about decoders and user-defined data.
-See <a class="reference internal" href="#template-variables"><span class="std std-ref">Template variables</span></a> for more details.</p>
+See <a class="reference internal" href="spec_template_var.html"><span class="doc">Template variable specification</span></a> for more details.</p>
 <p>You need to make a directory and put your template files in it.
 Generated files will have the same names as those of template files.
 If you use template variables in the names of template files,
 the names will be generated in the same way as the contents of generated files.</p>
 <p>This time, make <code class="code docutils literal notranslate"><span class="pre">templates</span></code> directory and
 create the following template files.</p>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">templates/{{ns}}constants.h</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">templates/{{ns}}constants.h</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
 <div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="c">{# Example usage of user-defined data for the global scope and the machine #}</span><span class="x"></span>
 <span class="x">/*</span>
 <span class="x"> * This file is generated for:</span>
@@ -251,8 +252,8 @@ create the following template files.</p>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id4">
-<div class="code-block-caption"><span class="caption-text">templates/{{ns}}constants.c</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">templates/{{ns}}constants.c</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
 <div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="c">{# Example usage of user-defined data for the global scope and the machine #}</span><span class="x"></span>
 <span class="x">/*</span>
 <span class="x"> * This file is generated for:</span>
@@ -281,14 +282,14 @@ create the following template files.</p>
 <p>Finally, you must run a command to generate with the template.
 Use <code class="code docutils literal notranslate"><span class="pre">mcdecoder</span> <span class="pre">generate</span></code> command and
 <code class="code docutils literal notranslate"><span class="pre">--template</span></code> option to specify the template.
-See <a class="reference internal" href="commandline_options.html"><span class="doc">Command line options</span></a> for more details.</p>
+See <a class="reference internal" href="spec_commandline_options.html"><span class="doc">Command line options</span></a> for more details.</p>
 <p>Run the command below:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder --template templates --output out arm.yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder generate --template templates --output out arm.yaml
 </pre></div>
 </div>
 <p>And the generated files will be:</p>
-<div class="literal-block-wrapper docutils container" id="id5">
-<div class="code-block-caption"><span class="caption-text">out/arm_constants.h</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">out/arm_constants.h</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
 <span class="cm">/*</span>
 <span class="cm"> * This file is generated for:</span>
@@ -305,8 +306,8 @@ See <a class="reference internal" href="commandline_options.html"><span class="d
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id6">
-<div class="code-block-caption"><span class="caption-text">out/arm_constants.c</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">out/arm_constants.c</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
 <span class="cm">/*</span>
 <span class="cm"> * This file is generated for:</span>
@@ -325,49 +326,6 @@ See <a class="reference internal" href="commandline_options.html"><span class="d
 <p>You can see <a class="reference download external" download="" href="https://github.com/wildlarva/mcdecoder/blob/master/examples/user_templates"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">files</span> <span class="pre">in</span> <span class="pre">this</span> <span class="pre">tutorial</span> <span class="pre">in</span> <span class="pre">github</span></code></a>.</p>
 </div>
 </div>
-<div class="section" id="template-variables">
-<span id="id1"></span><h2>Template variables<a class="headerlink" href="#template-variables" title="Permalink to this headline">¶</a></h2>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 28%" />
-<col style="width: 52%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Variable name</p></th>
-<th class="head"><p>Type</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>mcdecoder</p></td>
-<td><p><code class="code docutils literal notranslate"><span class="pre">McDecoder</span></code></p></td>
-<td><p>Root element of decoder model.</p></td>
-</tr>
-<tr class="row-odd"><td><p>machine_decoder</p></td>
-<td><p><code class="code docutils literal notranslate"><span class="pre">MachineDecoder</span></code></p></td>
-<td><p>Decoding information about machine</p></td>
-</tr>
-<tr class="row-even"><td><p>instruction_decoders</p></td>
-<td><p>Sequence of
-<code class="code docutils literal notranslate"><span class="pre">InstructionDecoder</span></code></p></td>
-<td><p>Decoding information about instructions</p></td>
-</tr>
-<tr class="row-odd"><td><p>ns</p></td>
-<td><p>string</p></td>
-<td><p>Namespace prefix for generated codes.
-Shorthand for <code class="code docutils literal notranslate"><span class="pre">mcdecoder.namespace_prefix</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>extras</p></td>
-<td><p>any (user-specific)</p></td>
-<td><p>User-defined data for the global scope.
-Shorthand for <code class="code docutils literal notranslate"><span class="pre">mcdecoder.extras</span></code></p></td>
-</tr>
-</tbody>
-</table>
-<p>See <a class="reference internal" href="decoder_model_reference.html"><span class="doc">MC decoder model reference</span></a>
-to understand the types of template variables.</p>
-</div>
 </div>
 
 
@@ -381,7 +339,7 @@ to understand the types of template variables.</p>
         <a href="specifications.html" class="btn btn-neutral float-right" title="Specifications" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="README.html" class="btn btn-neutral float-left" title="Machine Code Decoder Generator(mcdecoder)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quickstart tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

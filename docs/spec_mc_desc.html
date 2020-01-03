@@ -33,10 +33,11 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="MC decoder model reference" href="decoder_model_reference.html" />
-    <link rel="prev" title="Command line options" href="commandline_options.html" /> 
+    <link rel="next" title="Template variable specification" href="spec_template_var.html" />
+    <link rel="prev" title="Command line options" href="spec_commandline_options.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,8 +84,10 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_templates.html">User templates</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="specifications.html">Specifications</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="commandline_options.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_commandline_options.html">Command line options</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">MC description specification</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#basic-specification">Basic specification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#additional-specifications">Additional specifications</a><ul>
@@ -94,7 +97,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#schema-specification">Schema specification</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="decoder_model_reference.html">MC decoder model reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_template_var.html">Template variable specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_mcdecoder_model.html">MC decoder model specification</a></li>
 </ul>
 </li>
 </ul>
@@ -150,7 +154,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/mc_description.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/spec_mc_desc.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -293,7 +297,7 @@ The behavior depends on the types of the contents of files included:</p>
 <ul class="simple">
 <li><p>Sequence: Produce one sequence consisting of the elements of all sequences.</p></li>
 <li><p>Mapping: Produce one mapping consisting of the elements of all mappings.</p></li>
-<li><p>Scalar: Produce one list consisting of scalars.</p></li>
+<li><p>Scalar: Produce one sequence consisting of scalars.</p></li>
 <li><p>Mixture: Prompt an error.</p></li>
 </ul>
 <p>Expression: <code class="code docutils literal notranslate"><span class="pre">!include</span> <span class="pre">&lt;path-included&gt;</span></code></p>
@@ -493,10 +497,10 @@ to specify multiple files.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="decoder_model_reference.html" class="btn btn-neutral float-right" title="MC decoder model reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="spec_template_var.html" class="btn btn-neutral float-right" title="Template variable specification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="commandline_options.html" class="btn btn-neutral float-left" title="Command line options" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="spec_commandline_options.html" class="btn btn-neutral float-left" title="Command line options" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

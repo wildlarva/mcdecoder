@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Machine Code Decoder Generator(mcdecoder) &mdash; mcdecoder  documentation</title>
+  <title>README: mcdecoder &mdash; mcdecoder  documentation</title>
   
 
   
@@ -33,9 +33,10 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Specifications" href="specifications.html" />
+    <link rel="next" title="Quickstart tutorial" href="quickstart.html" />
     <link rel="prev" title="mcdecoder documentation" href="index.html" /> 
 </head>
 
@@ -100,6 +101,8 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_templates.html">User templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
 </ul>
 
@@ -146,7 +149,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Machine Code Decoder Generator(mcdecoder)</li>
+      <li>README: mcdecoder</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -165,8 +168,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="machine-code-decoder-generator-mcdecoder">
-<h1>Machine Code Decoder Generator(mcdecoder)<a class="headerlink" href="#machine-code-decoder-generator-mcdecoder" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="readme-mcdecoder">
+<h1>README: mcdecoder<a class="headerlink" href="#readme-mcdecoder" title="Permalink to this headline">¶</a></h1>
+<p>mcdecoder (Machine Code Decoder) is a set of tools to:</p>
+<ul class="simple">
+<li><p>Generate machine code decoder codes for a user-defined machine code specification</p></li>
+<li><p>Emulate a machine code decoder for a bit pattern and show decoded result</p></li>
+<li><p>Check instructions if there are inconsistent instructions such as:</p>
+<ul>
+<li><p>Some bit patterns do not have matching instructions</p></li>
+<li><p>Multiple instructions are defined for a certain bit pattern</p></li>
+</ul>
+</li>
+<li><p>etc.</p></li>
+</ul>
 <div class="section" id="for-users">
 <h2>For users<a class="headerlink" href="#for-users" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="requirements">
@@ -192,7 +207,7 @@ python3.8 -m mcdecoder generate --output &lt;output-directory&gt; &lt;path-to-mc
 <span class="c1"># ex. mcdecoder generate --output out test/arm.yaml</span>
 </pre></div>
 </div>
-<p>MC decoder files are generated as:</p>
+<p>MC decoder files will be generated as:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;output-directory&gt;/</span></code></p>
 <ul>
@@ -271,7 +286,7 @@ make -C ctest clean <span class="nb">test</span>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="specifications.html" class="btn btn-neutral float-right" title="Specifications" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quickstart tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral float-left" title="mcdecoder documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

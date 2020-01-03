@@ -6,10 +6,10 @@ mcdecoder documentation
     :caption: Contents:
 
     README <README>
+    quickstart
     user_templates
     specifications
 
-.. tutorial
 
 Indices
 ------------------

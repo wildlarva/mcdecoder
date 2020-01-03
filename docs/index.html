@@ -33,9 +33,10 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Machine Code Decoder Generator(mcdecoder)" href="README.html" /> 
+    <link rel="next" title="README: mcdecoder" href="README.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -82,6 +83,7 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_templates.html">User templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
 </ul>
@@ -158,15 +160,24 @@
 <li class="toctree-l2"><a class="reference internal" href="README.html#for-developers">For developers</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#introduce-an-example-instruction-encoding-to-be-decoded">1. Introduce an example instruction encoding to be decoded</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#write-an-mc-description-to-express-the-encoding">2. Write an MC description to express the encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#check-if-the-mc-description-is-working">3. Check if the MC description is working</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#generate-a-decoder-from-the-mc-description">4. Generate a decoder from the MC description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#run-the-decoder-from-c-client-code">5. Run the decoder from C client code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#what-s-next">What’s next?</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="user_templates.html">User templates</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="user_templates.html#tutorial">Tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_templates.html#template-variables">Template variables</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="commandline_options.html">Command line options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mc_description.html">MC description specification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="decoder_model_reference.html">MC decoder model reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_commandline_options.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_mc_desc.html">MC description specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_template_var.html">Template variable specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_mcdecoder_model.html">MC decoder model specification</a></li>
 </ul>
 </li>
 </ul>
@@ -187,7 +198,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="README.html" class="btn btn-neutral float-right" title="Machine Code Decoder Generator(mcdecoder)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="README.html" class="btn btn-neutral float-right" title="README: mcdecoder" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>

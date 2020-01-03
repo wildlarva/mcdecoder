@@ -1,0 +1,597 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quickstart tutorial &mdash; mcdecoder  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User templates" href="user_templates.html" />
+    <link rel="prev" title="README: mcdecoder" href="README.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> mcdecoder
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduce-an-example-instruction-encoding-to-be-decoded">1. Introduce an example instruction encoding to be decoded</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#write-an-mc-description-to-express-the-encoding">2. Write an MC description to express the encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#check-if-the-mc-description-is-working">3. Check if the MC description is working</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-a-decoder-from-the-mc-description">4. Generate a decoder from the MC description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-the-decoder-from-c-client-code">5. Run the decoder from C client code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-s-next">What’s next?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user_templates.html">User templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mcdecoder</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Quickstart tutorial</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quickstart-tutorial">
+<h1>Quickstart tutorial<a class="headerlink" href="#quickstart-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>You can generate a machine code decoder with mcdecoder
+by defining specifications of machine code.
+In this tutorial, you’ll see how to define machine code specifications
+and generate a decoder from the specification.</p>
+<p>The guide steps of the tutorial are:</p>
+<ol class="arabic simple">
+<li><p>Introduce an example instruction encoding to be decoded</p></li>
+<li><p>Write an MC description to express the encoding</p></li>
+<li><p>Check if the MC description is working</p></li>
+<li><p>Generate a decoder from the MC description</p></li>
+<li><p>Run the decoder from C client code</p></li>
+</ol>
+<div class="section" id="introduce-an-example-instruction-encoding-to-be-decoded">
+<h2>1. Introduce an example instruction encoding to be decoded<a class="headerlink" href="#introduce-an-example-instruction-encoding-to-be-decoded" title="Permalink to this headline">¶</a></h2>
+<p>In this tutorial, We use the ARM instructions below as an example.</p>
+<ul class="simple">
+<li><p>ADD (immediate, ARM) Encoding A1</p></li>
+<li><p>PUSH Encoding A1</p></li>
+</ul>
+<p>We ignore instruction matching conditions using field values
+(e.g. Rn == 0b1111 and S == 0) here for simplicity.</p>
+<table class="colwidths-given instruction-encoding docutils align-default" id="id1">
+<caption><span class="caption-text">The instruction encoding of ADD (immediate, ARM) Encoding A1</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td colspan="2"><p>MSB</p></td>
+<td colspan="28"></td>
+<td colspan="2"><p>LSB</p></td>
+</tr>
+<tr class="row-even"><td><p>31</p></td>
+<td><p>30</p></td>
+<td><p>29</p></td>
+<td><p>28</p></td>
+<td><p>27</p></td>
+<td><p>26</p></td>
+<td><p>25</p></td>
+<td><p>24</p></td>
+<td><p>23</p></td>
+<td><p>22</p></td>
+<td><p>21</p></td>
+<td><p>20</p></td>
+<td><p>19</p></td>
+<td><p>18</p></td>
+<td><p>17</p></td>
+<td><p>16</p></td>
+<td><p>15</p></td>
+<td><p>14</p></td>
+<td><p>13</p></td>
+<td><p>12</p></td>
+<td><p>11</p></td>
+<td><p>10</p></td>
+<td><p>09</p></td>
+<td><p>08</p></td>
+<td><p>07</p></td>
+<td><p>06</p></td>
+<td><p>05</p></td>
+<td><p>04</p></td>
+<td><p>03</p></td>
+<td><p>02</p></td>
+<td><p>01</p></td>
+<td><p>00</p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>cond</p></td>
+<td colspan="2"><p>0  0</p></td>
+<td><p>1</p></td>
+<td colspan="4"><p>0  1  0  0</p></td>
+<td><p>S</p></td>
+<td colspan="4"><p>Rn</p></td>
+<td colspan="4"><p>Rn</p></td>
+<td colspan="12"><p>imm12</p></td>
+</tr>
+</tbody>
+</table>
+<table class="colwidths-given instruction-encoding docutils align-default" id="id2">
+<caption><span class="caption-text">The instruction encoding of PUSH Encoding A1</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+<col style="width: 3%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td colspan="2"><p>MSB</p></td>
+<td colspan="28"></td>
+<td colspan="2"><p>LSB</p></td>
+</tr>
+<tr class="row-even"><td><p>31</p></td>
+<td><p>30</p></td>
+<td><p>29</p></td>
+<td><p>28</p></td>
+<td><p>27</p></td>
+<td><p>26</p></td>
+<td><p>25</p></td>
+<td><p>24</p></td>
+<td><p>23</p></td>
+<td><p>22</p></td>
+<td><p>21</p></td>
+<td><p>20</p></td>
+<td><p>19</p></td>
+<td><p>18</p></td>
+<td><p>17</p></td>
+<td><p>16</p></td>
+<td><p>15</p></td>
+<td><p>14</p></td>
+<td><p>13</p></td>
+<td><p>12</p></td>
+<td><p>11</p></td>
+<td><p>10</p></td>
+<td><p>09</p></td>
+<td><p>08</p></td>
+<td><p>07</p></td>
+<td><p>06</p></td>
+<td><p>05</p></td>
+<td><p>04</p></td>
+<td><p>03</p></td>
+<td><p>02</p></td>
+<td><p>01</p></td>
+<td><p>00</p></td>
+</tr>
+<tr class="row-odd"><td colspan="4"><p>cond</p></td>
+<td colspan="6"><p>1  0  0  1  0  0</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td colspan="4"><p>1  1  0  1</p></td>
+<td colspan="16"><p>register_list</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="write-an-mc-description-to-express-the-encoding">
+<h2>2. Write an MC description to express the encoding<a class="headerlink" href="#write-an-mc-description-to-express-the-encoding" title="Permalink to this headline">¶</a></h2>
+<p>Write machine code specifications as a file.
+In mcdecoder, we call it a machine code description file or
+an MC description file.
+It’s defined as a YAML format.</p>
+<p>You must add a sequence element of <code class="code docutils literal notranslate"><span class="pre">instructions</span></code>
+for each instruction.
+Name each instruction and define an instruction encoding in <code class="code docutils literal notranslate"><span class="pre">format</span></code>
+according to the encoding introduced before.
+See <a class="reference internal" href="spec_mc_desc.html"><span class="doc">MC description specification</span></a> to understand the grammar of MC description.</p>
+<p>Make <code class="code docutils literal notranslate"><span class="pre">arm.yaml</span></code> with the following content.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">arm.yaml</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+<span class="nt">instructions</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_immediate_a1</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">push_a1</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="check-if-the-mc-description-is-working">
+<h2>3. Check if the MC description is working<a class="headerlink" href="#check-if-the-mc-description-is-working" title="Permalink to this headline">¶</a></h2>
+<p>Now you have a minimum MC description.
+Let’s check if it is working.
+For this, you can use <code class="code docutils literal notranslate"><span class="pre">mcdecoder</span> <span class="pre">emulate</span></code> command
+to emulate a decoder behavior.</p>
+<p>Input the machine code <code class="code docutils literal notranslate"><span class="pre">e28db004</span></code> for example.
+It means <code class="code docutils literal notranslate"><span class="pre">add</span> <span class="pre">FP,</span> <span class="pre">SP,</span> <span class="pre">#4</span></code> in ARM assembly language
+and the fields in its encoding format should be:</p>
+<ul class="simple">
+<li><p>Rn = 13 (which is R13 or SP)</p></li>
+<li><p>Rd = 11 (which is R11 or FP)</p></li>
+<li><p>imm12 = 4</p></li>
+</ul>
+<p>Run the command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder emulate arm.yaml --pattern e28db004
+</pre></div>
+</div>
+<p>Its output will be…</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>instruction: add_immediate_a1
+
+cond: <span class="m">14</span>, 0xe, 0b1110
+S: <span class="m">0</span>, 0x0, 0b0
+Rn: <span class="m">13</span>, 0xd, 0b1101
+Rd: <span class="m">11</span>, 0xb, 0b1011
+imm12: <span class="m">4</span>, 0x4, 0b100
+</pre></div>
+</div>
+<p>Fine. It looks working.</p>
+<p>See <a class="reference internal" href="spec_commandline_options.html"><span class="doc">Command line options</span></a> for more information
+about <code class="code docutils literal notranslate"><span class="pre">emulate</span></code> sub-command if you’d like.</p>
+</div>
+<div class="section" id="generate-a-decoder-from-the-mc-description">
+<h2>4. Generate a decoder from the MC description<a class="headerlink" href="#generate-a-decoder-from-the-mc-description" title="Permalink to this headline">¶</a></h2>
+<p>Run <code class="code docutils literal notranslate"><span class="pre">mcdecoder</span> <span class="pre">generate</span></code> command to generate a decoder
+from the MC description.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder generate --output out arm.yaml
+</pre></div>
+</div>
+<p>You’ll get generated files below:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>out
+├── mcdecoder.c
+└── mcdecoder.h
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="spec_commandline_options.html"><span class="doc">Command line options</span></a> for more details
+about <code class="code docutils literal notranslate"><span class="pre">generate</span></code> sub-command if you’d like.</p>
+</div>
+<div class="section" id="run-the-decoder-from-c-client-code">
+<h2>5. Run the decoder from C client code<a class="headerlink" href="#run-the-decoder-from-c-client-code" title="Permalink to this headline">¶</a></h2>
+<p>Create a C client code to test the function of the generated decoder.
+Use a decoder API <code class="code docutils literal notranslate"><span class="pre">op_parse</span></code> in the client and define the stubs of
+instruction execution callback <code class="code docutils literal notranslate"><span class="pre">op_exec_&lt;instruction&gt;</span></code>.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* Decoder API */</span>
+<span class="kt">int</span> <span class="nf">op_parse</span><span class="p">(</span><span class="n">uint16</span> <span class="n">code</span><span class="p">[</span><span class="n">OP_DECODE_MAX</span><span class="p">],</span> <span class="n">OpDecodedCodeType</span> <span class="o">*</span><span class="n">decoded_code</span><span class="p">,</span> <span class="n">OperationCodeType</span> <span class="o">*</span><span class="n">optype</span><span class="p">);</span>
+
+<span class="cm">/* Instruction execution callback */</span>
+<span class="kt">int</span> <span class="nf">op_exec_add_immediate_a1</span><span class="p">(</span><span class="k">struct</span> <span class="n">TargetCore</span> <span class="o">*</span><span class="n">core</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In the client code, input the machine code <code class="code docutils literal notranslate"><span class="pre">e28db004</span></code>
+as you did with <code class="code docutils literal notranslate"><span class="pre">mcdecoder</span> <span class="pre">emulate</span></code> and check if the result is the same.</p>
+<p>Make the following C client code.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">client.c</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;out/mcdecoder.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="cm">/* Machine codes to be decoded */</span>
+  <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">machine_codes</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x8D</span><span class="p">,</span> <span class="mh">0xE2</span><span class="p">,</span> <span class="cm">/* add     fp, sp, #4 */</span>
+  <span class="p">};</span>
+
+  <span class="cm">/* Arguments for the decode API */</span>
+  <span class="n">OpDecodedCodeType</span> <span class="n">decoded_code</span><span class="p">;</span>
+  <span class="n">OperationCodeType</span> <span class="n">optype</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">result</span><span class="p">;</span>
+
+  <span class="cm">/* Decode */</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="n">op_parse</span><span class="p">((</span><span class="n">uint16</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">machine_codes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">decoded_code</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">optype</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Decode failed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span>
+  <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Decode succeeded.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">optype</span><span class="p">.</span><span class="n">code_id</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="k">case</span> <span class="nl">OpCodeId_add_immediate_a1</span><span class="p">:</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Instruction: add_immediate_a1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Rn = %d, Rd = %d, imm12 = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">decoded_code</span><span class="p">.</span><span class="n">code</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">Rn</span><span class="p">,</span> <span class="n">decoded_code</span><span class="p">.</span><span class="n">code</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">Rd</span><span class="p">,</span> <span class="n">decoded_code</span><span class="p">.</span><span class="n">code</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">imm12</span><span class="p">);</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="nl">OpCodeId_push_a1</span><span class="p">:</span>
+      <span class="cm">/* nop */</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">default</span><span class="o">:</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Stubs for instruction execution callbacks */</span>
+<span class="kt">int</span> <span class="nf">op_exec_add_immediate_a1</span><span class="p">(</span><span class="k">struct</span> <span class="n">TargetCore</span> <span class="o">*</span><span class="n">cpu</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">op_exec_push_a1</span><span class="p">(</span><span class="k">struct</span> <span class="n">TargetCore</span> <span class="o">*</span><span class="n">cpu</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>Now compile and execute the client code to get the decoding result.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcc client.c out/mcdecoder.c
+./a.out
+</pre></div>
+</div>
+<p>The result will be:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Decode succeeded.
+Instruction: add_immediate_a1
+<span class="nv">Rn</span> <span class="o">=</span> <span class="m">13</span>, <span class="nv">Rd</span> <span class="o">=</span> <span class="m">11</span>, <span class="nv">imm12</span> <span class="o">=</span> <span class="m">4</span>
+</pre></div>
+</div>
+<p>Good! It coincides with the result of <code class="code docutils literal notranslate"><span class="pre">mcdecoder</span> <span class="pre">emulate</span></code> and
+the tutorial is over.</p>
+<p>You can see <a class="reference download external" download="" href="https://github.com/wildlarva/mcdecoder/blob/master/examples/quickstart"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">files</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">tutorial</span> <span class="pre">in</span> <span class="pre">github</span></code></a>.</p>
+</div>
+<div class="section" id="what-s-next">
+<h2>What’s next?<a class="headerlink" href="#what-s-next" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="spec_mc_desc.html"><span class="doc">More details about MC description</span></a></p></li>
+<li><p><a class="reference internal" href="spec_commandline_options.html"><span class="doc">More details about mcdecoder emulate and generate</span></a></p></li>
+<li><p><a class="reference internal" href="spec_commandline_options.html"><span class="doc">Other useful mcdecoder commands</span></a></p>
+<ul>
+<li><p><code class="code docutils literal notranslate"><span class="pre">mcdecoder</span> <span class="pre">check</span></code>: Check the integrity of your MC description</p>
+<ul>
+<li><p>You can check your MC description if</p>
+<ul>
+<li><p>there are no instructions for a certain bit pattern or</p></li>
+<li><p>there are multiple instructions for a certain bit pattern.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">mcdecoder</span> <span class="pre">export</span></code>: Export the MC description as CSV format</p>
+<ul>
+<li><p>You can see all instructions at a glance in CSV view and
+filter instructions with spreadsheet apps
+like Google Spreadsheet or Excel.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="user_templates.html"><span class="doc">User templates: Create your own template</span></a></p>
+<ul>
+<li><p>if you need your custom decoder or you need additional codes
+to support your decoder, you can create your own templates.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="user_templates.html" class="btn btn-neutral float-right" title="User templates" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="README.html" class="btn btn-neutral float-left" title="README: mcdecoder" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, wildlarva
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

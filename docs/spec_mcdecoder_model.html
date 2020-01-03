@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>MC decoder model reference &mdash; mcdecoder  documentation</title>
+  <title>MC decoder model specification &mdash; mcdecoder  documentation</title>
   
 
   
@@ -33,9 +33,10 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="MC description specification" href="mc_description.html" /> 
+    <link rel="prev" title="Template variable specification" href="spec_template_var.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -82,10 +83,13 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_templates.html">User templates</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="specifications.html">Specifications</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="commandline_options.html">Command line options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mc_description.html">MC description specification</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">MC decoder model reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_commandline_options.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_mc_desc.html">MC description specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_template_var.html">Template variable specification</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MC decoder model specification</a></li>
 </ul>
 </li>
 </ul>
@@ -135,13 +139,13 @@
         
           <li><a href="specifications.html">Specifications</a> &raquo;</li>
         
-      <li>MC decoder model reference</li>
+      <li>MC decoder model specification</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/decoder_model_reference.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/spec_mcdecoder_model.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -154,8 +158,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="mc-decoder-model-reference">
-<h1>MC decoder model reference<a class="headerlink" href="#mc-decoder-model-reference" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="mc-decoder-model-specification">
+<h1>MC decoder model specification<a class="headerlink" href="#mc-decoder-model-specification" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="mcdecoder.core.McDecoder">
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McDecoder</code><span class="sig-paren">(</span><em class="sig-param">namespace_prefix: str, machine_decoder: mcdecoder.core.MachineDecoder, instruction_decoders: List[mcdecoder.core.InstructionDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.McDecoder" title="Permalink to this definition">¶</a></dt>
@@ -471,7 +475,7 @@ Each subclass must have a string attribute ‘type’ to express the type of a s
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="mc_description.html" class="btn btn-neutral float-left" title="MC description specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="spec_template_var.html" class="btn btn-neutral float-left" title="Template variable specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
