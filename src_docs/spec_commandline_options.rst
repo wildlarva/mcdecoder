@@ -1,5 +1,5 @@
-Command line options
-====================
+Command line options specification
+==================================
 
 .. highlight:: bash
 
