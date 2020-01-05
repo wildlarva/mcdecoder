@@ -37,7 +37,8 @@ def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None, byteorde
 
 # Internal functions
 
-def _emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16], byteorder: Literal['big', 'little']) -> List[core.InstructionDecodeResult]:
+def _emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16],
+             byteorder: Literal['big', 'little']) -> List[core.InstructionDecodeResult]:
     # Create MC decoder model
     mcdecoder = core.create_mcdecoder_model(mcfile)
 

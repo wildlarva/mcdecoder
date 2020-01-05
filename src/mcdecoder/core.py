@@ -114,7 +114,10 @@ class OrInstructionDecodeCondition(InstructionDecodeCondition):
 
 @dataclass
 class EqualityInstructionDecodeCondition(InstructionDecodeCondition):
-    """An equality condition subclass for InstructionDecodeCondition to test a field value's equality with a value. Supported operators are ==, !=, >, >=, < and <=."""
+    """
+    An equality condition subclass for InstructionDecodeCondition to test a field value's equality with a value.
+    Supported operators are ==, !=, >, >=, < and <=.
+    """
     field: str
     """Name of a field to be tested"""
     operator: str
@@ -138,7 +141,10 @@ class InInstructionDecodeCondition(InstructionDecodeCondition):
 
 @dataclass
 class InRangeInstructionDecodeCondition(InstructionDecodeCondition):
-    """An in-range condition subclass for InstructionDecodeCondition to test an instruction field is in a value range(inclusive)"""
+    """
+    An in-range condition subclass for InstructionDecodeCondition
+    to test an instruction field is in a value range(inclusive)
+    """
     field: str
     """Name of a field to be tested"""
     value_start: int
@@ -328,7 +334,8 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
     Find all the matched instructions to vectorized codes and return matched instructin matrix.
 
     :param context: context information of matching instructions
-    :return: N x M matrix of codes(N) and instructions(M). Each element holds the boolean result whether a code is matched for an instruction.
+    :return: N x M matrix of codes(N) and instructions(M).
+            Each element holds the boolean result whether a code is matched for an instruction.
     """
     # Vectorize the attributes of instruction decoders
     instruction_fields_mat = np.array([(instruction.type_bit_size, instruction.fixed_bits_mask,
@@ -355,7 +362,8 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
 
         elif instruction_decoder.unmatch_condition is not None:
             test_vec = np.logical_not(  # type: ignore # TODO pyright can't recognize numpy.logical_not
-                _test_instruction_condition_vectorized(code_mat[:, i], instruction_decoder.unmatch_condition, instruction_decoder))
+                _test_instruction_condition_vectorized(code_mat[:, i], instruction_decoder.unmatch_condition,
+                                                       instruction_decoder))
             test_mat[:, i] = np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
                 test_mat[:, i], test_vec)
 
@@ -390,7 +398,8 @@ class _InstructionFormatTransformer(lark.Transformer):
     def instruction_format(self, field_formats: List[InstructionFieldFormat]) -> InstructionFormat:
         return InstructionFormat(field_formats=field_formats)
 
-    def field_format(self, field_bits: str, field_name: str = None, field_bit_ranges: List[BitRange] = None) -> InstructionFieldFormat:
+    def field_format(self, field_bits: str, field_name: str = None,
+                     field_bit_ranges: List[BitRange] = None) -> InstructionFieldFormat:
         if field_bit_ranges is None:
             field_bit_ranges = [BitRange(start=len(field_bits) - 1, end=0)]
 
@@ -562,8 +571,8 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
     # Create field decoders
     field_names = set(map(lambda field: cast(str, field.name), filter(
         lambda field: field.name is not None, instruction_format.field_formats)))
-    field_extras_dict: Dict[str,
-                            Any] = cast(Dict[str, Any], instruction_desc_model['field_extras']) if 'field_extras' in instruction_desc_model else {}
+    field_extras_dict: Dict[str, Any] = cast(Dict[str, Any], instruction_desc_model['field_extras']) \
+        if 'field_extras' in instruction_desc_model else {}
     field_decoders = []
 
     for field_name in field_names:
@@ -621,7 +630,8 @@ def _build_fixed_bits_info(instruction_format: InstructionFormat) -> Tuple[int, 
     return fixed_bits_mask, fixed_bits
 
 
-def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruction_format: InstructionFormat, ff_index_to_start_bit: Dict[int, int]) -> InstructionFieldDecoder:
+def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruction_format: InstructionFormat,
+                          ff_index_to_start_bit: Dict[int, int]) -> InstructionFieldDecoder:
     """Create a model which contains information of a instruction field decoder"""
     # Find related field formats
     field_formats = filter(lambda field: field.name ==
@@ -655,7 +665,8 @@ def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruct
 
             # Create subfield decoder
             sf_decoder = InstructionSubfieldDecoder(
-                index=sf_index, mask=sf_mask, start_bit_in_instruction=sf_start_bit_in_instruction, end_bit_in_instruction=sf_end_bit_in_instruction, end_bit_in_field=bit_range.end)
+                index=sf_index, mask=sf_mask, start_bit_in_instruction=sf_start_bit_in_instruction,
+                end_bit_in_instruction=sf_end_bit_in_instruction, end_bit_in_field=bit_range.end)
             sf_decoders.append(sf_decoder)
 
             # Update the field start bit position
@@ -702,9 +713,11 @@ def _create_instruction_decode_condition(condition: InstructionCondition) -> Ins
         if condition.operator == 'in':
             return InInstructionDecodeCondition(field=condition.field, values=condition.values)
         elif condition.operator == 'in_range':
-            return InRangeInstructionDecodeCondition(field=condition.field, value_start=condition.values[0], value_end=condition.values[1])
+            return InRangeInstructionDecodeCondition(field=condition.field, value_start=condition.values[0],
+                                                     value_end=condition.values[1])
         else:
-            return EqualityInstructionDecodeCondition(field=condition.field, operator=condition.operator, value=condition.values[0])
+            return EqualityInstructionDecodeCondition(field=condition.field, operator=condition.operator,
+                                                      value=condition.values[0])
 
     else:
         raise RuntimeError(f'Unknown condition type: {condition}')
@@ -736,7 +749,9 @@ def _get_appropriate_code(context: DecodeContext, instruction_decoder: Instructi
         return context.code32
 
 
-def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: InstructionDecodeCondition, instruction_decoder: InstructionDecoder) -> np.ndarray:
+def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: InstructionDecodeCondition,  # noqa: C901
+                                           instruction_decoder: InstructionDecoder) -> np.ndarray:
+    # NOTE Do not refactor and split into multiple functions for performance
     if isinstance(condition, AndInstructionDecodeCondition):
         total_test_vec = np.full((code_vec.shape[0]), True)
         for child_condition in condition.conditions:

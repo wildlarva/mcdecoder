@@ -59,7 +59,8 @@ class _Arguments:
 def _create_parser() -> argparse.ArgumentParser:
     # Create an argument parser
     parser = argparse.ArgumentParser(
-        prog='mcdecoder', add_help=True, formatter_class=argparse.RawTextHelpFormatter, description='A toolset for a machine code decoder')
+        prog='mcdecoder', add_help=True, formatter_class=argparse.RawTextHelpFormatter,
+        description='A toolset for a machine code decoder')
     subparsers = parser.add_subparsers(
         dest='command', metavar='command', required=True)
 
@@ -73,11 +74,12 @@ def _create_parser() -> argparse.ArgumentParser:
               
               # Generate codes according to user-defined template files in 'user_templates' directory
               mcdecoder generate --template user_templates --output out mc.yaml
-            '''))
+            '''))  # noqa: W293
     generate_parser.add_argument(
         '--output', metavar='outdir', dest='output_directory', default='.', help='A path to an output directory (default: .)')
     generate_parser.add_argument(
-        '--template', metavar='templatedir', dest='template_directory', help='A path to a directoy including user-defined template files')
+        '--template', metavar='templatedir', dest='template_directory',
+        help='A path to a directoy including user-defined template files')
     generate_parser.add_argument(
         'mcfile', help='A path to a machine code description file')
 
@@ -88,7 +90,7 @@ def _create_parser() -> argparse.ArgumentParser:
               
               # Export a MC description as CSV format
               mcdecoder export --output mc.csv mc.yaml
-            '''))
+            '''))  # noqa: W293
     export_parser.add_argument(
         '--output', metavar='outfile', dest='output_file', required=True, help='A path to an output file')
     export_parser.add_argument(
@@ -107,9 +109,10 @@ def _create_parser() -> argparse.ArgumentParser:
               
               # Emulate a decoder when inputting e92d4800 as little endian
               mcdecoder emulate --byteorder little --pattern 00482de9 mc.yaml
-            '''))
+            '''))  # noqa: W293
     emulate_parser.add_argument(
-        '--pattern', metavar='pattern', dest='bit_pattern', required=True, help=textwrap.dedent('A binary/hex string as input binary data for a decoder'))
+        '--pattern', metavar='pattern', dest='bit_pattern', required=True,
+        help=textwrap.dedent('A binary/hex string as input binary data for a decoder'))
     emulate_parser.add_argument(
         '--base', choices=[2, 16], default=16, type=int, help='The base of a binary/hex string (default: 16)')
     emulate_parser.add_argument(
@@ -137,7 +140,7 @@ def _create_parser() -> argparse.ArgumentParser:
               
               # Check by inputting the range from 002d4800 to ff2d4800 to a decoder
               mcdecoder check --pattern xx2d4800 mc.yaml
-            '''))
+            '''))  # noqa: E501, W293
     emulate_parser.add_argument(
         '--pattern', metavar='pattern', dest='bit_pattern', required=True, help=textwrap.dedent('''\
             A binary/hex string as input binary data for a decoder.

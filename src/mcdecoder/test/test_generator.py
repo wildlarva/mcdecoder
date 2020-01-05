@@ -48,10 +48,17 @@ def test__generate() -> None:
                 fixed_bits=0x02800000,
                 type_bit_size=32,
                 field_decoders=[
-                    InstructionFieldDecoder(name='cond', start_bit=31, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(
-                        index=0, mask=0xf0000000, start_bit_in_instruction=31, end_bit_in_instruction=28, end_bit_in_field=0)], extras=None),
-                    InstructionFieldDecoder(name='S', start_bit=20, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(
-                        index=0, mask=0x00100000, start_bit_in_instruction=20, end_bit_in_instruction=20, end_bit_in_field=0)], extras=None),
+                    InstructionFieldDecoder(
+                        name='cond', start_bit=31, type_bit_size=8,
+                        subfield_decoders=[
+                            InstructionSubfieldDecoder(index=0, mask=0xf0000000, start_bit_in_instruction=31,
+                                                       end_bit_in_instruction=28, end_bit_in_field=0)
+                        ], extras=None),
+                    InstructionFieldDecoder(
+                        name='S', start_bit=20, type_bit_size=8, subfield_decoders=[
+                            InstructionSubfieldDecoder(index=0, mask=0x00100000, start_bit_in_instruction=20,
+                                                       end_bit_in_instruction=20, end_bit_in_field=0)
+                        ], extras=None),
                 ],
                 match_condition=EqualityInstructionDecodeCondition(
                     field='cond', operator='!=', value=0xf),
@@ -64,13 +71,21 @@ def test__generate() -> None:
                 fixed_bits=0x02800000,
                 type_bit_size=32,
                 field_decoders=[
-                    InstructionFieldDecoder(name='cond', start_bit=31, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(
-                        index=0, mask=0xf0000000, start_bit_in_instruction=31, end_bit_in_instruction=28, end_bit_in_field=0)], extras=None),
-                    InstructionFieldDecoder(name='register_list', start_bit=15, type_bit_size=16, subfield_decoders=[InstructionSubfieldDecoder(
-                        index=0, mask=0x0000ffff, start_bit_in_instruction=15, end_bit_in_instruction=0, end_bit_in_field=0)], extras=None),
+                    InstructionFieldDecoder(name='cond', start_bit=31, type_bit_size=8, subfield_decoders=[
+                        InstructionSubfieldDecoder(index=0, mask=0xf0000000, start_bit_in_instruction=31,
+                                                   end_bit_in_instruction=28, end_bit_in_field=0)
+                    ], extras=None),
+                    InstructionFieldDecoder(name='register_list', start_bit=15, type_bit_size=16, subfield_decoders=[
+                        InstructionSubfieldDecoder(index=0, mask=0x0000ffff, start_bit_in_instruction=15,
+                                                   end_bit_in_instruction=0, end_bit_in_field=0)
+                    ], extras=None),
                 ],
-                match_condition=AndInstructionDecodeCondition(conditions=cast(List[InstructionDecodeCondition], [EqualityInstructionDecodeCondition(
-                    field='register_list', operator='>', value=0x1), InRangeInstructionDecodeCondition(field='cond', value_start=2, value_end=4)])),
+                match_condition=AndInstructionDecodeCondition(conditions=cast(List[InstructionDecodeCondition], [
+                    EqualityInstructionDecodeCondition(
+                        field='register_list', operator='>', value=0x1),
+                    InRangeInstructionDecodeCondition(
+                        field='cond', value_start=2, value_end=4)
+                ])),
                 unmatch_condition=None,
                 extras=None,
             ),
@@ -80,10 +95,14 @@ def test__generate() -> None:
                 fixed_bits=0x02800000,
                 type_bit_size=32,
                 field_decoders=[
-                    InstructionFieldDecoder(name='cond', start_bit=31, type_bit_size=8, subfield_decoders=[InstructionSubfieldDecoder(
-                        index=0, mask=0xf0000000, start_bit_in_instruction=31, end_bit_in_instruction=28, end_bit_in_field=0)], extras=None),
-                    InstructionFieldDecoder(name='register_list', start_bit=15, type_bit_size=16, subfield_decoders=[InstructionSubfieldDecoder(
-                        index=0, mask=0x0000ffff, start_bit_in_instruction=15, end_bit_in_instruction=0, end_bit_in_field=0)], extras=None),
+                    InstructionFieldDecoder(name='cond', start_bit=31, type_bit_size=8, subfield_decoders=[
+                        InstructionSubfieldDecoder(index=0, mask=0xf0000000, start_bit_in_instruction=31,
+                                                   end_bit_in_instruction=28, end_bit_in_field=0)
+                    ], extras=None),
+                    InstructionFieldDecoder(name='register_list', start_bit=15, type_bit_size=16, subfield_decoders=[
+                        InstructionSubfieldDecoder(index=0, mask=0x0000ffff, start_bit_in_instruction=15,
+                                                   end_bit_in_instruction=0, end_bit_in_field=0)
+                    ], extras=None),
                 ],
                 match_condition=None,
                 unmatch_condition=None,

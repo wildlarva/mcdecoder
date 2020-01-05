@@ -2,7 +2,7 @@ from dataclasses import dataclass
 import itertools
 import re
 import textwrap
-from typing import Callable, FrozenSet, List, Literal, Optional, Set, Tuple
+from typing import Callable, FrozenSet, List, Literal, Optional, Set
 
 import numpy as np
 
@@ -91,7 +91,10 @@ class _CheckContext:
     duplicate_count: int = 0
     """Detected count of duplicate instructions"""
     ongoing_undefined_range_vec: Optional[np.ndarray] = None
-    """Ongoing detection range of an undefined instruction. This is 4-vector of step start, bits start, step end and bits end"""
+    """
+    Ongoing detection range of an undefined instruction.
+    This is 4-vector of step start, bits start, step end and bits end
+    """
     ongoing_duplicate_range_vec: Optional[np.ndarray] = None
     """Ongoing detection range of a duplicate instruction. This is 4-vector of step start, bits start, step end and bits end"""
 
@@ -156,7 +159,8 @@ def _check(mcfile: str, bit_pattern: str, base: Literal[2, 16], callback: Callab
     return _check_instructions_vectorized(mcdecoder, parsed_bit_pattern, callback)
 
 
-def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitPattern, callback: Callable[[List[_Error]], None]) -> _CheckResult:
+def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitPattern,
+                                   callback: Callable[[List[_Error]], None]) -> _CheckResult:
     """
     Check instructions if they have any errors.
     Errors are reported through callback while checking.
@@ -227,7 +231,8 @@ def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitP
     # Create result
     no_error_count = total_count - context.undefined_count - context.duplicate_count
 
-    return _CheckResult(no_error_count=no_error_count, undefined_error_count=context.undefined_count, duplicate_error_count=context.duplicate_count, duplicate_instruction_pairs=duplicate_instruction_pairs)
+    return _CheckResult(no_error_count=no_error_count, undefined_error_count=context.undefined_count,
+                        duplicate_error_count=context.duplicate_count, duplicate_instruction_pairs=duplicate_instruction_pairs)
 
 
 def _create_bit_pattern(bit_pattern: str, base: Literal[2, 16]) -> _BitPattern:
@@ -266,7 +271,8 @@ def _create_bit_pattern(bit_pattern: str, base: Literal[2, 16]) -> _BitPattern:
     return _BitPattern(fixed_bits=fixed_bits, variable_bit_size=variable_bit_size, variable_bit_ranges=variable_bit_ranges)
 
 
-def _detect_undefined_errors(context: _CheckContext, header_mat: np.ndarray, matched_instruction_count_vec: np.ndarray, step_end: int) -> List[_Error]:
+def _detect_undefined_errors(context: _CheckContext, header_mat: np.ndarray, matched_instruction_count_vec: np.ndarray,
+                             step_end: int) -> List[_Error]:
     errors = []
 
     undefined_header_mat = header_mat[matched_instruction_count_vec == 0]
@@ -316,7 +322,8 @@ def _detect_undefined_errors(context: _CheckContext, header_mat: np.ndarray, mat
     return errors
 
 
-def _detect_duplicate_errors(context: _CheckContext, header_mat: np.ndarray, test_mat: np.ndarray, matched_instruction_count_vec: np.ndarray, step_end: int) -> List[_Error]:
+def _detect_duplicate_errors(context: _CheckContext, header_mat: np.ndarray, test_mat: np.ndarray,
+                             matched_instruction_count_vec: np.ndarray, step_end: int) -> List[_Error]:
     errors = []
 
     duplicate_header_mat = header_mat[matched_instruction_count_vec >= 2]
