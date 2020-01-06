@@ -152,7 +152,7 @@ instruction execution callback :code:`op_exec_<instruction>`.
     int op_parse(uint16 code[OP_DECODE_MAX], OpDecodedCodeType *decoded_code, OperationCodeType *optype);
 
     /* Instruction execution callback */
-    int op_exec_add_immediate_a1(struct TargetCore *core);
+    int op_exec_<instruction>(struct TargetCore *core);
 
 In the client code, input the machine code :code:`e28db004`
 as you did with :code:`mcdecoder emulate` and check if the result is the same.
