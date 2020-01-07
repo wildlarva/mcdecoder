@@ -84,26 +84,18 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">README</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#for-users">For users</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#how-to-use">How to use</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#more-details-about-usage">More details about usage</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#for-developers">For developers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#requirements-for-development">Requirements for development</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#how-to-setup-environment-for-development">How to setup environment for development</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#how-to-run-tests-for-mcdecoder">How to run tests for mcdecoder</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#how-to-run-tests-for-generated-decoders">How to run tests for generated decoders</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#more-details-about-development">More details about development</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#who-is-mcdecoder-for">Who is mcdecoder for</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#more-details-about-usage">More details about usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#for-developers-of-mcdecoder">For developers of mcdecoder</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_templates.html">User templates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a></li>
 </ul>
 
             
@@ -170,111 +162,87 @@
             
   <div class="section" id="readme-mcdecoder">
 <h1>README: mcdecoder<a class="headerlink" href="#readme-mcdecoder" title="Permalink to this headline">¶</a></h1>
-<p>mcdecoder (Machine Code Decoder) is a set of tools to:</p>
+<p>mcdecoder (Machine Code Decoder) is a set of tools to implement a machine code decoder. It includes tools to:</p>
 <ul class="simple">
-<li><p>Generate machine code decoder codes for a user-defined machine code specification</p></li>
-<li><p>Emulate a machine code decoder for a bit pattern and show decoded result</p></li>
-<li><p>Check instructions if there are inconsistent instructions such as:</p>
-<ul>
-<li><p>Some bit patterns do not have matching instructions</p></li>
-<li><p>Multiple instructions are defined for a certain bit pattern</p></li>
-</ul>
-</li>
+<li><p>Generate a decoder for a user-defined machine code specification</p></li>
+<li><p>Emulate a decoder for a binary data and show decoded result</p></li>
+<li><p>Check the integrity of a machine code specification</p></li>
 <li><p>etc.</p></li>
 </ul>
-<div class="section" id="for-users">
-<h2>For users<a class="headerlink" href="#for-users" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Define your machine code specification</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># arm.yaml</span>
+<span class="nt">machine</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+<span class="nt">instructions</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_immediate_a1</span>
+    <span class="l l-Scalar l-Scalar-Plain">format</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
+</pre></div>
+</div>
+</li>
+<li><p>Generate a decoder</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder generate arm.yaml
+</pre></div>
+</div>
+</li>
+<li><p>Use the decoder from a client</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">OpDecodedCodeType</span> <span class="n">decoded_code</span><span class="p">;</span>
+<span class="n">OperationCodeType</span> <span class="n">optype</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">result</span><span class="p">;</span>
+
+<span class="n">uint8</span> <span class="n">machine_codes</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x8D</span><span class="p">,</span> <span class="mh">0xE2</span><span class="p">,</span> <span class="p">};</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">op_parse</span><span class="p">((</span><span class="n">uint16</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">machine_codes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">decoded_code</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">optype</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>For more details, follow Installation steps below and go on to <a class="reference external" href="https://wildlarva.github.io/mcdecoder/quickstart.html">Quickstart tutorial</a>.</p>
+</div>
+<div class="section" id="who-is-mcdecoder-for">
+<h2>Who is mcdecoder for<a class="headerlink" href="#who-is-mcdecoder-for" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Developers of a CPU emulator</p>
+<ul>
+<li><p>To implement the decoder part of an emulator</p></li>
+</ul>
+</li>
+<li><p>Developers of a static analyzer for machine codes</p>
+<ul>
+<li><p>To implement the decoder part of an analyzer</p></li>
+</ul>
+</li>
+<li><p>Learners of the basics about machine codes</p>
+<ul>
+<li><p>Hands-on approach to learn: write and test actual machine codes</p></li>
+</ul>
+</li>
+</ul>
+<p>Implementing and maintaining a decoder are tough and cumbersome. mcdecoder soothes these pains by generating a decoder.
+mcdecoder was originally developed for <a class="reference external" href="https://github.com/tmori/athrill/">athrill</a>, a CPU emulator.
+It will be independent from athrill and be a more general tool in the near future.</p>
+</div>
 <div class="section" id="requirements">
-<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Python 3.8 (with pip)</p></li>
 </ul>
 </div>
 <div class="section" id="installation">
-<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/wildlarva/mcdecoder.git
 <span class="nb">cd</span> mcdecoder
 python3.8 -m pip install .
 </pre></div>
 </div>
 </div>
-<div class="section" id="how-to-use">
-<h3>How to use<a class="headerlink" href="#how-to-use" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder generate --output &lt;output-directory&gt; &lt;path-to-mc-description-file&gt;
-<span class="c1"># or</span>
-python3.8 -m mcdecoder generate --output &lt;output-directory&gt; &lt;path-to-mc-description-file&gt;
-
-<span class="c1"># ex. mcdecoder generate --output out test/arm.yaml</span>
-</pre></div>
-</div>
-<p>MC decoder files will be generated as:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&lt;output-directory&gt;/</span></code></p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">mcdecoder.c</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mcdecoder.h</span></code></p></li>
-</ul>
-</li>
-</ul>
-</div>
 <div class="section" id="more-details-about-usage">
-<h3>More details about usage<a class="headerlink" href="#more-details-about-usage" title="Permalink to this headline">¶</a></h3>
-<p>See <a class="reference external" href="https://wildlarva.github.io/mcdecoder/">documentation</a>.</p>
+<h2>More details about usage<a class="headerlink" href="#more-details-about-usage" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="https://wildlarva.github.io/mcdecoder/">documents for mcdecoder users</a>.</p>
 </div>
-</div>
-<div class="section" id="for-developers">
-<h2>For developers<a class="headerlink" href="#for-developers" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="requirements-for-development">
-<h3>Requirements for development<a class="headerlink" href="#requirements-for-development" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><p>Python 3.8 (with pip and venv)</p></li>
-</ul>
-</div>
-<div class="section" id="how-to-setup-environment-for-development">
-<h3>How to setup environment for development<a class="headerlink" href="#how-to-setup-environment-for-development" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone mcdecoder</span>
-git clone https://github.com/wildlarva/mcdecoder.git
-
-<span class="c1"># Create virtual environment and switch to it</span>
-<span class="nb">cd</span> mcdecoder
-python3.8 -m venv env
-<span class="nb">source</span> env/bin/activate
-
-<span class="c1"># Install python tools and libraries</span>
-pip install -r requirements.txt
-
-<span class="c1"># Install mcdecoder</span>
-pip install -e .
-</pre></div>
-</div>
-<p>After the installation, changes to the cloned directory are immediately reflected to mcdecoder you installed.</p>
-</div>
-<div class="section" id="how-to-run-tests-for-mcdecoder">
-<h3>How to run tests for mcdecoder<a class="headerlink" href="#how-to-run-tests-for-mcdecoder" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Switch to virtual environment</span>
-<span class="nb">cd</span> &lt;path-to-cloned-directory&gt;
-<span class="nb">source</span> env/bin/activate
-
-<span class="c1"># Run tests</span>
-pytest
-</pre></div>
-</div>
-</div>
-<div class="section" id="how-to-run-tests-for-generated-decoders">
-<h3>How to run tests for generated decoders<a class="headerlink" href="#how-to-run-tests-for-generated-decoders" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Switch to virtual environment</span>
-<span class="nb">cd</span> &lt;path-to-cloned-directory&gt;
-<span class="nb">source</span> env/bin/activate
-
-<span class="c1"># Run tests</span>
-make -C ctest clean <span class="nb">test</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="more-details-about-development">
-<h3>More details about development<a class="headerlink" href="#more-details-about-development" title="Permalink to this headline">¶</a></h3>
-<p>See <a class="reference external" href="https://wildlarva.github.io/mcdecoder/">documentation</a>.</p>
-</div>
+<div class="section" id="for-developers-of-mcdecoder">
+<h2>For developers of mcdecoder<a class="headerlink" href="#for-developers-of-mcdecoder" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="https://wildlarva.github.io/mcdecoder/dev_docs.html">documents for mcdecoder developers</a>.</p>
 </div>
 </div>
 

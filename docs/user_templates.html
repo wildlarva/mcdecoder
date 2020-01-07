@@ -86,15 +86,16 @@
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart tutorial</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">User templates</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#add-user-defined-data-to-an-mc-description">1. Add user-defined data to an MC description</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#create-user-defined-template-files">2. Create user-defined template files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#generate-codes-with-the-created-template">3. Generate codes with the created template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-user-defined-data-to-an-mc-description">1. Add user-defined data to an MC description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-user-defined-template-files">2. Create user-defined template files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-codes-with-the-created-template">3. Generate codes with the created template</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-s-next">What’s next?</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a></li>
 </ul>
 
             
@@ -161,13 +162,11 @@
             
   <div class="section" id="user-templates">
 <h1>User templates<a class="headerlink" href="#user-templates" title="Permalink to this headline">¶</a></h1>
-<p>Sometimes, a user needs user-specific decoder codes or
+<p>Some users need user-specific decoder codes or
 some codes to support decoders like constant tables.
 mcdecoder allows users to define user-specific code templates
 to generate those codes.
 This is called user templates.</p>
-<div class="section" id="tutorial">
-<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h2>
 <p>To use user templates, follow the steps below:</p>
 <ol class="arabic simple">
 <li><p>Add user-defined data to an MC description</p></li>
@@ -175,7 +174,7 @@ This is called user templates.</p>
 <li><p>Generate codes with the created template</p></li>
 </ol>
 <div class="section" id="add-user-defined-data-to-an-mc-description">
-<h3>1. Add user-defined data to an MC description<a class="headerlink" href="#add-user-defined-data-to-an-mc-description" title="Permalink to this headline">¶</a></h3>
+<h2>1. Add user-defined data to an MC description<a class="headerlink" href="#add-user-defined-data-to-an-mc-description" title="Permalink to this headline">¶</a></h2>
 <p>First, you may need to add some user-specific data to your MC description file.
 If you don’t need any additional information than MC description specification,
 you can skip this step.
@@ -214,7 +213,7 @@ See <a class="reference internal" href="spec_mc_desc.html"><span class="doc">MC 
 </div>
 </div>
 <div class="section" id="create-user-defined-template-files">
-<h3>2. Create user-defined template files<a class="headerlink" href="#create-user-defined-template-files" title="Permalink to this headline">¶</a></h3>
+<h2>2. Create user-defined template files<a class="headerlink" href="#create-user-defined-template-files" title="Permalink to this headline">¶</a></h2>
 <p>Second, you must define user-defined templates.
 mcdecoder uses <a class="reference download external" download="" href="https://jinja.palletsprojects.com/"><code class="xref download docutils literal notranslate"><span class="pre">Jinja2</span></code></a> syntax for templates.
 See <a class="reference download external" download="" href="https://jinja.palletsprojects.com/templates/"><code class="xref download docutils literal notranslate"><span class="pre">Template</span> <span class="pre">Designer</span> <span class="pre">Documentation</span></code></a> to understand the template syntax.</p>
@@ -278,11 +277,11 @@ create the following template files.</p>
 </div>
 </div>
 <div class="section" id="generate-codes-with-the-created-template">
-<h3>3. Generate codes with the created template<a class="headerlink" href="#generate-codes-with-the-created-template" title="Permalink to this headline">¶</a></h3>
+<h2>3. Generate codes with the created template<a class="headerlink" href="#generate-codes-with-the-created-template" title="Permalink to this headline">¶</a></h2>
 <p>Finally, you must run a command to generate with the template.
 Use <code class="code docutils literal notranslate"><span class="pre">mcdecoder</span> <span class="pre">generate</span></code> command and
 <code class="code docutils literal notranslate"><span class="pre">--template</span></code> option to specify the template.
-See <a class="reference internal" href="spec_commandline_options.html"><span class="doc">Command line options</span></a> for more details.</p>
+See <a class="reference internal" href="spec_commandline_options.html"><span class="doc">Command line options specification</span></a> for more details.</p>
 <p>Run the command below:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder generate --template templates --output out arm.yaml
 </pre></div>
@@ -324,6 +323,15 @@ See <a class="reference internal" href="spec_commandline_options.html"><span cla
 </div>
 </div>
 <p>You can see <a class="reference download external" download="" href="https://github.com/wildlarva/mcdecoder/blob/master/examples/user_templates"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">files</span> <span class="pre">in</span> <span class="pre">this</span> <span class="pre">tutorial</span> <span class="pre">in</span> <span class="pre">github</span></code></a>.</p>
+<div class="section" id="what-s-next">
+<h3>What’s next?<a class="headerlink" href="#what-s-next" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="spec_mc_desc.html"><span class="doc">More details about MC description</span></a></p></li>
+<li><p><a class="reference download external" download="" href="https://jinja.palletsprojects.com/templates/"><code class="xref download docutils literal notranslate"><span class="pre">More</span> <span class="pre">details</span> <span class="pre">about</span> <span class="pre">Jinja2</span> <span class="pre">template</span> <span class="pre">syntax</span></code></a></p></li>
+<li><p><a class="reference internal" href="spec_template_var.html"><span class="doc">More details about template variables</span></a></p></li>
+<li><p><a class="reference internal" href="spec_mcdecoder_model.html"><span class="doc">More details about MC decoder model</span></a></p></li>
+<li><p><a class="reference internal" href="spec_commandline_options.html"><span class="doc">More details about mcdecoder generate</span></a></p></li>
+</ul>
 </div>
 </div>
 </div>

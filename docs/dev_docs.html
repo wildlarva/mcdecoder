@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Template variable specification &mdash; mcdecoder  documentation</title>
+  <title>Documents for mcdecoder developers &mdash; mcdecoder  documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="MC decoder model specification" href="spec_mcdecoder_model.html" />
-    <link rel="prev" title="MC description specification" href="spec_mc_desc.html" /> 
+    <link rel="next" title="Guides for developers" href="dev_guides.html" />
+    <link rel="prev" title="MC decoder model specification" href="spec_mcdecoder_model.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -86,14 +86,12 @@
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_templates.html">User templates</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="specifications.html">Specifications</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="spec_commandline_options.html">Command line options specification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="spec_mc_desc.html">MC description specification</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Template variable specification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="spec_mcdecoder_model.html">MC decoder model specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Documents for mcdecoder developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_guides.html">Guides for developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_design.html">Internal design</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a></li>
 </ul>
 
             
@@ -139,15 +137,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="specifications.html">Specifications</a> &raquo;</li>
-        
-      <li>Template variable specification</li>
+      <li>Documents for mcdecoder developers</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/spec_template_var.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/dev_docs.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -160,48 +156,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="template-variable-specification">
-<h1>Template variable specification<a class="headerlink" href="#template-variable-specification" title="Permalink to this headline">¶</a></h1>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 28%" />
-<col style="width: 52%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Variable name</p></th>
-<th class="head"><p>Type</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>mcdecoder</p></td>
-<td><p><code class="code docutils literal notranslate"><span class="pre">McDecoder</span></code></p></td>
-<td><p>Root element of decoder model.</p></td>
-</tr>
-<tr class="row-odd"><td><p>machine_decoder</p></td>
-<td><p><code class="code docutils literal notranslate"><span class="pre">MachineDecoder</span></code></p></td>
-<td><p>Decoding information about machine</p></td>
-</tr>
-<tr class="row-even"><td><p>instruction_decoders</p></td>
-<td><p>Sequence of
-<code class="code docutils literal notranslate"><span class="pre">InstructionDecoder</span></code></p></td>
-<td><p>Decoding information about instructions</p></td>
-</tr>
-<tr class="row-odd"><td><p>ns</p></td>
-<td><p>string</p></td>
-<td><p>Namespace prefix for generated codes.
-Shorthand for <code class="code docutils literal notranslate"><span class="pre">mcdecoder.namespace_prefix</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p>extras</p></td>
-<td><p>any (user-specific)</p></td>
-<td><p>User-defined data for the global scope.
-Shorthand for <code class="code docutils literal notranslate"><span class="pre">mcdecoder.extras</span></code></p></td>
-</tr>
-</tbody>
-</table>
-<p>See <a class="reference internal" href="spec_mcdecoder_model.html"><span class="doc">MC decoder model specification</span></a>
-to understand the types of template variables.</p>
+  <div class="section" id="documents-for-mcdecoder-developers">
+<h1>Documents for mcdecoder developers<a class="headerlink" href="#documents-for-mcdecoder-developers" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dev_guides.html">Guides for developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_guides.html#requirements-for-development">Requirements for development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_guides.html#how-to-setup-environment-for-development">How to setup environment for development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_guides.html#how-to-run-tests-for-mcdecoder">How to run tests for mcdecoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_guides.html#how-to-run-tests-for-generated-decoders">How to run tests for generated decoders</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev_design.html">Internal design</a></li>
+</ul>
+</div>
 </div>
 
 
@@ -212,10 +181,10 @@ to understand the types of template variables.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="spec_mcdecoder_model.html" class="btn btn-neutral float-right" title="MC decoder model specification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="dev_guides.html" class="btn btn-neutral float-right" title="Guides for developers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="spec_mc_desc.html" class="btn btn-neutral float-left" title="MC description specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="spec_mcdecoder_model.html" class="btn btn-neutral float-left" title="MC decoder model specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

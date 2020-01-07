@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Documents for mcdecoder developers" href="dev_docs.html" />
     <link rel="prev" title="Template variable specification" href="spec_template_var.html" /> 
 </head>
 
@@ -86,12 +87,13 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_templates.html">User templates</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="specifications.html">Specifications</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="spec_commandline_options.html">Command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_commandline_options.html">Command line options specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spec_mc_desc.html">MC description specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spec_template_var.html">Template variable specification</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">MC decoder model specification</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a></li>
 </ul>
 
             
@@ -381,7 +383,8 @@ Each subclass must have a string attribute ‘type’ to express the type of a s
 <dt id="mcdecoder.core.EqualityInstructionDecodeCondition">
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">EqualityInstructionDecodeCondition</code><span class="sig-paren">(</span><em class="sig-param">field: str</em>, <em class="sig-param">operator: str</em>, <em class="sig-param">value: int</em>, <em class="sig-param">type: str = 'equality'</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.EqualityInstructionDecodeCondition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#mcdecoder.core.InstructionDecodeCondition" title="mcdecoder.core.InstructionDecodeCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecodeCondition</span></code></a></p>
-<p>An equality condition subclass for InstructionDecodeCondition to test a field value’s equality with a value. Supported operators are ==, !=, &gt;, &gt;=, &lt; and &lt;=.</p>
+<p>An equality condition subclass for InstructionDecodeCondition to test a field value’s equality with a value.
+Supported operators are ==, !=, &gt;, &gt;=, &lt; and &lt;=.</p>
 <dl class="attribute">
 <dt id="mcdecoder.core.EqualityInstructionDecodeCondition.field">
 <code class="sig-name descname">field</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionDecodeCondition.field" title="Permalink to this definition">¶</a></dt>
@@ -437,7 +440,8 @@ Each subclass must have a string attribute ‘type’ to express the type of a s
 <dt id="mcdecoder.core.InRangeInstructionDecodeCondition">
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InRangeInstructionDecodeCondition</code><span class="sig-paren">(</span><em class="sig-param">field: str</em>, <em class="sig-param">value_start: int</em>, <em class="sig-param">value_end: int</em>, <em class="sig-param">type: str = 'in_range'</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InRangeInstructionDecodeCondition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#mcdecoder.core.InstructionDecodeCondition" title="mcdecoder.core.InstructionDecodeCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecodeCondition</span></code></a></p>
-<p>An in-range condition subclass for InstructionDecodeCondition to test an instruction field is in a value range(inclusive)</p>
+<p>An in-range condition subclass for InstructionDecodeCondition
+to test an instruction field is in a value range(inclusive)</p>
 <dl class="attribute">
 <dt id="mcdecoder.core.InRangeInstructionDecodeCondition.field">
 <code class="sig-name descname">field</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionDecodeCondition.field" title="Permalink to this definition">¶</a></dt>
@@ -473,6 +477,8 @@ Each subclass must have a string attribute ‘type’ to express the type of a s
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dev_docs.html" class="btn btn-neutral float-right" title="Documents for mcdecoder developers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="spec_template_var.html" class="btn btn-neutral float-left" title="Template variable specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

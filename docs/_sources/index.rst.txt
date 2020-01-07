@@ -9,6 +9,7 @@ mcdecoder documentation
     quickstart
     user_templates
     specifications
+    dev_docs
 
 
 Indices
