@@ -88,9 +88,9 @@ And the generated files will be:
 
 You can see :download:`example files in this tutorial in github <https://github.com/wildlarva/mcdecoder/blob/master/examples/user_templates>`.
 
-*********************************************************************
+=============================================
 What's next?
-*********************************************************************
+=============================================
 
 * :doc:`More details about MC description <spec_mc_desc>`
 * :download:`More details about Jinja2 template syntax <https://jinja.palletsprojects.com/templates/>`
