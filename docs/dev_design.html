@@ -33,9 +33,11 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Internal modules and members" href="dev_modules.html" />
     <link rel="prev" title="Guides for developers" href="dev_guides.html" /> 
 </head>
 
@@ -88,7 +90,23 @@
 <li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="dev_guides.html">Guides for developers</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Internal design</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Internal design</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#runtime-environment">Runtime environment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#runtime-structure-and-dependencies">Runtime structure and dependencies</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#modules-in-mcdecoder">Modules in mcdecoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#other-important-files-in-mcdecoder">Other important files in mcdecoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dependencies-to-external-packages">Dependencies to external packages</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#development-environment">Development environment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#development-structure-and-dependencies">Development structure and dependencies</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#packages">Packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#directories">Directories</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dev_modules.html">Internal modules and members</a></li>
 </ul>
 </li>
 </ul>
@@ -159,7 +177,291 @@
             
   <div class="section" id="internal-design">
 <h1>Internal design<a class="headerlink" href="#internal-design" title="Permalink to this headline">¶</a></h1>
-<p>TBD</p>
+<div class="section" id="runtime-environment">
+<h2>Runtime environment<a class="headerlink" href="#runtime-environment" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="runtime-structure-and-dependencies">
+<h3>Runtime structure and dependencies<a class="headerlink" href="#runtime-structure-and-dependencies" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/graphviz-9a03fb66a778642997f6d27ad1240e8ea40893da.png" alt="digraph runtime {
+node [shape=box]
+edge [style=dotted]
+
+subgraph cluster_mcdecoder {
+    label = &quot;mcdecoder&quot;
+
+    mcdecoder -&gt; __main__ -&gt; app -&gt; {generator, exporter, emulator, checker} -&gt; core
+    generator -&gt; templates
+    core -&gt; {schemas, grammars}
+
+    mcdecoder [label = &quot;mcdecoder (command)&quot;]
+    common
+    templates [label = &quot;templates/*/*&quot;]
+    schemas [label = &quot;schemas/*.json&quot;]
+    grammars [label = &quot;grammars/*.lark&quot;]
+}
+
+generator -&gt; Jinja2
+checker -&gt; numpy
+core -&gt; {PyYAML, jsonschema, lark, numpy}
+
+lark [label = &quot;Lark&quot;]
+numpy [label = &quot;NumPy&quot;]
+}" class="graphviz" /></div>
+</div>
+<div class="section" id="modules-in-mcdecoder">
+<h3>Modules in mcdecoder<a class="headerlink" href="#modules-in-mcdecoder" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 77%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Module</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>__main__</p></td>
+<td><p>Python entrypoint of mcdecoder</p></td>
+</tr>
+<tr class="row-odd"><td><p>app</p></td>
+<td><p>Implementation of the app workflow of mcdecoder</p>
+<p>Parses command line options and dispatch
+to each implementation of sub-commands.</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>generator</p></td>
+<td><p>Implementation of the sub-command ‘generate’</p>
+<p>Generates codes according to templates.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>exporter</p></td>
+<td><p>Implementation of the sub-command ‘export’</p>
+<p>Exports MC description to other formats.</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>emulator</p></td>
+<td><p>Implementation of the sub-command ‘emulate’</p>
+<p>Emulates a decoder and return decoded result.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>checker</p></td>
+<td><p>Implementation of the sub-command ‘check’</p>
+<p>Checks the integrity of a MC description.
+Uses vectorized calculations for performance.</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>core</p></td>
+<td><p>Provides core features of mcdecoder</p>
+<p>Core features include:</p>
+<ul class="simple">
+<li><p>Parse an MC description</p></li>
+<li><p>Validate an MC description against the schema</p></li>
+<li><p>Create an instance of MC decoder model</p></li>
+<li><p>Emulate a decoder</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>common</p></td>
+<td><p>Provides common implementations of mcdecoder</p>
+<p>Provides utilities and more to other modules.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Modules for sub-commands, such as generator, exporter, emulator
+and checker, provide the features of each sub-command.
+Each module provides implementations only for its sub-command.</p></li>
+<li><p>If multiple sub-commands require a certain feature,
+it should be defined in core module.</p></li>
+<li><p>If a certain implementation are not strongly related to mcdecoder,
+it should be defined in common module like making directories,
+converting the base of integer values, etc.</p></li>
+<li><p>Performance should be severely considered in checker module and
+the related features of core module.
+This module does billions of calculations for checking,
+so its performance is so important.</p></li>
+<li><p>All modules have dependencies to common module.</p></li>
+</ul>
+</div>
+<div class="section" id="other-important-files-in-mcdecoder">
+<h3>Other important files in mcdecoder<a class="headerlink" href="#other-important-files-in-mcdecoder" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Module</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mcdecoder</p></td>
+<td><p>Shell script to run mcdecoder</p>
+<p>Automatically generated by Setuptools.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>templates/*/*</p></td>
+<td><p>Jinja2 template files to generate a decoder</p></td>
+</tr>
+<tr class="row-even"><td><p>schemas/*.json</p></td>
+<td><p>JSON Schema files to validate an MC description</p></td>
+</tr>
+<tr class="row-odd"><td><p>grammars/*.lark</p></td>
+<td><p>Lark files to parse an MC description</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="dependencies-to-external-packages">
+<h3>Dependencies to external packages<a class="headerlink" href="#dependencies-to-external-packages" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Package</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PyYAML</p></td>
+<td><p>Used to load an MC description</p></td>
+</tr>
+<tr class="row-odd"><td><p>jsonschema</p></td>
+<td><p>Used to validate an MC description</p></td>
+</tr>
+<tr class="row-even"><td><p>Lark</p></td>
+<td><p>Used to parse an MC description</p></td>
+</tr>
+<tr class="row-odd"><td><p>NumPy</p></td>
+<td><p>Used to improve the performance of the sub-command
+‘check’</p></td>
+</tr>
+<tr class="row-even"><td><p>Jinja2</p></td>
+<td><p>Used to generate codes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="development-environment">
+<h2>Development environment<a class="headerlink" href="#development-environment" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="development-structure-and-dependencies">
+<h3>Development structure and dependencies<a class="headerlink" href="#development-structure-and-dependencies" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/graphviz-b553eb93a7afe81a2ea747d3acf6dc7d8bdb3b03.png" alt="digraph develop {
+compound = true
+node [shape=box]
+edge [style=dotted]
+
+subgraph cluster_sphinx {
+    label = &quot;Sphinx&quot;
+
+    sphinx_argparse [label = &quot;sphinx-\nargparse&quot;]
+    sphinx_jsonschema [label = &quot;Sphinx\nJSON Schema&quot;]
+    sphinx_rtd_theme [label = &quot;Read the Docs\nSphinx Theme&quot;]
+    m2r [label = &quot;M2R&quot;]
+    graphviz [label = &quot;Graphviz&quot;]
+}
+
+subgraph cluster_conan {
+    label = &quot;Conan&quot;
+
+    google_test [label = &quot;Google Test&quot;]
+}
+
+mcdecoder -&gt; pytest
+mcdecoder -&gt; sphinx_rtd_theme [lhead=cluster_sphinx]
+mcdecoder -&gt; google_test [lhead=cluster_conan]
+}" class="graphviz" /></div>
+</div>
+<div class="section" id="packages">
+<h3>Packages<a class="headerlink" href="#packages" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Package</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mcdecoder</p></td>
+<td><p>This project</p></td>
+</tr>
+<tr class="row-odd"><td><p>pytest</p></td>
+<td><p>Used to test mcdecoder</p></td>
+</tr>
+<tr class="row-even"><td><p>Conan</p></td>
+<td><p>Used to manage packages of C/C++</p></td>
+</tr>
+<tr class="row-odd"><td><p>Google Test</p></td>
+<td><p>Used to test generated decoders in C/C++</p></td>
+</tr>
+<tr class="row-even"><td><p>Sphinx</p></td>
+<td><p>Used to build documents</p></td>
+</tr>
+<tr class="row-odd"><td><p>sphinx-argparse</p></td>
+<td><p>Used to build documents about command line options</p></td>
+</tr>
+<tr class="row-even"><td><p>Sphinx JSON Schema</p></td>
+<td><p>Used to build documents about the schema of MC description</p></td>
+</tr>
+<tr class="row-odd"><td><p>Read the Docs Sphinx Theme</p></td>
+<td><p>Used to improve usability of generated documents</p></td>
+</tr>
+<tr class="row-even"><td><p>M2R</p></td>
+<td><p>Used to import README.md to Sphinx</p></td>
+</tr>
+<tr class="row-odd"><td><p>Graphviz</p></td>
+<td><p>Used to show diagrams in documents</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="directories">
+<h3>Directories<a class="headerlink" href="#directories" title="Permalink to this headline">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Directory</p></th>
+<th class="head"><p>Description of contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ctest</p></td>
+<td><p>Tests for generated decoders</p></td>
+</tr>
+<tr class="row-odd"><td><p>docs</p></td>
+<td><p>Documents published to GitHub Pages</p></td>
+</tr>
+<tr class="row-even"><td><p>examples</p></td>
+<td><p>Example files used in tutorials and other documents</p></td>
+</tr>
+<tr class="row-odd"><td><p>src</p></td>
+<td><p>Source files to implement a mcdecoder</p></td>
+</tr>
+<tr class="row-even"><td><p>src/test</p></td>
+<td><p>Tests for mcdecoder</p></td>
+</tr>
+<tr class="row-odd"><td><p>src_docs</p></td>
+<td><p>RST files to generate documents in docs directory</p></td>
+</tr>
+<tr class="row-even"><td><p>test</p></td>
+<td><p>Files used for both mcdecoder tests and
+generated decoder tests</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 
 
@@ -169,6 +471,8 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dev_modules.html" class="btn btn-neutral float-right" title="Internal modules and members" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="dev_guides.html" class="btn btn-neutral float-left" title="Guides for developers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

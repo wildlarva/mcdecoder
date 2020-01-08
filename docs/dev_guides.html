@@ -33,6 +33,7 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -93,9 +94,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#how-to-setup-environment-for-development">How to setup environment for development</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-to-run-tests-for-mcdecoder">How to run tests for mcdecoder</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-to-run-tests-for-generated-decoders">How to run tests for generated decoders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-build-documents">How to build documents</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="dev_design.html">Internal design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_modules.html">Internal modules and members</a></li>
 </ul>
 </li>
 </ul>
@@ -169,6 +172,7 @@
 <div class="section" id="requirements-for-development">
 <h2>Requirements for development<a class="headerlink" href="#requirements-for-development" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p>Ubuntu 18.x or above</p></li>
 <li><p>Python 3.8 (with pip and venv)</p></li>
 </ul>
 </div>
@@ -185,11 +189,14 @@ python3.8 -m venv env
 <span class="c1"># Install python tools and libraries</span>
 pip install -r requirements.txt
 
+<span class="c1"># Install other tools</span>
+sudo apt install graphviz
+
 <span class="c1"># Install mcdecoder</span>
 pip install -e .
 </pre></div>
 </div>
-<p>After the installation, changes to the cloned directory are
+<p>After the installation, changes to the cloned directory will be
 immediately reflected to mcdecoder you installed.</p>
 </div>
 <div class="section" id="how-to-run-tests-for-mcdecoder">
@@ -211,6 +218,17 @@ pytest
 
 <span class="c1"># Run tests</span>
 make -C ctest clean <span class="nb">test</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-build-documents">
+<h2>How to build documents<a class="headerlink" href="#how-to-build-documents" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Switch to virtual environment</span>
+<span class="nb">cd</span> &lt;path-to-cloned-directory&gt;
+<span class="nb">source</span> env/bin/activate
+
+<span class="c1"># Build documents</span>
+make -C src_docs clean apply-html
 </pre></div>
 </div>
 </div>
