@@ -67,9 +67,8 @@ html_css_files = [
 # -- Options for autodoc -------------------------------------------------
 
 autodoc_default_options = {
-    'members': True,
+    'members': None,
     'member-order': 'alphabetical',
-    'undoc-members': True,
-    'inherited-members': True,
-    'show-inheritance': True,
+    'undoc-members': None,
+    'show-inheritance': None,
 }
