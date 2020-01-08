@@ -6,6 +6,7 @@ Guides for developers
 Requirements for development
 =============================================
 
+* Ubuntu 18.x or above
 * Python 3.8 (with pip and venv)
 
 =============================================
@@ -25,10 +26,13 @@ How to setup environment for development
     # Install python tools and libraries
     pip install -r requirements.txt
 
+    # Install other tools
+    sudo apt install graphviz
+
     # Install mcdecoder
     pip install -e .
 
-After the installation, changes to the cloned directory are
+After the installation, changes to the cloned directory will be
 immediately reflected to mcdecoder you installed.
 
 =============================================
@@ -56,3 +60,17 @@ How to run tests for generated decoders
 
     # Run tests
     make -C ctest clean test
+
+
+=============================================
+How to build documents
+=============================================
+
+.. code-block:: bash
+
+    # Switch to virtual environment
+    cd <path-to-cloned-directory>
+    source env/bin/activate
+
+    # Build documents
+    make -C src_docs clean apply-html

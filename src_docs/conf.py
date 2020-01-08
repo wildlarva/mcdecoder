@@ -33,6 +33,7 @@ author = 'wildlarva'
 extensions = [
     'm2r',
     'sphinx.ext.autodoc',
+    'sphinx.ext.graphviz',
     'sphinx-jsonschema',
     'sphinxarg.ext',
 ]
