@@ -369,8 +369,8 @@ def calc_instruction_bit_size(instruction_format: InstructionFormat) -> int:
     :param instruction_format: Calculation target
     :return: Bit length of an instruction
     """
-    return sum(map(lambda field_format: len(
-        field_format.bits_format), instruction_format.field_formats))
+    return sum(len(
+        field_format.bits_format) for field_format in instruction_format.field_formats)
 
 
 def find_matched_instructions(context: DecodeContext) -> List[InstructionDecoder]:
@@ -636,8 +636,8 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrit
         ff_start_bit_in_instruction -= field_bit_size
 
     # Create field decoders
-    field_names = set(map(lambda field: cast(str, field.name), filter(
-        lambda field: field.name is not None, instruction_format.field_formats)))
+    field_names = set(cast(str, field.name)
+                      for field in instruction_format.field_formats if field.name is not None)
     field_extras_dict: Dict[str, Any] = cast(Dict[str, Any], instruction_desc_model['field_extras']) \
         if 'field_extras' in instruction_desc_model else {}
     field_decoders = []
@@ -701,8 +701,8 @@ def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruct
                           ff_index_to_start_bit: Dict[int, int]) -> InstructionFieldDecoder:
     """Create a model which contains information of a instruction field decoder"""
     # Find related field formats
-    field_formats = filter(lambda field: field.name ==
-                           field_name, instruction_format.field_formats)
+    field_formats = [
+        field for field in instruction_format.field_formats if field.name == field_name]
 
     # Create subfield decoders
     start_bit_in_field = 0

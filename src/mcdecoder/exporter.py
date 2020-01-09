@@ -45,8 +45,8 @@ def _export(mcfile: str, output_file: str) -> bool:
     # Parse instruction formats
     instruction_infos = [_InstructionInfo(instruction=instruction, format=core.parse_instruction_format(
         instruction['format'])) for instruction in mc_desc['instructions']]
-    max_instruction_bit_size = max(map(
-        lambda info: core.calc_instruction_bit_size(info.format), instruction_infos))
+    max_instruction_bit_size = max(core.calc_instruction_bit_size(
+        info.format) for info in instruction_infos)
 
     # Make columns
     bit_columns = [f'b{bit}' for bit in range(
@@ -62,7 +62,7 @@ def _export(mcfile: str, output_file: str) -> bool:
         unrelated_bits = '-' * \
             (max_instruction_bit_size - instruction_bit_size)
         related_bits = ''.join(
-            map(lambda field_format: field_format.bits_format, info.format.field_formats))
+            field_format.bits_format for field_format in info.format.field_formats)
         bits = unrelated_bits + related_bits
 
         # Make condition string
