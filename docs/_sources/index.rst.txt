@@ -1,21 +1,18 @@
+################################
 mcdecoder documentation
-=======================
+################################
 
 .. toctree::
     :maxdepth: 2
     :caption: Contents:
 
-    README <README>
-    quickstart
-    user_templates
+    guides
     specifications
     dev_docs
 
-
+*********************************
 Indices
-------------------
+*********************************
 
 * :ref:`genindex`
-
-.. * :ref:`modindex`
-.. * :ref:`search`
+* :ref:`modindex`

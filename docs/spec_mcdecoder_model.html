@@ -82,11 +82,12 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="README.html">README</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_templates.html">User templates</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="specifications.html">Specifications</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="spec_commandline_options.html">Command line options specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spec_mc_desc.html">MC description specification</a></li>
@@ -340,14 +341,15 @@
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDecodeCondition</code></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A condition of instruction encoding when an instruction applys.
-Each subclass must have a string attribute ‘type’ to express the type of a subclass.</p>
+<p>Condition of instruction encoding when an instruction applys.</p>
+<p>Each subclass must have a string attribute ‘type’ to express the type of a subclass.</p>
 </dd></dl>
 
 <dl class="class">
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">AndInstructionDecodeCondition</code><span class="sig-paren">(</span><em class="sig-param">conditions: List[mcdecoder.core.InstructionDecodeCondition], type: str = 'and'</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <a class="reference internal" href="dev_modules.html#mcdecoder.core.InstructionDecodeCondition" title="mcdecoder.core.InstructionDecodeCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecodeCondition</span></code></a></p>
+<p>‘and’ condition subclass for InstructionDecodeCondition to combine conditions with AND operator</p>
 <dl class="attribute">
 <dt>
 <code class="sig-name descname">conditions</code><em class="property"> = None</em></dt>
@@ -366,6 +368,7 @@ Each subclass must have a string attribute ‘type’ to express the type of a s
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">OrInstructionDecodeCondition</code><span class="sig-paren">(</span><em class="sig-param">conditions: List[mcdecoder.core.InstructionDecodeCondition], type: str = 'or'</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <a class="reference internal" href="dev_modules.html#mcdecoder.core.InstructionDecodeCondition" title="mcdecoder.core.InstructionDecodeCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecodeCondition</span></code></a></p>
+<p>‘or’ condition subclass for InstructionDecodeCondition to combine conditions with OR operator</p>
 <dl class="attribute">
 <dt>
 <code class="sig-name descname">conditions</code><em class="property"> = None</em></dt>
@@ -384,8 +387,8 @@ Each subclass must have a string attribute ‘type’ to express the type of a s
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">EqualityInstructionDecodeCondition</code><span class="sig-paren">(</span><em class="sig-param">field: str</em>, <em class="sig-param">operator: str</em>, <em class="sig-param">value: int</em>, <em class="sig-param">type: str = 'equality'</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <a class="reference internal" href="dev_modules.html#mcdecoder.core.InstructionDecodeCondition" title="mcdecoder.core.InstructionDecodeCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecodeCondition</span></code></a></p>
-<p>An equality condition subclass for InstructionDecodeCondition to test a field value’s equality with a value.
-Supported operators are ==, !=, &gt;, &gt;=, &lt; and &lt;=.</p>
+<p>Equality condition subclass for InstructionDecodeCondition to test a field value’s equality with a value.</p>
+<p>Supported operators are ==, !=, &gt;, &gt;=, &lt; and &lt;=.</p>
 <dl class="attribute">
 <dt>
 <code class="sig-name descname">field</code><em class="property"> = None</em></dt>
@@ -416,7 +419,7 @@ Supported operators are ==, !=, &gt;, &gt;=, &lt; and &lt;=.</p>
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InInstructionDecodeCondition</code><span class="sig-paren">(</span><em class="sig-param">field: str, values: List[int], type: str = 'in'</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <a class="reference internal" href="dev_modules.html#mcdecoder.core.InstructionDecodeCondition" title="mcdecoder.core.InstructionDecodeCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecodeCondition</span></code></a></p>
-<p>An in condition subclass for InstructionDecodeCondition to test an instruction field is in a value set</p>
+<p>‘in’ condition subclass for InstructionDecodeCondition to test an instruction field is in a value set</p>
 <dl class="attribute">
 <dt>
 <code class="sig-name descname">field</code><em class="property"> = None</em></dt>
@@ -441,7 +444,7 @@ Supported operators are ==, !=, &gt;, &gt;=, &lt; and &lt;=.</p>
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InRangeInstructionDecodeCondition</code><span class="sig-paren">(</span><em class="sig-param">field: str</em>, <em class="sig-param">value_start: int</em>, <em class="sig-param">value_end: int</em>, <em class="sig-param">type: str = 'in_range'</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <a class="reference internal" href="dev_modules.html#mcdecoder.core.InstructionDecodeCondition" title="mcdecoder.core.InstructionDecodeCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecodeCondition</span></code></a></p>
-<p>An in-range condition subclass for InstructionDecodeCondition
+<p>‘in_range’ condition subclass for InstructionDecodeCondition
 to test an instruction field is in a value range(inclusive)</p>
 <dl class="attribute">
 <dt>
