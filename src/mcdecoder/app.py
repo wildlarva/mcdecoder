@@ -9,6 +9,14 @@ from . import checker, emulator, exporter, generator
 
 
 def run_app(argv: List[str]) -> int:
+    """
+    Run the application workflow of mcdecoder.
+
+    Parse argv and execute a corresponding sub-command.
+
+    :param argv: Command line parameters
+    :return: Exit code of mcdecoder
+    """
     # Create an argument parser
     parser = _create_parser()
 

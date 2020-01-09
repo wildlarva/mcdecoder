@@ -6,6 +6,20 @@ from . import common, core
 
 
 def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None, byteorder: Literal['big', 'little'] = None) -> int:
+    """
+    Implementation of the sub-command 'emulate'.
+
+    Emulate a decoder and output the decoding result.
+
+    If base is not specified, base 16 is used by default.
+    If byteorder is not specified, big endian is used by default.
+
+    :param mcfile: Path to an MC description
+    :param bit_pattern: Binary/hex string to be decoded
+    :param base: Base of integer that specifies the expression of bit_pattern
+    :param byteorder: Byte order of bit_pattern
+    :return: Exit code of mcdecoder
+    """
     # Default
     if base is None:
         base = 16

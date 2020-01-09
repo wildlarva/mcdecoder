@@ -8,6 +8,17 @@ from . import common, core
 
 
 def export(mcfile: str, output_file: str) -> int:
+    """
+    Implementation of the sub-command 'export'.
+
+    Export an MC description as another format.
+
+    NOTE Currently, mcdecoder supports only CSV format.
+
+    :param mcfile: Path to an MC description file
+    :param output_file: Path to an file to be exported
+    :return: Exit code of mcdecoder
+    """
     result = _export(mcfile, output_file)
     if result:
         print('Exported a machine code description.')

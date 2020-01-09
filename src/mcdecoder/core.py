@@ -18,6 +18,7 @@ import yaml
 
 
 class InstructionDescrition(TypedDict):
+    """Describes an instruction"""
     name: str
     """Name of an instruction"""
     format: str
@@ -90,7 +91,8 @@ class InstructionFieldDecoder:
 @dataclass
 class InstructionDecodeCondition:
     """
-    A condition of instruction encoding when an instruction applys.
+    Condition of instruction encoding when an instruction applys.
+
     Each subclass must have a string attribute 'type' to express the type of a subclass.
     """
     pass
@@ -98,6 +100,7 @@ class InstructionDecodeCondition:
 
 @dataclass
 class AndInstructionDecodeCondition(InstructionDecodeCondition):
+    """'and' condition subclass for InstructionDecodeCondition to combine conditions with AND operator"""
     conditions: List[InstructionDecodeCondition]
     """Child InstructionDecodeConditions combined with logical AND operation"""
     type: str = 'and'
@@ -106,6 +109,7 @@ class AndInstructionDecodeCondition(InstructionDecodeCondition):
 
 @dataclass
 class OrInstructionDecodeCondition(InstructionDecodeCondition):
+    """'or' condition subclass for InstructionDecodeCondition to combine conditions with OR operator"""
     conditions: List[InstructionDecodeCondition]
     """Child InstructionDecodeConditions combined with logical OR operation"""
     type: str = 'or'
@@ -115,7 +119,8 @@ class OrInstructionDecodeCondition(InstructionDecodeCondition):
 @dataclass
 class EqualityInstructionDecodeCondition(InstructionDecodeCondition):
     """
-    An equality condition subclass for InstructionDecodeCondition to test a field value's equality with a value.
+    Equality condition subclass for InstructionDecodeCondition to test a field value's equality with a value.
+
     Supported operators are ==, !=, >, >=, < and <=.
     """
     field: str
@@ -130,7 +135,7 @@ class EqualityInstructionDecodeCondition(InstructionDecodeCondition):
 
 @dataclass
 class InInstructionDecodeCondition(InstructionDecodeCondition):
-    """An in condition subclass for InstructionDecodeCondition to test an instruction field is in a value set"""
+    """'in' condition subclass for InstructionDecodeCondition to test an instruction field is in a value set"""
     field: str
     """Name of a field to be tested"""
     values: List[int]
@@ -142,7 +147,7 @@ class InInstructionDecodeCondition(InstructionDecodeCondition):
 @dataclass
 class InRangeInstructionDecodeCondition(InstructionDecodeCondition):
     """
-    An in-range condition subclass for InstructionDecodeCondition
+    'in_range' condition subclass for InstructionDecodeCondition
     to test an instruction field is in a value range(inclusive)
     """
     field: str
@@ -199,39 +204,56 @@ class McDecoder:
 # Instruction condition
 @dataclass
 class InstructionCondition:
+    """Parsed condition of an instruction"""
     pass
 
 
 @dataclass
 class LogicalInstructionCondition(InstructionCondition):
+    """Parsed logical condition of an instruction, 'and' or 'or'"""
     operator: Literal['and', 'or']
+    """Operator of a logical condition"""
     conditions: List[InstructionCondition]
+    """Conditions combined with an logical operator"""
 
 
 @dataclass
 class PrimitiveInstructionCondition(InstructionCondition):
+    """Parsed primitive condition of an instruction such as '==', 'in', etc."""
     field: str
+    """Field to be tested"""
     operator: str
+    """Operator to test"""
     values: List[int]
+    """Values to test with"""
 
 
 # Instruction format
 @dataclass
 class BitRange:
+    """Parsed bit range"""
     start: int
+    """MSB of a bit range"""
     end: int
+    """LSB of a bit range"""
 
 
 @dataclass
 class InstructionFieldFormat:
+    """Parsed encoding format of an instruction field"""
     name: Optional[str]
+    """Name of a field"""
     bits_format: str
+    """Encoding format of a field"""
     bit_ranges: List[BitRange]
+    """Bit ranges of a field that the encoding format corresponds to"""
 
 
 @dataclass
 class InstructionFormat:
+    """Parsed encoding format of an instruction"""
     field_formats: List[InstructionFieldFormat]
+    """Child InstructionFieldFormats"""
 
 
 # Decode emulation
@@ -239,39 +261,54 @@ class InstructionFormat:
 
 @dataclass
 class DecodeContext:
+    """Context information while decoding. It is used for non-vectorized calculations."""
     mcdecoder: McDecoder
+    """McDecoder used for decoding"""
     code16: int
+    """16-bit code"""
     code32: int
+    """32-bit code"""
 
 
 @dataclass
 class DecodeContextVectorized:
-    """A context information while decoding"""
+    """Context information while decoding. It is used for vectorized calculations"""
     mcdecoder: McDecoder
     """McDecoder used for decoding"""
     code16_vec: np.ndarray
-    """N-vector of 16-bit codes. The length of this code16 and code32 must be the same"""
+    """N-vector of 16-bit codes. The length of code16_vec and code32_vec must be the same"""
     code32_vec: np.ndarray
-    """N-vector of 32-bit codes. The length of this code16 and code32 must be the same"""
+    """N-vector of 32-bit codes. The length of code16_vec and code32_vec must be the same"""
 
 
 @dataclass
 class InstructionFieldDecodeResult:
+    """Decoding result of an instruction field"""
     decoder: InstructionFieldDecoder
+    """Corresponding InstructionFieldDecoder"""
     value: int
+    """Decoded value for a field"""
 
 
 @dataclass
 class InstructionDecodeResult:
+    """Decoding result of an instruction"""
     decoder: InstructionDecoder
+    """Corresponding InstructionDecoder"""
     field_results: List[InstructionFieldDecodeResult]
+    """Child InstructionFieldDecodeResults"""
 
 
 # External functions
 
 
 def create_mcdecoder_model(mcfile_path: str) -> McDecoder:
-    """Create a model which contains information of MC decoder"""
+    """
+    Create a model which contains information of MC decoder
+
+    :param mcfile_path: Path to an MC description file
+    :return: Created McDecoder
+    """
     # Load MC description
     mc_desc_model = load_mc_description_model(mcfile_path)
 
@@ -297,6 +334,12 @@ def create_mcdecoder_model(mcfile_path: str) -> McDecoder:
 
 
 def load_mc_description_model(mcfile_path: str) -> McDescription:
+    """
+    Load an MC description file and validate against the schema
+
+    :param mcfile_path: Path to an MC description file
+    :return: Loaded McDescription
+    """
     # Load MC description
     _yaml_include_context.base_dir = os.path.dirname(mcfile_path)
     with open(mcfile_path, 'rb') as file:
@@ -309,17 +352,34 @@ def load_mc_description_model(mcfile_path: str) -> McDescription:
 
 
 def parse_instruction_format(instruction_format: str) -> InstructionFormat:
-    """Parse an instruction format and returns an array of field formats"""
+    """
+    Parse a string of the encoding format of an instruction
+
+    :param instruction_format: String of the encoding format of an instruction
+    :return: Parsed InstructionFormat
+    """
     parsed_tree = _instruction_format_parser.parse(instruction_format)
     return cast(InstructionFormat, _InstructionFormatTransformer(None).transform(parsed_tree))
 
 
 def calc_instruction_bit_size(instruction_format: InstructionFormat) -> int:
+    """
+    Calculate the bit length of an instruction
+
+    :param instruction_format: Calculation target
+    :return: Bit length of an instruction
+    """
     return sum(map(lambda field_format: len(
         field_format.bits_format), instruction_format.field_formats))
 
 
 def find_matched_instructions(context: DecodeContext) -> List[InstructionDecoder]:
+    """
+    Find instructions matched with a given code
+
+    :param context: Context information while decoding
+    :return: Matched InstructionDecoders
+    """
     context_vectorized = DecodeContextVectorized(mcdecoder=context.mcdecoder, code16_vec=np.array([
                                                  context.code16]), code32_vec=np.array([context.code32]))
     test_mat = find_matched_instructions_vectorized(context_vectorized)
@@ -333,7 +393,7 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
     """
     Find all the matched instructions to vectorized codes and return matched instructin matrix.
 
-    :param context: context information of matching instructions
+    :param context: Context information while decoding
     :return: N x M matrix of codes(N) and instructions(M).
             Each element holds the boolean result whether a code is matched for an instruction.
     """
@@ -371,6 +431,13 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
 
 
 def decode_instruction(context: DecodeContext, instruction_decoder: InstructionDecoder) -> InstructionDecodeResult:
+    """
+    Decode an instruction
+
+    :param context: Context information while decoding
+    :param instruction_decoder: InstructionDecoder to decode with
+    :return: InstructionDecodeResult
+    """
     code = _get_appropriate_code(context, instruction_decoder)
 
     field_results: List[InstructionFieldDecodeResult] = []

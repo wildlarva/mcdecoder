@@ -13,8 +13,18 @@ from . import common, core
 
 def check(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None) -> int:
     """
-    Implementation of check sub-command.
-    NOTE Currently, mcdecoder does not support little endian bit pattern
+    Implementation of the sub-command 'check'.
+
+    Check the integrity of an MC description and output errors.
+
+    If base is not specified, base 16 is used by default.
+
+    NOTE Currently, mcdecoder does not support little endian bit pattern.
+
+    :param mcfile: Path to an MC description file
+    :param bit_pattern: Binary data to be input
+    :param base: Base of integer that specifies the expression of binary data
+    :return: Exit code of mcdecoder
     """
     # Default
     if base is None:

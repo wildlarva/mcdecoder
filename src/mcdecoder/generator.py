@@ -9,7 +9,19 @@ from . import common, core
 
 
 def generate(mcfile_path: str, output_directory: str = None, template_directory: str = None) -> int:
-    """Generate MC decoder files from MC description file"""
+    """
+    Implementation the sub-command 'generate'.
+
+    Generate MC decoder files from MC description file.
+
+    If output_directory is not specified, it is defaulted to the current directory.
+    If template_directory is not specified, the default decoder template (athrill decoder) is used.
+
+    :param mcfile_path: Path to an MC description file
+    :param output_directory: Path to an output directory of generated codes
+    :param template_directory: Path to a directory including template files
+    :return: Exit code of mcdecoder
+    """
     # Default output directory to the current
     if output_directory is None:
         output_directory = '.'
