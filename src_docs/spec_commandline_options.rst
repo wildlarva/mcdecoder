@@ -1,4 +1,4 @@
-Command line options specification
+Command line option specification
 ==================================
 
 .. highlight:: bash
