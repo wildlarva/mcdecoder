@@ -21,5 +21,5 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 apply-html: html
-	rm -r "$(DOCSDIR)"/*.html "$(DOCSDIR)"/_static "$(DOCSDIR)"/_sources
+	rm -r "$(DOCSDIR)"/*.html "$(DOCSDIR)"/*.js "$(DOCSDIR)"/_images "$(DOCSDIR)"/_sources "$(DOCSDIR)"/_static
 	cp -r "$(BUILDDIR)"/html/* "$(DOCSDIR)"
