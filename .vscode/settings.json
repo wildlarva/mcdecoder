@@ -26,5 +26,5 @@
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": false,
-    "restructuredtext.confPath": "${workspaceFolder}/doc",
+    "restructuredtext.confPath": "${workspaceFolder}/src_docs",
 }
