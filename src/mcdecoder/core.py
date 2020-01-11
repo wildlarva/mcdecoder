@@ -17,7 +17,7 @@ import yaml
 # MC description models loaded from yaml files
 
 
-class InstructionDescrition(TypedDict):
+class InstructionDescription(TypedDict):
     """Describes an instruction"""
     name: str
     """Name of an instruction"""
@@ -49,8 +49,8 @@ class McDescription(TypedDict):
     """Describes a machine code specification. The root element of MC description model"""
     machine: MachineDescription
     """Child MachineDescription"""
-    instructions: List[InstructionDescrition]
-    """Child InstructionDescritions"""
+    instructions: List[InstructionDescription]
+    """Child InstructionDescriptions"""
     decoder: Optional[McDecoderDescription]
     """Child McDecoderDescription"""
     extras: Optional[Any]
@@ -615,7 +615,7 @@ def _make_namespace_prefix(namespace: Optional[str]) -> str:
     return namespace + '_' if namespace is not None else ''
 
 
-def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrition) -> InstructionDecoder:
+def _create_instruction_decoder_model(instruction_desc_model: InstructionDescription) -> InstructionDecoder:
     """Create a model which contains information of individual instruction decoder"""
     # Parse instruction format
     instruction_format = parse_instruction_format(
