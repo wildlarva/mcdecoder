@@ -58,6 +58,62 @@ class McDescription(TypedDict):
 
 # endregion
 
+# region MC description models parsed from string
+
+@dataclass
+class InstructionConditionDescription:
+    """Parsed condition of an instruction"""
+    pass
+
+
+@dataclass
+class LogicalInstructionConditionDescription(InstructionConditionDescription):
+    """Parsed logical condition of an instruction, 'and' or 'or'"""
+    operator: Literal['and', 'or']
+    """Operator of a logical condition"""
+    conditions: List[InstructionConditionDescription]
+    """Conditions combined with an logical operator"""
+
+
+@dataclass
+class PrimitiveInstructionConditionDescription(InstructionConditionDescription):
+    """Parsed primitive condition of an instruction such as '==', 'in', etc."""
+    field: str
+    """Field to be tested"""
+    operator: str
+    """Operator to test"""
+    values: List[int]
+    """Values to test with"""
+
+
+@dataclass
+class BitRangeDescription:
+    """Parsed bit range"""
+    start: int
+    """MSB of a bit range"""
+    end: int
+    """LSB of a bit range"""
+
+
+@dataclass
+class InstructionFieldFormatDescription:
+    """Parsed encoding format of an instruction field"""
+    name: Optional[str]
+    """Name of a field"""
+    bits_format: str
+    """Encoding format of a field"""
+    bit_ranges: List[BitRangeDescription]
+    """Bit ranges of a field that the encoding format corresponds to"""
+
+
+@dataclass
+class InstructionFormatDescription:
+    """Parsed encoding format of an instruction"""
+    field_formats: List[InstructionFieldFormatDescription]
+    """Child InstructionFieldFormatDescriptions"""
+
+# endregion
+
 # region Decoder models
 @dataclass
 class InstructionSubfieldDecoder:
@@ -200,63 +256,6 @@ class McDecoder:
     """Child InstructionDecoders"""
     extras: Optional[Any]
     """User-defined data not related to a machine, an instruction and a field"""
-
-# endregion
-
-# region Parsed instruction condition description
-@dataclass
-class InstructionConditionDescription:
-    """Parsed condition of an instruction"""
-    pass
-
-
-@dataclass
-class LogicalInstructionConditionDescription(InstructionConditionDescription):
-    """Parsed logical condition of an instruction, 'and' or 'or'"""
-    operator: Literal['and', 'or']
-    """Operator of a logical condition"""
-    conditions: List[InstructionConditionDescription]
-    """Conditions combined with an logical operator"""
-
-
-@dataclass
-class PrimitiveInstructionConditionDescription(InstructionConditionDescription):
-    """Parsed primitive condition of an instruction such as '==', 'in', etc."""
-    field: str
-    """Field to be tested"""
-    operator: str
-    """Operator to test"""
-    values: List[int]
-    """Values to test with"""
-
-# endregion
-
-# region Parsed instruction format description
-@dataclass
-class BitRangeDescription:
-    """Parsed bit range"""
-    start: int
-    """MSB of a bit range"""
-    end: int
-    """LSB of a bit range"""
-
-
-@dataclass
-class InstructionFieldFormatDescription:
-    """Parsed encoding format of an instruction field"""
-    name: Optional[str]
-    """Name of a field"""
-    bits_format: str
-    """Encoding format of a field"""
-    bit_ranges: List[BitRangeDescription]
-    """Bit ranges of a field that the encoding format corresponds to"""
-
-
-@dataclass
-class InstructionFormatDescription:
-    """Parsed encoding format of an instruction"""
-    field_formats: List[InstructionFieldFormatDescription]
-    """Child InstructionFieldFormatDescriptions"""
 
 # endregion
 
