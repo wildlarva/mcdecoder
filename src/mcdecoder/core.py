@@ -868,33 +868,33 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
         return total_test_vec
 
     elif isinstance(condition, EqualityIdCondition):
-        value = _instruction_condition_object_vectorized(
+        value_vec = _instruction_condition_object_vectorized(
             code_vec, condition.subject, instruction_decoder)
         if condition.operator == '==':
-            return value == condition.value
+            return value_vec == condition.value
         elif condition.operator == '!=':
-            return value != condition.value
+            return value_vec != condition.value
         elif condition.operator == '<':
-            return value < condition.value
+            return value_vec < condition.value
         elif condition.operator == '<=':
-            return value <= condition.value
+            return value_vec <= condition.value
         elif condition.operator == '>':
-            return value > condition.value
+            return value_vec > condition.value
         elif condition.operator == '>=':
-            return value >= condition.value
+            return value_vec >= condition.value
         else:
             return np.full((code_vec.shape[0]), False)
 
     elif isinstance(condition, InIdCondition):
-        value = _instruction_condition_object_vectorized(
+        value_vec = _instruction_condition_object_vectorized(
             code_vec, condition.subject, instruction_decoder)
-        return np.isin(value, condition.values)
+        return np.isin(value_vec, condition.values)
 
     elif isinstance(condition, InRangeIdCondition):
-        value = _instruction_condition_object_vectorized(
+        value_vec = _instruction_condition_object_vectorized(
             code_vec, condition.subject, instruction_decoder)
         return np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
-            value >= condition.value_start, value <= condition.value_end)
+            value_vec >= condition.value_start, value_vec <= condition.value_end)
 
     else:
         return np.full((code_vec.shape[0]), False)
@@ -915,11 +915,11 @@ def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: Instr
 
 
 def _decode_field_vectorized(code_vec: np.ndarray, field_decoder: InstructionFieldDecoder) -> np.ndarray:
-    value = np.zeros(code_vec.shape[0], dtype=int)
+    value_vec = np.zeros(code_vec.shape[0], dtype=int)
     for sf_decoder in field_decoder.subfield_decoders:
-        value |= ((code_vec & sf_decoder.mask) >>
-                  sf_decoder.end_bit_in_instruction) << sf_decoder.end_bit_in_field
-    return value
+        value_vec |= ((code_vec & sf_decoder.mask) >>
+                      sf_decoder.end_bit_in_instruction) << sf_decoder.end_bit_in_field
+    return value_vec
 
 
 # endregion
