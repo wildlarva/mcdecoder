@@ -60,28 +60,28 @@ instructions:
     #   <object>: Object to test with
     #     Expression: <field_object> or <value>
     # 
-    #   <field_object>: A field object to be tested
+    #   <field_object>: Field object to be tested
     #     Expression: <field>[<field_element_index>]
     # 
-    #   <field>: A field name to be tested
+    #   <field>: Field name to be tested
     #
-    #   <field_element_index>: [optional] A bit element index of a field
+    #   <field_element_index>: [optional] Bit element index of a field
     #     Base 10 integer value like 1, 2, etc.
     #
-    #   <operator>: An equality operator to test
+    #   <operator>: Equality operator to test
     #     It can be ==, !=, <, <=, > or >=.
     #
-    #   <values>: A value set to test with
+    #   <values>: Value set to test with
     #     Expression: [<value>,...]
     #     It takes multiple values with the separator ','(comma symbol).
     #
-    #   <value>: A value to test the equality to
+    #   <value>: Value to test the equality with
     #     Base 2, 10 or 16 integer values like 15, 0b1111, 0xf, etc.
     #
-    #   <value_start>: The start of a value range(inclusive)
+    #   <value_start>: Start of a value range(inclusive)
     #     Base 2, 10 or 16 integer values like 15, 0b1111, 0xf, etc.
     #
-    #   <value_end>: The end of a value range(inclusive)
+    #   <value_end>: End of a value range(inclusive)
     #     Base 2, 10 or 16 integer values like 15, 0b1111, 0xf, etc.
     match_condition: (cond in_range 0-14 and S == 1) or cond == 15
 
