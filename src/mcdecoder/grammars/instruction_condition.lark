@@ -5,9 +5,10 @@ and_condition: atom_condition ("and" atom_condition)*
                 | subject equality_op object -> equality_condition
                 | subject "in" number_array -> in_condition
                 | subject "in_range" number "-" number -> in_range_condition
-?subject: object
-?object: id ("[" number "]")? -> field_object
+?subject: field_object
+?object: field_object
         | number -> immediate_object
+field_object: id ("[" number "]")?
 number_array: "[" number ("," number)* "]"
 id: ID
 ?number: DECIMAL_NUMBER -> decimal_number

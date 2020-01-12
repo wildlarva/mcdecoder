@@ -54,7 +54,19 @@ instructions:
     # You can also use '(' and ')' for readability.
     #
     # where
+    #   <subject>: Subject to be tested
+    #     Expression: <field_object>
+    #
+    #   <object>: Object to test with
+    #     Expression: <field_object> or <value>
+    # 
+    #   <field_object>: A field object to be tested
+    #     Expression: <field>[<field_element_index>]
+    # 
     #   <field>: A field name to be tested
+    #
+    #   <field_element_index>: [optional] A bit element index of a field
+    #     Base 10 integer value like 1, 2, etc.
     #
     #   <operator>: An equality operator to test
     #     It can be ==, !=, <, <=, > or >=.
