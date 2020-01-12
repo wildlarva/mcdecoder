@@ -4,6 +4,7 @@ extern "C"
 {
 #include "out/arm_mcdecoder.h"
 #include "out/riscv_mcdecoder.h"
+#include "out/pc_mcdecoder.h"
 }
 
 TEST(op_parse, should_decode_32bit_instructions)
@@ -117,4 +118,46 @@ TEST(op_parse, should_not_decode_condition_unmatched_instructions)
 
   // add
   EXPECT_NE(result_add, 0);
+}
+
+TEST(op_parse, should_match_field_element_subject)
+{
+  // constants
+  pc_uint8 machine_codes[] = {
+      0x03, 0x00, 0x00, 0x10, /* instruction using a condition with a field element subject */
+      0x03, 0x00, 0x00, 0x30, /* instruction using a condition with a field element subject */
+  };
+
+  // actions
+  pc_OpDecodedCodeType decoded_code1, decoded_code2;
+  pc_OperationCodeType optype1, optype2;
+  int result1, result2;
+
+  result1 = pc_op_parse((pc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+  result2 = pc_op_parse((pc_uint16 *)&machine_codes[4], &decoded_code2, &optype2);
+
+  // assertions
+  EXPECT_EQ(result1, 0);
+  EXPECT_EQ(optype1.code_id, pc_OpCodeId_field_element_subject);
+
+  EXPECT_EQ(result2, 0);
+  EXPECT_EQ(optype2.code_id, pc_OpCodeId_field_element_subject);
+}
+
+TEST(op_parse, should_unmatch_field_element_subject)
+{
+  // constants
+  pc_uint8 machine_codes[] = {
+      0x03, 0x00, 0x00, 0x20, /* instruction using a condition with a field element subject */
+  };
+
+  // actions
+  pc_OpDecodedCodeType decoded_code;
+  pc_OperationCodeType optype;
+  int result;
+
+  result = pc_op_parse((pc_uint16 *)&machine_codes[0], &decoded_code, &optype);
+
+  // assertions
+  EXPECT_NE(result, 0);
 }

@@ -9,5 +9,8 @@ instructions:
   - name: in_range_condition
     format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0010
     unmatch_condition: cond1 in_range 1-0xa
+  - name: field_element_subject
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0011
+    match_condition: cond1[0] == 1
 decoder:
-  namespace: simple_condition
+  namespace: pc

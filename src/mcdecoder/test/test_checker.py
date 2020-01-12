@@ -321,6 +321,28 @@ def test__check_unmatch_in_range_condition() -> None:
     assert result2.duplicate_error_count == 0
 
 
+def test__check_match_field_element_subject() -> None:
+    result1 = _check(
+        'test/primitive_condition.yaml', '10 00 00 03', 16, lambda error: None)
+    assert result1.no_error_count == 1
+    assert result1.undefined_error_count == 0
+    assert result1.duplicate_error_count == 0
+
+    result2 = _check(
+        'test/primitive_condition.yaml', '30 00 00 03', 16, lambda error: None)
+    assert result2.no_error_count == 1
+    assert result2.undefined_error_count == 0
+    assert result2.duplicate_error_count == 0
+
+
+def test__check_unmatch_field_element_subject() -> None:
+    result1 = _check(
+        'test/primitive_condition.yaml', '20 00 00 03', 16, lambda error: None)
+    assert result1.no_error_count == 0
+    assert result1.undefined_error_count == 1
+    assert result1.duplicate_error_count == 0
+
+
 def test__check_match_and_condition() -> None:
     result1 = _check(
         'test/complex_condition.yaml', '12 00 00 00', 16, lambda error: None)

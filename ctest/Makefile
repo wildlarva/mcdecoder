@@ -9,7 +9,7 @@ all: setup generate
 test: all
 	make -f build.mk test
 
-generate: out/arm_mcdecoder.c out/riscv_mcdecoder.c
+generate: out/arm_mcdecoder.c out/riscv_mcdecoder.c out/pc_mcdecoder.c
 
 clean: setup
 	rm -vfr out
@@ -26,4 +26,7 @@ out/arm_mcdecoder.c: ../test/arm.yaml
 	mcdecoder generate --output out $<
 
 out/riscv_mcdecoder.c: ../test/riscv.yaml
+	mcdecoder generate --output out $<
+
+out/pc_mcdecoder.c: ../test/primitive_condition.yaml
 	mcdecoder generate --output out $<

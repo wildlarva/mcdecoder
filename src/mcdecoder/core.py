@@ -62,6 +62,21 @@ class McDescription(TypedDict):
 
 
 @dataclass
+class InstructionConditionObjectDescription:
+    """Parsed object or subject of an instruction condition"""
+    pass
+
+
+@dataclass
+class FieldInstructionConditionObjectDescription(InstructionConditionObjectDescription):
+    """Parsed field object or subject of an instruction condition"""
+    field: str
+    """Name of a field to be tested"""
+    element_index: Optional[int]
+    """Bit element index of a field to be tested"""
+
+
+@dataclass
 class InstructionConditionDescription:
     """Parsed condition of an instruction"""
     pass
@@ -79,8 +94,8 @@ class LogicalInstructionConditionDescription(InstructionConditionDescription):
 @dataclass
 class PrimitiveInstructionConditionDescription(InstructionConditionDescription):
     """Parsed primitive condition of an instruction such as '==', 'in', etc."""
-    field: str
-    """Field to be tested"""
+    subject: InstructionConditionObjectDescription
+    """Subjective InstructionConditionObjectDescription to be tested"""
     operator: str
     """Operator to test"""
     values: List[int]
@@ -160,6 +175,8 @@ class InstructionDecoderConditionObject:
 class FieldIdConditionObject(InstructionDecoderConditionObject):
     field: str
     """Name of a field to be tested"""
+    element_index: Optional[int]
+    """Bit element index of a field to be tested"""
     type: str = 'field'
     """Type of InstructionDecoderConditionObject. It's always 'field' for FieldIdConditionObject"""
 
@@ -539,14 +556,20 @@ class _InstructionConditionDescriptionTransformer(lark.Transformer):
         else:
             return LogicalInstructionConditionDescription(operator='and', conditions=atom_conditions)
 
-    def equality_condition(self, field: str, equality_op: str, value: int) -> PrimitiveInstructionConditionDescription:
-        return PrimitiveInstructionConditionDescription(field=field, operator=equality_op, values=[value])
+    def equality_condition(self, subject: InstructionConditionObjectDescription, equality_op: str, value: int) \
+            -> PrimitiveInstructionConditionDescription:
+        return PrimitiveInstructionConditionDescription(subject=subject, operator=equality_op, values=[value])
 
-    def in_condition(self, field: str, values: List[int]) -> PrimitiveInstructionConditionDescription:
-        return PrimitiveInstructionConditionDescription(field=field, operator='in', values=values)
+    def in_condition(self, subject: InstructionConditionObjectDescription, values: List[int]) \
+            -> PrimitiveInstructionConditionDescription:
+        return PrimitiveInstructionConditionDescription(subject=subject, operator='in', values=values)
 
-    def in_range_condition(self, field: str, value_start: int, value_end: int) -> PrimitiveInstructionConditionDescription:
-        return PrimitiveInstructionConditionDescription(field=field, operator='in_range', values=[value_start, value_end])
+    def in_range_condition(self, subject: InstructionConditionObjectDescription, value_start: int, value_end: int) \
+            -> PrimitiveInstructionConditionDescription:
+        return PrimitiveInstructionConditionDescription(subject=subject, operator='in_range', values=[value_start, value_end])
+
+    def field_object(self, field: str, element_index: Optional[int] = None):
+        return FieldInstructionConditionObjectDescription(field=field, element_index=element_index)
 
     @lark.v_args(inline=False)
     def number_array(self, numbers: List[int]) -> List[int]:
@@ -805,17 +828,27 @@ def _create_instruction_decode_condition(condition: InstructionConditionDescript
             return OrIdCondition(conditions=child_decode_conditions)
 
     elif isinstance(condition, PrimitiveInstructionConditionDescription):
+        decode_condition_subject = _create_instruction_decoder_condition_object(
+            condition.subject)
         if condition.operator == 'in':
-            return InIdCondition(subject=FieldIdConditionObject(field=condition.field), values=condition.values)
+            return InIdCondition(subject=decode_condition_subject, values=condition.values)
         elif condition.operator == 'in_range':
-            return InRangeIdCondition(subject=FieldIdConditionObject(field=condition.field), value_start=condition.values[0],
+            return InRangeIdCondition(subject=decode_condition_subject, value_start=condition.values[0],
                                       value_end=condition.values[1])
         else:
-            return EqualityIdCondition(subject=FieldIdConditionObject(field=condition.field), operator=condition.operator,
+            return EqualityIdCondition(subject=decode_condition_subject, operator=condition.operator,
                                        value=condition.values[0])
 
     else:
         raise RuntimeError(f'Unknown condition type: {condition}')
+
+
+def _create_instruction_decoder_condition_object(object: InstructionConditionObjectDescription) \
+        -> InstructionDecoderConditionObject:
+    if isinstance(object, FieldInstructionConditionObjectDescription):
+        return FieldIdConditionObject(field=object.field, element_index=object.element_index)
+    else:
+        raise RuntimeError(f'Unknown condition object type: {object}')
 
 
 def _parse_instruction_condition(instruction_condition: str) -> InstructionConditionDescription:
@@ -909,6 +942,10 @@ def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: Instr
             return np.zeros((code_vec.shape[0]))
 
         value_vec = _decode_field_vectorized(code_vec, field_decoder)
+        if object.element_index is not None:
+            value_vec = (value_vec & (1 << object.element_index)
+                         ) >> object.element_index
+
         return value_vec
     else:
         return np.zeros((code_vec.shape[0]))

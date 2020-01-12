@@ -1,7 +1,11 @@
 {# Renders the object/subject of a condition #}
 {%- macro instruction_condition_object(instruction, object) -%}
     {%- if object.type == 'field' -%}
-        context->decoded_code->code.{{ instruction.name }}.{{ object.field }}
+        {%- if object.element_index is none -%}
+            context->decoded_code->code.{{ instruction.name }}.{{ object.field }}
+        {%- else -%}
+            BIT_ELEMENT(context->decoded_code->code.{{ instruction.name }}.{{ object.field }}, {{ object.element_index }})
+        {%- endif -%}
     {%- endif -%}
 {%- endmacro -%}
 
@@ -38,6 +42,9 @@ typedef struct {
     {{ ns }}uint16 code16;
     {{ ns }}uint32 code32;
 } OpDecodeContext;
+
+/* macros */
+#define BIT_ELEMENT(value, element_index) (((value) & (1 << (element_index))) >> element_index)
 
 /* op constants */
 {% for inst in instruction_decoders %}

@@ -61,7 +61,7 @@ def test__generate() -> None:
                         ], extras=None),
                 ],
                 match_condition=EqualityIdCondition(
-                    subject=FieldIdConditionObject(field='cond'), operator='!=', value=0xf),
+                    subject=FieldIdConditionObject(field='cond', element_index=None), operator='!=', value=0xf),
                 unmatch_condition=None,
                 extras=None,
             ),
@@ -82,9 +82,9 @@ def test__generate() -> None:
                 ],
                 match_condition=AndIdCondition(conditions=cast(List[InstructionDecoderCondition], [
                     EqualityIdCondition(
-                        subject=FieldIdConditionObject(field='register_list'), operator='>', value=0x1),
+                        subject=FieldIdConditionObject(field='register_list', element_index=None), operator='>', value=0x1),
                     InRangeIdCondition(
-                        subject=FieldIdConditionObject(field='cond'), value_start=2, value_end=4)
+                        subject=FieldIdConditionObject(field='cond', element_index=None), value_start=2, value_end=4)
                 ])),
                 unmatch_condition=None,
                 extras=None,
