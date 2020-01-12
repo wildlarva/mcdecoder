@@ -8,6 +8,8 @@
         {%- endif -%}
     {%- elif object.type == 'immediate' -%}
         {{ object.value }}
+    {%- elif object.type == 'function' -%}
+        {{ object.function }}({{ instruction_condition_object(instruction, object.argument) }})
     {%- endif -%}
 {%- endmacro -%}
 

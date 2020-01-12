@@ -63,13 +63,13 @@ class McDescription(TypedDict):
 
 @dataclass
 class InstructionConditionObjectDescription:
-    """Parsed object/subject of an instruction condition"""
+    """Parsed object/subject in an instruction condition"""
     pass
 
 
 @dataclass
 class FieldInstructionConditionObjectDescription(InstructionConditionObjectDescription):
-    """Parsed field object/subject of an instruction condition"""
+    """Field object/subject in an instruction condition"""
     field: str
     """Name of a field to be tested"""
     element_index: Optional[int]
@@ -78,9 +78,18 @@ class FieldInstructionConditionObjectDescription(InstructionConditionObjectDescr
 
 @dataclass
 class ImmediateInstructionConditionObjectDescription(InstructionConditionObjectDescription):
-    """Parsed immediate value object/subject of an instruction condition"""
+    """Immediate value object/subject in an instruction condition"""
     value: int
     """Value to be tested"""
+
+
+@dataclass
+class FunctionInstructionConditionObjectDescription(InstructionConditionObjectDescription):
+    """Uses the result of a function call as an object/subject in an instruction condition"""
+    function: str
+    """Name of a function to be called"""
+    argument: FieldInstructionConditionObjectDescription
+    """Argument FieldInstructionConditionObjectDescription"""
 
 
 @dataclass
@@ -216,6 +225,17 @@ class ImmediateIdConditionObject(InstructionDecoderConditionObject):
     """Value to be tested"""
     type: str = 'immediate'
     """Type of InstructionDecoderConditionObject. It's always 'immediate' for ImmediateIdConditionObject"""
+
+
+@dataclass
+class FunctionIdConditionObject(InstructionDecoderConditionObject):
+    """Uses the result of a function call as an object/subject. It is a subclass for InstructionDecoderConditionObject"""
+    function: str
+    """Name of a function to be called"""
+    argument: FieldIdConditionObject
+    """Argument FieldIdConditionObject"""
+    type: str = 'function'
+    """Type of InstructionDecoderConditionObject. It's always 'function' for FunctionIdConditionObject"""
 
 
 @dataclass
