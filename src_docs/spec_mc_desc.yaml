@@ -55,10 +55,17 @@ instructions:
     #
     # where
     #   <subject>: Subject to be tested
-    #     Expression: <field_object>
+    #     Expression: <field_object> or <function_object>
     #
     #   <object>: Object to test with
-    #     Expression: <field_object> or <value>
+    #     Expression: <field_object> or <function_object> or <value>
+    # 
+    #   <function_object>: The result of a function call to be tested
+    #     Expression: <function>(<field_object>)
+    # 
+    #   <function>: Function name that its result is to be tested
+    #     Supported functions are:
+    #       - setbit_count: Count the set bit count of a given argument.
     # 
     #   <field_object>: Field object to be tested
     #     Expression: <field>[<field_element_index>]
