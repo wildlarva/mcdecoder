@@ -745,13 +745,13 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
 
     # Create instruction decode conditions
     if 'match_condition' in instruction_desc_model:
-        match_condition = _parse_and_create_instruction_decode_condition(
+        match_condition = _parse_and_create_instruction_decoder_condition(
             cast(str, instruction_desc_model['match_condition']))
     else:
         match_condition = None
 
     if 'unmatch_condition' in instruction_desc_model:
-        unmatch_condition = _parse_and_create_instruction_decode_condition(
+        unmatch_condition = _parse_and_create_instruction_decoder_condition(
             cast(str, instruction_desc_model['unmatch_condition']))
     else:
         unmatch_condition = None
@@ -853,14 +853,14 @@ def _calc_type_bit_size(bit_size: int) -> int:
         return 32
 
 
-def _parse_and_create_instruction_decode_condition(instruction_condition: str) -> InstructionDecoderCondition:
+def _parse_and_create_instruction_decoder_condition(instruction_condition: str) -> InstructionDecoderCondition:
     parsed_condition = _parse_instruction_condition(instruction_condition)
-    return _create_instruction_decode_condition(parsed_condition)
+    return _create_instruction_decoder_condition(parsed_condition)
 
 
-def _create_instruction_decode_condition(condition: InstructionConditionDescription) -> InstructionDecoderCondition:
+def _create_instruction_decoder_condition(condition: InstructionConditionDescription) -> InstructionDecoderCondition:
     if isinstance(condition, LogicalInstructionConditionDescription):
-        child_decode_conditions = [_create_instruction_decode_condition(
+        child_decode_conditions = [_create_instruction_decoder_condition(
             child_condition) for child_condition in condition.conditions]
         if condition.operator == 'and':
             return AndIdCondition(conditions=child_decode_conditions)
