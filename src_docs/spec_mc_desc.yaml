@@ -44,11 +44,11 @@ instructions:
     #
     # The following condition types are supported.
     # - Equality: The equality between a field value and a given value.
-    #     Expression: <field> <operator> <value>
+    #     Expression: <subject> <operator> <object>
     # - In a set: A field value is in a given value set.
-    #     Expression: <field> in <values>
+    #     Expression: <subject> in <values>
     # - In a range: A field value is in a given value range(inclusive).
-    #     Expression: <field> in_range <value_start>-<value_end>
+    #     Expression: <subject> in_range <value_start>-<value_end>
     #
     # These conditions can be combined with a logical operator 'and' or 'or'.
     # You can also use '(' and ')' for readability.
