@@ -60,4 +60,4 @@ Schema specification
 
 The schema is defined with JSON Schema and explained with the terms of it.
 
-.. jsonschema:: ../src/mcdecoder/schemas/mc_schema.json
+.. jsonschema:: ../src/mcdecoder/schemas/mc_desc_schema.json

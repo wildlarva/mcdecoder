@@ -683,7 +683,7 @@ def _add_yaml_include_constructor() -> None:
 
 
 def _validate_mc_desc_model(mc_desc_model: Any) -> None:
-    with importlib.resources.open_text('mcdecoder.schemas', 'mc_schema.json') as file:
+    with importlib.resources.open_text('mcdecoder.schemas', 'mc_desc_schema.json') as file:
         schema = json.load(file)
 
     jsonschema.validate(mc_desc_model, schema)
