@@ -90,7 +90,7 @@ class InstructionFieldDecoder:
 
 
 @dataclass
-class InstructionDecodeCondition:
+class InstructionDecoderCondition:
     """
     Condition of instruction encoding when an instruction applys.
 
@@ -100,27 +100,27 @@ class InstructionDecodeCondition:
 
 
 @dataclass
-class AndInstructionDecodeCondition(InstructionDecodeCondition):
-    """'and' condition subclass for InstructionDecodeCondition to combine conditions with AND operator"""
-    conditions: List[InstructionDecodeCondition]
-    """Child InstructionDecodeConditions combined with logical AND operation"""
+class AndIdCondition(InstructionDecoderCondition):
+    """'and' condition subclass for InstructionDecoderCondition to combine conditions with AND operator"""
+    conditions: List[InstructionDecoderCondition]
+    """Child InstructionDecoderConditions combined with logical AND operation"""
     type: str = 'and'
-    """Type of InstructionDecodeCondition. It's always 'and' for AndInstructionDecodeCondition"""
+    """Type of InstructionDecoderCondition. It's always 'and' for AndIdCondition"""
 
 
 @dataclass
-class OrInstructionDecodeCondition(InstructionDecodeCondition):
-    """'or' condition subclass for InstructionDecodeCondition to combine conditions with OR operator"""
-    conditions: List[InstructionDecodeCondition]
-    """Child InstructionDecodeConditions combined with logical OR operation"""
+class OrIdCondition(InstructionDecoderCondition):
+    """'or' condition subclass for InstructionDecoderCondition to combine conditions with OR operator"""
+    conditions: List[InstructionDecoderCondition]
+    """Child InstructionDecoderConditions combined with logical OR operation"""
     type: str = 'or'
-    """Type of InstructionDecodeCondition. It's always 'or' for OrInstructionDecodeCondition"""
+    """Type of InstructionDecoderCondition. It's always 'or' for OrIdCondition"""
 
 
 @dataclass
-class EqualityInstructionDecodeCondition(InstructionDecodeCondition):
+class EqualityIdCondition(InstructionDecoderCondition):
     """
-    Equality condition subclass for InstructionDecodeCondition to test a field value's equality with a value.
+    Equality condition subclass for InstructionDecoderCondition to test a field value's equality with a value.
 
     Supported operators are ==, !=, >, >=, < and <=.
     """
@@ -131,24 +131,24 @@ class EqualityInstructionDecodeCondition(InstructionDecodeCondition):
     value: int
     """Value to test with"""
     type: str = 'equality'
-    """Type of InstructionDecodeCondition. It's always 'equality' for EqualityInstructionDecodeCondition"""
+    """Type of InstructionDecoderCondition. It's always 'equality' for EqualityIdCondition"""
 
 
 @dataclass
-class InInstructionDecodeCondition(InstructionDecodeCondition):
-    """'in' condition subclass for InstructionDecodeCondition to test an instruction field is in a value set"""
+class InIdCondition(InstructionDecoderCondition):
+    """'in' condition subclass for InstructionDecoderCondition to test an instruction field is in a value set"""
     field: str
     """Name of a field to be tested"""
     values: List[int]
     """Value set a field must be in"""
     type: str = 'in'
-    """Type of InstructionDecodeCondition. It's always 'in' for InInstructionDecodeCondition"""
+    """Type of InstructionDecoderCondition. It's always 'in' for InIdCondition"""
 
 
 @dataclass
-class InRangeInstructionDecodeCondition(InstructionDecodeCondition):
+class InRangeIdCondition(InstructionDecoderCondition):
     """
-    'in_range' condition subclass for InstructionDecodeCondition
+    'in_range' condition subclass for InstructionDecoderCondition
     to test an instruction field is in a value range(inclusive)
     """
     field: str
@@ -158,7 +158,7 @@ class InRangeInstructionDecodeCondition(InstructionDecodeCondition):
     value_end: int
     """End of a value range a field must be in"""
     type: str = 'in_range'
-    """Type of InstructionDecodeCondition. It's always 'in_range' for InRangeInstructionDecodeCondition"""
+    """Type of InstructionDecoderCondition. It's always 'in_range' for InRangeIdCondition"""
 
 
 @dataclass
@@ -172,9 +172,9 @@ class InstructionDecoder:
     """Fixed bits of an instruction"""
     type_bit_size: int
     """Bit size of a data type used for an instruction"""
-    match_condition: Optional[InstructionDecodeCondition]
+    match_condition: Optional[InstructionDecoderCondition]
     """Condition an instruction must satisfy"""
-    unmatch_condition: Optional[InstructionDecodeCondition]
+    unmatch_condition: Optional[InstructionDecoderCondition]
     """Condition an instruction must not satisfy"""
     field_decoders: List[InstructionFieldDecoder]
     """Child InstructionFieldDecoders"""
@@ -203,24 +203,24 @@ class McDecoder:
 
 # endregion
 
-# region Instruction condition
+# region Parsed instruction condition description
 @dataclass
-class InstructionCondition:
+class InstructionConditionDescription:
     """Parsed condition of an instruction"""
     pass
 
 
 @dataclass
-class LogicalInstructionCondition(InstructionCondition):
+class LogicalInstructionConditionDescription(InstructionConditionDescription):
     """Parsed logical condition of an instruction, 'and' or 'or'"""
     operator: Literal['and', 'or']
     """Operator of a logical condition"""
-    conditions: List[InstructionCondition]
+    conditions: List[InstructionConditionDescription]
     """Conditions combined with an logical operator"""
 
 
 @dataclass
-class PrimitiveInstructionCondition(InstructionCondition):
+class PrimitiveInstructionConditionDescription(InstructionConditionDescription):
     """Parsed primitive condition of an instruction such as '==', 'in', etc."""
     field: str
     """Field to be tested"""
@@ -231,9 +231,9 @@ class PrimitiveInstructionCondition(InstructionCondition):
 
 # endregion
 
-# region Instruction format
+# region Parsed instruction format description
 @dataclass
-class BitRange:
+class BitRangeDescription:
     """Parsed bit range"""
     start: int
     """MSB of a bit range"""
@@ -242,21 +242,21 @@ class BitRange:
 
 
 @dataclass
-class InstructionFieldFormat:
+class InstructionFieldFormatDescription:
     """Parsed encoding format of an instruction field"""
     name: Optional[str]
     """Name of a field"""
     bits_format: str
     """Encoding format of a field"""
-    bit_ranges: List[BitRange]
+    bit_ranges: List[BitRangeDescription]
     """Bit ranges of a field that the encoding format corresponds to"""
 
 
 @dataclass
-class InstructionFormat:
+class InstructionFormatDescription:
     """Parsed encoding format of an instruction"""
-    field_formats: List[InstructionFieldFormat]
-    """Child InstructionFieldFormats"""
+    field_formats: List[InstructionFieldFormatDescription]
+    """Child InstructionFieldFormatDescriptions"""
 
 # endregion
 
@@ -358,18 +358,18 @@ def load_mc_description_model(mcfile_path: str) -> McDescription:
     return cast(McDescription, mc_desc_model)
 
 
-def parse_instruction_format(instruction_format: str) -> InstructionFormat:
+def parse_instruction_format(instruction_format: str) -> InstructionFormatDescription:
     """
     Parse a string of the encoding format of an instruction
 
     :param instruction_format: String of the encoding format of an instruction
-    :return: Parsed InstructionFormat
+    :return: Parsed InstructionFormatDescription
     """
     parsed_tree = _instruction_format_parser.parse(instruction_format)
-    return cast(InstructionFormat, _InstructionFormatTransformer(None).transform(parsed_tree))
+    return cast(InstructionFormatDescription, _InstructionFormatDescriptionTransformer(None).transform(parsed_tree))
 
 
-def calc_instruction_bit_size(instruction_format: InstructionFormat) -> int:
+def calc_instruction_bit_size(instruction_format: InstructionFormatDescription) -> int:
     """
     Calculate the bit length of an instruction
 
@@ -468,30 +468,31 @@ class _YamlIncludeContext:
 
 
 @lark.v_args(inline=True)
-class _InstructionFormatTransformer(lark.Transformer):
+class _InstructionFormatDescriptionTransformer(lark.Transformer):
     @lark.v_args(inline=False)
-    def instruction_format(self, field_formats: List[InstructionFieldFormat]) -> InstructionFormat:
-        return InstructionFormat(field_formats=field_formats)
+    def instruction_format(self, field_formats: List[InstructionFieldFormatDescription]) -> InstructionFormatDescription:
+        return InstructionFormatDescription(field_formats=field_formats)
 
     def field_format(self, field_bits: str, field_name: str = None,
-                     field_bit_ranges: List[BitRange] = None) -> InstructionFieldFormat:
+                     field_bit_ranges: List[BitRangeDescription] = None) -> InstructionFieldFormatDescription:
         if field_bit_ranges is None:
-            field_bit_ranges = [BitRange(start=len(field_bits) - 1, end=0)]
+            field_bit_ranges = [BitRangeDescription(
+                start=len(field_bits) - 1, end=0)]
 
-        return InstructionFieldFormat(name=field_name, bits_format=field_bits, bit_ranges=field_bit_ranges)
+        return InstructionFieldFormatDescription(name=field_name, bits_format=field_bits, bit_ranges=field_bit_ranges)
 
     @lark.v_args(inline=False)
     def field_bits(self, field_bits_tokens: List[lark.Token]) -> str:
         return ''.join(field_bits_tokens)
 
     @lark.v_args(inline=False)
-    def field_bit_ranges(self, field_bit_ranges: List[BitRange]) -> List[BitRange]:
+    def field_bit_ranges(self, field_bit_ranges: List[BitRangeDescription]) -> List[BitRangeDescription]:
         return field_bit_ranges
 
-    def field_bit_range(self, subfield_start: int, subfield_end: int = None) -> BitRange:
+    def field_bit_range(self, subfield_start: int, subfield_end: int = None) -> BitRangeDescription:
         if subfield_end is None:
             subfield_end = subfield_start
-        return BitRange(start=subfield_start, end=subfield_end)
+        return BitRangeDescription(start=subfield_start, end=subfield_end)
 
     def id(self, id_token: lark.Token) -> str:
         return str(id_token)
@@ -505,29 +506,29 @@ class _InstructionFormatTransformer(lark.Transformer):
 
 
 @lark.v_args(inline=True)
-class _InstructionConditionTransformer(lark.Transformer):
+class _InstructionConditionDescriptionTransformer(lark.Transformer):
     @lark.v_args(inline=False)
-    def or_condition(self, and_conditions: List[InstructionCondition]) -> InstructionCondition:
+    def or_condition(self, and_conditions: List[InstructionConditionDescription]) -> InstructionConditionDescription:
         if len(and_conditions) == 1:
             return and_conditions[0]
         else:
-            return LogicalInstructionCondition(operator='or', conditions=and_conditions)
+            return LogicalInstructionConditionDescription(operator='or', conditions=and_conditions)
 
     @lark.v_args(inline=False)
-    def and_condition(self, atom_conditions: List[InstructionCondition]) -> InstructionCondition:
+    def and_condition(self, atom_conditions: List[InstructionConditionDescription]) -> InstructionConditionDescription:
         if len(atom_conditions) == 1:
             return atom_conditions[0]
         else:
-            return LogicalInstructionCondition(operator='and', conditions=atom_conditions)
+            return LogicalInstructionConditionDescription(operator='and', conditions=atom_conditions)
 
-    def equality_condition(self, field: str, equality_op: str, value: int) -> PrimitiveInstructionCondition:
-        return PrimitiveInstructionCondition(field=field, operator=equality_op, values=[value])
+    def equality_condition(self, field: str, equality_op: str, value: int) -> PrimitiveInstructionConditionDescription:
+        return PrimitiveInstructionConditionDescription(field=field, operator=equality_op, values=[value])
 
-    def in_condition(self, field: str, values: List[int]) -> PrimitiveInstructionCondition:
-        return PrimitiveInstructionCondition(field=field, operator='in', values=values)
+    def in_condition(self, field: str, values: List[int]) -> PrimitiveInstructionConditionDescription:
+        return PrimitiveInstructionConditionDescription(field=field, operator='in', values=values)
 
-    def in_range_condition(self, field: str, value_start: int, value_end: int) -> PrimitiveInstructionCondition:
-        return PrimitiveInstructionCondition(field=field, operator='in_range', values=[value_start, value_end])
+    def in_range_condition(self, field: str, value_start: int, value_end: int) -> PrimitiveInstructionConditionDescription:
+        return PrimitiveInstructionConditionDescription(field=field, operator='in_range', values=[value_start, value_end])
 
     @lark.v_args(inline=False)
     def number_array(self, numbers: List[int]) -> List[int]:
@@ -689,7 +690,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
     )
 
 
-def _build_fixed_bits_info(instruction_format: InstructionFormat) -> Tuple[int, int]:
+def _build_fixed_bits_info(instruction_format: InstructionFormatDescription) -> Tuple[int, int]:
     """Build fixed bits information and returns fixed_bits_mask and fixed_bits"""
     fixed_bits_mask = 0
     fixed_bits = 0
@@ -706,7 +707,7 @@ def _build_fixed_bits_info(instruction_format: InstructionFormat) -> Tuple[int, 
     return fixed_bits_mask, fixed_bits
 
 
-def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruction_format: InstructionFormat,
+def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruction_format: InstructionFormatDescription,
                           ff_index_to_start_bit: Dict[int, int]) -> InstructionFieldDecoder:
     """Create a model which contains information of a instruction field decoder"""
     # Find related field formats
@@ -771,38 +772,38 @@ def _calc_type_bit_size(bit_size: int) -> int:
         return 32
 
 
-def _parse_and_create_instruction_decode_condition(instruction_condition: str) -> InstructionDecodeCondition:
+def _parse_and_create_instruction_decode_condition(instruction_condition: str) -> InstructionDecoderCondition:
     parsed_condition = _parse_instruction_condition(instruction_condition)
     return _create_instruction_decode_condition(parsed_condition)
 
 
-def _create_instruction_decode_condition(condition: InstructionCondition) -> InstructionDecodeCondition:
-    if isinstance(condition, LogicalInstructionCondition):
+def _create_instruction_decode_condition(condition: InstructionConditionDescription) -> InstructionDecoderCondition:
+    if isinstance(condition, LogicalInstructionConditionDescription):
         child_decode_conditions = [_create_instruction_decode_condition(
             child_condition) for child_condition in condition.conditions]
         if condition.operator == 'and':
-            return AndInstructionDecodeCondition(conditions=child_decode_conditions)
+            return AndIdCondition(conditions=child_decode_conditions)
         else:  # condition.operator == 'or'
-            return OrInstructionDecodeCondition(conditions=child_decode_conditions)
+            return OrIdCondition(conditions=child_decode_conditions)
 
-    elif isinstance(condition, PrimitiveInstructionCondition):
+    elif isinstance(condition, PrimitiveInstructionConditionDescription):
         if condition.operator == 'in':
-            return InInstructionDecodeCondition(field=condition.field, values=condition.values)
+            return InIdCondition(field=condition.field, values=condition.values)
         elif condition.operator == 'in_range':
-            return InRangeInstructionDecodeCondition(field=condition.field, value_start=condition.values[0],
-                                                     value_end=condition.values[1])
+            return InRangeIdCondition(field=condition.field, value_start=condition.values[0],
+                                      value_end=condition.values[1])
         else:
-            return EqualityInstructionDecodeCondition(field=condition.field, operator=condition.operator,
-                                                      value=condition.values[0])
+            return EqualityIdCondition(field=condition.field, operator=condition.operator,
+                                       value=condition.values[0])
 
     else:
         raise RuntimeError(f'Unknown condition type: {condition}')
 
 
-def _parse_instruction_condition(instruction_condition: str) -> InstructionCondition:
+def _parse_instruction_condition(instruction_condition: str) -> InstructionConditionDescription:
     """Parse an instruction condition and returns a parsed condition"""
     parsed_tree = _instruction_condition_parser.parse(instruction_condition)
-    return cast(InstructionCondition, _InstructionConditionTransformer(None).transform(parsed_tree))
+    return cast(InstructionConditionDescription, _InstructionConditionDescriptionTransformer(None).transform(parsed_tree))
 
 
 def _create_instruction_condition_parser() -> lark.Lark:
@@ -825,10 +826,10 @@ def _get_appropriate_code(context: DecodeContext, instruction_decoder: Instructi
         return context.code32
 
 
-def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: InstructionDecodeCondition,  # noqa: C901
+def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: InstructionDecoderCondition,  # noqa: C901
                                            instruction_decoder: InstructionDecoder) -> np.ndarray:
     # NOTE Do not refactor and split into multiple functions for performance
-    if isinstance(condition, AndInstructionDecodeCondition):
+    if isinstance(condition, AndIdCondition):
         total_test_vec = np.full((code_vec.shape[0]), True)
         for child_condition in condition.conditions:
             test_vec: np.ndarray = _test_instruction_condition_vectorized(
@@ -838,7 +839,7 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
 
         return total_test_vec
 
-    elif isinstance(condition, OrInstructionDecodeCondition):
+    elif isinstance(condition, OrIdCondition):
         total_test_vec = np.full((code_vec.shape[0]), False)
         for child_condition in condition.conditions:
             test_vec: np.ndarray = _test_instruction_condition_vectorized(
@@ -848,7 +849,7 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
 
         return total_test_vec
 
-    elif isinstance(condition, EqualityInstructionDecodeCondition):
+    elif isinstance(condition, EqualityIdCondition):
         field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
                               condition.field), None)
         if field_decoder is None:
@@ -870,7 +871,7 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
         else:
             return np.full((code_vec.shape[0]), False)
 
-    elif isinstance(condition, InInstructionDecodeCondition):
+    elif isinstance(condition, InIdCondition):
         field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
                               condition.field), None)
         if field_decoder is None:
@@ -880,7 +881,7 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
 
         return np.isin(value, condition.values)
 
-    elif isinstance(condition, InRangeInstructionDecodeCondition):
+    elif isinstance(condition, InRangeIdCondition):
         field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
                               condition.field), None)
         if field_decoder is None:

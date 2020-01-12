@@ -1,5 +1,5 @@
 from ..core import (
-    EqualityInstructionDecodeCondition, InRangeInstructionDecodeCondition,
+    EqualityIdCondition, InRangeIdCondition,
     create_mcdecoder_model, load_mc_description_model)
 
 
@@ -132,14 +132,14 @@ def test_create_mcdecoder_model_condition() -> None:
         'test/arm.yaml')
 
     add_condition = mcdecoder_model.instruction_decoders[0].unmatch_condition
-    assert isinstance(add_condition, EqualityInstructionDecodeCondition)
+    assert isinstance(add_condition, EqualityIdCondition)
     assert add_condition.type == 'equality'
     assert add_condition.field == 'cond'
     assert add_condition.operator == '=='
     assert add_condition.value == 15
 
     push_condition = mcdecoder_model.instruction_decoders[1].match_condition
-    assert isinstance(push_condition, InRangeInstructionDecodeCondition)
+    assert isinstance(push_condition, InRangeIdCondition)
     assert push_condition.type == 'in_range'
     assert push_condition.field == 'cond'
     assert push_condition.value_start == 0

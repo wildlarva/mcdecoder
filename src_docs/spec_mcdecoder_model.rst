@@ -16,20 +16,20 @@ MC decoder model specification
 .. autoclass:: mcdecoder.core.InstructionSubfieldDecoder
     :noindex:
 
-.. autoclass:: mcdecoder.core.InstructionDecodeCondition
+.. autoclass:: mcdecoder.core.InstructionDecoderCondition
     :noindex:
 
-.. autoclass:: mcdecoder.core.AndInstructionDecodeCondition
+.. autoclass:: mcdecoder.core.AndIdCondition
     :noindex:
 
-.. autoclass:: mcdecoder.core.OrInstructionDecodeCondition
+.. autoclass:: mcdecoder.core.OrIdCondition
     :noindex:
 
-.. autoclass:: mcdecoder.core.EqualityInstructionDecodeCondition
+.. autoclass:: mcdecoder.core.EqualityIdCondition
     :noindex:
 
-.. autoclass:: mcdecoder.core.InInstructionDecodeCondition
+.. autoclass:: mcdecoder.core.InIdCondition
     :noindex:
 
-.. autoclass:: mcdecoder.core.InRangeInstructionDecodeCondition
+.. autoclass:: mcdecoder.core.InRangeIdCondition
     :noindex:

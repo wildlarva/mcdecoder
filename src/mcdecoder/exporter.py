@@ -35,7 +35,7 @@ def export(mcfile: str, output_file: str) -> int:
 @dataclass
 class _InstructionInfo:
     instruction: core.InstructionDescription
-    format: core.InstructionFormat
+    format: core.InstructionFormatDescription
 
 
 # endregion

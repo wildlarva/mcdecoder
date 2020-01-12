@@ -5,8 +5,8 @@ from typing import List, cast
 import jinja2
 
 from ..core import (
-    AndInstructionDecodeCondition, EqualityInstructionDecodeCondition,
-    InRangeInstructionDecodeCondition, InstructionDecodeCondition,
+    AndIdCondition, EqualityIdCondition,
+    InRangeIdCondition, InstructionDecoderCondition,
     InstructionDecoder, InstructionFieldDecoder, InstructionSubfieldDecoder,
     MachineDecoder, McDecoder)
 from ..generator import _generate, generate
@@ -60,7 +60,7 @@ def test__generate() -> None:
                                                        end_bit_in_instruction=20, end_bit_in_field=0)
                         ], extras=None),
                 ],
-                match_condition=EqualityInstructionDecodeCondition(
+                match_condition=EqualityIdCondition(
                     field='cond', operator='!=', value=0xf),
                 unmatch_condition=None,
                 extras=None,
@@ -80,10 +80,10 @@ def test__generate() -> None:
                                                    end_bit_in_instruction=0, end_bit_in_field=0)
                     ], extras=None),
                 ],
-                match_condition=AndInstructionDecodeCondition(conditions=cast(List[InstructionDecodeCondition], [
-                    EqualityInstructionDecodeCondition(
+                match_condition=AndIdCondition(conditions=cast(List[InstructionDecoderCondition], [
+                    EqualityIdCondition(
                         field='register_list', operator='>', value=0x1),
-                    InRangeInstructionDecodeCondition(
+                    InRangeIdCondition(
                         field='cond', value_start=2, value_end=4)
                 ])),
                 unmatch_condition=None,
