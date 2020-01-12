@@ -161,3 +161,48 @@ TEST(op_parse, should_unmatch_field_element_subject)
   // assertions
   EXPECT_NE(result, 0);
 }
+
+TEST(op_parse, should_match_field_object)
+{
+  // constants
+  pc_uint8 machine_codes[] = {
+      0x04, 0x00, 0x00, 0x00, /* instruction using a condition with a field element subject */
+      0x04, 0x00, 0x00, 0x11, /* instruction using a condition with a field element subject */
+  };
+
+  // actions
+  pc_OpDecodedCodeType decoded_code1, decoded_code2;
+  pc_OperationCodeType optype1, optype2;
+  int result1, result2;
+
+  result1 = pc_op_parse((pc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+  result2 = pc_op_parse((pc_uint16 *)&machine_codes[4], &decoded_code2, &optype2);
+
+  // assertions
+  EXPECT_EQ(result1, 0);
+  EXPECT_EQ(optype1.code_id, pc_OpCodeId_field_object);
+
+  EXPECT_EQ(result2, 0);
+  EXPECT_EQ(optype2.code_id, pc_OpCodeId_field_object);
+}
+
+TEST(op_parse, should_unmatch_field_object)
+{
+  // constants
+  pc_uint8 machine_codes[] = {
+      0x04, 0x00, 0x00, 0x01, /* instruction using a condition with a field element subject */
+      0x04, 0x00, 0x00, 0x10, /* instruction using a condition with a field element subject */
+  };
+
+  // actions
+  pc_OpDecodedCodeType decoded_code1, decoded_code2;
+  pc_OperationCodeType optype1, optype2;
+  int result1, result2;
+
+  result1 = pc_op_parse((pc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+  result2 = pc_op_parse((pc_uint16 *)&machine_codes[4], &decoded_code2, &optype2);
+
+  // assertions
+  EXPECT_NE(result1, 0);
+  EXPECT_NE(result2, 0);
+}

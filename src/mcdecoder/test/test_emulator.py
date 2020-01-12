@@ -254,6 +254,32 @@ def test__emulate_unmatch_field_element_subject() -> None:
     assert len(instructions1) == 0
 
 
+def test__emulate_match_field_object() -> None:
+    instructions1 = _emulate(
+        'test/primitive_condition.yaml', '00 00 00 04', 16, 'big')
+    assert len(instructions1) == 1
+
+    (instruction1,) = instructions1
+    assert instruction1.decoder.name == 'field_object'
+
+    instructions2 = _emulate(
+        'test/primitive_condition.yaml', '11 00 00 04', 16, 'big')
+    assert len(instructions2) == 1
+
+    (instruction2,) = instructions2
+    assert instruction2.decoder.name == 'field_object'
+
+
+def test__emulate_unmatch_field_object() -> None:
+    instructions1 = _emulate(
+        'test/primitive_condition.yaml', '01 00 00 04', 16, 'big')
+    assert len(instructions1) == 0
+
+    instructions2 = _emulate(
+        'test/primitive_condition.yaml', '10 00 00 04', 16, 'big')
+    assert len(instructions2) == 0
+
+
 def test__emulate_match_and_condition() -> None:
     instructions1 = _emulate(
         'test/complex_condition.yaml', '12 00 00 00', 16, 'big')

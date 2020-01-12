@@ -2,11 +2,12 @@
 or_condition: and_condition ("or" and_condition)*
 and_condition: atom_condition ("and" atom_condition)*
 ?atom_condition: "(" or_condition ")"
-                | subject equality_op number -> equality_condition
+                | subject equality_op object -> equality_condition
                 | subject "in" number_array -> in_condition
                 | subject "in_range" number "-" number -> in_range_condition
 ?subject: object
 ?object: id ("[" number "]")? -> field_object
+        | number -> immediate_object
 number_array: "[" number ("," number)* "]"
 id: ID
 ?number: DECIMAL_NUMBER -> decimal_number

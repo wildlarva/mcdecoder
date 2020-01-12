@@ -105,8 +105,6 @@ class EqualityInstructionConditionDescription(InstructionConditionDescription):
     """Subjective InstructionConditionObjectDescription to be tested"""
     operator: str
     """Operator to test"""
-    value: int
-    """Values to test with. Deprecated"""
     object: InstructionConditionObjectDescription
     """Objective InstructionConditionObjectDescription to test with"""
 
@@ -595,11 +593,9 @@ class _InstructionConditionDescriptionTransformer(lark.Transformer):
         else:
             return LogicalInstructionConditionDescription(operator='and', conditions=atom_conditions)
 
-    def equality_condition(self, subject: InstructionConditionObjectDescription, equality_op: str, value: int) \
-            -> EqualityInstructionConditionDescription:
-        return EqualityInstructionConditionDescription(subject=subject, operator=equality_op,
-                                                       object=ImmediateInstructionConditionObjectDescription(value=value),
-                                                       value=value)
+    def equality_condition(self, subject: InstructionConditionObjectDescription, equality_op: str,
+                           object: InstructionConditionObjectDescription) -> EqualityInstructionConditionDescription:
+        return EqualityInstructionConditionDescription(subject=subject, operator=equality_op, object=object)
 
     def in_condition(self, subject: InstructionConditionObjectDescription, values: List[int]) \
             -> InInstructionConditionDescription:
@@ -609,8 +605,11 @@ class _InstructionConditionDescriptionTransformer(lark.Transformer):
             -> InRangeInstructionConditionDescription:
         return InRangeInstructionConditionDescription(subject=subject, value_start=value_start, value_end=value_end)
 
-    def field_object(self, field: str, element_index: Optional[int] = None):
+    def field_object(self, field: str, element_index: Optional[int] = None) -> FieldInstructionConditionObjectDescription:
         return FieldInstructionConditionObjectDescription(field=field, element_index=element_index)
+
+    def immediate_object(self, value: int) -> ImmediateInstructionConditionObjectDescription:
+        return ImmediateInstructionConditionObjectDescription(value=value)
 
     @lark.v_args(inline=False)
     def number_array(self, numbers: List[int]) -> List[int]:
@@ -871,8 +870,10 @@ def _create_instruction_decode_condition(condition: InstructionConditionDescript
     elif isinstance(condition, EqualityInstructionConditionDescription):
         decode_condition_subject = _create_instruction_decoder_condition_object(
             condition.subject)
+        decode_condition_object = _create_instruction_decoder_condition_object(
+            condition.object)
         return EqualityIdCondition(subject=decode_condition_subject, operator=condition.operator,
-                                   object=ImmediateIdConditionObject(value=condition.value))
+                                   object=decode_condition_object)
 
     elif isinstance(condition, InInstructionConditionDescription):
         decode_condition_subject = _create_instruction_decoder_condition_object(
@@ -893,6 +894,8 @@ def _create_instruction_decoder_condition_object(object: InstructionConditionObj
         -> InstructionDecoderConditionObject:
     if isinstance(object, FieldInstructionConditionObjectDescription):
         return FieldIdConditionObject(field=object.field, element_index=object.element_index)
+    elif isinstance(object, ImmediateInstructionConditionObjectDescription):
+        return ImmediateIdConditionObject(value=object.value)
     else:
         raise RuntimeError(f'Unknown condition object type: {object}')
 
