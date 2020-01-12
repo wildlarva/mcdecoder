@@ -5,7 +5,7 @@ from typing import List, Literal, Optional, cast
 
 from . import checker, emulator, exporter, generator
 
-# External functions
+# region External functions
 
 
 def run_app(argv: List[str]) -> int:
@@ -45,7 +45,9 @@ def run_app(argv: List[str]) -> int:
     return 0
 
 
-# Internal classes
+# endregion
+
+# region Internal classes
 
 
 @dataclass
@@ -63,7 +65,9 @@ class _Arguments:
         pass
 
 
-# Internal functions
+# endregion
+
+# region Internal functions
 def _create_parser() -> argparse.ArgumentParser:
     # Create an argument parser
     parser = argparse.ArgumentParser(
@@ -160,3 +164,6 @@ def _create_parser() -> argparse.ArgumentParser:
         'mcfile', help='A path to a machine code description file')
 
     return parser
+
+
+# endregion

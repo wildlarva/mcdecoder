@@ -3,7 +3,7 @@ import re
 from typing import Literal
 
 
-# External functions
+# region External functions
 
 
 def convert_to_big_endian(bits: str, base: Literal[2, 16], byteorder: Literal['big', 'little']) -> str:
@@ -107,3 +107,5 @@ def make_parent_directories(file: str) -> bool:
             return False
 
     return True
+
+# endregion

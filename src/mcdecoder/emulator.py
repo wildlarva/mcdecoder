@@ -2,7 +2,7 @@ from typing import List, Literal
 
 from . import common, core
 
-# External functions
+# region External functions
 
 
 def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None, byteorder: Literal['big', 'little'] = None) -> int:
@@ -49,7 +49,9 @@ def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None, byteorde
     return 0
 
 
-# Internal functions
+# endregion
+
+# region Internal functions
 
 def _emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16],
              byteorder: Literal['big', 'little']) -> List[core.InstructionDecodeResult]:
@@ -86,3 +88,6 @@ def _emulate_decoder(context: core.DecodeContext) -> List[core.InstructionDecode
 
 def _bit_pattern_to_int(bit_pattern: str, base: Literal[2, 16], byteorder: Literal['big', 'little']) -> int:
     return int(common.convert_to_big_endian(bit_pattern, base, byteorder), base)
+
+
+# endregion

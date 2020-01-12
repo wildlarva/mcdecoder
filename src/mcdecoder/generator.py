@@ -5,7 +5,7 @@ import jinja2
 from . import common, core
 
 
-# External functions
+# region External functions
 
 
 def generate(mcfile_path: str, output_directory: str = None, template_directory: str = None) -> int:
@@ -45,7 +45,9 @@ def generate(mcfile_path: str, output_directory: str = None, template_directory:
         return 1
 
 
-# Internal functions
+# endregion
+
+# region Internal functions
 
 
 def _generate(mcdecoder_model: core.McDecoder, output_directory: str, template_loader: jinja2.BaseLoader) -> bool:
@@ -82,3 +84,6 @@ def _generate(mcdecoder_model: core.McDecoder, output_directory: str, template_l
             file.write(template.render(template_args))
 
     return True
+
+
+# endregion

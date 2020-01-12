@@ -4,7 +4,7 @@ from typing import List, cast
 
 from . import common, core
 
-# External functions
+# region External functions
 
 
 def export(mcfile: str, output_file: str) -> int:
@@ -28,7 +28,9 @@ def export(mcfile: str, output_file: str) -> int:
         return 1
 
 
-# Internal classes
+# endregion
+
+# region Internal classes
 
 @dataclass
 class _InstructionInfo:
@@ -36,7 +38,9 @@ class _InstructionInfo:
     format: core.InstructionFormat
 
 
-# Internal functions
+# endregion
+
+# region Internal functions
 
 def _export(mcfile: str, output_file: str) -> bool:
     # Load MC description
@@ -87,3 +91,6 @@ def _export(mcfile: str, output_file: str) -> bool:
         writer.writerows(rows)
 
     return True
+
+
+# endregion

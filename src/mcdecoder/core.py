@@ -12,9 +12,9 @@ import lark
 import numpy as np
 import yaml
 
-# External classes
+# region External classes
 
-# MC description models loaded from yaml files
+# region MC description models loaded from yaml files
 
 
 class InstructionDescription(TypedDict):
@@ -56,8 +56,9 @@ class McDescription(TypedDict):
     extras: Optional[Any]
     """User-defined data not related to a machine, an instruction and a field"""
 
+# endregion
 
-# Decoder models
+# region Decoder models
 @dataclass
 class InstructionSubfieldDecoder:
     """Decoder for a instruction subfield"""
@@ -200,8 +201,9 @@ class McDecoder:
     extras: Optional[Any]
     """User-defined data not related to a machine, an instruction and a field"""
 
+# endregion
 
-# Instruction condition
+# region Instruction condition
 @dataclass
 class InstructionCondition:
     """Parsed condition of an instruction"""
@@ -227,8 +229,9 @@ class PrimitiveInstructionCondition(InstructionCondition):
     values: List[int]
     """Values to test with"""
 
+# endregion
 
-# Instruction format
+# region Instruction format
 @dataclass
 class BitRange:
     """Parsed bit range"""
@@ -255,8 +258,9 @@ class InstructionFormat:
     field_formats: List[InstructionFieldFormat]
     """Child InstructionFieldFormats"""
 
+# endregion
 
-# Decode emulation
+# region Decode emulation
 
 
 @dataclass
@@ -298,8 +302,11 @@ class InstructionDecodeResult:
     field_results: List[InstructionFieldDecodeResult]
     """Child InstructionFieldDecodeResults"""
 
+# endregion
 
-# External functions
+# endregion
+
+# region External functions
 
 
 def create_mcdecoder_model(mcfile_path: str) -> McDecoder:
@@ -448,8 +455,9 @@ def decode_instruction(context: DecodeContext, instruction_decoder: InstructionD
 
     return InstructionDecodeResult(decoder=instruction_decoder, field_results=field_results)
 
+# endregion
 
-# Internal classes
+# region Internal classes
 
 
 @dataclass
@@ -543,8 +551,9 @@ class _InstructionConditionTransformer(lark.Transformer):
     def __init__(self, dummy: Any) -> None:
         pass
 
+# endregion
 
-# Internal functions
+# region Internal functions
 
 
 def _yaml_include_constructor(loader: yaml.Loader, node: yaml.Node) -> Any:
@@ -894,11 +903,16 @@ def _decode_field_vectorized(code_vec: np.ndarray, field_decoder: InstructionFie
     return value
 
 
-# Internal variables
+# endregion
+
+# region Internal variables
 _yaml_include_context: _YamlIncludeContext = _YamlIncludeContext(base_dir='')
 _instruction_format_parser: lark.Lark = _create_instruction_format_parser()
 _instruction_condition_parser: lark.Lark = _create_instruction_condition_parser()
 
+# endregion
 
-# Global executions
+# region Global executions
 _add_yaml_include_constructor()
+
+# endregion

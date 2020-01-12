@@ -8,7 +8,7 @@ import numpy as np
 
 from . import common, core
 
-# External functions
+# region External functions
 
 
 def check(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None) -> int:
@@ -63,7 +63,9 @@ def check(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None) -> int:
     return 0
 
 
-# Internal classes
+# endregion
+
+# region Internal classes
 
 
 @dataclass
@@ -126,14 +128,18 @@ class _Error:
     bits_end: int
 
 
-# Internal global variables
+# endregion
+
+# region Internal global variables
 
 
 _VEC_SIZE = 1 << 16
 """Max size of vectors and rows of matrices used for checking"""
 
 
-# Internal functions
+# endregion
+
+# region Internal functions
 
 
 def _output_error(errors: List[_Error]) -> None:
@@ -444,3 +450,6 @@ def _detect_duplicate_instruction_pairs(context: _CheckContext) -> List[List[str
     sorted_instruction_pairs = sorted(sorted(pair)
                                       for pair in duplicate_instruction_pairs)
     return sorted_instruction_pairs
+
+
+# endregion
