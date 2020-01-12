@@ -63,17 +63,24 @@ class McDescription(TypedDict):
 
 @dataclass
 class InstructionConditionObjectDescription:
-    """Parsed object or subject of an instruction condition"""
+    """Parsed object/subject of an instruction condition"""
     pass
 
 
 @dataclass
 class FieldInstructionConditionObjectDescription(InstructionConditionObjectDescription):
-    """Parsed field object or subject of an instruction condition"""
+    """Parsed field object/subject of an instruction condition"""
     field: str
     """Name of a field to be tested"""
     element_index: Optional[int]
     """Bit element index of a field to be tested"""
+
+
+@dataclass
+class ImmediateInstructionConditionObjectDescription(InstructionConditionObjectDescription):
+    """Parsed immediate value object/subject of an instruction condition"""
+    value: int
+    """Value to be tested"""
 
 
 @dataclass
@@ -99,7 +106,9 @@ class EqualityInstructionConditionDescription(InstructionConditionDescription):
     operator: str
     """Operator to test"""
     value: int
-    """Values to test with"""
+    """Values to test with. Deprecated"""
+    object: InstructionConditionObjectDescription
+    """Objective InstructionConditionObjectDescription to test with"""
 
 
 @dataclass
@@ -193,12 +202,22 @@ class InstructionDecoderConditionObject:
 
 @dataclass
 class FieldIdConditionObject(InstructionDecoderConditionObject):
+    """Field object/subject subclass for InstructionDecoderConditionObject"""
     field: str
     """Name of a field to be tested"""
     element_index: Optional[int]
     """Bit element index of a field to be tested"""
     type: str = 'field'
     """Type of InstructionDecoderConditionObject. It's always 'field' for FieldIdConditionObject"""
+
+
+@dataclass
+class ImmediateIdConditionObject(InstructionDecoderConditionObject):
+    """Immediate value object/subject subclass for InstructionDecoderConditionObject"""
+    value: int
+    """Value to be tested"""
+    type: str = 'immediate'
+    """Type of InstructionDecoderConditionObject. It's always 'immediate' for ImmediateIdConditionObject"""
 
 
 @dataclass
@@ -240,8 +259,8 @@ class EqualityIdCondition(InstructionDecoderCondition):
     """Subjective InstructionDecoderConditionObject to be tested"""
     operator: str
     """Operator to test"""
-    value: int
-    """Value to test with"""
+    object: InstructionDecoderConditionObject
+    """Objective InstructionDecoderConditionObject to test with"""
     type: str = 'equality'
     """Type of InstructionDecoderCondition. It's always 'equality' for EqualityIdCondition"""
 
@@ -578,7 +597,9 @@ class _InstructionConditionDescriptionTransformer(lark.Transformer):
 
     def equality_condition(self, subject: InstructionConditionObjectDescription, equality_op: str, value: int) \
             -> EqualityInstructionConditionDescription:
-        return EqualityInstructionConditionDescription(subject=subject, operator=equality_op, value=value)
+        return EqualityInstructionConditionDescription(subject=subject, operator=equality_op,
+                                                       object=ImmediateInstructionConditionObjectDescription(value=value),
+                                                       value=value)
 
     def in_condition(self, subject: InstructionConditionObjectDescription, values: List[int]) \
             -> InInstructionConditionDescription:
@@ -850,7 +871,8 @@ def _create_instruction_decode_condition(condition: InstructionConditionDescript
     elif isinstance(condition, EqualityInstructionConditionDescription):
         decode_condition_subject = _create_instruction_decoder_condition_object(
             condition.subject)
-        return EqualityIdCondition(subject=decode_condition_subject, operator=condition.operator, value=condition.value)
+        return EqualityIdCondition(subject=decode_condition_subject, operator=condition.operator,
+                                   object=ImmediateIdConditionObject(value=condition.value))
 
     elif isinstance(condition, InInstructionConditionDescription):
         decode_condition_subject = _create_instruction_decoder_condition_object(
@@ -925,20 +947,22 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
         return total_test_vec
 
     elif isinstance(condition, EqualityIdCondition):
-        value_vec = _instruction_condition_object_vectorized(
+        subject_vec = _instruction_condition_object_vectorized(
             code_vec, condition.subject, instruction_decoder)
+        object_vec = _instruction_condition_object_vectorized(
+            code_vec, condition.object, instruction_decoder)
         if condition.operator == '==':
-            return value_vec == condition.value
+            return subject_vec == object_vec
         elif condition.operator == '!=':
-            return value_vec != condition.value
+            return subject_vec != object_vec
         elif condition.operator == '<':
-            return value_vec < condition.value
+            return subject_vec < object_vec
         elif condition.operator == '<=':
-            return value_vec <= condition.value
+            return subject_vec <= object_vec
         elif condition.operator == '>':
-            return value_vec > condition.value
+            return subject_vec > object_vec
         elif condition.operator == '>=':
-            return value_vec >= condition.value
+            return subject_vec >= object_vec
         else:
             return np.full((code_vec.shape[0]), False)
 
@@ -971,6 +995,11 @@ def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: Instr
                          ) >> object.element_index
 
         return value_vec
+
+    elif isinstance(object, ImmediateIdConditionObject):
+        # Returns scalar
+        return np.array(object.value)
+
     else:
         return np.zeros((code_vec.shape[0]))
 

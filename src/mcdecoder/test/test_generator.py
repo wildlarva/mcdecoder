@@ -5,7 +5,7 @@ from typing import List, cast
 import jinja2
 
 from ..core import (
-    AndIdCondition, EqualityIdCondition, FieldIdConditionObject,
+    AndIdCondition, EqualityIdCondition, FieldIdConditionObject, ImmediateIdConditionObject,
     InRangeIdCondition, InstructionDecoderCondition,
     InstructionDecoder, InstructionFieldDecoder, InstructionSubfieldDecoder,
     MachineDecoder, McDecoder)
@@ -61,7 +61,8 @@ def test__generate() -> None:
                         ], extras=None),
                 ],
                 match_condition=EqualityIdCondition(
-                    subject=FieldIdConditionObject(field='cond', element_index=None), operator='!=', value=0xf),
+                    subject=FieldIdConditionObject(field='cond', element_index=None), operator='!=',
+                    object=ImmediateIdConditionObject(value=0xf)),
                 unmatch_condition=None,
                 extras=None,
             ),
@@ -82,7 +83,8 @@ def test__generate() -> None:
                 ],
                 match_condition=AndIdCondition(conditions=cast(List[InstructionDecoderCondition], [
                     EqualityIdCondition(
-                        subject=FieldIdConditionObject(field='register_list', element_index=None), operator='>', value=0x1),
+                        subject=FieldIdConditionObject(field='register_list', element_index=None), operator='>',
+                        object=ImmediateIdConditionObject(value=0x1)),
                     InRangeIdCondition(
                         subject=FieldIdConditionObject(field='cond', element_index=None), value_start=2, value_end=4)
                 ])),

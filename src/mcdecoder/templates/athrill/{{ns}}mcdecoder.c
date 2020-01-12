@@ -6,6 +6,8 @@
         {%- else -%}
             BIT_ELEMENT(context->decoded_code->code.{{ instruction.name }}.{{ object.field }}, {{ object.element_index }})
         {%- endif -%}
+    {%- elif object.type == 'immediate' -%}
+        {{ object.value }}
     {%- endif -%}
 {%- endmacro -%}
 
@@ -22,7 +24,7 @@
             ({{ instruction_condition(instruction, child_condition) }})
         {% endfor %}
     {%- elif condition.type == 'equality' -%}
-        {{ instruction_condition_object(instruction, condition.subject) }} {{ condition.operator }} {{ condition.value }}
+        {{ instruction_condition_object(instruction, condition.subject) }} {{ condition.operator }} {{ instruction_condition_object(instruction, condition.object) }}
     {%- elif condition.type == 'in' -%}
         {% for value in condition.values %}
             {%- if not loop.first %} || {% endif -%}
