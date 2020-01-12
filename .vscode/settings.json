@@ -2,6 +2,7 @@
     "editor.formatOnSave": true,
     "files.associations": {
         "**/*templates/**": "jinja",
+        "ctest/conanfile.txt": "properties",
     },
     "json.schemas": [
         {
