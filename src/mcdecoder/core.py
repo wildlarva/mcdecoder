@@ -5,7 +5,8 @@ import itertools
 import json
 import os.path
 from os.path import isfile
-from typing import Any, Dict, List, Literal, Optional, Tuple, TypedDict, cast
+from typing import (
+    Any, Callable, Dict, List, Literal, Optional, Tuple, TypedDict, cast)
 
 import jsonschema
 import lark
@@ -631,6 +632,10 @@ class _InstructionConditionDescriptionTransformer(lark.Transformer):
     def immediate_object(self, value: int) -> ImmediateInstructionConditionObjectDescription:
         return ImmediateInstructionConditionObjectDescription(value=value)
 
+    def function_object(self, function: str, argument: FieldInstructionConditionObjectDescription) \
+            -> FunctionInstructionConditionObjectDescription:
+        return FunctionInstructionConditionObjectDescription(function=function, argument=argument)
+
     @lark.v_args(inline=False)
     def number_array(self, numbers: List[int]) -> List[int]:
         return numbers
@@ -1027,6 +1032,15 @@ def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: Instr
         # Returns scalar
         return np.array(object.value)
 
+    elif isinstance(object, FunctionIdConditionObject):
+        if not (object.function in _FUNCTION_NAME_TO_FUNCTION):
+            return np.zeros((code_vec.shape[0]))
+
+        function = _FUNCTION_NAME_TO_FUNCTION[object.function]
+        value_vec = _instruction_condition_object_vectorized(
+            code_vec, object.argument, instruction_decoder)
+        return function(value_vec)
+
     else:
         return np.zeros((code_vec.shape[0]))
 
@@ -1039,9 +1053,32 @@ def _decode_field_vectorized(code_vec: np.ndarray, field_decoder: InstructionFie
     return value_vec
 
 
+def _setbit_count(value_vec: np.ndarray) -> np.ndarray:
+    """
+    Calculate the set bit count of a value. It is built-in function for an instruction condition.
+
+    :param value_vec: N-vector of values
+    :return: N-vector of set bit counts of values
+    """
+    value_vvec = value_vec.reshape(value_vec.shape[0], 1)
+    bit_mat = np.unpackbits(value_vvec.view(dtype=np.uint8),  # type: ignore # TODO pyright can't recognize numpy.uint8
+                            axis=1)
+    count_vec = np.sum(bit_mat, axis=1)
+    return count_vec
+
+
 # endregion
 
 # region Internal variables
+
+_FUNCTION_NAME_TO_FUNCTION: Dict[str, Callable[[np.ndarray], np.ndarray]] = {
+    'setbit_count': _setbit_count,
+}
+"""
+Dictionary to define built-in functions for an instruction condition.
+Its entry is a pair of a function name and a function.
+"""
+
 _yaml_include_context: _YamlIncludeContext = _YamlIncludeContext(base_dir='')
 _instruction_format_parser: lark.Lark = _create_instruction_format_parser()
 _instruction_condition_parser: lark.Lark = _create_instruction_condition_parser()

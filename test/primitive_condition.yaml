@@ -15,5 +15,8 @@ instructions:
   - name: field_object
     format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0100
     match_condition: cond1 == cond2
+  - name: function_subject
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0101
+    match_condition: setbit_count(cond1) == 2
 decoder:
   namespace: pc

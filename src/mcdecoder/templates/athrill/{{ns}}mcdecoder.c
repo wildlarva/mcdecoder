@@ -39,6 +39,10 @@
 
 #include "{{ ns }}mcdecoder.h"
 
+#include <stdbool.h>
+
+/* types */
+
 typedef struct {
     {{ ns }}uint16 *code;
     {{ ns }}OpDecodedCodeType *decoded_code;
@@ -46,9 +50,6 @@ typedef struct {
     {{ ns }}uint16 code16;
     {{ ns }}uint32 code32;
 } OpDecodeContext;
-
-/* macros */
-#define BIT_ELEMENT(value, element_index) (((value) & (1 << (element_index))) >> element_index)
 
 /* op constants */
 {% for inst in instruction_decoders %}
@@ -64,6 +65,19 @@ typedef struct {
         {% endfor %}
     {% endfor %}
 {% endfor %}
+
+/* macros */
+#define BIT_ELEMENT(value, element_index) (((value) & (1 << (element_index))) >> element_index)
+
+/* functions for conditions */
+static {{ ns }}uint32 setbit_count({{ ns }}uint32 value) {
+    {{ ns }}uint32 count = 0;
+    while (value) {
+        count += value & 1;
+        value >>= 1;
+    }
+    return count;
+}
 
 /* individual op parse functions */
 {% for inst in instruction_decoders %}

@@ -13,3 +13,4 @@ int pc_op_exec_in_condition(struct TargetCore *core) { return 0; }
 int pc_op_exec_in_range_condition(struct TargetCore *core) { return 0; }
 int pc_op_exec_field_element_subject(struct TargetCore *core) { return 0; }
 int pc_op_exec_field_object(struct TargetCore *core) { return 0; }
+int pc_op_exec_function_subject(struct TargetCore *core) { return 0; }

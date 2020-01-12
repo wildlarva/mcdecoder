@@ -6,9 +6,12 @@ and_condition: atom_condition ("and" atom_condition)*
                 | subject "in" number_array -> in_condition
                 | subject "in_range" number "-" number -> in_range_condition
 ?subject: field_object
+        | function_object
 ?object: field_object
         | number -> immediate_object
+        | function_object
 field_object: id ("[" number "]")?
+function_object: id "(" field_object ")"
 number_array: "[" number ("," number)* "]"
 id: ID
 ?number: DECIMAL_NUMBER -> decimal_number
