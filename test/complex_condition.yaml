@@ -13,4 +13,4 @@ instructions:
     format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0011
     unmatch_condition: (cond1 == 1 and cond2 == 2) or cond1 == 3
 decoder:
-  namespace: complex_condition
+  namespace: cc

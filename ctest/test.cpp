@@ -5,6 +5,7 @@ extern "C"
 #include "out/arm_mcdecoder.h"
 #include "out/riscv_mcdecoder.h"
 #include "out/pc_mcdecoder.h"
+#include "out/cc_mcdecoder.h"
 }
 
 TEST(op_parse, should_decode_32bit_instructions)
@@ -118,6 +119,136 @@ TEST(op_parse, should_not_decode_condition_unmatched_instructions)
 
   // add
   EXPECT_NE(result_add, 0);
+}
+
+TEST(op_parse, should_match_equality_condition)
+{
+  // constants
+  pc_uint8 machine_codes[] = {
+      0x00, 0x00, 0x00, 0x10, /* instruction using an equality condition */
+  };
+
+  // actions
+  pc_OpDecodedCodeType decoded_code1;
+  pc_OperationCodeType optype1;
+  int result1;
+
+  result1 = pc_op_parse((pc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+
+  // assertions
+  EXPECT_EQ(result1, 0);
+  EXPECT_EQ(optype1.code_id, pc_OpCodeId_equality_condition);
+}
+
+TEST(op_parse, should_unmatch_equality_condition)
+{
+  // constants
+  pc_uint8 machine_codes[] = {
+      0x00, 0x00, 0x00, 0x00, /* instruction using an equality condition */
+      0x00, 0x00, 0x00, 0x20, /* instruction using an equality condition */
+  };
+
+  // actions
+  pc_OpDecodedCodeType decoded_code1, decoded_code2;
+  pc_OperationCodeType optype1, optype2;
+  int result1, result2;
+
+  result1 = pc_op_parse((pc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+  result2 = pc_op_parse((pc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+
+  // assertions
+  EXPECT_NE(result1, 0);
+  EXPECT_NE(result2, 0);
+}
+
+TEST(op_parse, should_match_in_condition)
+{
+  // constants
+  pc_uint8 machine_codes[] = {
+      0x01, 0x00, 0x00, 0x10, /* instruction using an 'in' condition */
+      0x01, 0x00, 0x00, 0x30, /* instruction using an 'in' condition */
+  };
+
+  // actions
+  pc_OpDecodedCodeType decoded_code1, decoded_code2;
+  pc_OperationCodeType optype1, optype2;
+  int result1, result2;
+
+  result1 = pc_op_parse((pc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+  result2 = pc_op_parse((pc_uint16 *)&machine_codes[4], &decoded_code2, &optype2);
+
+  // assertions
+  EXPECT_EQ(result1, 0);
+  EXPECT_EQ(optype1.code_id, pc_OpCodeId_in_condition);
+
+  EXPECT_EQ(result2, 0);
+  EXPECT_EQ(optype2.code_id, pc_OpCodeId_in_condition);
+}
+
+TEST(op_parse, should_unmatch_in_condition)
+{
+  // constants
+  pc_uint8 machine_codes[] = {
+      0x01, 0x00, 0x00, 0x00, /* instruction using an 'in' condition */
+      0x01, 0x00, 0x00, 0x20, /* instruction using an 'in' condition */
+  };
+
+  // actions
+  pc_OpDecodedCodeType decoded_code1, decoded_code2;
+  pc_OperationCodeType optype1, optype2;
+  int result1, result2;
+
+  result1 = pc_op_parse((pc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+  result2 = pc_op_parse((pc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+
+  // assertions
+  EXPECT_NE(result1, 0);
+  EXPECT_NE(result2, 0);
+}
+
+TEST(op_parse, should_match_in_range_condition)
+{
+  // constants
+  pc_uint8 machine_codes[] = {
+      0x02, 0x00, 0x00, 0x00, /* instruction using an 'in_range' condition */
+      0x02, 0x00, 0x00, 0xb0, /* instruction using an 'in_range' condition */
+  };
+
+  // actions
+  pc_OpDecodedCodeType decoded_code1, decoded_code2;
+  pc_OperationCodeType optype1, optype2;
+  int result1, result2;
+
+  result1 = pc_op_parse((pc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+  result2 = pc_op_parse((pc_uint16 *)&machine_codes[4], &decoded_code2, &optype2);
+
+  // assertions
+  EXPECT_EQ(result1, 0);
+  EXPECT_EQ(optype1.code_id, pc_OpCodeId_in_range_condition);
+
+  EXPECT_EQ(result2, 0);
+  EXPECT_EQ(optype2.code_id, pc_OpCodeId_in_range_condition);
+}
+
+TEST(op_parse, should_unmatch_in_range_condition)
+{
+  // constants
+  pc_uint8 machine_codes[] = {
+      0x02, 0x00, 0x00, 0x10, /* instruction using an 'in_range' condition */
+      0x02, 0x00, 0x00, 0xa0, /* instruction using an 'in_range' condition */
+  };
+
+  // actions
+  pc_OpDecodedCodeType decoded_code1, decoded_code2;
+  pc_OperationCodeType optype1, optype2;
+  int result1, result2;
+
+  result1 = pc_op_parse((pc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+  result2 = pc_op_parse((pc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+
+  // assertions
+  EXPECT_NE(result1, 0);
+  EXPECT_NE(result2, 0);
 }
 
 TEST(op_parse, should_match_field_element_subject)
@@ -250,4 +381,145 @@ TEST(op_parse, should_unmatch_function_subject)
   // assertions
   EXPECT_NE(result1, 0);
   EXPECT_NE(result2, 0);
+}
+
+TEST(op_parse, should_match_and_condition)
+{
+  // constants
+  cc_uint8 machine_codes[] = {
+      0x00, 0x00, 0x00, 0x12, /* instruction using an 'and' condition */
+  };
+
+  // actions
+  cc_OpDecodedCodeType decoded_code1;
+  cc_OperationCodeType optype1;
+  int result1;
+
+  result1 = cc_op_parse((cc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+
+  // assertions
+  EXPECT_EQ(result1, 0);
+  EXPECT_EQ(optype1.code_id, cc_OpCodeId_and_condition);
+}
+
+TEST(op_parse, should_unmatch_and_condition)
+{
+  // constants
+  cc_uint8 machine_codes[] = {
+      0x00, 0x00, 0x00, 0x11, /* instruction using an 'and' condition */
+      0x00, 0x00, 0x00, 0x22, /* instruction using an 'and' condition */
+  };
+
+  // actions
+  cc_OpDecodedCodeType decoded_code1, decoded_code2;
+  cc_OperationCodeType optype1, optype2;
+  int result1, result2;
+
+  result1 = cc_op_parse((cc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+  result2 = cc_op_parse((cc_uint16 *)&machine_codes[4], &decoded_code2, &optype2);
+
+  // assertions
+  EXPECT_NE(result1, 0);
+  EXPECT_NE(result2, 0);
+}
+
+TEST(op_parse, should_match_or_condition)
+{
+  // constants
+  cc_uint8 machine_codes[] = {
+      0x01, 0x00, 0x00, 0x21, /* instruction using an 'or' condition */
+  };
+
+  // actions
+  cc_OpDecodedCodeType decoded_code1;
+  cc_OperationCodeType optype1;
+  int result1;
+
+  result1 = cc_op_parse((cc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+
+  // assertions
+  EXPECT_EQ(result1, 0);
+  EXPECT_EQ(optype1.code_id, cc_OpCodeId_or_condition);
+}
+
+TEST(op_parse, should_unmatch_or_condition)
+{
+  // constants
+  cc_uint8 machine_codes[] = {
+      0x01, 0x00, 0x00, 0x02, /* instruction using an 'or' condition */
+      0x01, 0x00, 0x00, 0x10, /* instruction using an 'or' condition */
+  };
+
+  // actions
+  cc_OpDecodedCodeType decoded_code1, decoded_code2;
+  cc_OperationCodeType optype1, optype2;
+  int result1, result2;
+
+  result1 = cc_op_parse((cc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+  result2 = cc_op_parse((cc_uint16 *)&machine_codes[4], &decoded_code2, &optype2);
+
+  // assertions
+  EXPECT_NE(result1, 0);
+  EXPECT_NE(result2, 0);
+}
+
+TEST(op_parse, should_match_andor_condition)
+{
+  // constants
+  cc_uint8 machine_codes[] = {
+      0x02, 0x00, 0x00, 0x12, /* instruction using both 'and' and 'or' condition */
+      0x02, 0x00, 0x00, 0x30, /* instruction using both 'and' and 'or' condition */
+      0x03, 0x00, 0x00, 0x11, /* instruction using both 'and' and 'or' condition */
+      0x03, 0x00, 0x00, 0x22, /* instruction using both 'and' and 'or' condition */
+  };
+
+  // actions
+  cc_OpDecodedCodeType decoded_code1, decoded_code2, decoded_code3, decoded_code4;
+  cc_OperationCodeType optype1, optype2, optype3, optype4;
+  int result1, result2, result3, result4;
+
+  result1 = cc_op_parse((cc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+  result2 = cc_op_parse((cc_uint16 *)&machine_codes[4], &decoded_code2, &optype2);
+  result3 = cc_op_parse((cc_uint16 *)&machine_codes[8], &decoded_code3, &optype3);
+  result4 = cc_op_parse((cc_uint16 *)&machine_codes[12], &decoded_code4, &optype4);
+
+  // assertions
+  EXPECT_EQ(result1, 0);
+  EXPECT_EQ(optype1.code_id, cc_OpCodeId_and_or_condition1);
+
+  EXPECT_EQ(result2, 0);
+  EXPECT_EQ(optype2.code_id, cc_OpCodeId_and_or_condition1);
+
+  EXPECT_EQ(result3, 0);
+  EXPECT_EQ(optype3.code_id, cc_OpCodeId_and_or_condition2);
+
+  EXPECT_EQ(result4, 0);
+  EXPECT_EQ(optype4.code_id, cc_OpCodeId_and_or_condition2);
+}
+
+TEST(op_parse, should_unmatch_andor_condition)
+{
+  // constants
+  cc_uint8 machine_codes[] = {
+      0x02, 0x00, 0x00, 0x11, /* instruction using both 'and' and 'or' condition */
+      0x02, 0x00, 0x00, 0x22, /* instruction using both 'and' and 'or' condition */
+      0x03, 0x00, 0x00, 0x12, /* instruction using both 'and' and 'or' condition */
+      0x03, 0x00, 0x00, 0x30, /* instruction using both 'and' and 'or' condition */
+  };
+
+  // actions
+  cc_OpDecodedCodeType decoded_code1, decoded_code2, decoded_code3, decoded_code4;
+  cc_OperationCodeType optype1, optype2, optype3, optype4;
+  int result1, result2, result3, result4;
+
+  result1 = cc_op_parse((cc_uint16 *)&machine_codes[0], &decoded_code1, &optype1);
+  result2 = cc_op_parse((cc_uint16 *)&machine_codes[4], &decoded_code2, &optype2);
+  result3 = cc_op_parse((cc_uint16 *)&machine_codes[8], &decoded_code3, &optype3);
+  result4 = cc_op_parse((cc_uint16 *)&machine_codes[12], &decoded_code4, &optype4);
+
+  // assertions
+  EXPECT_NE(result1, 0);
+  EXPECT_NE(result2, 0);
+  EXPECT_NE(result3, 0);
+  EXPECT_NE(result4, 0);
 }
