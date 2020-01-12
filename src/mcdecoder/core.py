@@ -199,8 +199,6 @@ class EqualityIdCondition(InstructionDecoderCondition):
 
     Supported operators are ==, !=, >, >=, < and <=.
     """
-    field: str
-    """Name of a field to be tested. Deprecated"""
     subject: InstructionDecoderConditionObject
     """Subjective InstructionDecoderConditionObject to be tested"""
     operator: str
@@ -214,8 +212,6 @@ class EqualityIdCondition(InstructionDecoderCondition):
 @dataclass
 class InIdCondition(InstructionDecoderCondition):
     """'in' condition subclass for InstructionDecoderCondition to test an instruction field is in a value set"""
-    field: str
-    """Name of a field to be tested. Deprecated"""
     subject: InstructionDecoderConditionObject
     """Subjective InstructionDecoderConditionObject to be tested"""
     values: List[int]
@@ -230,8 +226,6 @@ class InRangeIdCondition(InstructionDecoderCondition):
     'in_range' condition subclass for InstructionDecoderCondition
     to test an instruction field is in a value range(inclusive)
     """
-    field: str
-    """Name of a field to be tested. Deprecated"""
     subject: InstructionDecoderConditionObject
     """Subjective InstructionDecoderConditionObject to be tested"""
     value_start: int
@@ -812,15 +806,12 @@ def _create_instruction_decode_condition(condition: InstructionConditionDescript
 
     elif isinstance(condition, PrimitiveInstructionConditionDescription):
         if condition.operator == 'in':
-            return InIdCondition(subject=FieldIdConditionObject(field=condition.field), field=condition.field,
-                                 values=condition.values)
+            return InIdCondition(subject=FieldIdConditionObject(field=condition.field), values=condition.values)
         elif condition.operator == 'in_range':
-            return InRangeIdCondition(subject=FieldIdConditionObject(field=condition.field), field=condition.field,
-                                      value_start=condition.values[0],
+            return InRangeIdCondition(subject=FieldIdConditionObject(field=condition.field), value_start=condition.values[0],
                                       value_end=condition.values[1])
         else:
-            return EqualityIdCondition(subject=FieldIdConditionObject(field=condition.field), field=condition.field,
-                                       operator=condition.operator,
+            return EqualityIdCondition(subject=FieldIdConditionObject(field=condition.field), operator=condition.operator,
                                        value=condition.values[0])
 
     else:
@@ -877,12 +868,8 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
         return total_test_vec
 
     elif isinstance(condition, EqualityIdCondition):
-        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
-                              condition.field), None)
-        if field_decoder is None:
-            return np.full((code_vec.shape[0]), False)
-
-        value = _decode_field_vectorized(code_vec, field_decoder)
+        value = _instruction_condition_object_vectorized(
+            code_vec, condition.subject, instruction_decoder)
         if condition.operator == '==':
             return value == condition.value
         elif condition.operator == '!=':
@@ -899,28 +886,32 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
             return np.full((code_vec.shape[0]), False)
 
     elif isinstance(condition, InIdCondition):
-        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
-                              condition.field), None)
-        if field_decoder is None:
-            return np.full((code_vec.shape[0]), False)
-
-        value = _decode_field_vectorized(code_vec, field_decoder)
-
+        value = _instruction_condition_object_vectorized(
+            code_vec, condition.subject, instruction_decoder)
         return np.isin(value, condition.values)
 
     elif isinstance(condition, InRangeIdCondition):
-        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
-                              condition.field), None)
-        if field_decoder is None:
-            return np.full((code_vec.shape[0]), False)
-
-        value = _decode_field_vectorized(code_vec, field_decoder)
-
+        value = _instruction_condition_object_vectorized(
+            code_vec, condition.subject, instruction_decoder)
         return np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
             value >= condition.value_start, value <= condition.value_end)
 
     else:
         return np.full((code_vec.shape[0]), False)
+
+
+def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: InstructionDecoderConditionObject,
+                                             instruction_decoder: InstructionDecoder) -> np.ndarray:
+    if isinstance(object, FieldIdConditionObject):
+        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
+                              object.field), None)
+        if field_decoder is None:
+            return np.zeros((code_vec.shape[0]))
+
+        value_vec = _decode_field_vectorized(code_vec, field_decoder)
+        return value_vec
+    else:
+        return np.zeros((code_vec.shape[0]))
 
 
 def _decode_field_vectorized(code_vec: np.ndarray, field_decoder: InstructionFieldDecoder) -> np.ndarray:

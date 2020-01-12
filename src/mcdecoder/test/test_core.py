@@ -1,5 +1,5 @@
 from ..core import (
-    EqualityIdCondition, InRangeIdCondition,
+    EqualityIdCondition, FieldIdConditionObject, InRangeIdCondition,
     create_mcdecoder_model, load_mc_description_model)
 
 
@@ -134,14 +134,16 @@ def test_create_mcdecoder_model_condition() -> None:
     add_condition = mcdecoder_model.instruction_decoders[0].unmatch_condition
     assert isinstance(add_condition, EqualityIdCondition)
     assert add_condition.type == 'equality'
-    assert add_condition.field == 'cond'
+    assert isinstance(add_condition.subject, FieldIdConditionObject)
+    assert add_condition.subject.field == 'cond'
     assert add_condition.operator == '=='
     assert add_condition.value == 15
 
     push_condition = mcdecoder_model.instruction_decoders[1].match_condition
     assert isinstance(push_condition, InRangeIdCondition)
     assert push_condition.type == 'in_range'
-    assert push_condition.field == 'cond'
+    assert isinstance(push_condition.subject, FieldIdConditionObject)
+    assert push_condition.subject.field == 'cond'
     assert push_condition.value_start == 0
     assert push_condition.value_end == 14
 
