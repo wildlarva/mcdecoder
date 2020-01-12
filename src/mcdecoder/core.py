@@ -888,22 +888,22 @@ def _create_instruction_decoder_condition(condition: InstructionConditionDescrip
             return OrIdCondition(conditions=child_decode_conditions)
 
     elif isinstance(condition, EqualityInstructionConditionDescription):
-        decode_condition_subject = _create_instruction_decoder_condition_object(
+        decoder_condition_subject = _create_instruction_decoder_condition_object(
             condition.subject)
-        decode_condition_object = _create_instruction_decoder_condition_object(
+        decoder_condition_object = _create_instruction_decoder_condition_object(
             condition.object)
-        return EqualityIdCondition(subject=decode_condition_subject, operator=condition.operator,
-                                   object=decode_condition_object)
+        return EqualityIdCondition(subject=decoder_condition_subject, operator=condition.operator,
+                                   object=decoder_condition_object)
 
     elif isinstance(condition, InInstructionConditionDescription):
-        decode_condition_subject = _create_instruction_decoder_condition_object(
+        decoder_condition_subject = _create_instruction_decoder_condition_object(
             condition.subject)
-        return InIdCondition(subject=decode_condition_subject, values=condition.values)
+        return InIdCondition(subject=decoder_condition_subject, values=condition.values)
 
     elif isinstance(condition, InRangeInstructionConditionDescription):
-        decode_condition_subject = _create_instruction_decoder_condition_object(
+        decoder_condition_subject = _create_instruction_decoder_condition_object(
             condition.subject)
-        return InRangeIdCondition(subject=decode_condition_subject, value_start=condition.value_start,
+        return InRangeIdCondition(subject=decoder_condition_subject, value_start=condition.value_start,
                                   value_end=condition.value_end)
 
     else:
@@ -916,6 +916,10 @@ def _create_instruction_decoder_condition_object(object: InstructionConditionObj
         return FieldIdConditionObject(field=object.field, element_index=object.element_index)
     elif isinstance(object, ImmediateInstructionConditionObjectDescription):
         return ImmediateIdConditionObject(value=object.value)
+    elif isinstance(object, FunctionInstructionConditionObjectDescription):
+        decoder_condition_argument = cast(FieldIdConditionObject,
+                                          _create_instruction_decoder_condition_object(object.argument))
+        return FunctionIdConditionObject(function=object.function, argument=decoder_condition_argument)
     else:
         raise RuntimeError(f'Unknown condition object type: {object}')
 
