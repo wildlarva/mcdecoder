@@ -60,6 +60,7 @@ class McDescription(TypedDict):
 
 # region MC description models parsed from string
 
+
 @dataclass
 class InstructionConditionDescription:
     """Parsed condition of an instruction"""
@@ -146,6 +147,24 @@ class InstructionFieldDecoder:
 
 
 @dataclass
+class InstructionDecoderConditionObject:
+    """
+    Object or subject of InstructionDecoderCondition.
+
+    Each subclass must have a string attribute 'type' to express the type of a subclass.
+    """
+    pass
+
+
+@dataclass
+class FieldIdConditionObject(InstructionDecoderConditionObject):
+    field: str
+    """Name of a field to be tested"""
+    type: str = 'field'
+    """Type of InstructionDecoderConditionObject. It's always 'field' for FieldIdConditionObject"""
+
+
+@dataclass
 class InstructionDecoderCondition:
     """
     Condition of instruction encoding when an instruction applys.
@@ -181,7 +200,9 @@ class EqualityIdCondition(InstructionDecoderCondition):
     Supported operators are ==, !=, >, >=, < and <=.
     """
     field: str
-    """Name of a field to be tested"""
+    """Name of a field to be tested. Deprecated"""
+    subject: InstructionDecoderConditionObject
+    """Subjective InstructionDecoderConditionObject to be tested"""
     operator: str
     """Operator to test"""
     value: int
@@ -194,7 +215,9 @@ class EqualityIdCondition(InstructionDecoderCondition):
 class InIdCondition(InstructionDecoderCondition):
     """'in' condition subclass for InstructionDecoderCondition to test an instruction field is in a value set"""
     field: str
-    """Name of a field to be tested"""
+    """Name of a field to be tested. Deprecated"""
+    subject: InstructionDecoderConditionObject
+    """Subjective InstructionDecoderConditionObject to be tested"""
     values: List[int]
     """Value set a field must be in"""
     type: str = 'in'
@@ -208,7 +231,9 @@ class InRangeIdCondition(InstructionDecoderCondition):
     to test an instruction field is in a value range(inclusive)
     """
     field: str
-    """Name of a field to be tested"""
+    """Name of a field to be tested. Deprecated"""
+    subject: InstructionDecoderConditionObject
+    """Subjective InstructionDecoderConditionObject to be tested"""
     value_start: int
     """Start of a value range a field must be in"""
     value_end: int
@@ -787,12 +812,15 @@ def _create_instruction_decode_condition(condition: InstructionConditionDescript
 
     elif isinstance(condition, PrimitiveInstructionConditionDescription):
         if condition.operator == 'in':
-            return InIdCondition(field=condition.field, values=condition.values)
+            return InIdCondition(subject=FieldIdConditionObject(field=condition.field), field=condition.field,
+                                 values=condition.values)
         elif condition.operator == 'in_range':
-            return InRangeIdCondition(field=condition.field, value_start=condition.values[0],
+            return InRangeIdCondition(subject=FieldIdConditionObject(field=condition.field), field=condition.field,
+                                      value_start=condition.values[0],
                                       value_end=condition.values[1])
         else:
-            return EqualityIdCondition(field=condition.field, operator=condition.operator,
+            return EqualityIdCondition(subject=FieldIdConditionObject(field=condition.field), field=condition.field,
+                                       operator=condition.operator,
                                        value=condition.values[0])
 
     else:
