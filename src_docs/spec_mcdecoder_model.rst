@@ -33,3 +33,15 @@ MC decoder model specification
 
 .. autoclass:: mcdecoder.core.InRangeIdCondition
     :noindex:
+
+.. autoclass:: mcdecoder.core.InstructionDecoderConditionObject
+    :noindex:
+
+.. autoclass:: mcdecoder.core.FieldIdConditionObject
+    :noindex:
+
+.. autoclass:: mcdecoder.core.ImmediateIdConditionObject
+    :noindex:
+
+.. autoclass:: mcdecoder.core.FunctionIdConditionObject
+    :noindex:
