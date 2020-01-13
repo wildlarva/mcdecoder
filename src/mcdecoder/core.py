@@ -160,10 +160,18 @@ class InstructionFieldEncodingDescription:
 
 
 @dataclass
-class InstructionEncodingDescription:
-    """Parsed encoding format of an instruction"""
+class InstructionEncodingElementDescription:
+    """Parsed encoding element of an instruction"""
     fields: List[InstructionFieldEncodingDescription]
     """Child InstructionFieldEncodingDescriptions"""
+
+
+@dataclass
+class InstructionEncodingDescription:
+    """Parsed encoding format of an instruction"""
+    elements: List[InstructionEncodingElementDescription]
+    """Child InstructionEncodingElementDescriptions"""
+
 
 # endregion
 
@@ -469,7 +477,9 @@ def calc_instruction_bit_size(instruction_encoding: InstructionEncodingDescripti
     :param instruction_encoding: Calculation target
     :return: Bit length of an instruction
     """
-    return sum(len(field.bits_format) for field in instruction_encoding.fields)
+    field_encodings = itertools.chain.from_iterable(
+        element.fields for element in instruction_encoding.elements)
+    return sum(len(field.bits_format) for field in field_encodings)
 
 
 def find_matched_instructions(context: DecodeContext) -> List[InstructionDecoder]:
@@ -564,7 +574,7 @@ class _InstructionEncodingDescriptionTransformer(lark.Transformer):
     @lark.v_args(inline=False)
     def instruction_encoding(self, field_encodings: List[InstructionFieldEncodingDescription]) \
             -> InstructionEncodingDescription:
-        return InstructionEncodingDescription(fields=field_encodings)
+        return InstructionEncodingDescription(elements=[InstructionEncodingElementDescription(fields=field_encodings)])
 
     def field_encoding(self, field_bits: str, field_name: str = None,
                        field_bit_ranges: List[BitRangeDescription] = None) -> InstructionFieldEncodingDescription:
@@ -736,6 +746,8 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
     # Parse instruction encoding
     instruction_encoding = parse_instruction_encoding(
         instruction_desc_model['format'])
+    field_encodings = list(itertools.chain.from_iterable(
+        element.fields for element in instruction_encoding.elements))
     instruction_bit_size = calc_instruction_bit_size(instruction_encoding)
 
     # Build fixed bits information
@@ -745,15 +757,15 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
     ff_start_bit_in_instruction = instruction_bit_size - 1
     ff_index_to_start_bit: Dict[int, int] = {}
 
-    for field_encoding in instruction_encoding.fields:
+    for field_encoding in field_encodings:
         field_bit_size = len(field_encoding.bits_format)
-        ff_index_to_start_bit[instruction_encoding.fields.index(
+        ff_index_to_start_bit[field_encodings.index(
             field_encoding)] = ff_start_bit_in_instruction
         ff_start_bit_in_instruction -= field_bit_size
 
     # Create field decoders
     field_names = set(cast(str, field.name)
-                      for field in instruction_encoding.fields if field.name is not None)
+                      for field in field_encodings if field.name is not None)
     field_extras_dict: Dict[str, Any] = cast(Dict[str, Any], instruction_desc_model['field_extras']) \
         if 'field_extras' in instruction_desc_model else {}
     field_decoders = []
@@ -798,8 +810,10 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
 
 def _build_fixed_bits_info(instruction_encoding: InstructionEncodingDescription) -> Tuple[int, int]:
     """Build fixed bits information and returns fixed bit mask and fixed bits"""
+    field_encodings = itertools.chain.from_iterable(
+        element.fields for element in instruction_encoding.elements)
     instruction_bit_format = ''.join(
-        field.bits_format for field in instruction_encoding.fields)
+        field.bits_format for field in field_encodings)
     fixed_bit_mask = int(instruction_bit_format.replace(
         '0', '1').replace('x', '0'), base=2)
     fixed_bits = int(instruction_bit_format.replace('x', '0'), base=2)
@@ -810,7 +824,10 @@ def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruct
                           ff_index_to_start_bit: Dict[int, int]) -> InstructionFieldDecoder:
     """Create a model which contains information of an instruction field decoder"""
     # Find related field formats
-    field_encodings = [field for field in instruction_encoding.fields if field.name == field_name]
+    field_encodings = list(itertools.chain.from_iterable(
+        element.fields for element in instruction_encoding.elements))
+    matched_field_encodings = [
+        field for field in field_encodings if field.name == field_name]
 
     # Create subfield decoders
     start_bit_in_field = 0
@@ -819,9 +836,9 @@ def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruct
     sf_decoders: List[InstructionSubfieldDecoder] = []
     sf_index = 0
 
-    for field_encoding in field_encodings:
+    for field_encoding in matched_field_encodings:
         # Calculate bit position for the field encoding
-        sf_start_bit_in_instruction = ff_index_to_start_bit[instruction_encoding.fields.index(
+        sf_start_bit_in_instruction = ff_index_to_start_bit[field_encodings.index(
             field_encoding)]
         field_start_bit_in_instruction = max(
             field_start_bit_in_instruction, sf_start_bit_in_instruction)

@@ -1,5 +1,6 @@
 import csv
 from dataclasses import dataclass
+import itertools
 from typing import List, cast
 
 from . import common, core
@@ -60,13 +61,15 @@ def _export(mcfile: str, output_file: str) -> bool:
     # Make rows
     rows: List[List[str]] = []
     for info in instruction_infos:
+        field_encodings = itertools.chain.from_iterable(
+            element.fields for element in info.encoding.elements)
         instruction_bit_size = core.calc_instruction_bit_size(info.encoding)
 
         # Concatenate all bits to one string
         unrelated_bits = '-' * \
             (max_instruction_bit_size - instruction_bit_size)
         related_bits = ''.join(
-            field.bits_format for field in info.encoding.fields)
+            field.bits_format for field in field_encodings)
         bits = unrelated_bits + related_bits
 
         # Make condition string
