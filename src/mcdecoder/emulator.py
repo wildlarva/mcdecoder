@@ -87,7 +87,7 @@ def _emulate_decoder(context: core.DecodeContext) -> List[core.InstructionDecode
 
 
 def _bit_pattern_to_int(bit_pattern: str, base: Literal[2, 16], byteorder: Literal['big', 'little']) -> int:
-    return int(common.convert_to_big_endian(bit_pattern, base, byteorder), base)
+    return int(common.convert_to_big_endian(bit_pattern, base, byteorder), base=base)
 
 
 # endregion

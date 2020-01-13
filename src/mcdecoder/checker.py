@@ -254,7 +254,7 @@ def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitP
 def _create_bit_pattern(bit_pattern: str, base: Literal[2, 16]) -> _BitPattern:
     """Parse bit pattern"""
     char_bit_len = common.bit_length_of_character(base)
-    fixed_bits = int(bit_pattern.replace('x', '0'), base)
+    fixed_bits = int(bit_pattern.replace('x', '0'), base=base)
 
     # Calculate variable bit size
     variable_bit_size = len(

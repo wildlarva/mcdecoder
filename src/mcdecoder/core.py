@@ -647,10 +647,10 @@ class _InstructionConditionDescriptionTransformer(lark.Transformer):
         return int(number_token)
 
     def hex_number(self, number_token: lark.Token) -> int:
-        return int(number_token, 16)
+        return int(number_token, base=16)
 
     def binary_number(self, number_token: lark.Token) -> int:
-        return int(number_token, 2)
+        return int(number_token, base=2)
 
     def equality_op(self, equality_op_token: lark.Token) -> str:
         return str(equality_op_token)
@@ -797,20 +797,13 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
 
 
 def _build_fixed_bits_info(instruction_format: InstructionFormatDescription) -> Tuple[int, int]:
-    """Build fixed bits information and returns fixed_bits_mask and fixed_bits"""
-    fixed_bits_mask = 0
-    fixed_bits = 0
-
-    for field_format in instruction_format.field_formats:
-        for bit_format in field_format.bits_format:
-            if bit_format == 'x':
-                fixed_bits_mask = (fixed_bits_mask << 1) | 0
-                fixed_bits = (fixed_bits << 1) | 0
-            else:
-                fixed_bits_mask = (fixed_bits_mask << 1) | 1
-                fixed_bits = (fixed_bits << 1) | int(bit_format)
-
-    return fixed_bits_mask, fixed_bits
+    """Build fixed bits information and returns fixed bit mask and fixed bits"""
+    instruction_bit_format = ''.join(
+        field_format.bits_format for field_format in instruction_format.field_formats)
+    fixed_bit_mask = int(instruction_bit_format.replace(
+        '0', '1').replace('x', '0'), base=2)
+    fixed_bits = int(instruction_bit_format.replace('x', '0'), base=2)
+    return fixed_bit_mask, fixed_bits
 
 
 def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruction_format: InstructionFormatDescription,
