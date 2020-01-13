@@ -170,7 +170,7 @@ class InstructionFormatDescription:
 # region Decoder models
 @dataclass
 class InstructionSubfieldDecoder:
-    """Decoder for a instruction subfield"""
+    """Decoder for an instruction subfield"""
     index: int
     """Index number of a subfield in a field: 0th to (n-1)th"""
     mask: int
@@ -808,7 +808,7 @@ def _build_fixed_bits_info(instruction_format: InstructionFormatDescription) -> 
 
 def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruction_format: InstructionFormatDescription,
                           ff_index_to_start_bit: Dict[int, int]) -> InstructionFieldDecoder:
-    """Create a model which contains information of a instruction field decoder"""
+    """Create a model which contains information of an instruction field decoder"""
     # Find related field formats
     field_formats = [
         field for field in instruction_format.field_formats if field.name == field_name]
