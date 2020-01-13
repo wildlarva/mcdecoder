@@ -999,15 +999,15 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
             return np.full((code_vec.shape[0]), False)
 
     elif isinstance(condition, InIdCondition):
-        value_vec = _instruction_condition_object_vectorized(
+        subject_vec = _instruction_condition_object_vectorized(
             code_vec, condition.subject, instruction_decoder)
-        return np.isin(value_vec, condition.values)
+        return np.isin(subject_vec, condition.values)
 
     elif isinstance(condition, InRangeIdCondition):
-        value_vec = _instruction_condition_object_vectorized(
+        subject_vec = _instruction_condition_object_vectorized(
             code_vec, condition.subject, instruction_decoder)
         return np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
-            value_vec >= condition.value_start, value_vec <= condition.value_end)
+            subject_vec >= condition.value_start, subject_vec <= condition.value_end)
 
     else:
         return np.full((code_vec.shape[0]), False)
