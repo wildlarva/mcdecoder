@@ -699,9 +699,15 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="class">
 <dt id="mcdecoder.core.InstructionDecoder">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, fixed_bits_mask: int, fixed_bits: int, type_bit_size: int, match_condition: Optional[mcdecoder.core.InstructionDecoderCondition], unmatch_condition: Optional[mcdecoder.core.InstructionDecoderCondition], field_decoders: List[mcdecoder.core.InstructionFieldDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionDecoder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, encoding_element_bit_length: int, length_of_encoding_elements: int, fixed_bits_mask: int, fixed_bits: int, type_bit_size: int, match_condition: Optional[mcdecoder.core.InstructionDecoderCondition], unmatch_condition: Optional[mcdecoder.core.InstructionDecoderCondition], field_decoders: List[mcdecoder.core.InstructionFieldDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionDecoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decoder for an instruction</p>
+<dl class="attribute">
+<dt id="mcdecoder.core.InstructionDecoder.encoding_element_bit_length">
+<code class="sig-name descname">encoding_element_bit_length</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.encoding_element_bit_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bit length of an encoding element</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="mcdecoder.core.InstructionDecoder.extras">
 <code class="sig-name descname">extras</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.extras" title="Permalink to this definition">¶</a></dt>
@@ -724,6 +730,12 @@ to test an instruction field is in a value range(inclusive)</p>
 <dt id="mcdecoder.core.InstructionDecoder.fixed_bits_mask">
 <code class="sig-name descname">fixed_bits_mask</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.fixed_bits_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mask of fixed bit positions of an instruction</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.InstructionDecoder.length_of_encoding_elements">
+<code class="sig-name descname">length_of_encoding_elements</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.length_of_encoding_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length of encoding elements</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -812,6 +824,32 @@ to test an instruction field is in a value range(inclusive)</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="mcdecoder.core.InstructionEncodingDescription">
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionEncodingDescription</code><span class="sig-paren">(</span><em class="sig-param">elements: List[mcdecoder.core.InstructionEncodingElementDescription]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionEncodingDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parsed encoding format of an instruction</p>
+<dl class="attribute">
+<dt id="mcdecoder.core.InstructionEncodingDescription.elements">
+<code class="sig-name descname">elements</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionEncodingDescription.elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Child InstructionEncodingElementDescriptions</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="mcdecoder.core.InstructionEncodingElementDescription">
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionEncodingElementDescription</code><span class="sig-paren">(</span><em class="sig-param">fields: List[mcdecoder.core.InstructionFieldEncodingDescription]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionEncodingElementDescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parsed encoding element of an instruction</p>
+<dl class="attribute">
+<dt id="mcdecoder.core.InstructionEncodingElementDescription.fields">
+<code class="sig-name descname">fields</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionEncodingElementDescription.fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Child InstructionFieldEncodingDescriptions</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="mcdecoder.core.InstructionFieldDecodeResult">
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionFieldDecodeResult</code><span class="sig-paren">(</span><em class="sig-param">decoder: mcdecoder.core.InstructionFieldDecoder</em>, <em class="sig-param">value: int</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecodeResult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -868,39 +906,26 @@ to test an instruction field is in a value range(inclusive)</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="mcdecoder.core.InstructionFieldFormatDescription">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionFieldFormatDescription</code><span class="sig-paren">(</span><em class="sig-param">name: Optional[str], bits_format: str, bit_ranges: List[mcdecoder.core.BitRangeDescription]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionFieldFormatDescription" title="Permalink to this definition">¶</a></dt>
+<dt id="mcdecoder.core.InstructionFieldEncodingDescription">
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionFieldEncodingDescription</code><span class="sig-paren">(</span><em class="sig-param">name: Optional[str], bits_format: str, bit_ranges: List[mcdecoder.core.BitRangeDescription]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionFieldEncodingDescription" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Parsed encoding format of an instruction field</p>
 <dl class="attribute">
-<dt id="mcdecoder.core.InstructionFieldFormatDescription.bit_ranges">
-<code class="sig-name descname">bit_ranges</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldFormatDescription.bit_ranges" title="Permalink to this definition">¶</a></dt>
+<dt id="mcdecoder.core.InstructionFieldEncodingDescription.bit_ranges">
+<code class="sig-name descname">bit_ranges</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldEncodingDescription.bit_ranges" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bit ranges of a field that the encoding format corresponds to</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="mcdecoder.core.InstructionFieldFormatDescription.bits_format">
-<code class="sig-name descname">bits_format</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldFormatDescription.bits_format" title="Permalink to this definition">¶</a></dt>
+<dt id="mcdecoder.core.InstructionFieldEncodingDescription.bits_format">
+<code class="sig-name descname">bits_format</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldEncodingDescription.bits_format" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encoding format of a field</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="mcdecoder.core.InstructionFieldFormatDescription.name">
-<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldFormatDescription.name" title="Permalink to this definition">¶</a></dt>
+<dt id="mcdecoder.core.InstructionFieldEncodingDescription.name">
+<code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldEncodingDescription.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of a field</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="mcdecoder.core.InstructionFormatDescription">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionFormatDescription</code><span class="sig-paren">(</span><em class="sig-param">field_formats: List[mcdecoder.core.InstructionFieldFormatDescription]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionFormatDescription" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Parsed encoding format of an instruction</p>
-<dl class="attribute">
-<dt id="mcdecoder.core.InstructionFormatDescription.field_formats">
-<code class="sig-name descname">field_formats</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFormatDescription.field_formats" title="Permalink to this definition">¶</a></dt>
-<dd><p>Child InstructionFieldFormatDescriptions</p>
 </dd></dl>
 
 </dd></dl>
@@ -909,7 +934,7 @@ to test an instruction field is in a value range(inclusive)</p>
 <dt id="mcdecoder.core.InstructionSubfieldDecoder">
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionSubfieldDecoder</code><span class="sig-paren">(</span><em class="sig-param">index: int</em>, <em class="sig-param">mask: int</em>, <em class="sig-param">start_bit_in_instruction: int</em>, <em class="sig-param">end_bit_in_instruction: int</em>, <em class="sig-param">end_bit_in_field: int</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionSubfieldDecoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Decoder for a instruction subfield</p>
+<p>Decoder for an instruction subfield</p>
 <dl class="attribute">
 <dt id="mcdecoder.core.InstructionSubfieldDecoder.end_bit_in_field">
 <code class="sig-name descname">end_bit_in_field</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionSubfieldDecoder.end_bit_in_field" title="Permalink to this definition">¶</a></dt>
@@ -1083,11 +1108,11 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="function">
 <dt id="mcdecoder.core.calc_instruction_bit_size">
-<code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">calc_instruction_bit_size</code><span class="sig-paren">(</span><em class="sig-param">instruction_format: mcdecoder.core.InstructionFormatDescription</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#mcdecoder.core.calc_instruction_bit_size" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">calc_instruction_bit_size</code><span class="sig-paren">(</span><em class="sig-param">instruction_encoding: mcdecoder.core.InstructionEncodingDescription</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#mcdecoder.core.calc_instruction_bit_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the bit length of an instruction</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>instruction_format</strong> – Calculation target</p>
+<dd class="field-odd"><p><strong>instruction_encoding</strong> – Calculation target</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Bit length of an instruction</p>
@@ -1170,15 +1195,15 @@ Each element holds the boolean result whether a code is matched for an instructi
 </dd></dl>
 
 <dl class="function">
-<dt id="mcdecoder.core.parse_instruction_format">
-<code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">parse_instruction_format</code><span class="sig-paren">(</span><em class="sig-param">instruction_format: str</em><span class="sig-paren">)</span> &#x2192; mcdecoder.core.InstructionFormatDescription<a class="headerlink" href="#mcdecoder.core.parse_instruction_format" title="Permalink to this definition">¶</a></dt>
+<dt id="mcdecoder.core.parse_instruction_encoding">
+<code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">parse_instruction_encoding</code><span class="sig-paren">(</span><em class="sig-param">instruction_encoding: str</em><span class="sig-paren">)</span> &#x2192; mcdecoder.core.InstructionEncodingDescription<a class="headerlink" href="#mcdecoder.core.parse_instruction_encoding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a string of the encoding format of an instruction</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>instruction_format</strong> – String of the encoding format of an instruction</p>
+<dd class="field-odd"><p><strong>instruction_encoding</strong> – String of the encoding format of an instruction</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Parsed InstructionFormatDescription</p>
+<dd class="field-even"><p>Parsed InstructionEncodingDescription</p>
 </dd>
 </dl>
 </dd></dl>

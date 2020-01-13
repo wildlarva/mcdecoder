@@ -189,8 +189,10 @@
 
     <span class="c1"># format: Encoding format of the instruction</span>
     <span class="c1">#</span>
-    <span class="c1"># Instruction fields are separated by bar symbol(|).</span>
-    <span class="c1"># Expression: &lt;field_bits&gt;:&lt;field_name&gt;[&lt;field_bit_ranges&gt;]|...</span>
+    <span class="c1"># Instruction consists of multiple fields. Fields are separated by bar symbol(|).</span>
+    <span class="c1"># If an instruction is constructed by multiple N-byte words, they&#39;re split by double-bar symbol(||).</span>
+    <span class="c1">#</span>
+    <span class="c1"># Expression: &lt;field_bits&gt;:&lt;field_name&gt;[&lt;field_bit_ranges&gt;]|... || ...</span>
     <span class="c1">#</span>
     <span class="c1"># where</span>
     <span class="c1">#   &lt;field_bits&gt;: Encoding format of an instruction field</span>

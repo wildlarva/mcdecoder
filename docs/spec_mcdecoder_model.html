@@ -207,9 +207,15 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, fixed_bits_mask: int, fixed_bits: int, type_bit_size: int, match_condition: Optional[mcdecoder.core.InstructionDecoderCondition], unmatch_condition: Optional[mcdecoder.core.InstructionDecoderCondition], field_decoders: List[mcdecoder.core.InstructionFieldDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, encoding_element_bit_length: int, length_of_encoding_elements: int, fixed_bits_mask: int, fixed_bits: int, type_bit_size: int, match_condition: Optional[mcdecoder.core.InstructionDecoderCondition], unmatch_condition: Optional[mcdecoder.core.InstructionDecoderCondition], field_decoders: List[mcdecoder.core.InstructionFieldDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decoder for an instruction</p>
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">encoding_element_bit_length</code><em class="property"> = None</em></dt>
+<dd><p>Bit length of an encoding element</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt>
 <code class="sig-name descname">extras</code><em class="property"> = None</em></dt>
@@ -232,6 +238,12 @@
 <dt>
 <code class="sig-name descname">fixed_bits_mask</code><em class="property"> = None</em></dt>
 <dd><p>Mask of fixed bit positions of an instruction</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">length_of_encoding_elements</code><em class="property"> = None</em></dt>
+<dd><p>Length of encoding elements</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -301,7 +313,7 @@
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionSubfieldDecoder</code><span class="sig-paren">(</span><em class="sig-param">index: int</em>, <em class="sig-param">mask: int</em>, <em class="sig-param">start_bit_in_instruction: int</em>, <em class="sig-param">end_bit_in_instruction: int</em>, <em class="sig-param">end_bit_in_field: int</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Decoder for a instruction subfield</p>
+<p>Decoder for an instruction subfield</p>
 <dl class="attribute">
 <dt>
 <code class="sig-name descname">end_bit_in_field</code><em class="property"> = None</em></dt>
