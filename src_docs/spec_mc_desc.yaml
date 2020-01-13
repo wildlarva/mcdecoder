@@ -16,8 +16,10 @@ instructions:
 
     # format: Encoding format of the instruction
     #
-    # Instruction fields are separated by bar symbol(|).
-    # Expression: <field_bits>:<field_name>[<field_bit_ranges>]|...
+    # Instruction consists of multiple fields. Fields are separated by bar symbol(|).
+    # If an instruction is constructed by multiple N-byte words, they're split by double-bar symbol(||).
+    #
+    # Expression: <field_bits>:<field_name>[<field_bit_ranges>]|... || ...
     #
     # where
     #   <field_bits>: Encoding format of an instruction field
