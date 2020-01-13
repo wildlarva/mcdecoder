@@ -44,6 +44,8 @@ def test__generate() -> None:
         instruction_decoders=[
             InstructionDecoder(
                 name='add_1',
+                encoding_element_bit_length=32,
+                length_of_encoding_elements=1,
                 fixed_bits_mask=0x0fe00000,
                 fixed_bits=0x02800000,
                 type_bit_size=32,
@@ -68,6 +70,8 @@ def test__generate() -> None:
             ),
             InstructionDecoder(
                 name='push_1',
+                encoding_element_bit_length=32,
+                length_of_encoding_elements=1,
                 fixed_bits_mask=0x0fe00000,
                 fixed_bits=0x02800000,
                 type_bit_size=32,
@@ -93,6 +97,8 @@ def test__generate() -> None:
             ),
             InstructionDecoder(
                 name='push_2',
+                encoding_element_bit_length=32,
+                length_of_encoding_elements=1,
                 fixed_bits_mask=0x0fe00000,
                 fixed_bits=0x02800000,
                 type_bit_size=32,

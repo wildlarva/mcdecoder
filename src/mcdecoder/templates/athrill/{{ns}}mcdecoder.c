@@ -47,8 +47,8 @@ typedef struct {
     {{ ns }}uint16 *code;
     {{ ns }}OpDecodedCodeType *decoded_code;
     {{ ns }}OperationCodeType *optype;
-    {{ ns }}uint16 code16;
-    {{ ns }}uint32 code32;
+    {{ ns }}uint16 code16x1;
+    {{ ns }}uint32 code32x1;
 } OpDecodeContext;
 
 /* op constants */
@@ -83,7 +83,7 @@ static {{ ns }}uint32 setbit_count({{ ns }}uint32 value) {
 {% for inst in instruction_decoders %}
     /* {{ inst.name }} */
     static int op_parse_{{ inst.name }}(OpDecodeContext *context) {
-        if ((context->code{{ inst.type_bit_size }} & OP_FB_MASK_{{ inst.name }}) != OP_FB_{{ inst.name }}) {
+        if ((context->code{{ inst.encoding_element_bit_length }}x{{ inst.length_of_encoding_elements }} & OP_FB_MASK_{{ inst.name }}) != OP_FB_{{ inst.name }}) {
             return 1;
         }
 
@@ -93,7 +93,7 @@ static {{ ns }}uint32 setbit_count({{ ns }}uint32 value) {
         {% for field in inst.field_decoders %}
             context->decoded_code->code.{{ inst.name }}.{{ field.name }} =
             {% for sf in field.subfield_decoders %}
-                {% if not loop.first %}| {% endif %}(((context->code{{ inst.type_bit_size }} & OP_SF_MASK_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) >> OP_SF_EBII_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) << OP_SF_EBIF_{{ inst.name }}_{{ field.name }}_{{ sf.index }}){% if loop.last %};{% endif %}
+                {% if not loop.first %}| {% endif %}(((context->code{{ inst.encoding_element_bit_length }}x{{ inst.length_of_encoding_elements }} & OP_SF_MASK_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) >> OP_SF_EBII_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) << OP_SF_EBIF_{{ inst.name }}_{{ field.name }}_{{ sf.index }}){% if loop.last %};{% endif %}
             {% endfor %}
         {% endfor %}
 
@@ -121,8 +121,8 @@ int {{ ns }}op_parse({{ ns }}uint16 code[{{ ns }}OP_DECODE_MAX], {{ ns }}OpDecod
     context.code = &code[0];
     context.decoded_code = decoded_code;
     context.optype = optype;
-    context.code16 = ({{ ns }}uint16) code[0];
-    context.code32 = *(({{ ns }}uint32 *) &code[0]);
+    context.code16x1 = ({{ ns }}uint16) code[0];
+    context.code32x1 = *(({{ ns }}uint32 *) &code[0]);
 
     {% for inst in instruction_decoders %}
         if (op_parse_{{ inst.name }}(&context) == 0) {

@@ -324,6 +324,10 @@ class InstructionDecoder:
     """Decoder for an instruction"""
     name: str
     """Name of an instruction"""
+    encoding_element_bit_length: int
+    """Bit length of an encoding element"""
+    length_of_encoding_elements: int
+    """Length of encoding elements"""
     fixed_bits_mask: int
     """Mask of fixed bit positions of an instruction"""
     fixed_bits: int
@@ -798,6 +802,8 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
 
     return InstructionDecoder(
         name=instruction_desc_model['name'],
+        encoding_element_bit_length=_calc_type_bit_size(instruction_bit_size),
+        length_of_encoding_elements=1,
         fixed_bits_mask=fixed_bits_mask,
         fixed_bits=fixed_bits,
         type_bit_size=_calc_type_bit_size(instruction_bit_size),
