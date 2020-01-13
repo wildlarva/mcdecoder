@@ -8,6 +8,7 @@ CXX_SRCS = \
 	test.cpp \
 	stub.c \
 	out/arm_mcdecoder.c \
+	out/at_mcdecoder.c \
 	out/riscv_mcdecoder.c \
 	out/pc_mcdecoder.c \
 	out/cc_mcdecoder.c
@@ -16,6 +17,7 @@ CXX_OBJ_FILES = \
 	build/test.o \
 	build/stub.o \
 	build/arm_mcdecoder.o \
+	build/at_mcdecoder.o \
 	build/riscv_mcdecoder.o \
 	build/pc_mcdecoder.o \
 	build/cc_mcdecoder.o

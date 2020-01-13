@@ -576,9 +576,14 @@ class _YamlIncludeContext:
 @lark.v_args(inline=True)
 class _InstructionEncodingDescriptionTransformer(lark.Transformer):
     @lark.v_args(inline=False)
-    def instruction_encoding(self, field_encodings: List[InstructionFieldEncodingDescription]) \
+    def instruction_encoding(self, element_encodings: List[InstructionEncodingElementDescription]) \
             -> InstructionEncodingDescription:
-        return InstructionEncodingDescription(elements=[InstructionEncodingElementDescription(fields=field_encodings)])
+        return InstructionEncodingDescription(elements=element_encodings)
+
+    @lark.v_args(inline=False)
+    def instruction_encoding_element(self, field_encodings: List[InstructionFieldEncodingDescription]) \
+            -> InstructionEncodingElementDescription:
+        return InstructionEncodingElementDescription(fields=field_encodings)
 
     def field_encoding(self, field_bits: str, field_name: str = None,
                        field_bit_ranges: List[BitRangeDescription] = None) -> InstructionFieldEncodingDescription:
@@ -733,6 +738,16 @@ def _create_instruction_encoding_parser() -> lark.Lark:
         return lark.Lark(file, start='instruction_encoding', parser='lalr')
 
 
+def _calc_instruction_encoding_element_bit_length(encoding_element: InstructionEncodingElementDescription) -> int:
+    """
+    Calculate the bit length of an instruction encoding element
+
+    :param encoding_element: Calculation target
+    :return: Bit length of an instruction encoding element
+    """
+    return sum(len(field.bits_format) for field in encoding_element.fields)
+
+
 def _create_machine_decoder_model(machine_desc_model: MachineDescription) -> MachineDecoder:
     extras: Optional[Any] = None
     if 'extras' in machine_desc_model:
@@ -753,6 +768,8 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
     field_encodings = list(itertools.chain.from_iterable(
         element.fields for element in instruction_encoding.elements))
     instruction_bit_size = calc_instruction_bit_size(instruction_encoding)
+    encoding_element_bit_length = max(_calc_instruction_encoding_element_bit_length(
+        element) for element in instruction_encoding.elements)
 
     # Build fixed bits information
     fixed_bits_mask, fixed_bits = _build_fixed_bits_info(instruction_encoding)
@@ -802,8 +819,8 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
 
     return InstructionDecoder(
         name=instruction_desc_model['name'],
-        encoding_element_bit_length=_calc_type_bit_size(instruction_bit_size),
-        length_of_encoding_elements=1,
+        encoding_element_bit_length=encoding_element_bit_length,
+        length_of_encoding_elements=len(instruction_encoding.elements),
         fixed_bits_mask=fixed_bits_mask,
         fixed_bits=fixed_bits,
         type_bit_size=_calc_type_bit_size(instruction_bit_size),

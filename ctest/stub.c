@@ -5,6 +5,9 @@
 int arm_op_exec_add_1(struct TargetCore *cpu) { return 0; }
 int arm_op_exec_push_1(struct TargetCore *cpu) { return 0; }
 
+int at_op_exec_add_1(struct TargetCore *cpu) { return 0; }
+int at_op_exec_push_1(struct TargetCore *cpu) { return 0; }
+
 int riscv_op_exec_c_addi_1(struct TargetCore *cpu) { return 0; }
 int riscv_op_exec_c_sd_1(struct TargetCore *cpu) { return 0; }
 

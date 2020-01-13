@@ -48,6 +48,7 @@ typedef struct {
     {{ ns }}OpDecodedCodeType *decoded_code;
     {{ ns }}OperationCodeType *optype;
     {{ ns }}uint16 code16x1;
+    {{ ns }}uint32 code16x2;
     {{ ns }}uint32 code32x1;
 } OpDecodeContext;
 
@@ -122,6 +123,7 @@ int {{ ns }}op_parse({{ ns }}uint16 code[{{ ns }}OP_DECODE_MAX], {{ ns }}OpDecod
     context.decoded_code = decoded_code;
     context.optype = optype;
     context.code16x1 = ({{ ns }}uint16) code[0];
+    context.code16x2 = ((({{ ns }}uint32) code[0]) << 16) | (({{ ns }}uint32) code[1]);
     context.code32x1 = *(({{ ns }}uint32 *) &code[0]);
 
     {% for inst in instruction_decoders %}

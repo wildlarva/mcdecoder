@@ -3,6 +3,7 @@
 extern "C"
 {
 #include "out/arm_mcdecoder.h"
+#include "out/at_mcdecoder.h"
 #include "out/riscv_mcdecoder.h"
 #include "out/pc_mcdecoder.h"
 #include "out/cc_mcdecoder.h"
@@ -91,6 +92,47 @@ TEST(op_decode, should_decode_16bit_instructions)
   EXPECT_EQ(decoded_code_sd.code.c_sd_1.offset, (0x1 << 3) | (0x0 << 6)); /* 12-10, 9-7 bit */
   EXPECT_EQ(decoded_code_sd.code.c_sd_1.src, 0x01);                       /* 6-2 bit */
   EXPECT_EQ(decoded_code_sd.code.c_sd_1.op, 0x02);                        /* 1-0 bit */
+}
+
+TEST(op_parse, should_decode_16bit_x2_instructions)
+{
+  // constants
+  unsigned char machine_codes[] = {
+      0x2d, 0xe9, 0x01, 0x40, /* push */
+      0x11, 0xf5, 0x01, 0x11, /* add */
+  };
+
+  // actions
+  at_OpDecodedCodeType decoded_code_push;
+  at_OperationCodeType optype_push;
+  int result_push;
+  result_push = at_op_parse((at_uint16 *)&machine_codes[0], &decoded_code_push, &optype_push);
+
+  at_OpDecodedCodeType decoded_code_add;
+  at_OperationCodeType optype_add;
+  int result_add;
+  result_add = at_op_parse((at_uint16 *)&machine_codes[4], &decoded_code_add, &optype_add);
+
+  // assertions
+  // push
+  EXPECT_EQ(result_push, 0);
+  EXPECT_EQ(optype_push.code_id, at_OpCodeId_push_1);
+  EXPECT_EQ(optype_push.format_id, at_OP_CODE_FORMAT_push_1);
+  EXPECT_EQ(decoded_code_push.type_id, at_OP_CODE_FORMAT_push_1);
+  EXPECT_EQ(decoded_code_push.code.push_1.M, 0x1);             /* 14 bit */
+  EXPECT_EQ(decoded_code_push.code.push_1.register_list, 0x1); /* 12-0 bit */
+
+  // add
+  EXPECT_EQ(result_add, 0);
+  EXPECT_EQ(optype_add.code_id, at_OpCodeId_add_1);
+  EXPECT_EQ(optype_add.format_id, at_OP_CODE_FORMAT_add_1);
+  EXPECT_EQ(decoded_code_add.type_id, at_OP_CODE_FORMAT_add_1);
+  EXPECT_EQ(decoded_code_add.code.add_1.i, 0x1);    /* 26 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.S, 0x1);    /* 20 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.Rn, 0x1);   /* 19-16 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.imm3, 0x1); /* 14-12 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.Rd, 0x1);   /* 11-8 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.imm8, 0x1); /* 7-0 bit */
 }
 
 TEST(op_parse, should_not_decode_condition_unmatched_instructions)

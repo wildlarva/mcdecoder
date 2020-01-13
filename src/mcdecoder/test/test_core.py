@@ -61,6 +61,47 @@ def test_create_mcdecoder_model_32bit_instructions() -> None:
     assert instruction_decoder_model_push_1.name == 'push_1'
 
 
+def test_create_mcdecoder_model_16bit_x2_instructions() -> None:
+    mcdecoder = create_mcdecoder_model('test/arm_thumb.yaml')
+
+    assert len(mcdecoder.instruction_decoders) == 2
+
+    instruction_add, instruction_push = mcdecoder.instruction_decoders
+    assert instruction_add.name == 'add_1'
+    assert instruction_add.encoding_element_bit_length == 16
+    assert instruction_add.length_of_encoding_elements == 2
+    assert instruction_add.fixed_bits_mask == 0xfbe08000
+    assert instruction_add.fixed_bits == 0xf1000000
+    assert instruction_add.type_bit_size == 32
+    assert len(instruction_add.field_decoders) == 6
+
+    field_i = instruction_add.field_decoders[0]
+    assert field_i.name == 'i'
+    assert field_i.type_bit_size == 8
+    assert len(field_i.subfield_decoders) == 1
+
+    sf_i = field_i.subfield_decoders[0]
+    assert sf_i.index == 0
+    assert sf_i.mask == 0x04000000
+    assert sf_i.start_bit_in_instruction == 26
+    assert sf_i.end_bit_in_instruction == 26
+    assert sf_i.end_bit_in_field == 0
+
+    field_imm3 = instruction_add.field_decoders[3]
+    assert field_imm3.name == 'imm3'
+    assert field_imm3.type_bit_size == 8
+    assert len(field_imm3.subfield_decoders) == 1
+
+    sf_imm3 = field_imm3.subfield_decoders[0]
+    assert sf_imm3.index == 0
+    assert sf_imm3.mask == 0x00007000
+    assert sf_imm3.start_bit_in_instruction == 14
+    assert sf_imm3.end_bit_in_instruction == 12
+    assert sf_imm3.end_bit_in_field == 0
+
+    assert instruction_push.name == 'push_1'
+
+
 def test_create_mcdecoder_model_16bit_instructions() -> None:
     mcdecoder_model = create_mcdecoder_model(
         'test/riscv.yaml')
