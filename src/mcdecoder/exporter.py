@@ -35,7 +35,7 @@ def export(mcfile: str, output_file: str) -> int:
 @dataclass
 class _InstructionInfo:
     instruction: core.InstructionDescription
-    format: core.InstructionFormatDescription
+    encoding: core.InstructionEncodingDescription
 
 
 # endregion
@@ -47,10 +47,10 @@ def _export(mcfile: str, output_file: str) -> bool:
     mc_desc = core.load_mc_description_model(mcfile)
 
     # Parse instruction formats
-    instruction_infos = [_InstructionInfo(instruction=instruction, format=core.parse_instruction_format(
+    instruction_infos = [_InstructionInfo(instruction=instruction, encoding=core.parse_instruction_encoding(
         instruction['format'])) for instruction in mc_desc['instructions']]
     max_instruction_bit_size = max(core.calc_instruction_bit_size(
-        info.format) for info in instruction_infos)
+        info.encoding) for info in instruction_infos)
 
     # Make columns
     bit_columns = [f'b{bit}' for bit in range(
@@ -60,13 +60,13 @@ def _export(mcfile: str, output_file: str) -> bool:
     # Make rows
     rows: List[List[str]] = []
     for info in instruction_infos:
-        instruction_bit_size = core.calc_instruction_bit_size(info.format)
+        instruction_bit_size = core.calc_instruction_bit_size(info.encoding)
 
         # Concatenate all bits to one string
         unrelated_bits = '-' * \
             (max_instruction_bit_size - instruction_bit_size)
         related_bits = ''.join(
-            field_format.bits_format for field_format in info.format.field_formats)
+            field.bits_format for field in info.encoding.fields)
         bits = unrelated_bits + related_bits
 
         # Make condition string

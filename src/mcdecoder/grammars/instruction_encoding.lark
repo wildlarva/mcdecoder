@@ -1,5 +1,5 @@
-instruction_format: field_format ("|" field_format)*
-field_format: field_bits (":" id ("[" field_bit_ranges "]")?)?
+instruction_encoding: field_encoding ("|" field_encoding)*
+field_encoding: field_bits (":" id ("[" field_bit_ranges "]")?)?
 field_bits: BIT_ARRAY+
 field_bit_ranges: field_bit_range ("," field_bit_range)*
 field_bit_range: number (":" number)?

@@ -149,7 +149,7 @@ class BitRangeDescription:
 
 
 @dataclass
-class InstructionFieldFormatDescription:
+class InstructionFieldEncodingDescription:
     """Parsed encoding format of an instruction field"""
     name: Optional[str]
     """Name of a field"""
@@ -160,10 +160,10 @@ class InstructionFieldFormatDescription:
 
 
 @dataclass
-class InstructionFormatDescription:
+class InstructionEncodingDescription:
     """Parsed encoding format of an instruction"""
-    field_formats: List[InstructionFieldFormatDescription]
-    """Child InstructionFieldFormatDescriptions"""
+    fields: List[InstructionFieldEncodingDescription]
+    """Child InstructionFieldEncodingDescriptions"""
 
 # endregion
 
@@ -451,26 +451,25 @@ def load_mc_description_model(mcfile_path: str) -> McDescription:
     return cast(McDescription, mc_desc_model)
 
 
-def parse_instruction_format(instruction_format: str) -> InstructionFormatDescription:
+def parse_instruction_encoding(instruction_encoding: str) -> InstructionEncodingDescription:
     """
     Parse a string of the encoding format of an instruction
 
-    :param instruction_format: String of the encoding format of an instruction
-    :return: Parsed InstructionFormatDescription
+    :param instruction_encoding: String of the encoding format of an instruction
+    :return: Parsed InstructionEncodingDescription
     """
-    parsed_tree = _instruction_format_parser.parse(instruction_format)
-    return cast(InstructionFormatDescription, _InstructionFormatDescriptionTransformer(None).transform(parsed_tree))
+    parsed_tree = _instruction_encoding_parser.parse(instruction_encoding)
+    return cast(InstructionEncodingDescription, _InstructionEncodingDescriptionTransformer(None).transform(parsed_tree))
 
 
-def calc_instruction_bit_size(instruction_format: InstructionFormatDescription) -> int:
+def calc_instruction_bit_size(instruction_encoding: InstructionEncodingDescription) -> int:
     """
     Calculate the bit length of an instruction
 
-    :param instruction_format: Calculation target
+    :param instruction_encoding: Calculation target
     :return: Bit length of an instruction
     """
-    return sum(len(
-        field_format.bits_format) for field_format in instruction_format.field_formats)
+    return sum(len(field.bits_format) for field in instruction_encoding.fields)
 
 
 def find_matched_instructions(context: DecodeContext) -> List[InstructionDecoder]:
@@ -561,18 +560,19 @@ class _YamlIncludeContext:
 
 
 @lark.v_args(inline=True)
-class _InstructionFormatDescriptionTransformer(lark.Transformer):
+class _InstructionEncodingDescriptionTransformer(lark.Transformer):
     @lark.v_args(inline=False)
-    def instruction_format(self, field_formats: List[InstructionFieldFormatDescription]) -> InstructionFormatDescription:
-        return InstructionFormatDescription(field_formats=field_formats)
+    def instruction_encoding(self, field_encodings: List[InstructionFieldEncodingDescription]) \
+            -> InstructionEncodingDescription:
+        return InstructionEncodingDescription(fields=field_encodings)
 
-    def field_format(self, field_bits: str, field_name: str = None,
-                     field_bit_ranges: List[BitRangeDescription] = None) -> InstructionFieldFormatDescription:
+    def field_encoding(self, field_bits: str, field_name: str = None,
+                       field_bit_ranges: List[BitRangeDescription] = None) -> InstructionFieldEncodingDescription:
         if field_bit_ranges is None:
             field_bit_ranges = [BitRangeDescription(
                 start=len(field_bits) - 1, end=0)]
 
-        return InstructionFieldFormatDescription(name=field_name, bits_format=field_bits, bit_ranges=field_bit_ranges)
+        return InstructionFieldEncodingDescription(name=field_name, bits_format=field_bits, bit_ranges=field_bit_ranges)
 
     @lark.v_args(inline=False)
     def field_bits(self, field_bits_tokens: List[lark.Token]) -> str:
@@ -714,9 +714,9 @@ def _validate_mc_desc_model(mc_desc_model: Any) -> None:
     jsonschema.validate(mc_desc_model, schema)
 
 
-def _create_instruction_format_parser() -> lark.Lark:
-    with importlib.resources.open_text('mcdecoder.grammars', 'instruction_format.lark') as file:
-        return lark.Lark(file, start='instruction_format', parser='lalr')
+def _create_instruction_encoding_parser() -> lark.Lark:
+    with importlib.resources.open_text('mcdecoder.grammars', 'instruction_encoding.lark') as file:
+        return lark.Lark(file, start='instruction_encoding', parser='lalr')
 
 
 def _create_machine_decoder_model(machine_desc_model: MachineDescription) -> MachineDecoder:
@@ -733,27 +733,27 @@ def _make_namespace_prefix(namespace: Optional[str]) -> str:
 
 def _create_instruction_decoder_model(instruction_desc_model: InstructionDescription) -> InstructionDecoder:
     """Create a model which contains information of individual instruction decoder"""
-    # Parse instruction format
-    instruction_format = parse_instruction_format(
+    # Parse instruction encoding
+    instruction_encoding = parse_instruction_encoding(
         instruction_desc_model['format'])
-    instruction_bit_size = calc_instruction_bit_size(instruction_format)
+    instruction_bit_size = calc_instruction_bit_size(instruction_encoding)
 
     # Build fixed bits information
-    fixed_bits_mask, fixed_bits = _build_fixed_bits_info(instruction_format)
+    fixed_bits_mask, fixed_bits = _build_fixed_bits_info(instruction_encoding)
 
     # Save the start bit positions of field formats
     ff_start_bit_in_instruction = instruction_bit_size - 1
     ff_index_to_start_bit: Dict[int, int] = {}
 
-    for field_format in instruction_format.field_formats:
-        field_bit_size = len(field_format.bits_format)
-        ff_index_to_start_bit[instruction_format.field_formats.index(
-            field_format)] = ff_start_bit_in_instruction
+    for field_encoding in instruction_encoding.fields:
+        field_bit_size = len(field_encoding.bits_format)
+        ff_index_to_start_bit[instruction_encoding.fields.index(
+            field_encoding)] = ff_start_bit_in_instruction
         ff_start_bit_in_instruction -= field_bit_size
 
     # Create field decoders
     field_names = set(cast(str, field.name)
-                      for field in instruction_format.field_formats if field.name is not None)
+                      for field in instruction_encoding.fields if field.name is not None)
     field_extras_dict: Dict[str, Any] = cast(Dict[str, Any], instruction_desc_model['field_extras']) \
         if 'field_extras' in instruction_desc_model else {}
     field_decoders = []
@@ -761,7 +761,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
     for field_name in field_names:
         field_extras = field_extras_dict[field_name] if field_name in field_extras_dict else None
         field_decoder = _create_field_decoder(
-            field_name, field_extras, instruction_format, ff_index_to_start_bit)
+            field_name, field_extras, instruction_encoding, ff_index_to_start_bit)
         field_decoders.append(field_decoder)
 
     # Sort field decoders according to start bit position
@@ -796,22 +796,21 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
     )
 
 
-def _build_fixed_bits_info(instruction_format: InstructionFormatDescription) -> Tuple[int, int]:
+def _build_fixed_bits_info(instruction_encoding: InstructionEncodingDescription) -> Tuple[int, int]:
     """Build fixed bits information and returns fixed bit mask and fixed bits"""
     instruction_bit_format = ''.join(
-        field_format.bits_format for field_format in instruction_format.field_formats)
+        field.bits_format for field in instruction_encoding.fields)
     fixed_bit_mask = int(instruction_bit_format.replace(
         '0', '1').replace('x', '0'), base=2)
     fixed_bits = int(instruction_bit_format.replace('x', '0'), base=2)
     return fixed_bit_mask, fixed_bits
 
 
-def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruction_format: InstructionFormatDescription,
+def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruction_encoding: InstructionEncodingDescription,
                           ff_index_to_start_bit: Dict[int, int]) -> InstructionFieldDecoder:
     """Create a model which contains information of an instruction field decoder"""
     # Find related field formats
-    field_formats = [
-        field for field in instruction_format.field_formats if field.name == field_name]
+    field_encodings = [field for field in instruction_encoding.fields if field.name == field_name]
 
     # Create subfield decoders
     start_bit_in_field = 0
@@ -820,14 +819,14 @@ def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruct
     sf_decoders: List[InstructionSubfieldDecoder] = []
     sf_index = 0
 
-    for field_format in field_formats:
-        # Calculate bit position for the field format
-        sf_start_bit_in_instruction = ff_index_to_start_bit[instruction_format.field_formats.index(
-            field_format)]
+    for field_encoding in field_encodings:
+        # Calculate bit position for the field encoding
+        sf_start_bit_in_instruction = ff_index_to_start_bit[instruction_encoding.fields.index(
+            field_encoding)]
         field_start_bit_in_instruction = max(
             field_start_bit_in_instruction, sf_start_bit_in_instruction)
 
-        for bit_range in field_format.bit_ranges:
+        for bit_range in field_encoding.bit_ranges:
             # Calculate bit size and position for the subfield
             sf_bit_size = bit_range.start - bit_range.end + 1
             sf_end_bit_in_instruction = sf_start_bit_in_instruction - sf_bit_size + 1
@@ -1073,7 +1072,7 @@ Its entry is a pair of a function name and a function.
 """
 
 _yaml_include_context: _YamlIncludeContext = _YamlIncludeContext(base_dir='')
-_instruction_format_parser: lark.Lark = _create_instruction_format_parser()
+_instruction_encoding_parser: lark.Lark = _create_instruction_encoding_parser()
 _instruction_condition_parser: lark.Lark = _create_instruction_condition_parser()
 
 # endregion
