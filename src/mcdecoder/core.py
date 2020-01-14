@@ -720,7 +720,7 @@ def _yaml_include_constructor(loader: yaml.Loader, node: yaml.Node) -> Any:
 
     # Load included yamls
     results = []
-    paths = (path for path in glob.iglob(path_pattern) if isfile(path))
+    paths = sorted(path for path in glob.iglob(path_pattern) if isfile(path))
     for path in paths:
         with open(path, 'r') as file:
             results.append(yaml.load(file, Loader=yaml.Loader))
