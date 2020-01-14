@@ -204,7 +204,7 @@ def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitP
 
         context.decode_context.code32x1_vec = bits_vec
         context.decode_context.code16x1_vec = bits_vec >> 16
-        context.decode_context.code16x2_vec = context.decode_context.code32x1_vec
+        context.decode_context.code16x2_vec = bits_vec
 
         # Emulate decode matching
         test_mat = core.find_matched_instructions_vectorized(
