@@ -6,7 +6,7 @@ def test_check() -> None:
     assert check('test/arm.yaml', 'ex xd 48 00') == 0
 
 
-def test__check_no_mask() -> None:
+def test__check_no_mask_code32x1() -> None:
     result1 = _check('test/arm.yaml', 'e9 2d 48 00', 16, lambda _: None)
     assert result1.undefined_error_count == 0
     assert result1.duplicate_error_count == 0
@@ -17,6 +17,13 @@ def test__check_no_mask() -> None:
     assert result2.undefined_error_count == 0
     assert result2.duplicate_error_count == 0
     assert len(result2.duplicate_instruction_pairs) == 0
+
+
+def test__check_no_mask_code16x2() -> None:
+    result1 = _check('test/arm_thumb.yaml', 'e9 2d 40 01', 16, lambda _: None)
+    assert result1.undefined_error_count == 0
+    assert result1.duplicate_error_count == 0
+    assert len(result1.duplicate_instruction_pairs) == 0
 
 
 def test__check_one_character_mask() -> None:

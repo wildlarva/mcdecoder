@@ -375,19 +375,27 @@ class DecodeContext:
     """McDecoder used for decoding"""
     code16x1: int
     """16-bit code(1 word of 16-bit)"""
+    code16x2: int
+    """16-bit code(2 words of 16-bit)"""
     code32x1: int
     """32-bit code(1 word of 32-bit)"""
 
 
 @dataclass
 class DecodeContextVectorized:
-    """Context information while decoding. It is used for vectorized calculations"""
+    """
+    Context information while decoding. It is used for vectorized calculations.
+
+    NOTE The length of code16x1_vec, code16x2_vec and code32x1_vec must be the same.
+    """
     mcdecoder: McDecoder
     """McDecoder used for decoding"""
     code16x1_vec: np.ndarray
-    """N-vector of 16-bit codes(1 word of 16-bit). The length of code16x1_vec and code32x1_vec must be the same"""
+    """N-vector of 16-bit codes(1 word of 16-bit)"""
+    code16x2_vec: np.ndarray
+    """N-vector of 16-bit codes(2 words of 16-bit)"""
     code32x1_vec: np.ndarray
-    """N-vector of 32-bit codes(1 word of 32-bit). The length of code16x1_vec and code32x1_vec must be the same"""
+    """N-vector of 32-bit codes(1 word of 32-bit)"""
 
 
 @dataclass
@@ -493,8 +501,12 @@ def find_matched_instructions(context: DecodeContext) -> List[InstructionDecoder
     :param context: Context information while decoding
     :return: Matched InstructionDecoders
     """
-    context_vectorized = DecodeContextVectorized(mcdecoder=context.mcdecoder, code16x1_vec=np.array([
-                                                 context.code16x1]), code32x1_vec=np.array([context.code32x1]))
+    context_vectorized = DecodeContextVectorized(
+        mcdecoder=context.mcdecoder,
+        code16x1_vec=np.array([context.code16x1]),
+        code16x2_vec=np.array([context.code16x2]),
+        code32x1_vec=np.array([context.code32x1]),
+    )
     test_mat = find_matched_instructions_vectorized(context_vectorized)
 
     instruction_vec = np.array(
@@ -523,6 +535,8 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
     # Test instructions what form of codes they need
     code16x1_test_vec = np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
         encoding_element_bit_length_vec == 16, length_of_encoding_elements_vec == 1)
+    code16x2_test_vec = np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
+        encoding_element_bit_length_vec == 16, length_of_encoding_elements_vec == 2)
     code32x1_test_vec = np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
         encoding_element_bit_length_vec == 32, length_of_encoding_elements_vec == 1)
 
@@ -531,6 +545,8 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
         (context.code16x1_vec.shape[0], code16x1_test_vec.shape[0]), dtype=np.int)
     code_mat[:, code16x1_test_vec] = context.code16x1_vec.reshape(
         context.code16x1_vec.shape[0], 1)
+    code_mat[:, code16x2_test_vec] = context.code16x2_vec.reshape(
+        context.code16x2_vec.shape[0], 1)
     code_mat[:, code32x1_test_vec] = context.code32x1_vec.reshape(
         context.code32x1_vec.shape[0], 1)
 
@@ -995,6 +1011,8 @@ def _decode_field(code: int, field_decoder: InstructionFieldDecoder) -> int:
 def _get_appropriate_code(context: DecodeContext, instruction_decoder: InstructionDecoder) -> int:
     if instruction_decoder.encoding_element_bit_length == 16 and instruction_decoder.length_of_encoding_elements == 1:
         return context.code16x1
+    elif instruction_decoder.encoding_element_bit_length == 16 and instruction_decoder.length_of_encoding_elements == 2:
+        return context.code16x2
     elif instruction_decoder.encoding_element_bit_length == 32 and instruction_decoder.length_of_encoding_elements == 1:
         return context.code32x1
     else:

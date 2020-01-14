@@ -42,7 +42,7 @@ def test__emulate_with_base2_big_endian() -> None:
     assert field_register_list.value == 0x4800
 
 
-def test__emulate_with_base16_big_endian() -> None:
+def test__emulate_with_base16_big_endian_code32x1() -> None:
     instructions = _emulate(
         'test/arm.yaml', 'e9 2d 48 00', 16, 'big')
     assert len(instructions) == 1
@@ -57,6 +57,23 @@ def test__emulate_with_base16_big_endian() -> None:
 
     assert field_register_list.decoder.name == 'register_list'
     assert field_register_list.value == 0x4800
+
+
+def test__emulate_with_base16_big_endian_code16x2() -> None:
+    instructions = _emulate(
+        'test/arm_thumb.yaml', 'e9 2d 40 01', 16, 'big')
+    assert len(instructions) == 1
+
+    (instruction_push,) = instructions
+    assert instruction_push.decoder.name == 'push_1'
+    assert len(instruction_push.field_results) == 2
+
+    field_m, field_register_list = instruction_push.field_results
+    assert field_m.decoder.name == 'M'
+    assert field_m.value == 0x1
+
+    assert field_register_list.decoder.name == 'register_list'
+    assert field_register_list.value == 0x1
 
 
 def test__emulate_with_base2_little_endian() -> None:
@@ -76,7 +93,7 @@ def test__emulate_with_base2_little_endian() -> None:
     assert field_register_list.value == 0x4800
 
 
-def test__emulate_with_base16_little_endian() -> None:
+def test__emulate_with_base16_little_endian_code32x1() -> None:
     instructions = _emulate(
         'test/arm.yaml', '00 48 2d e9', 16, 'little')
     assert len(instructions) == 1
@@ -91,6 +108,23 @@ def test__emulate_with_base16_little_endian() -> None:
 
     assert field_register_list.decoder.name == 'register_list'
     assert field_register_list.value == 0x4800
+
+
+def test__emulate_with_base16_little_endian_code16x2() -> None:
+    instructions = _emulate(
+        'test/arm_thumb.yaml', '2d e9 01 40', 16, 'little')
+    assert len(instructions) == 1
+
+    (instruction_push,) = instructions
+    assert instruction_push.decoder.name == 'push_1'
+    assert len(instruction_push.field_results) == 2
+
+    field_m, field_register_list = instruction_push.field_results
+    assert field_m.decoder.name == 'M'
+    assert field_m.value == 0x1
+
+    assert field_register_list.decoder.name == 'register_list'
+    assert field_register_list.value == 0x1
 
 
 def test__emulate_insufficient_bits_base2() -> None:
