@@ -543,12 +543,9 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
     # N x M matrix of codes and instructions holding code values
     code_mat: np.ndarray = np.zeros(
         (context.code16x1_vec.shape[0], code16x1_test_vec.shape[0]), dtype=np.int)
-    code_mat[:, code16x1_test_vec] = context.code16x1_vec.reshape(
-        context.code16x1_vec.shape[0], 1)
-    code_mat[:, code16x2_test_vec] = context.code16x2_vec.reshape(
-        context.code16x2_vec.shape[0], 1)
-    code_mat[:, code32x1_test_vec] = context.code32x1_vec.reshape(
-        context.code32x1_vec.shape[0], 1)
+    code_mat[:, code16x1_test_vec] = context.code16x1_vec.reshape(-1, 1)
+    code_mat[:, code16x2_test_vec] = context.code16x2_vec.reshape(-1, 1)
+    code_mat[:, code32x1_test_vec] = context.code32x1_vec.reshape(-1, 1)
 
     # N x M matrix of codes and instructions holding fixed bits test boolean values
     fb_test_mat = (code_mat & fixed_bits_mask_vec) == fixed_bits_vec
@@ -1023,7 +1020,7 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
                                            instruction_decoder: InstructionDecoder) -> np.ndarray:
     # NOTE Do not refactor and split into multiple functions for performance
     if isinstance(condition, AndIdCondition):
-        total_test_vec = np.full((code_vec.shape[0]), True)
+        total_test_vec = np.full_like(code_vec, True)
         for child_condition in condition.conditions:
             test_vec: np.ndarray = _test_instruction_condition_vectorized(
                 code_vec, child_condition, instruction_decoder)
@@ -1033,7 +1030,7 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
         return total_test_vec
 
     elif isinstance(condition, OrIdCondition):
-        total_test_vec = np.full((code_vec.shape[0]), False)
+        total_test_vec = np.full_like(code_vec, False)
         for child_condition in condition.conditions:
             test_vec: np.ndarray = _test_instruction_condition_vectorized(
                 code_vec, child_condition, instruction_decoder)
@@ -1060,7 +1057,7 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
         elif condition.operator == '>=':
             return subject_vec >= object_vec
         else:
-            return np.full((code_vec.shape[0]), False)
+            return np.full_like(code_vec, False)
 
     elif isinstance(condition, InIdCondition):
         subject_vec = _instruction_condition_object_vectorized(
@@ -1074,7 +1071,7 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
             subject_vec >= condition.value_start, subject_vec <= condition.value_end)
 
     else:
-        return np.full((code_vec.shape[0]), False)
+        return np.full_like(code_vec, False)
 
 
 def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: InstructionDecoderConditionObject,
@@ -1083,7 +1080,7 @@ def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: Instr
         field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
                               object.field), None)
         if field_decoder is None:
-            return np.zeros((code_vec.shape[0]), dtype=np.int)
+            return np.zeros_like(code_vec)
 
         value_vec = _decode_field_vectorized(code_vec, field_decoder)
         if object.element_index is not None:
@@ -1098,7 +1095,7 @@ def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: Instr
 
     elif isinstance(object, FunctionIdConditionObject):
         if not (object.function in _FUNCTION_NAME_TO_FUNCTION):
-            return np.zeros((code_vec.shape[0]), dtype=np.int)
+            return np.zeros_like(code_vec)
 
         function = _FUNCTION_NAME_TO_FUNCTION[object.function]
         value_vec = _instruction_condition_object_vectorized(
@@ -1106,11 +1103,11 @@ def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: Instr
         return function(value_vec)
 
     else:
-        return np.zeros((code_vec.shape[0]), dtype=np.int)
+        return np.zeros_like(code_vec)
 
 
 def _decode_field_vectorized(code_vec: np.ndarray, field_decoder: InstructionFieldDecoder) -> np.ndarray:
-    value_vec = np.zeros(code_vec.shape[0], dtype=int)
+    value_vec = np.zeros_like(code_vec)
     for sf_decoder in field_decoder.subfield_decoders:
         value_vec |= ((code_vec & sf_decoder.mask) >>
                       sf_decoder.end_bit_in_instruction) << sf_decoder.end_bit_in_field
@@ -1124,7 +1121,7 @@ def _setbit_count(value_vec: np.ndarray) -> np.ndarray:
     :param value_vec: N-vector of values
     :return: N-vector of set bit counts of values
     """
-    value_vvec = value_vec.reshape(value_vec.shape[0], 1)
+    value_vvec = value_vec.reshape(-1, 1)
     bit_mat = np.unpackbits(value_vvec.view(dtype=np.uint8),  # type: ignore # TODO pyright can't recognize numpy.uint8
                             axis=1)
     count_vec = np.sum(bit_mat, axis=1)

@@ -213,8 +213,8 @@ def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitP
 
         # Combine step, bits and test result
         # N x 2 matrix of codes x (step, bits)
-        header_mat = np.hstack((step_vec.reshape(
-            step_vec.shape[0], 1), bits_vec.reshape(bits_vec.shape[0], 1)))
+        header_mat = np.hstack(
+            (step_vec.reshape(-1, 1), bits_vec.reshape(-1, 1)))
 
         # Collect errors
         errors: List[_Error] = []
@@ -422,7 +422,7 @@ def _create_left_errors(context: _CheckContext) -> List[_Error]:
 
 
 def _make_bits(context: _CheckContext, step_vec: np.ndarray) -> np.ndarray:
-    bits_vec = np.full((step_vec.shape[0]), context.bit_pattern.fixed_bits)
+    bits_vec = np.full_like(step_vec, context.bit_pattern.fixed_bits)
     for bit_range in context.bit_pattern.variable_bit_ranges:
         bits_vec |= (step_vec & bit_range.mask) << bit_range.shift
     return bits_vec
