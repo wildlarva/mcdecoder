@@ -68,14 +68,14 @@ def _emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16],
     # Convert bit pattern to int based on the specified byteorder
     byte_str_len = common.string_length_for_byte(base)
 
-    code16 = _bit_pattern_to_int(
+    code16x1 = _bit_pattern_to_int(
         padded_bit_pattern[:byte_str_len * 2], base, byteorder)
-    code32 = _bit_pattern_to_int(
+    code32x1 = _bit_pattern_to_int(
         padded_bit_pattern[:byte_str_len * 4], base, byteorder)
 
     # Create decode context
     decode_context = core.DecodeContext(
-        mcdecoder=mcdecoder, code16=code16, code32=code32)
+        mcdecoder=mcdecoder, code16x1=code16x1, code32x1=code32x1)
 
     # Emulate decoder
     return _emulate_decoder(decode_context)

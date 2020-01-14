@@ -373,10 +373,10 @@ class DecodeContext:
     """Context information while decoding. It is used for non-vectorized calculations."""
     mcdecoder: McDecoder
     """McDecoder used for decoding"""
-    code16: int
-    """16-bit code"""
-    code32: int
-    """32-bit code"""
+    code16x1: int
+    """16-bit code(1 word of 16-bit)"""
+    code32x1: int
+    """32-bit code(1 word of 32-bit)"""
 
 
 @dataclass
@@ -384,10 +384,10 @@ class DecodeContextVectorized:
     """Context information while decoding. It is used for vectorized calculations"""
     mcdecoder: McDecoder
     """McDecoder used for decoding"""
-    code16_vec: np.ndarray
-    """N-vector of 16-bit codes. The length of code16_vec and code32_vec must be the same"""
-    code32_vec: np.ndarray
-    """N-vector of 32-bit codes. The length of code16_vec and code32_vec must be the same"""
+    code16x1_vec: np.ndarray
+    """N-vector of 16-bit codes(1 word of 16-bit). The length of code16x1_vec and code32x1_vec must be the same"""
+    code32x1_vec: np.ndarray
+    """N-vector of 32-bit codes(1 word of 32-bit). The length of code16x1_vec and code32x1_vec must be the same"""
 
 
 @dataclass
@@ -493,8 +493,8 @@ def find_matched_instructions(context: DecodeContext) -> List[InstructionDecoder
     :param context: Context information while decoding
     :return: Matched InstructionDecoders
     """
-    context_vectorized = DecodeContextVectorized(mcdecoder=context.mcdecoder, code16_vec=np.array([
-                                                 context.code16]), code32_vec=np.array([context.code32]))
+    context_vectorized = DecodeContextVectorized(mcdecoder=context.mcdecoder, code16x1_vec=np.array([
+                                                 context.code16x1]), code32x1_vec=np.array([context.code32x1]))
     test_mat = find_matched_instructions_vectorized(context_vectorized)
 
     instruction_vec = np.array(
@@ -511,16 +511,28 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
             Each element holds the boolean result whether a code is matched for an instruction.
     """
     # Vectorize the attributes of instruction decoders
-    instruction_fields_mat = np.array([(instruction.type_bit_size, instruction.fixed_bits_mask,
-                                        instruction.fixed_bits) for instruction in context.mcdecoder.instruction_decoders])
+    instruction_fields_mat = np.array([(instruction.encoding_element_bit_length, instruction.length_of_encoding_elements,
+                                        instruction.fixed_bits_mask, instruction.fixed_bits)
+                                       for instruction in context.mcdecoder.instruction_decoders])
 
-    type_bit_size_vec = instruction_fields_mat[:, 0]
-    fixed_bits_mask_vec = instruction_fields_mat[:, 1]
-    fixed_bits_vec = instruction_fields_mat[:, 2]
+    encoding_element_bit_length_vec = instruction_fields_mat[:, 0]
+    length_of_encoding_elements_vec = instruction_fields_mat[:, 1]
+    fixed_bits_mask_vec = instruction_fields_mat[:, 2]
+    fixed_bits_vec = instruction_fields_mat[:, 3]
+
+    # Test instructions what form of codes they need
+    code16x1_test_vec = np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
+        encoding_element_bit_length_vec == 16, length_of_encoding_elements_vec == 1)
+    code32x1_test_vec = np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
+        encoding_element_bit_length_vec == 32, length_of_encoding_elements_vec == 1)
 
     # N x M matrix of codes and instructions holding code values
-    code_mat: np.ndarray = np.where(type_bit_size_vec == 16, context.code16_vec.reshape(
-        context.code16_vec.shape[0], 1), context.code32_vec.reshape(context.code32_vec.shape[0], 1))
+    code_mat: np.ndarray = np.zeros(
+        (context.code16x1_vec.shape[0], code16x1_test_vec.shape[0]), dtype=np.int)
+    code_mat[:, code16x1_test_vec] = context.code16x1_vec.reshape(
+        context.code16x1_vec.shape[0], 1)
+    code_mat[:, code32x1_test_vec] = context.code32x1_vec.reshape(
+        context.code32x1_vec.shape[0], 1)
 
     # N x M matrix of codes and instructions holding fixed bits test boolean values
     fb_test_mat = (code_mat & fixed_bits_mask_vec) == fixed_bits_vec
@@ -981,10 +993,12 @@ def _decode_field(code: int, field_decoder: InstructionFieldDecoder) -> int:
 
 
 def _get_appropriate_code(context: DecodeContext, instruction_decoder: InstructionDecoder) -> int:
-    if instruction_decoder.type_bit_size == 16:
-        return context.code16
+    if instruction_decoder.encoding_element_bit_length == 16 and instruction_decoder.length_of_encoding_elements == 1:
+        return context.code16x1
+    elif instruction_decoder.encoding_element_bit_length == 32 and instruction_decoder.length_of_encoding_elements == 1:
+        return context.code32x1
     else:
-        return context.code32
+        return 0
 
 
 def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: InstructionDecoderCondition,  # noqa: C901
@@ -1051,7 +1065,7 @@ def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: Instr
         field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
                               object.field), None)
         if field_decoder is None:
-            return np.zeros((code_vec.shape[0]))
+            return np.zeros((code_vec.shape[0]), dtype=np.int)
 
         value_vec = _decode_field_vectorized(code_vec, field_decoder)
         if object.element_index is not None:
@@ -1066,7 +1080,7 @@ def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: Instr
 
     elif isinstance(object, FunctionIdConditionObject):
         if not (object.function in _FUNCTION_NAME_TO_FUNCTION):
-            return np.zeros((code_vec.shape[0]))
+            return np.zeros((code_vec.shape[0]), dtype=np.int)
 
         function = _FUNCTION_NAME_TO_FUNCTION[object.function]
         value_vec = _instruction_condition_object_vectorized(
@@ -1074,7 +1088,7 @@ def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: Instr
         return function(value_vec)
 
     else:
-        return np.zeros((code_vec.shape[0]))
+        return np.zeros((code_vec.shape[0]), dtype=np.int)
 
 
 def _decode_field_vectorized(code_vec: np.ndarray, field_decoder: InstructionFieldDecoder) -> np.ndarray:

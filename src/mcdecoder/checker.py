@@ -185,7 +185,7 @@ def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitP
 
     # Create check context
     decode_context = core.DecodeContextVectorized(
-        mcdecoder=mcdecoder, code16_vec=np.empty(()), code32_vec=np.empty(()))
+        mcdecoder=mcdecoder, code16x1_vec=np.empty(()), code32x1_vec=np.empty(()))
 
     # N x M matrix of detected duplicates and instructions holding boolean whether an instruction is matched
     duplicate_instruction_mat = np.full(
@@ -202,8 +202,8 @@ def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitP
         step_vec = np.arange(step_start, step_end + 1)
         bits_vec = _make_bits(context, step_vec)
 
-        context.decode_context.code32_vec = bits_vec
-        context.decode_context.code16_vec = bits_vec >> 16
+        context.decode_context.code32x1_vec = bits_vec
+        context.decode_context.code16x1_vec = bits_vec >> 16
 
         # Emulate decode matching
         test_mat = core.find_matched_instructions_vectorized(
