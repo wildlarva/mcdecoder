@@ -4,7 +4,6 @@ import importlib.resources
 import itertools
 import json
 import os.path
-from os.path import isfile
 from typing import (
     Any, Callable, Dict, List, Literal, Optional, Tuple, TypedDict, cast)
 
@@ -724,7 +723,8 @@ def _yaml_include_constructor(loader: yaml.Loader, node: yaml.Node) -> Any:
 
     # Load included yamls
     results = []
-    paths = sorted(path for path in glob.iglob(path_pattern) if isfile(path))
+    paths = sorted(path for path in glob.iglob(
+        path_pattern) if os.path.isfile(path))
     for path in paths:
         with open(path, 'r') as file:
             results.append(yaml.load(file, Loader=yaml.Loader))
