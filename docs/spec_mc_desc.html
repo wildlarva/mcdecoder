@@ -191,9 +191,9 @@
     <span class="c1"># format: Encoding format of the instruction</span>
     <span class="c1">#</span>
     <span class="c1"># Instruction consists of multiple fields. Fields are separated by bar symbol(|).</span>
-    <span class="c1"># If an instruction is constructed by multiple N-byte words, they&#39;re split by double-bar symbol(||).</span>
+    <span class="c1"># If an instruction is constructed by multiple N-byte words, they&#39;re split by double-slash symbol(//).</span>
     <span class="c1">#</span>
-    <span class="c1"># Expression: &lt;field_bits&gt;:&lt;field_name&gt;[&lt;field_bit_ranges&gt;]|... || ...</span>
+    <span class="c1"># Expression: &lt;field_bits&gt;:&lt;field_name&gt;[&lt;field_bit_ranges&gt;]|... // ...</span>
     <span class="c1">#</span>
     <span class="c1"># where</span>
     <span class="c1">#   &lt;field_bits&gt;: Encoding format of an instruction field</span>
@@ -440,7 +440,7 @@ to specify multiple files.</p>
 <td><p><em>string</em></p></td>
 </tr>
 <tr class="row-even"><td><p>pattern</p></td>
-<td><p>^[A-Za-z0-9_:[],|u0020u0009u000au000d]*$</p></td>
+<td><p>^[A-Za-z0-9_:[],|/u0020u0009u000au000d]*$</p></td>
 </tr>
 <tr class="row-odd"><td rowspan="2"><ul class="simple">
 <li><p>match_condition</p></li>
