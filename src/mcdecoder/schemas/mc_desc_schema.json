@@ -26,25 +26,25 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "pattern": "^[A-Za-z]\\w*$"
+                        "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
                     },
                     "format": {
                         "type": "string",
-                        "pattern": "^[\\w\\s\\[\\]:,|]*$"
+                        "pattern": "^[A-Za-z0-9_:\\[\\],|\\u0020\\u0009\\u000a\\u000d]*$"
                     },
                     "match_condition": {
                         "type": "string",
-                        "pattern": "^[\\w\\s\\-\\[\\],!=><()]*$"
+                        "pattern": "^[A-Za-z0-9_!=><\\-\\[\\],()\\u0020\\u0009\\u000a\\u000d]*$"
                     },
                     "unmatch_condition": {
                         "type": "string",
-                        "pattern": "^[\\w\\s\\-\\[\\],!=><()]*$"
+                        "pattern": "^[A-Za-z0-9_!=><\\-\\[\\],()\\u0020\\u0009\\u000a\\u000d]*$"
                     },
                     "extras": {},
                     "field_extras": {
                         "type": "object",
                         "patternProperties": {
-                            "^[A-Za-z]\\w*$": {}
+                            "^[A-Za-z][A-Za-z0-9_]*$": {}
                         },
                         "additionalProperties": false
                     }
@@ -61,7 +61,7 @@
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "pattern": "^[A-Za-z]\\w*$"
+                    "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
                 }
             },
             "additionalProperties": false
