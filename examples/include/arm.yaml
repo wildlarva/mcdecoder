@@ -1,2 +1,3 @@
-machine: {}
+machine:
+  byteorder: little
 instructions: !include instructions/*_instructions.yaml
