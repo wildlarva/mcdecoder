@@ -1,4 +1,4 @@
-instruction_encoding: instruction_encoding_element ("||" instruction_encoding_element)*
+instruction_encoding: instruction_encoding_element ("//" instruction_encoding_element)*
 instruction_encoding_element: field_encoding ("|" field_encoding)*
 field_encoding: field_bits (":" id ("[" field_bit_ranges "]")?)?
 field_bits: BIT_ARRAY+

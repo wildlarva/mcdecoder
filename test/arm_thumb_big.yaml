@@ -2,8 +2,8 @@ machine:
   byteorder: big
 instructions:
   - name: add_1
-    format: 11110|x:i|0|1000|x:S|xxxx:Rn || 0|xxx:imm3|xxxx:Rd|xxxx xxxx:imm8
+    format: 11110|x:i|0|1000|x:S|xxxx:Rn // 0|xxx:imm3|xxxx:Rd|xxxx xxxx:imm8
   - name: push_1
-    format: 11101|00|100|1|0|1101 || 0|x:M|0|x xxxx xxxx xxxx:register_list
+    format: 11101|00|100|1|0|1101 // 0|x:M|0|x xxxx xxxx xxxx:register_list
 decoder:
   namespace: atb
