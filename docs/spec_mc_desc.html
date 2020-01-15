@@ -177,6 +177,7 @@
 
 <span class="c1"># matchine: Describes a machine</span>
 <span class="nt">machine</span><span class="p">:</span>
+  <span class="nt">byteorder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">little</span> <span class="c1"># Byte order of the machine. It can be &#39;big&#39; or &#39;little&#39;</span>
   <span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] Container of user-defined data for the machine</span>
     <span class="c1"># Any structure can be defined here</span>
     <span class="nt">arch_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">arm</span>
@@ -375,7 +376,7 @@ to specify multiple files.</p>
 </tr>
 <tr class="row-even"><td colspan="5"><p>properties</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="4"><ul class="simple">
+<tr class="row-odd"><td rowspan="6"><ul class="simple">
 <li><p><strong>machine</strong></p></li>
 </ul>
 </td>
@@ -383,6 +384,16 @@ to specify multiple files.</p>
 <td colspan="3"><p><em>object</em></p></td>
 </tr>
 <tr class="row-even"><td colspan="4"><p>properties</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="simple">
+<li><p><strong>byteorder</strong></p></li>
+</ul>
+</td>
+<td><p>type</p></td>
+<td colspan="2"><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>enum</p></td>
+<td colspan="2"><p>big, little</p></td>
 </tr>
 <tr class="row-odd"><td colspan="4"><ul class="simple">
 <li><p>extras</p></li>
@@ -418,7 +429,7 @@ to specify multiple files.</p>
 <td><p><em>string</em></p></td>
 </tr>
 <tr class="row-even"><td><p>pattern</p></td>
-<td><p>^[A-Za-z]w*$</p></td>
+<td><p>^[A-Za-z][A-Za-z0-9_]*$</p></td>
 </tr>
 <tr class="row-odd"><td rowspan="2"><ul class="simple">
 <li><p><strong>format</strong></p></li>
@@ -428,7 +439,7 @@ to specify multiple files.</p>
 <td><p><em>string</em></p></td>
 </tr>
 <tr class="row-even"><td><p>pattern</p></td>
-<td><p>^[ws[]:,|]*$</p></td>
+<td><p>^[A-Za-z0-9_:[],|u0020u0009u000au000d]*$</p></td>
 </tr>
 <tr class="row-odd"><td rowspan="2"><ul class="simple">
 <li><p>match_condition</p></li>
@@ -438,7 +449,7 @@ to specify multiple files.</p>
 <td><p><em>string</em></p></td>
 </tr>
 <tr class="row-even"><td><p>pattern</p></td>
-<td><p>^[ws-[],!=&gt;&lt;()]*$</p></td>
+<td><p>^[A-Za-z0-9_!=&gt;&lt;-[],()u0020u0009u000au000d]*$</p></td>
 </tr>
 <tr class="row-odd"><td rowspan="2"><ul class="simple">
 <li><p>unmatch_condition</p></li>
@@ -448,7 +459,7 @@ to specify multiple files.</p>
 <td><p><em>string</em></p></td>
 </tr>
 <tr class="row-even"><td><p>pattern</p></td>
-<td><p>^[ws-[],!=&gt;&lt;()]*$</p></td>
+<td><p>^[A-Za-z0-9_!=&gt;&lt;-[],()u0020u0009u000au000d]*$</p></td>
 </tr>
 <tr class="row-odd"><td colspan="3"><ul class="simple">
 <li><p>extras</p></li>
@@ -465,7 +476,7 @@ to specify multiple files.</p>
 <tr class="row-odd"><td colspan="2"><p>patternProperties</p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><ul class="simple">
-<li><p>^[A-Za-z]w*$</p></li>
+<li><p>^[A-Za-z][A-Za-z0-9_]*$</p></li>
 </ul>
 </td>
 </tr>
@@ -492,7 +503,7 @@ to specify multiple files.</p>
 <td colspan="2"><p><em>string</em></p></td>
 </tr>
 <tr class="row-even"><td><p>pattern</p></td>
-<td colspan="2"><p>^[A-Za-z]w*$</p></td>
+<td colspan="2"><p>^[A-Za-z][A-Za-z0-9_]*$</p></td>
 </tr>
 <tr class="row-odd"><td><p>additionalProperties</p></td>
 <td colspan="3"><p>False</p></td>

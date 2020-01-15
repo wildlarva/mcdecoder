@@ -338,19 +338,25 @@ If byteorder is not specified, big endian is used by default.</p>
 
 <dl class="class">
 <dt id="mcdecoder.core.DecodeContext">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">DecodeContext</code><span class="sig-paren">(</span><em class="sig-param">mcdecoder: mcdecoder.core.McDecoder</em>, <em class="sig-param">code16: int</em>, <em class="sig-param">code32: int</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.DecodeContext" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">DecodeContext</code><span class="sig-paren">(</span><em class="sig-param">mcdecoder: mcdecoder.core.McDecoder</em>, <em class="sig-param">code16x1: int</em>, <em class="sig-param">code16x2: int</em>, <em class="sig-param">code32x1: int</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.DecodeContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Context information while decoding. It is used for non-vectorized calculations.</p>
 <dl class="attribute">
-<dt id="mcdecoder.core.DecodeContext.code16">
-<code class="sig-name descname">code16</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContext.code16" title="Permalink to this definition">¶</a></dt>
-<dd><p>16-bit code</p>
+<dt id="mcdecoder.core.DecodeContext.code16x1">
+<code class="sig-name descname">code16x1</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContext.code16x1" title="Permalink to this definition">¶</a></dt>
+<dd><p>16-bit code(1 word of 16-bit)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="mcdecoder.core.DecodeContext.code32">
-<code class="sig-name descname">code32</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContext.code32" title="Permalink to this definition">¶</a></dt>
-<dd><p>32-bit code</p>
+<dt id="mcdecoder.core.DecodeContext.code16x2">
+<code class="sig-name descname">code16x2</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContext.code16x2" title="Permalink to this definition">¶</a></dt>
+<dd><p>16-bit code(2 words of 16-bit)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.DecodeContext.code32x1">
+<code class="sig-name descname">code32x1</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContext.code32x1" title="Permalink to this definition">¶</a></dt>
+<dd><p>32-bit code(1 word of 32-bit)</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -363,19 +369,26 @@ If byteorder is not specified, big endian is used by default.</p>
 
 <dl class="class">
 <dt id="mcdecoder.core.DecodeContextVectorized">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">DecodeContextVectorized</code><span class="sig-paren">(</span><em class="sig-param">mcdecoder: mcdecoder.core.McDecoder</em>, <em class="sig-param">code16_vec: numpy.ndarray</em>, <em class="sig-param">code32_vec: numpy.ndarray</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">DecodeContextVectorized</code><span class="sig-paren">(</span><em class="sig-param">mcdecoder: mcdecoder.core.McDecoder</em>, <em class="sig-param">code16x1_vec: numpy.ndarray</em>, <em class="sig-param">code16x2_vec: numpy.ndarray</em>, <em class="sig-param">code32x1_vec: numpy.ndarray</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Context information while decoding. It is used for vectorized calculations</p>
+<p>Context information while decoding. It is used for vectorized calculations.</p>
+<p>NOTE The length of code16x1_vec, code16x2_vec and code32x1_vec must be the same.</p>
 <dl class="attribute">
-<dt id="mcdecoder.core.DecodeContextVectorized.code16_vec">
-<code class="sig-name descname">code16_vec</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized.code16_vec" title="Permalink to this definition">¶</a></dt>
-<dd><p>N-vector of 16-bit codes. The length of code16_vec and code32_vec must be the same</p>
+<dt id="mcdecoder.core.DecodeContextVectorized.code16x1_vec">
+<code class="sig-name descname">code16x1_vec</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized.code16x1_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>N-vector of 16-bit codes(1 word of 16-bit)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="mcdecoder.core.DecodeContextVectorized.code32_vec">
-<code class="sig-name descname">code32_vec</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized.code32_vec" title="Permalink to this definition">¶</a></dt>
-<dd><p>N-vector of 32-bit codes. The length of code16_vec and code32_vec must be the same</p>
+<dt id="mcdecoder.core.DecodeContextVectorized.code16x2_vec">
+<code class="sig-name descname">code16x2_vec</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized.code16x2_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>N-vector of 16-bit codes(2 words of 16-bit)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.DecodeContextVectorized.code32x1_vec">
+<code class="sig-name descname">code32x1_vec</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized.code32x1_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>N-vector of 32-bit codes(1 word of 32-bit)</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -988,9 +1001,15 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="class">
 <dt id="mcdecoder.core.MachineDecoder">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">MachineDecoder</code><span class="sig-paren">(</span><em class="sig-param">extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.MachineDecoder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">MachineDecoder</code><span class="sig-paren">(</span><em class="sig-param">byteorder: Literal[big, little], extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.MachineDecoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decoder for a machine</p>
+<dl class="attribute">
+<dt id="mcdecoder.core.MachineDecoder.byteorder">
+<code class="sig-name descname">byteorder</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.MachineDecoder.byteorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Byte order of a machine</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="mcdecoder.core.MachineDecoder.extras">
 <code class="sig-name descname">extras</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.MachineDecoder.extras" title="Permalink to this definition">¶</a></dt>
@@ -1004,6 +1023,12 @@ to test an instruction field is in a value range(inclusive)</p>
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">MachineDescription</code><a class="headerlink" href="#mcdecoder.core.MachineDescription" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>Describes a machine</p>
+<dl class="attribute">
+<dt id="mcdecoder.core.MachineDescription.byteorder">
+<code class="sig-name descname">byteorder</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.MachineDescription.byteorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Byte order of a machine</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="mcdecoder.core.MachineDescription.extras">
 <code class="sig-name descname">extras</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.MachineDescription.extras" title="Permalink to this definition">¶</a></dt>
