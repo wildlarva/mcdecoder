@@ -3,7 +3,9 @@
 extern "C"
 {
 #include "out/arm_mcdecoder.h"
+#include "out/ab_mcdecoder.h"
 #include "out/at_mcdecoder.h"
+#include "out/atb_mcdecoder.h"
 #include "out/riscv_mcdecoder.h"
 #include "out/pc_mcdecoder.h"
 #include "out/cc_mcdecoder.h"
@@ -43,6 +45,47 @@ TEST(op_parse, should_decode_32bit_instructions)
   EXPECT_EQ(optype_add.code_id, arm_OpCodeId_add_1);
   EXPECT_EQ(optype_add.format_id, arm_OP_CODE_FORMAT_add_1);
   EXPECT_EQ(decoded_code_add.type_id, arm_OP_CODE_FORMAT_add_1);
+  EXPECT_EQ(decoded_code_add.code.add_1.cond, 0x0E);  /* 31-28 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.S, 0x00);     /* 20 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.Rn, 0x0D);    /* 19-16 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.Rd, 0x0B);    /* 15-12 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.imm12, 0x04); /* 11-0 bit */
+}
+
+TEST(op_parse, should_decode_32bit_instructions_big)
+{
+  // constants
+  unsigned char machine_codes[] = {
+      0xE9, 0x2D, 0x48, 0x00, /* push    {fp, lr} */
+      0xE2, 0x8D, 0xB0, 0x04, /* add     fp, sp, #4 */
+  };
+
+  // actions
+  ab_OpDecodedCodeType decoded_code_push;
+  ab_OperationCodeType optype_push;
+  int result_push;
+
+  result_push = ab_op_parse((ab_uint16 *)&machine_codes[0], &decoded_code_push, &optype_push);
+
+  ab_OpDecodedCodeType decoded_code_add;
+  ab_OperationCodeType optype_add;
+  int result_add;
+  result_add = ab_op_parse((ab_uint16 *)&machine_codes[4], &decoded_code_add, &optype_add);
+
+  // assertions
+  // push
+  EXPECT_EQ(result_push, 0);
+  EXPECT_EQ(optype_push.code_id, ab_OpCodeId_push_1);
+  EXPECT_EQ(optype_push.format_id, ab_OP_CODE_FORMAT_push_1);
+  EXPECT_EQ(decoded_code_push.type_id, ab_OP_CODE_FORMAT_push_1);
+  EXPECT_EQ(decoded_code_push.code.push_1.cond, 0x0E);            /* 31-28 bit */
+  EXPECT_EQ(decoded_code_push.code.push_1.register_list, 0x4800); /* 15-0 bit */
+
+  // add
+  EXPECT_EQ(result_add, 0);
+  EXPECT_EQ(optype_add.code_id, ab_OpCodeId_add_1);
+  EXPECT_EQ(optype_add.format_id, ab_OP_CODE_FORMAT_add_1);
+  EXPECT_EQ(decoded_code_add.type_id, ab_OP_CODE_FORMAT_add_1);
   EXPECT_EQ(decoded_code_add.code.add_1.cond, 0x0E);  /* 31-28 bit */
   EXPECT_EQ(decoded_code_add.code.add_1.S, 0x00);     /* 20 bit */
   EXPECT_EQ(decoded_code_add.code.add_1.Rn, 0x0D);    /* 19-16 bit */
@@ -127,6 +170,47 @@ TEST(op_parse, should_decode_16bit_x2_instructions)
   EXPECT_EQ(optype_add.code_id, at_OpCodeId_add_1);
   EXPECT_EQ(optype_add.format_id, at_OP_CODE_FORMAT_add_1);
   EXPECT_EQ(decoded_code_add.type_id, at_OP_CODE_FORMAT_add_1);
+  EXPECT_EQ(decoded_code_add.code.add_1.i, 0x1);    /* 26 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.S, 0x1);    /* 20 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.Rn, 0x1);   /* 19-16 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.imm3, 0x1); /* 14-12 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.Rd, 0x1);   /* 11-8 bit */
+  EXPECT_EQ(decoded_code_add.code.add_1.imm8, 0x1); /* 7-0 bit */
+}
+
+TEST(op_parse, should_decode_16bit_x2_instructions_big)
+{
+  // constants
+  unsigned char machine_codes[] = {
+      0xe9, 0x2d, 0x40, 0x01, /* push */
+      0xf5, 0x11, 0x11, 0x01, /* add */
+  };
+
+  // actions
+  atb_OpDecodedCodeType decoded_code_push;
+  atb_OperationCodeType optype_push;
+  int result_push;
+  result_push = atb_op_parse((atb_uint16 *)&machine_codes[0], &decoded_code_push, &optype_push);
+
+  atb_OpDecodedCodeType decoded_code_add;
+  atb_OperationCodeType optype_add;
+  int result_add;
+  result_add = atb_op_parse((atb_uint16 *)&machine_codes[4], &decoded_code_add, &optype_add);
+
+  // assertions
+  // push
+  EXPECT_EQ(result_push, 0);
+  EXPECT_EQ(optype_push.code_id, atb_OpCodeId_push_1);
+  EXPECT_EQ(optype_push.format_id, atb_OP_CODE_FORMAT_push_1);
+  EXPECT_EQ(decoded_code_push.type_id, atb_OP_CODE_FORMAT_push_1);
+  EXPECT_EQ(decoded_code_push.code.push_1.M, 0x1);             /* 14 bit */
+  EXPECT_EQ(decoded_code_push.code.push_1.register_list, 0x1); /* 12-0 bit */
+
+  // add
+  EXPECT_EQ(result_add, 0);
+  EXPECT_EQ(optype_add.code_id, atb_OpCodeId_add_1);
+  EXPECT_EQ(optype_add.format_id, atb_OP_CODE_FORMAT_add_1);
+  EXPECT_EQ(decoded_code_add.type_id, atb_OP_CODE_FORMAT_add_1);
   EXPECT_EQ(decoded_code_add.code.add_1.i, 0x1);    /* 26 bit */
   EXPECT_EQ(decoded_code_add.code.add_1.S, 0x1);    /* 20 bit */
   EXPECT_EQ(decoded_code_add.code.add_1.Rn, 0x1);   /* 19-16 bit */

@@ -5,9 +5,19 @@
         "machine": {
             "type": "object",
             "properties": {
+                "byteorder": {
+                    "type": "string",
+                    "enum": [
+                        "big",
+                        "little"
+                    ]
+                },
                 "extras": {}
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "required": [
+                "byteorder"
+            ]
         },
         "instructions": {
             "type": "array",

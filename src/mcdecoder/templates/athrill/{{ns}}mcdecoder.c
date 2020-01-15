@@ -118,13 +118,25 @@ static {{ ns }}uint32 setbit_count({{ ns }}uint32 value) {
 
 /* op parse function */
 int {{ ns }}op_parse({{ ns }}uint16 code[{{ ns }}OP_DECODE_MAX], {{ ns }}OpDecodedCodeType *decoded_code, {{ ns }}OperationCodeType *optype) {
+    {% if machine_decoder.byteorder == 'big' %}
+        {{ ns }}uint8 *raw_code = ({{ ns }}uint8 *) &code[0];
+        {{ ns }}uint16 word1_16bit = ((({{ ns }}uint16) raw_code[0]) << 8) | (({{ ns }}uint16) raw_code[1]);
+        {{ ns }}uint16 word2_16bit = ((({{ ns }}uint16) raw_code[2]) << 8) | (({{ ns }}uint16) raw_code[3]);
+    {% endif %}
+
     OpDecodeContext context;
     context.code = &code[0];
     context.decoded_code = decoded_code;
     context.optype = optype;
-    context.code16x1 = ({{ ns }}uint16) code[0];
-    context.code16x2 = ((({{ ns }}uint32) code[0]) << 16) | (({{ ns }}uint32) code[1]);
-    context.code32x1 = *(({{ ns }}uint32 *) &code[0]);
+    {% if machine_decoder.byteorder == 'little' %}
+        context.code16x1 = code[0];
+        context.code16x2 = ((({{ ns }}uint32) code[0]) << 16) | (({{ ns }}uint32) code[1]);
+        context.code32x1 = *(({{ ns }}uint32 *) &code[0]);
+    {% else %}
+        context.code16x1 = word1_16bit;
+        context.code16x2 = ((({{ ns }}uint32) word1_16bit) << 16) | (({{ ns }}uint32) word2_16bit);
+        context.code32x1 = context.code16x2;
+    {% endif %}
 
     {% for inst in instruction_decoders %}
         if (op_parse_{{ inst.name }}(&context) == 0) {

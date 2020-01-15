@@ -9,7 +9,7 @@ all: setup generate
 test: all
 	make -f build.mk test
 
-generate: out/arm_mcdecoder.c out/at_mcdecoder.c out/riscv_mcdecoder.c out/pc_mcdecoder.c out/cc_mcdecoder.c
+generate: out/arm_mcdecoder.c out/ab_mcdecoder.c out/at_mcdecoder.c out/atb_mcdecoder.c out/riscv_mcdecoder.c out/pc_mcdecoder.c out/cc_mcdecoder.c
 
 clean: setup
 	rm -vfr out
@@ -25,7 +25,13 @@ build/conanbuildinfo.mak: conanfile.txt
 out/arm_mcdecoder.c: ../test/arm.yaml
 	mcdecoder generate --output out $<
 
+out/ab_mcdecoder.c: ../test/arm_big.yaml
+	mcdecoder generate --output out $<
+
 out/at_mcdecoder.c: ../test/arm_thumb.yaml
+	mcdecoder generate --output out $<
+
+out/atb_mcdecoder.c: ../test/arm_thumb_big.yaml
 	mcdecoder generate --output out $<
 
 out/riscv_mcdecoder.c: ../test/riscv.yaml

@@ -4,6 +4,7 @@
 
 # matchine: Describes a machine
 machine:
+  byteorder: little # Byte order of the machine. It can be 'big' or 'little'
   extras: # [optional] Container of user-defined data for the machine
     # Any structure can be defined here
     arch_type: arm

@@ -40,7 +40,7 @@ def test_generate_with_output_dir() -> None:
 def test__generate() -> None:
     mcdecoder_model = McDecoder(
         namespace_prefix='ns_',
-        machine_decoder=MachineDecoder(extras=None),
+        machine_decoder=MachineDecoder(byteorder='little', extras=None),
         instruction_decoders=[
             InstructionDecoder(
                 name='add_1',

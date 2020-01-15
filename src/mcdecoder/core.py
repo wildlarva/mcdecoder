@@ -36,6 +36,8 @@ class InstructionDescription(TypedDict):
 
 class MachineDescription(TypedDict):
     """Describes a machine"""
+    byteorder: Literal['big', 'little']
+    """Byte order of a machine"""
     extras: Optional[Any]
     """Container of user-defined data for a machine"""
 
@@ -347,6 +349,8 @@ class InstructionDecoder:
 @dataclass
 class MachineDecoder:
     """Decoder for a machine"""
+    byteorder: Literal['big', 'little']
+    """Byte order of a machine"""
     extras: Optional[Any]
     """User-defined data for a machine"""
 
@@ -778,7 +782,7 @@ def _create_machine_decoder_model(machine_desc_model: MachineDescription) -> Mac
     if 'extras' in machine_desc_model:
         extras = machine_desc_model['extras']
 
-    return MachineDecoder(extras=extras)
+    return MachineDecoder(byteorder=machine_desc_model['byteorder'], extras=extras)
 
 
 def _make_namespace_prefix(namespace: Optional[str]) -> str:

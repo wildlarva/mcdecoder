@@ -1,4 +1,5 @@
-machine: {}
+machine:
+  byteorder: little
 instructions:
   - name: duplicate_instruction_1
     format: xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list
