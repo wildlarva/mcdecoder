@@ -180,10 +180,11 @@
 <ol class="arabic">
 <li><p>Define your machine code specification</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># arm.yaml</span>
-<span class="nt">machine</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+<span class="nt">machine</span><span class="p">:</span>
+  <span class="nt">byteorder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">little</span>
 <span class="nt">instructions</span><span class="p">:</span>
-<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_immediate_a1</span>
-    <span class="l l-Scalar l-Scalar-Plain">format</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_immediate_a1</span>
+    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
 </pre></div>
 </div>
 </li>

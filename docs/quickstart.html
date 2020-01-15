@@ -372,7 +372,8 @@ See <a class="reference internal" href="spec_mc_desc.html"><span class="doc">MC 
 <p>Make <code class="code docutils literal notranslate"><span class="pre">arm.yaml</span></code> with the following content.</p>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">arm.yaml</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span> <span class="p p-Indicator">{}</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span>
+  <span class="nt">byteorder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">little</span>
 <span class="nt">instructions</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_immediate_a1</span>
     <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
