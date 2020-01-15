@@ -13,9 +13,10 @@ mcdecoder (Machine Code Decoder) is a set of tools to implement a machine code d
 
     ```yaml
     # arm.yaml
-    machine: {}
+    machine:
+      byteorder: little
     instructions:
-    - name: add_immediate_a1
+      - name: add_immediate_a1
         format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12
     ```
 
