@@ -70,6 +70,17 @@ typedef struct {
 /* macros */
 #define BIT_ELEMENT(value, element_index) (((value) & (1 << (element_index))) >> element_index)
 
+/* function declarations */
+static {{ ns }}uint32 setbit_count({{ ns }}uint32 value);
+{% for tree in mcdecoder.decision_trees %}
+    {%- for node in tree.root_node.nodes %}
+        static int decision_node_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.index }}(OpDecodeContext *context, {{ ns }}uint32 code);
+    {%- endfor -%}
+{%- endfor %}
+{% for inst in instruction_decoders %}
+    static int op_parse_{{ inst.name }}(OpDecodeContext *context);
+{%- endfor %}
+
 /* functions for conditions */
 static {{ ns }}uint32 setbit_count({{ ns }}uint32 value) {
     {{ ns }}uint32 count = 0;
@@ -97,7 +108,6 @@ static {{ ns }}uint32 setbit_count({{ ns }}uint32 value) {
                 {% if not loop.first %}| {% endif %}(((context->code{{ inst.encoding_element_bit_length }}x{{ inst.length_of_encoding_elements }} & OP_SF_MASK_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) >> OP_SF_EBII_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) << OP_SF_EBIF_{{ inst.name }}_{{ field.name }}_{{ sf.index }}){% if loop.last %};{% endif %}
             {% endfor %}
         {% endfor %}
-
         {% if inst.match_condition %}
             if (!(
                 {{ instruction_condition(inst, inst.match_condition) }}
@@ -115,6 +125,36 @@ static {{ ns }}uint32 setbit_count({{ ns }}uint32 value) {
         return 0;
     }
 {% endfor %}
+
+/* decision node functions */
+{% for tree in mcdecoder.decision_trees -%}
+    {%- for node in tree.root_node.nodes %}
+        static int decision_node_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.index }}(OpDecodeContext *context, {{ ns }}uint32 code) {
+            {% for inst in node.instructions %}
+                if (op_parse_{{ inst.name }}(context) == 0) {
+                    return 0;
+                }
+            {%- endfor %}
+            {% if node.fixed_bit_nodes -%}
+                switch (code & 0x{{ '%08x'|format(node.mask) }}) {
+                    {% for threshold_value, child_node in node.fixed_bit_nodes.items() %}
+                        case 0x{{ '%08x'|format(threshold_value) }}:
+                            if (decision_node_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ child_node.index }}(context, code) == 0) {
+                                return 0;
+                            }
+                            break;
+                    {%- endfor %}
+                }
+            {% endif -%}
+            {% if node.arbitrary_bit_node %}
+                if (decision_node_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.arbitrary_bit_node.index }}(context, code) == 0) {
+                    return 0;
+                }
+            {%- endif %}
+            return 1;
+        }
+    {%- endfor -%}
+{%- endfor %}
 
 /* op parse function */
 int {{ ns }}op_parse({{ ns }}uint16 code[{{ ns }}OP_DECODE_MAX], {{ ns }}OpDecodedCodeType *decoded_code, {{ ns }}OperationCodeType *optype) {
@@ -137,13 +177,11 @@ int {{ ns }}op_parse({{ ns }}uint16 code[{{ ns }}OP_DECODE_MAX], {{ ns }}OpDecod
         context.code16x2 = ((({{ ns }}uint32) word1_16bit) << 16) | (({{ ns }}uint32) word2_16bit);
         context.code32x1 = context.code16x2;
     {% endif %}
-
-    {% for inst in instruction_decoders %}
-        if (op_parse_{{ inst.name }}(&context) == 0) {
+    {% for tree in mcdecoder.decision_trees -%}
+        if (decision_node_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ tree.root_node.index }}(&context, context.code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}) == 0) {
             return 0;
         }
     {% endfor %}
-
     return 1;
 }
 

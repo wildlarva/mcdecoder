@@ -206,3 +206,209 @@ def test_load_mc_description_model_include() -> None:
     assert included_mapping['b'] == 2
     assert included_mapping['c'] == 3
     assert included_mapping['d'] == 4
+
+
+def test_create_mcdecoder_model_decision_tree_code32x1() -> None:
+    mcdecoder_model = create_mcdecoder_model(
+        'test/decision_tree_code32x1.yaml')
+
+    # Decision tree
+    assert len(mcdecoder_model.decision_trees) == 1
+
+    decision_tree = mcdecoder_model.decision_trees[0]
+    assert decision_tree.encoding_element_bit_length == 32
+    assert decision_tree.length_of_encoding_elements == 1
+
+    # Root node
+    root_node = decision_tree.root_node
+    assert root_node.mask == 0xf00f0000
+    assert len(root_node.fixed_bit_nodes) == 5
+    assert root_node.arbitrary_bit_node is None
+    assert len(root_node.instructions) == 0
+
+    # Node for instruction0000
+    node0000 = root_node.fixed_bit_nodes[0x00000000]
+    assert node0000.mask == 0x0ff0ff0f
+    assert len(node0000.fixed_bit_nodes) == 3
+    assert node0000.arbitrary_bit_node is None
+    assert len(node0000.instructions) == 0
+
+    node0000_0001 = node0000.fixed_bit_nodes[0x00000001]
+    assert node0000_0001.mask == 0
+    assert len(node0000_0001.fixed_bit_nodes) == 0
+    assert node0000_0001.arbitrary_bit_node is None
+    assert len(node0000_0001.instructions) == 1
+    assert node0000_0001.instructions[0].name == 'instruction0000_0001'
+
+    node0000_0010 = node0000.fixed_bit_nodes[0x00000002]
+    assert node0000_0010.mask == 0
+    assert len(node0000_0010.fixed_bit_nodes) == 0
+    assert node0000_0010.arbitrary_bit_node is None
+    assert len(node0000_0010.instructions) == 1
+    assert node0000_0010.instructions[0].name == 'instruction0000_0010'
+
+    node0000_1000 = node0000.fixed_bit_nodes[0x00000008]
+    assert node0000_1000.mask == 0
+    assert len(node0000_1000.fixed_bit_nodes) == 0
+    assert node0000_1000.arbitrary_bit_node is None
+    assert len(node0000_1000.instructions) == 1
+    assert node0000_1000.instructions[0].name == 'instruction0000_1000'
+
+    # Node for instruction0001
+    node0001 = root_node.fixed_bit_nodes[0x10000000]
+    assert node0001.mask == 0x00f0ffff
+    assert len(node0001.fixed_bit_nodes) == 3
+    assert node0001.arbitrary_bit_node is None
+    assert len(node0001.instructions) == 0
+
+    node0001_0001 = node0001.fixed_bit_nodes[0x00000010]
+    assert node0001_0001.mask == 0
+    assert len(node0001_0001.fixed_bit_nodes) == 0
+    assert node0001_0001.arbitrary_bit_node is None
+    assert len(node0001_0001.instructions) == 1
+    assert node0001_0001.instructions[0].name == 'instruction0001_0001'
+
+    node0001_0010 = node0001.fixed_bit_nodes[0x00000020]
+    assert node0001_0010.mask == 0
+    assert len(node0001_0010.fixed_bit_nodes) == 0
+    assert node0001_0010.arbitrary_bit_node is None
+    assert len(node0001_0010.instructions) == 1
+    assert node0001_0010.instructions[0].name == 'instruction0001_0010'
+
+    node0001_1000 = node0001.fixed_bit_nodes[0x00000080]
+    assert node0001_1000.mask == 0
+    assert len(node0001_1000.fixed_bit_nodes) == 0
+    assert node0001_1000.arbitrary_bit_node is None
+    assert len(node0001_1000.instructions) == 1
+    assert node0001_1000.instructions[0].name == 'instruction0001_1000'
+
+    # Node for instruction0101
+    node0101 = root_node.fixed_bit_nodes[0x50000000]
+    assert node0101.mask == 0x00f00000
+    assert len(node0101.fixed_bit_nodes) == 2
+    assert node0101.arbitrary_bit_node is not None
+    assert len(node0101.instructions) == 0
+
+    node0101_0001 = node0101.fixed_bit_nodes[0x00100000]
+    assert node0101_0001.mask == 0
+    assert len(node0101_0001.fixed_bit_nodes) == 0
+    assert node0101_0001.arbitrary_bit_node is None
+    assert len(node0101_0001.instructions) == 1
+    assert node0101_0001.instructions[0].name == 'instruction0101_0001'
+
+    node0101_0010 = node0101.fixed_bit_nodes[0x00200000]
+    assert node0101_0010.mask == 0
+    assert len(node0101_0010.fixed_bit_nodes) == 0
+    assert node0101_0010.arbitrary_bit_node is None
+    assert len(node0101_0010.instructions) == 1
+    assert node0101_0010.instructions[0].name == 'instruction0101_0010'
+
+    node0101_ab = node0101.arbitrary_bit_node
+    assert node0101_ab.mask == 0
+    assert len(node0101_ab.fixed_bit_nodes) == 0
+    assert node0101_ab.arbitrary_bit_node is None
+    assert len(node0101_ab.instructions) == 1
+    assert node0101_ab.instructions[0].name == 'instruction0101_ab'
+
+
+def test_create_mcdecoder_model_decision_tree_code16x2() -> None:
+    mcdecoder_model = create_mcdecoder_model(
+        'test/decision_tree_code16x2.yaml')
+
+    # Decision tree
+    assert len(mcdecoder_model.decision_trees) == 1
+
+    decision_tree = mcdecoder_model.decision_trees[0]
+    assert decision_tree.encoding_element_bit_length == 16
+    assert decision_tree.length_of_encoding_elements == 2
+
+    # Root node
+    root_node = decision_tree.root_node
+    assert root_node.mask == 0xf00f0000
+    assert len(root_node.fixed_bit_nodes) == 5
+    assert root_node.arbitrary_bit_node is None
+    assert len(root_node.instructions) == 0
+
+    # Node for instruction0000
+    node0000 = root_node.fixed_bit_nodes[0x00000000]
+    assert node0000.mask == 0x0ff0ff0f
+    assert len(node0000.fixed_bit_nodes) == 3
+    assert node0000.arbitrary_bit_node is None
+    assert len(node0000.instructions) == 0
+
+    node0000_0001 = node0000.fixed_bit_nodes[0x00000001]
+    assert node0000_0001.mask == 0
+    assert len(node0000_0001.fixed_bit_nodes) == 0
+    assert node0000_0001.arbitrary_bit_node is None
+    assert len(node0000_0001.instructions) == 1
+    assert node0000_0001.instructions[0].name == 'instruction0000_0001'
+
+    node0000_0010 = node0000.fixed_bit_nodes[0x00000002]
+    assert node0000_0010.mask == 0
+    assert len(node0000_0010.fixed_bit_nodes) == 0
+    assert node0000_0010.arbitrary_bit_node is None
+    assert len(node0000_0010.instructions) == 1
+    assert node0000_0010.instructions[0].name == 'instruction0000_0010'
+
+    node0000_1000 = node0000.fixed_bit_nodes[0x00000008]
+    assert node0000_1000.mask == 0
+    assert len(node0000_1000.fixed_bit_nodes) == 0
+    assert node0000_1000.arbitrary_bit_node is None
+    assert len(node0000_1000.instructions) == 1
+    assert node0000_1000.instructions[0].name == 'instruction0000_1000'
+
+    # Node for instruction0001
+    node0001 = root_node.fixed_bit_nodes[0x10000000]
+    assert node0001.mask == 0x00f0ffff
+    assert len(node0001.fixed_bit_nodes) == 3
+    assert node0001.arbitrary_bit_node is None
+    assert len(node0001.instructions) == 0
+
+    node0001_0001 = node0001.fixed_bit_nodes[0x00000010]
+    assert node0001_0001.mask == 0
+    assert len(node0001_0001.fixed_bit_nodes) == 0
+    assert node0001_0001.arbitrary_bit_node is None
+    assert len(node0001_0001.instructions) == 1
+    assert node0001_0001.instructions[0].name == 'instruction0001_0001'
+
+    node0001_0010 = node0001.fixed_bit_nodes[0x00000020]
+    assert node0001_0010.mask == 0
+    assert len(node0001_0010.fixed_bit_nodes) == 0
+    assert node0001_0010.arbitrary_bit_node is None
+    assert len(node0001_0010.instructions) == 1
+    assert node0001_0010.instructions[0].name == 'instruction0001_0010'
+
+    node0001_1000 = node0001.fixed_bit_nodes[0x00000080]
+    assert node0001_1000.mask == 0
+    assert len(node0001_1000.fixed_bit_nodes) == 0
+    assert node0001_1000.arbitrary_bit_node is None
+    assert len(node0001_1000.instructions) == 1
+    assert node0001_1000.instructions[0].name == 'instruction0001_1000'
+
+    # Node for instruction0101
+    node0101 = root_node.fixed_bit_nodes[0x50000000]
+    assert node0101.mask == 0x00f00000
+    assert len(node0101.fixed_bit_nodes) == 2
+    assert node0101.arbitrary_bit_node is not None
+    assert len(node0101.instructions) == 0
+
+    node0101_0001 = node0101.fixed_bit_nodes[0x00100000]
+    assert node0101_0001.mask == 0
+    assert len(node0101_0001.fixed_bit_nodes) == 0
+    assert node0101_0001.arbitrary_bit_node is None
+    assert len(node0101_0001.instructions) == 1
+    assert node0101_0001.instructions[0].name == 'instruction0101_0001'
+
+    node0101_0010 = node0101.fixed_bit_nodes[0x00200000]
+    assert node0101_0010.mask == 0
+    assert len(node0101_0010.fixed_bit_nodes) == 0
+    assert node0101_0010.arbitrary_bit_node is None
+    assert len(node0101_0010.instructions) == 1
+    assert node0101_0010.instructions[0].name == 'instruction0101_0010'
+
+    node0101_ab = node0101.arbitrary_bit_node
+    assert node0101_ab.mask == 0
+    assert len(node0101_ab.fixed_bit_nodes) == 0
+    assert node0101_ab.arbitrary_bit_node is None
+    assert len(node0101_ab.instructions) == 1
+    assert node0101_ab.instructions[0].name == 'instruction0101_ab'

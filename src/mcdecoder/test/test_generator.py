@@ -8,7 +8,7 @@ from ..core import (
     AndIdCondition, EqualityIdCondition, FieldIdConditionObject, ImmediateIdConditionObject,
     InRangeIdCondition, InstructionDecoderCondition,
     InstructionDecoder, InstructionFieldDecoder, InstructionSubfieldDecoder,
-    MachineDecoder, McDecoder)
+    MachineDecoder, McDecoder, McdDecisionNode, McdDecisionTree)
 from ..generator import _generate, generate
 
 
@@ -44,6 +44,7 @@ def test__generate() -> None:
         instruction_decoders=[
             InstructionDecoder(
                 name='add_1',
+                _encoding='xxxx0010100xxxxxxxxxxxxxxxxxxxxx',
                 encoding_element_bit_length=32,
                 length_of_encoding_elements=1,
                 fixed_bits_mask=0x0fe00000,
@@ -70,6 +71,7 @@ def test__generate() -> None:
             ),
             InstructionDecoder(
                 name='push_1',
+                _encoding='xxxx0010100xxxxxxxxxxxxxxxxxxxxx',
                 encoding_element_bit_length=32,
                 length_of_encoding_elements=1,
                 fixed_bits_mask=0x0fe00000,
@@ -97,6 +99,7 @@ def test__generate() -> None:
             ),
             InstructionDecoder(
                 name='push_2',
+                _encoding='xxxx0010100xxxxxxxxxxxxxxxxxxxxx',
                 encoding_element_bit_length=32,
                 length_of_encoding_elements=1,
                 fixed_bits_mask=0x0fe00000,
@@ -115,6 +118,14 @@ def test__generate() -> None:
                 match_condition=None,
                 unmatch_condition=None,
                 extras=None,
+            ),
+        ],
+        decision_trees=[
+            McdDecisionTree(
+                encoding_element_bit_length=32,
+                length_of_encoding_elements=1,
+                root_node=McdDecisionNode(index=0, mask=0, fixed_bit_nodes={
+                }, arbitrary_bit_node=None, instructions=[]),
             ),
         ],
         extras=None,

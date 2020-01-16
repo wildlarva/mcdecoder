@@ -1,0 +1,31 @@
+machine:
+  byteorder: little
+instructions:
+  - name: instruction0000_0001
+    format: 0000 0000 0000 0000 0000 0000 xxxx 0001
+  - name: instruction0000_0010
+    format: 0000 0000 0000 0000 0000 0000 xxxx 0010
+  - name: instruction0000_1000
+    format: 0000 0000 0000 0000 0000 0000 xxxx 1000
+  - name: instruction0001_0001
+    format: 0001 xxxx 0000 0000 0000 0000 0001 0000
+  - name: instruction0001_0010
+    format: 0001 xxxx 0000 0000 0000 0000 0010 0000
+  - name: instruction0001_1000
+    format: 0001 xxxx 0000 0000 0000 0000 1000 0000
+  - name: instruction0100_0001
+    format: 0100 0001 0000 0000 0000 0000 0000 xxxx
+  - name: instruction0100_0010
+    format: 0100 0010 0000 0000 0000 0000 0000 xxxx
+  - name: instruction0100_1000
+    format: 0100 1000 0000 0000 0000 0000 0000 xxxx
+  - name: instruction0101_0001
+    format: 0101 0000 0001 0000 xxxx xxxx 0000 0000
+  - name: instruction0101_0010
+    format: 0101 0000 0010 0000 xxxx xxxx 0000 0000
+  - name: instruction0101_ab
+    format: 0101 0000 xxxx 0000 xxxx xxxx 0000 0000
+  - name: instruction1000
+    format: 1000 xxxx xxxx 0000 xxxx xxxx xxxx xxxx
+decoder:
+  namespace: dt

@@ -325,6 +325,8 @@ class InstructionDecoder:
     """Decoder for an instruction"""
     name: str
     """Name of an instruction"""
+    _encoding: str
+    """Encoding of an instruction"""
     encoding_element_bit_length: int
     """Bit length of an encoding element"""
     length_of_encoding_elements: int
@@ -355,6 +357,52 @@ class MachineDecoder:
 
 
 @dataclass
+class McdDecisionNode:
+    """
+    Node of a McdDecisionTree.
+
+    It has two types of child nodes:
+
+    * Fixed bit node: A node related to fixed bits. It is decided by a threshold value.
+    * Arbitrary bit node: A node related to arbitrary bits. It isn't decided by a threshold value and pass through to the node.
+    """
+    index: int
+    """Index number of a node in a tree"""
+    mask: int
+    """Mask of threshold bit positions"""
+    fixed_bit_nodes: Dict[int, 'McdDecisionNode']
+    """Dictionary of a threshold value and its fixed bit McdDecisionNode"""
+    arbitrary_bit_node: Optional['McdDecisionNode']
+    """Arbitrary bit McdDecisionNode"""
+    instructions: List[InstructionDecoder]
+    """Instructions decided by a node"""
+
+    @property
+    def nodes(self) -> List['McdDecisionNode']:
+        """This node and its descendants"""
+        nodes: List['McdDecisionNode'] = []
+        nodes.append(self)
+        nodes.extend(itertools.chain.from_iterable(
+            node.nodes for node in self.fixed_bit_nodes.values()))
+
+        if self.arbitrary_bit_node is not None:
+            nodes.extend(self.arbitrary_bit_node.nodes)
+
+        return nodes
+
+
+@dataclass
+class McdDecisionTree:
+    """Decision tree to find a matched instruction for a code"""
+    encoding_element_bit_length: int
+    """Bit length of an encoding element"""
+    length_of_encoding_elements: int
+    """Length of encoding elements"""
+    root_node: McdDecisionNode
+    """Root node of a decision tree"""
+
+
+@dataclass
 class McDecoder:
     """Decoder itself. The root model element of MC decoder model"""
     namespace_prefix: str
@@ -363,6 +411,8 @@ class McDecoder:
     """Child MachineDecoder"""
     instruction_decoders: List[InstructionDecoder]
     """Child InstructionDecoders"""
+    decision_trees: List[McdDecisionTree]
+    """Child McdDecisionTree"""
     extras: Optional[Any]
     """User-defined data not related to a machine, an instruction and a field"""
 
@@ -440,6 +490,9 @@ def create_mcdecoder_model(mcfile_path: str) -> McDecoder:
     instruction_decoders = [_create_instruction_decoder_model(
         instruction_desc_model) for instruction_desc_model in mc_desc_model['instructions']]
 
+    # Create decision tree
+    decision_trees = _create_decision_trees(instruction_decoders)
+
     # Create MC decoder
     namespace: Optional[str] = None
     if 'decoder' in mc_desc_model:
@@ -452,6 +505,7 @@ def create_mcdecoder_model(mcfile_path: str) -> McDecoder:
         namespace_prefix=_make_namespace_prefix(namespace),
         machine_decoder=machine_decoder,
         instruction_decoders=instruction_decoders,
+        decision_trees=decision_trees,
         extras=extras,
     )
 
@@ -705,6 +759,14 @@ class _InstructionConditionDescriptionTransformer(lark.Transformer):
     def __init__(self, dummy: Any) -> None:
         pass
 
+
+@dataclass
+class _DecisionTreeCreateContext:
+    """Context information while creating a decision tree"""
+    index: int = 0
+    """Next index number of a decision node"""
+
+
 # endregion
 
 # region Internal functions
@@ -848,6 +910,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
 
     return InstructionDecoder(
         name=instruction_desc_model['name'],
+        _encoding=_instruction_bit_format(instruction_encoding),
         encoding_element_bit_length=encoding_element_bit_length,
         length_of_encoding_elements=len(instruction_encoding.elements),
         fixed_bits_mask=fixed_bits_mask,
@@ -862,14 +925,17 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
 
 def _build_fixed_bits_info(instruction_encoding: InstructionEncodingDescription) -> Tuple[int, int]:
     """Build fixed bits information and returns fixed bit mask and fixed bits"""
-    field_encodings = itertools.chain.from_iterable(
-        element.fields for element in instruction_encoding.elements)
-    instruction_bit_format = ''.join(
-        field.bits_format for field in field_encodings)
+    instruction_bit_format = _instruction_bit_format(instruction_encoding)
     fixed_bit_mask = int(instruction_bit_format.replace(
         '0', '1').replace('x', '0'), base=2)
     fixed_bits = int(instruction_bit_format.replace('x', '0'), base=2)
     return fixed_bit_mask, fixed_bits
+
+
+def _instruction_bit_format(instruction_encoding: InstructionEncodingDescription) -> str:
+    field_encodings = itertools.chain.from_iterable(
+        element.fields for element in instruction_encoding.elements)
+    return ''.join(field.bits_format for field in field_encodings)
 
 
 def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruction_encoding: InstructionEncodingDescription,
@@ -999,6 +1065,150 @@ def _parse_instruction_condition(instruction_condition: str) -> InstructionCondi
 def _create_instruction_condition_parser() -> lark.Lark:
     with importlib.resources.open_text('mcdecoder.grammars', 'instruction_condition.lark') as file:
         return lark.Lark(file, start='condition', parser='lalr')
+
+
+def _create_decision_trees(instruction_decoders: List[InstructionDecoder]) -> List[McdDecisionTree]:
+    # Collect all encodings
+    instruction_decoder_vec = np.array(instruction_decoders, dtype=np.object)
+    encoding_form_mat = np.array([(instruction.encoding_element_bit_length, instruction.length_of_encoding_elements)
+                                  for instruction in instruction_decoder_vec])
+    unique_encoding_form_mat = np.unique(encoding_form_mat, axis=0)
+
+    # Create decision tree for each encoding form
+    decision_trees: List[McdDecisionTree] = []
+    for encoding_form_vec in unique_encoding_form_mat:
+        encoding_element_bit_length, length_of_encoding_elements = encoding_form_vec
+
+        # Collect encodings related to encoding form
+        matched_instruction_decoder_vec = instruction_decoder_vec[(
+            encoding_form_mat == encoding_form_vec).all(axis=1)]
+
+        str_encoding_mat = np.array([list(instruction._encoding)
+                                     for instruction in matched_instruction_decoder_vec])
+        encoding_mat: np.ndarray = np.empty_like(
+            str_encoding_mat, dtype=np.int)
+        encoding_mat[str_encoding_mat == '0'] = 0
+        encoding_mat[str_encoding_mat == '1'] = 1
+        encoding_mat[str_encoding_mat == 'x'] = _ARBITRARY_BIT_INT
+
+        # Prepare bit positions
+        bitpos_vec = np.arange(encoding_mat.shape[1] - 1, -1, -1)
+
+        # Create nodes
+        root_node = _create_decision_node(_DecisionTreeCreateContext(
+        ), encoding_mat, matched_instruction_decoder_vec, bitpos_vec)
+
+        # Create tree
+        decision_tree = McdDecisionTree(encoding_element_bit_length=encoding_element_bit_length,
+                                        length_of_encoding_elements=length_of_encoding_elements, root_node=root_node)
+        decision_trees.append(decision_tree)
+
+    return decision_trees
+
+
+def _create_decision_node(context: _DecisionTreeCreateContext, encoding_mat: np.ndarray, instruction_decoder_vec: np.ndarray,
+                          bitpos_vec: np.ndarray) -> McdDecisionNode:
+    """
+    Create a decision node and its descendants.
+
+    NOTE The row length of encoding_mat must be the same as the lengths of instruction_decoder_vec and bitpos_vec.
+
+    :param context: Context information while creating a decision tree
+    :param encoding_mat: N x M matrix of instructions and encoding bits
+    :param instruction_decoder_vec: N-vector of instructions
+    :param bitpos_vec: N-vector of bit positions
+    :return: Created McdDecisionNode
+    """
+    if encoding_mat.shape[0] > 1 and encoding_mat.shape[1] > 0:
+        # N x M matrix of instruction and test result if it is 'x'
+        x_encoding_mat = encoding_mat == _ARBITRARY_BIT_INT
+
+        # Evaluate bit positions if they're appropriate for decision threshold
+        zero_count_vec = np.sum(encoding_mat == 0, axis=0)
+        one_count_vec = np.sum(encoding_mat == 1, axis=0)
+        value_vec = (zero_count_vec * one_count_vec + 1) * \
+            (zero_count_vec + one_count_vec)
+
+        # Determine bit positions for threshold
+        prime_index = np.argmax(value_vec)
+        threshold_test_vec = (
+            x_encoding_mat == x_encoding_mat[:, prime_index].reshape(-1, 1)).all(axis=0)
+        threshold_bitpos_vec = bitpos_vec[threshold_test_vec]
+
+        threshold_value_mat = encoding_mat[:, threshold_test_vec]
+        unique_threshold_value_mat: np.ndarray = np.unique(
+            threshold_value_mat, axis=0)
+
+        # Left data for children
+        left_test_vec = np.logical_not(  # type: ignore # TODO pyright can't recognize numpy.logical_not
+            threshold_test_vec)
+        left_encoding_mat = encoding_mat[:, left_test_vec]
+        left_bitpos_vec = bitpos_vec[left_test_vec]
+
+        # Categorize fixed bit nodes and arbitrary bit node
+        ab_vec: np.ndarray = np.full_like(
+            threshold_bitpos_vec, _ARBITRARY_BIT_INT)
+        ab_test_vec = (unique_threshold_value_mat == ab_vec).all(axis=1)
+        fb_test_vec = np.logical_not(  # type: ignore # TODO pyright can't recognize numpy.logical_not
+            ab_test_vec)
+        fb_threshold_value_mat = unique_threshold_value_mat[fb_test_vec]
+        exists_ab = np.any(ab_test_vec)
+
+        # Save index
+        index = context.index
+        context.index += 1
+
+        # Create child fixed bit nodes
+        fixed_bit_nodes: Dict[int, McdDecisionNode] = {}
+        for threshold_value_vec in fb_threshold_value_mat:
+            child_test_vec = (threshold_value_mat ==
+                              threshold_value_vec).all(axis=1)
+
+            total_threshold_value = 0
+            for threshold_value, threshold_bitpos in zip(threshold_value_vec, threshold_bitpos_vec):
+                total_threshold_value |= threshold_value << threshold_bitpos
+
+            fixed_bit_nodes[total_threshold_value] = _create_decision_node(
+                context, left_encoding_mat[child_test_vec], instruction_decoder_vec[child_test_vec], left_bitpos_vec)
+
+        # Create child arbitrary bit nodes
+        arbitrary_bit_node: Optional[McdDecisionNode] = None
+        if exists_ab:
+            child_test_vec = (threshold_value_mat == ab_vec).all(axis=1)
+            arbitrary_bit_node = _create_decision_node(
+                context, left_encoding_mat[child_test_vec], instruction_decoder_vec[child_test_vec], left_bitpos_vec)
+
+        # Create node
+        mask = 0
+        for threshold_bitpos in threshold_bitpos_vec:
+            mask |= 1 << threshold_bitpos
+
+        decision_node = McdDecisionNode(index=index, mask=mask, fixed_bit_nodes=fixed_bit_nodes,
+                                        arbitrary_bit_node=arbitrary_bit_node, instructions=[])
+        return decision_node
+
+    else:
+        # Create node
+        decision_node = McdDecisionNode(index=context.index, mask=0, fixed_bit_nodes={}, arbitrary_bit_node=None,
+                                        instructions=list(instruction_decoder_vec))
+        context.index += 1
+        return decision_node
+
+
+def _print_node(node: McdDecisionNode, level: int) -> None:
+    if node.mask != 0:
+        print(f'{" |" * level}(mask: {node.mask:#x})')
+
+    for instruction_decoder in node.instructions:
+        print(f'{" |" * level}-{instruction_decoder.name}')
+
+    for fb_value, fb_node in node.fixed_bit_nodes.items():
+        print(f'{" |" * level}-{fb_value:#x}')
+        _print_node(fb_node, level + 1)
+
+    if node.arbitrary_bit_node is not None:
+        print(f'{" |" * level}-arbitrary')
+        _print_node(node.arbitrary_bit_node, level + 1)
 
 
 def _decode_field(code: int, field_decoder: InstructionFieldDecoder) -> int:
@@ -1143,6 +1353,9 @@ _FUNCTION_NAME_TO_FUNCTION: Dict[str, Callable[[np.ndarray], np.ndarray]] = {
 Dictionary to define built-in functions for an instruction condition.
 Its entry is a pair of a function name and a function.
 """
+
+_ARBITRARY_BIT_INT: int = 2
+"""Integer representation of an arbitrary bit"""
 
 _yaml_include_context: _YamlIncludeContext = _YamlIncludeContext(base_dir='')
 _instruction_encoding_parser: lark.Lark = _create_instruction_encoding_parser()
