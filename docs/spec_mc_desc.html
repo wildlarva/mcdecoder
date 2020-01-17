@@ -268,7 +268,9 @@ Each list element in <code class="code docutils literal notranslate"><span class
 Instruction can be split into multiple parts
 which are named instruction fields.
 One field can be split into several bit ranges.
-Each bit range is called a subfield in a field.</p>
+Each bit range is called a subfield in a field.
+An instruction can be constructed by multiple N-byte words.
+Each word is called an encoding element in an instruction.</p>
 <p>Here is an example of instruction fields
 (the fields ‘cond’, ‘S’, ‘Rn’, ‘Rd’ and ‘imm12’).</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
@@ -277,6 +279,10 @@ Each bit range is called a subfield in a field.</p>
 <p>Here is an example of instruction subfields
 (the field ‘imm’ is split into several bit positions).</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">000:funct3|x:imm[5]|xxxx x:dest|xxx xx:imm[4:0]|01:op</span>
+</pre></div>
+</div>
+<p>Here is an example of encoding elements in an instruction (2 words of 16-bit).</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn // xxxx:Rd|xxxx xxxx xxxx:imm12</span>
 </pre></div>
 </div>
 <p>Expression: <code class="code docutils literal notranslate"><span class="pre">&lt;field_bits&gt;:&lt;field_name&gt;[&lt;field_bit_ranges&gt;]|...</span> <span class="pre">//</span> <span class="pre">...</span></code></p>
