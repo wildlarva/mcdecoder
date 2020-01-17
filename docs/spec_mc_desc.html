@@ -194,38 +194,32 @@
 as a YAML format.
 Here is an overview of MC description.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span> <span class="c1"># Describes a machine</span>
-  <span class="nt">byteorder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">little</span> <span class="c1"># Byte order of the machine</span>
-  <span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] Container of user-defined data for the machine</span>
-    <span class="c1"># Any structure can be defined here</span>
-    <span class="nt">arch_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">arm</span> <span class="c1"># This is an example structure</span>
+  <span class="nt">byteorder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">little</span> <span class="c1"># Byte order of a machine</span>
+  <span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] User-defined data for a machine</span>
+    <span class="nt">arch_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">arm</span>
 
 <span class="nt">instructions</span><span class="p">:</span> <span class="c1"># Describes instructions</span>
-  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_1</span> <span class="c1"># Name of the instruction</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_1</span> <span class="c1"># Name of an instruction</span>
 
-    <span class="c1"># Encoding format of the instruction</span>
+    <span class="c1"># Encoding format of an instruction</span>
     <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
 
-    <span class="c1"># [optional] Condition when the instruction applys</span>
+    <span class="c1"># [optional] Condition when an instruction applys</span>
     <span class="nt">match_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(cond in_range 0-14 and S == 1) or cond == 15</span>
 
-    <span class="c1"># [optional] Condition when the instruction does not apply</span>
+    <span class="c1"># [optional] Condition when an instruction does not apply</span>
     <span class="nt">unmatch_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond == 15</span>
 
-    <span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] Container of user-defined data for the instruction</span>
-      <span class="c1"># Any structure can be defined here</span>
+    <span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] User-defined data for an instruction</span>
       <span class="nt">clocks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
-    
-    <span class="c1"># [optional] Container of user-defined data for each field</span>
-    <span class="nt">field_extras</span><span class="p">:</span>
-      <span class="c1"># Any structure can be defined in a mapping value</span>
-      <span class="nt">Rn</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span> <span class="nv">register</span><span class="p p-Indicator">}</span> <span class="c1"># This is an example structure</span>
+    <span class="nt">field_extras</span><span class="p">:</span> <span class="c1"># [optional] User-defined data for each field</span>
+      <span class="nt">Rn</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span> <span class="nv">register</span><span class="p p-Indicator">}</span>
 
 <span class="nt">decoder</span><span class="p">:</span> <span class="c1"># [optional] Decoder information of the global scope</span>
   <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ns</span> <span class="c1"># [optional] Namespace for the symbols of a generated decoder</span>
 
-<span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] Container of user-defined data of the global scope</span>
-    <span class="c1"># Any structure can be defined here</span>
-    <span class="nt">compiler</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gcc</span> <span class="c1"># This is an example structure</span>
+<span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] User-defined data for the global scope</span>
+  <span class="nt">compiler</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gcc</span>
 </pre></div>
 </div>
 </div>
@@ -265,7 +259,7 @@ Each list element in <code class="code docutils literal notranslate"><span class
 <div class="section" id="instructions-format-encoding-format-of-an-instruction">
 <h3>instructions.format: Encoding format of an instruction<a class="headerlink" href="#instructions-format-encoding-format-of-an-instruction" title="Permalink to this headline">¶</a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">format</span></code> defines the encoding format of an instruction.
-Instruction can be split into multiple parts
+Instruction can be split into multiple parts,
 which are named instruction fields.
 One field can be split into several bit ranges.
 Each bit range is called a subfield in a field.
@@ -277,8 +271,13 @@ Each word is called an encoding element in an instruction.</p>
 </pre></div>
 </div>
 <p>Here is an example of instruction subfields
-(the field ‘imm’ is split into several bit positions).</p>
+(the field ‘imm’ is split into several bit ranges).</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">000:funct3|x:imm[5]|xxxx x:dest|xxx xx:imm[4:0]|01:op</span>
+</pre></div>
+</div>
+<p>Here is another example of instruction subfields
+(the field ‘offset’ is split into adjacent bit ranges).</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">111:funct3|x xxxx x:offset[5:3,8:6]|xxx xx:src|10:op</span>
 </pre></div>
 </div>
 <p>Here is an example of encoding elements in an instruction (2 words of 16-bit).</p>
@@ -287,7 +286,7 @@ Each word is called an encoding element in an instruction.</p>
 </div>
 <p>Expression: <code class="code docutils literal notranslate"><span class="pre">&lt;field_bits&gt;:&lt;field_name&gt;[&lt;field_bit_ranges&gt;]|...</span> <span class="pre">//</span> <span class="pre">...</span></code></p>
 <p>Fields are separated by bar symbol(<code class="code docutils literal notranslate"><span class="pre">|</span></code>).
-If an instruction is constructed by multiple N-byte words,
+If an instruction is constructed by multiple encoding elements,
 they’re split by double-slash symbol(<code class="code docutils literal notranslate"><span class="pre">//</span></code>).</p>
 <p>where</p>
 <dl>
@@ -301,7 +300,8 @@ they’re split by double-slash symbol(<code class="code docutils literal notran
 </dd>
 <dt>&lt;field_bit_ranges&gt;</dt><dd><p>[optional] Field bit ranges of an instruction field</p>
 <p>Expression: <code class="code docutils literal notranslate"><span class="pre">&lt;subfield_start&gt;:&lt;subfield_end&gt;,...</span></code></p>
-<p>Bit ranges are separated by comma symbol(<code class="code docutils literal notranslate"><span class="pre">,</span></code>).</p>
+<p>It takes multiple adjacent bit ranges.
+Bit ranges are separated by comma symbol(<code class="code docutils literal notranslate"><span class="pre">,</span></code>).</p>
 </dd>
 <dt>&lt;subfield_start&gt;</dt><dd><p>MSB of a subfield in an instruction field</p>
 <p>NOTE: This is a MSB in a field, not in an instruction.</p>
@@ -322,7 +322,8 @@ The following condition types are supported.</p>
 </ul>
 <p>These conditions can be combined with a logical operator <code class="code docutils literal notranslate"><span class="pre">and</span></code> or
 <code class="code docutils literal notranslate"><span class="pre">or</span></code>.
-You can also use <code class="code docutils literal notranslate"><span class="pre">(</span></code> and <code class="code docutils literal notranslate"><span class="pre">)</span></code> for readability.</p>
+You can also use <code class="code docutils literal notranslate"><span class="pre">(</span></code> and <code class="code docutils literal notranslate"><span class="pre">)</span></code> for grouping conditions or
+just for readability.</p>
 <div class="section" id="equality-condition">
 <h4>Equality condition<a class="headerlink" href="#equality-condition" title="Permalink to this headline">¶</a></h4>
 <p>It defines a condition to test the equality between a field value and
@@ -392,6 +393,16 @@ in a given value range(inclusive).</p>
 </dd>
 </dl>
 <p>See also the common expressions below.</p>
+</div>
+<div class="section" id="complex-condition">
+<h4>Complex condition<a class="headerlink" href="#complex-condition" title="Permalink to this headline">¶</a></h4>
+<p>The conditions explained before can be combined together.</p>
+<p>Here’s an example of a combination of the conditions.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Rn != 15</span>
+  <span class="no">and (cond in_range 10-11 or cond in [13, 15])</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="common-expressions">
 <h4>Common expressions<a class="headerlink" href="#common-expressions" title="Permalink to this headline">¶</a></h4>
