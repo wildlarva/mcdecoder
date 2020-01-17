@@ -1,132 +1,33 @@
-# Specification of machine code description file
-#
-# Machine code description file needs to be a YAML format.
-
-# matchine: Describes a machine
-machine:
-  byteorder: little # Byte order of the machine. It can be 'big' or 'little'
+machine: # Describes a machine
+  byteorder: little # Byte order of the machine
   extras: # [optional] Container of user-defined data for the machine
     # Any structure can be defined here
-    arch_type: arm
+    arch_type: arm # This is an example structure
 
-# instructions: Describes instructions
-#
-# Each list element represents an instruction.
-instructions:
+instructions: # Describes instructions
   - name: add_1 # Name of the instruction
 
-    # format: Encoding format of the instruction
-    #
-    # Instruction consists of multiple fields. Fields are separated by bar symbol(|).
-    # If an instruction is constructed by multiple N-byte words, they're split by double-slash symbol(//).
-    #
-    # Expression: <field_bits>:<field_name>[<field_bit_ranges>]|... // ...
-    #
-    # where
-    #   <field_bits>: Encoding format of an instruction field
-    #     It takes an array of 0, 1 or x.
-    #     '0' or '1' represents a fixed bit of the instruction field. 'x' represents any bit.
-    #
-    #   <field_name>: [optional] Name of the instruction field
-    #     NOTE: One field name can be used multiple times in one instruction.
-    #           This constructs subfields of a field split into several bit ranges.
-    #
-    #   <field_bit_ranges>: [optional] Field bit ranges of an instruction field
-    #     Each bit range expresses a subfield of the field.
-    #     Subfields are separated by comma symbol(,).
-    #     Expression: <subfield_start>:<subfield_end>,...
-    #
-    #   <subfield_start>: Subfield start bit position in the instruction field
-    #     NOTE: This is a start bit position in a field, not in an instruction.
-    #
-    #   <subfield_end>: [optional] Subfield end bit position in the instruction field
-    #     NOTE: This is an end bit position in a field, not in an instruction.
+    # Encoding format of the instruction
     format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12
 
-    # match_condition: [optional] Bit condition when the instruction applys
-    #
-    # The following condition types are supported.
-    # - Equality: The equality between a field value and a given value.
-    #     Expression: <subject> <operator> <object>
-    # - In a set: A field value is in a given value set.
-    #     Expression: <subject> in <values>
-    # - In a range: A field value is in a given value range(inclusive).
-    #     Expression: <subject> in_range <value_start>-<value_end>
-    #
-    # These conditions can be combined with a logical operator 'and' or 'or'.
-    # You can also use '(' and ')' for readability.
-    #
-    # where
-    #   <subject>: Subject to be tested
-    #     Expression: <field_object> or <function_object>
-    #
-    #   <object>: Object to test with
-    #     Expression: <field_object> or <function_object> or <value>
-    # 
-    #   <function_object>: The result of a function call to be tested
-    #     Expression: <function>(<field_object>)
-    # 
-    #   <function>: Function name that its result is to be tested
-    #     Supported functions are:
-    #       - setbit_count: Count the set bit count of a given argument.
-    # 
-    #   <field_object>: Field object to be tested
-    #     Expression: <field>[<field_element_index>]
-    # 
-    #   <field>: Field name to be tested
-    #
-    #   <field_element_index>: [optional] Bit element index of a field
-    #     Base 10 integer value like 1, 2, etc.
-    #
-    #   <operator>: Equality operator to test
-    #     It can be ==, !=, <, <=, > or >=.
-    #
-    #   <values>: Value set to test with
-    #     Expression: [<value>,...]
-    #     It takes multiple values with the separator ','(comma symbol).
-    #
-    #   <value>: Value to test the equality with
-    #     Base 2, 10 or 16 integer values like 15, 0b1111, 0xf, etc.
-    #
-    #   <value_start>: Start of a value range(inclusive)
-    #     Base 2, 10 or 16 integer values like 15, 0b1111, 0xf, etc.
-    #
-    #   <value_end>: End of a value range(inclusive)
-    #     Base 2, 10 or 16 integer values like 15, 0b1111, 0xf, etc.
+    # [optional] Bit condition when the instruction applys
     match_condition: (cond in_range 0-14 and S == 1) or cond == 15
 
-    # unmatch_condition: [optional] Bit condition when the instruction does not apply
-    #
-    # The expression is the same as that of match_condition.
-    # unmatch_condition is mutually exclusive with match_condition.
+    # [optional] Bit condition when the instruction does not apply
     unmatch_condition: cond == 15
 
     extras: # [optional] Container of user-defined data for the instruction
       # Any structure can be defined here
       clocks: 10
     
-    # field_extras: [optional] Container of user-defined data for each field
-    # 
-    # Each mapping key represents a field defining user-defined data and its value holds user-defined data for the field
+    # [optional] Container of user-defined data for each field
     field_extras:
       # Any structure can be defined in a mapping value
-      Rn: {type: register}
-      Rd: {type: register}
-      imm12: {type: immediate}
+      Rn: {type: register} # This is an example structure
 
-  - name: push_1
-    format: xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list
-    match_condition: cond != 15
-
-  - name: c_addi_1
-    format: 000:funct3|x:imm[5]|xxxx x:dest|xxx xx:imm[4:0]|01:op
-
-  - name: c_sd_1
-    format: 111:funct3|x xxxx x:offset[5:3,8:6]|xxx xx:src|10:op
-
-decoder: # [optional] Decoder information that isn't related to a machine, an instruction and a field
+decoder: # [optional] Decoder information of the global scope
   namespace: ns # [optional] Namespace for the symbols of a generated decoder
 
-extras: # [optional] Container of user-defined data that isn't related to a machine, an instruction and a field
+extras: # [optional] Container of user-defined data of the global scope
     # Any structure can be defined here
-    compiler: gcc
+    compiler: gcc # This is an example structure
