@@ -258,6 +258,7 @@ Common expressions
     Function name that its result is to be tested
 
     Supported functions are:
+
     * :code:`setbit_count`: Count the set bit count of a given argument.
 
 <field_object>

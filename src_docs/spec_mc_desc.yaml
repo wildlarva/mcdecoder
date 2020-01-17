@@ -10,10 +10,10 @@ instructions: # Describes instructions
     # Encoding format of the instruction
     format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12
 
-    # [optional] Bit condition when the instruction applys
+    # [optional] Condition when the instruction applys
     match_condition: (cond in_range 0-14 and S == 1) or cond == 15
 
-    # [optional] Bit condition when the instruction does not apply
+    # [optional] Condition when the instruction does not apply
     unmatch_condition: cond == 15
 
     extras: # [optional] Container of user-defined data for the instruction
