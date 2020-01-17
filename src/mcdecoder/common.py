@@ -57,7 +57,7 @@ def string_length_for_byte(base: Literal[2, 16]) -> int:
     Calculate a string length that corresponds to one byte
 
     :param base: Base of integer
-    :return: A string length for one byte
+    :return: String length for one byte
     """
     return 8 if base == 2 else 2
 
@@ -67,7 +67,7 @@ def bit_length_of_character(base: Literal[2, 16]) -> int:
     Calculate a bit length that corresponds to one character
 
     :param base: Base of integer
-    :return: A bit length for one character
+    :return: Bit length for one character
     """
     return 1 if base == 2 else 4
 
@@ -87,7 +87,7 @@ def make_mask(bit_size: int) -> int:
     Make a mask of bit_size bits
 
     :param bit_size: Bit length of a mask
-    :return: A mask with bit_size bits
+    :return: Mask with bit_size bits
     """
     return (1 << bit_size) - 1
 

@@ -85,11 +85,11 @@ class _BitPattern:
 
 @dataclass
 class _CheckContext:
-    """A context information while checking"""
+    """Context information while checking"""
     bit_pattern: _BitPattern
     """Bit pattern to be checked"""
     decode_context: core.DecodeContextVectorized
-    """A context information while decoding"""
+    """Context information while decoding"""
     duplicate_instruction_mat: np.ndarray
     """
     N x M matrix of duplicate detections and instructions.
