@@ -1,64 +1,30 @@
 #----------------------------------------
 #	 Make variables
 #----------------------------------------
-DECODER_SRCS = \
-	out/arm_mcdecoder.c \
-	out/ab_mcdecoder.c \
-	out/at_mcdecoder.c \
-	out/atb_mcdecoder.c \
-	out/riscv_mcdecoder.c \
-	out/pc_mcdecoder.c \
-	out/cc_mcdecoder.c \
-	out/dt16x2_mcdecoder.c\
-	out/dt32x1_mcdecoder.c
+
+BUILD_DIR = build
+
 
 #----------------------------------------
 #	 Make Rules
 #----------------------------------------
 
 .PHONY: clean generate setup test
-all: setup generate
+all: setup
 	make -f build.mk all
 
-test: all
+test: setup
 	make -f build.mk test
 
-generate: $(DECODER_SRCS)
+generate: setup
+	make -f build.mk generate
 
 clean: setup
-	rm -vfr out
 	make -f build.mk clean
 
-setup: build/conanbuildinfo.mak
+setup: $(BUILD_DIR)/conanbuildinfo.mak
 
 build/conanbuildinfo.mak: conanfile.txt
-	rm -vfr build && \
-	mkdir build && \
-	conan install -if build .
-
-out/arm_mcdecoder.c: ../test/arm.yaml
-	mcdecoder generate --output out $<
-
-out/ab_mcdecoder.c: ../test/arm_big.yaml
-	mcdecoder generate --output out $<
-
-out/at_mcdecoder.c: ../test/arm_thumb.yaml
-	mcdecoder generate --output out $<
-
-out/atb_mcdecoder.c: ../test/arm_thumb_big.yaml
-	mcdecoder generate --output out $<
-
-out/riscv_mcdecoder.c: ../test/riscv.yaml
-	mcdecoder generate --output out $<
-
-out/pc_mcdecoder.c: ../test/primitive_condition.yaml
-	mcdecoder generate --output out $<
-
-out/cc_mcdecoder.c: ../test/complex_condition.yaml
-	mcdecoder generate --output out $<
-
-out/dt16x2_mcdecoder.c: ../test/decision_tree_code16x2.yaml
-	mcdecoder generate --output out $<
-
-out/dt32x1_mcdecoder.c: ../test/decision_tree_code32x1.yaml
-	mcdecoder generate --output out $<
+	rm -vfr $(BUILD_DIR) && \
+	mkdir $(BUILD_DIR) && \
+	conan install -if $(BUILD_DIR) .
