@@ -198,7 +198,7 @@ class InstructionFieldDecoder:
     """Decoder for an instruction field"""
     name: str
     """Name of a field"""
-    start_bit: int
+    _start_bit: int
     """MSB of a field in an instruction"""
     type_bit_size: int
     """Bit size of a data type used for a field"""
@@ -891,7 +891,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
 
     # Sort field decoders according to start bit position
     field_decoders = sorted(
-        field_decoders, key=lambda field: field.start_bit, reverse=True)
+        field_decoders, key=lambda field: field._start_bit, reverse=True)
 
     # Create instruction decode conditions
     if 'match_condition' in instruction_desc_model:
@@ -990,7 +990,7 @@ def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruct
     # Create field decoder
     return InstructionFieldDecoder(
         name=field_name,
-        start_bit=field_start_bit_in_instruction,
+        _start_bit=field_start_bit_in_instruction,
         type_bit_size=_calc_type_bit_size(start_bit_in_field + 1),
         subfield_decoders=sf_decoders,
         extras=field_extras)
