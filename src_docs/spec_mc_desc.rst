@@ -71,6 +71,8 @@ Instruction can be split into multiple parts
 which are named instruction fields.
 One field can be split into several bit ranges.
 Each bit range is called a subfield in a field.
+An instruction can be constructed by multiple N-byte words.
+Each word is called an encoding element in an instruction.
 
 Here is an example of instruction fields
 (the fields 'cond', 'S', 'Rn', 'Rd' and 'imm12').
@@ -85,6 +87,12 @@ Here is an example of instruction subfields
 .. code-block:: yaml
 
     format: 000:funct3|x:imm[5]|xxxx x:dest|xxx xx:imm[4:0]|01:op
+
+Here is an example of encoding elements in an instruction (2 words of 16-bit).
+
+.. code-block:: yaml
+
+    format: xxxx:cond|00|1|0100|x:S|xxxx:Rn // xxxx:Rd|xxxx xxxx xxxx:imm12
 
 Expression: :code:`<field_bits>:<field_name>[<field_bit_ranges>]|... // ...`
 
