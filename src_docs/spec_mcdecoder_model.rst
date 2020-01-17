@@ -45,3 +45,9 @@ MC decoder model specification
 
 .. autoclass:: mcdecoder.core.FunctionIdConditionObject
     :noindex:
+
+.. autoclass:: mcdecoder.core.McdDecisionTree
+    :noindex:
+
+.. autoclass:: mcdecoder.core.McdDecisionNode
+    :noindex:
