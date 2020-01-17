@@ -1,22 +1,22 @@
 machine: # Describes a machine
-  byteorder: little # Byte order of the machine
-  extras: # [optional] Container of user-defined data for the machine
+  byteorder: little # Byte order of a machine
+  extras: # [optional] Container of user-defined data for a machine
     # Any structure can be defined here
     arch_type: arm # This is an example structure
 
 instructions: # Describes instructions
-  - name: add_1 # Name of the instruction
+  - name: add_1 # Name of an instruction
 
-    # Encoding format of the instruction
+    # Encoding format of an instruction
     format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12
 
-    # [optional] Condition when the instruction applys
+    # [optional] Condition when an instruction applys
     match_condition: (cond in_range 0-14 and S == 1) or cond == 15
 
-    # [optional] Condition when the instruction does not apply
+    # [optional] Condition when an instruction does not apply
     unmatch_condition: cond == 15
 
-    extras: # [optional] Container of user-defined data for the instruction
+    extras: # [optional] Container of user-defined data for an instruction
       # Any structure can be defined here
       clocks: 10
     
