@@ -712,7 +712,7 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="class">
 <dt id="mcdecoder.core.InstructionDecoder">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, encoding_element_bit_length: int, length_of_encoding_elements: int, fixed_bits_mask: int, fixed_bits: int, type_bit_size: int, match_condition: Optional[mcdecoder.core.InstructionDecoderCondition], unmatch_condition: Optional[mcdecoder.core.InstructionDecoderCondition], field_decoders: List[mcdecoder.core.InstructionFieldDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionDecoder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, _encoding: str, encoding_element_bit_length: int, length_of_encoding_elements: int, fixed_bits_mask: int, fixed_bits: int, type_bit_size: int, match_condition: Optional[mcdecoder.core.InstructionDecoderCondition], unmatch_condition: Optional[mcdecoder.core.InstructionDecoderCondition], field_decoders: List[mcdecoder.core.InstructionFieldDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionDecoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decoder for an instruction</p>
 <dl class="attribute">
@@ -1039,9 +1039,15 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="class">
 <dt id="mcdecoder.core.McDecoder">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McDecoder</code><span class="sig-paren">(</span><em class="sig-param">namespace_prefix: str, machine_decoder: mcdecoder.core.MachineDecoder, instruction_decoders: List[mcdecoder.core.InstructionDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.McDecoder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McDecoder</code><span class="sig-paren">(</span><em class="sig-param">namespace_prefix: str, machine_decoder: mcdecoder.core.MachineDecoder, instruction_decoders: List[mcdecoder.core.InstructionDecoder], decision_trees: List[mcdecoder.core.McdDecisionTree], extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.McDecoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decoder itself. The root model element of MC decoder model</p>
+<dl class="attribute">
+<dt id="mcdecoder.core.McDecoder.decision_trees">
+<code class="sig-name descname">decision_trees</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDecoder.decision_trees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Child McdDecisionTree</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="mcdecoder.core.McDecoder.extras">
 <code class="sig-name descname">extras</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDecoder.extras" title="Permalink to this definition">¶</a></dt>
@@ -1108,6 +1114,80 @@ to test an instruction field is in a value range(inclusive)</p>
 <dt id="mcdecoder.core.McDescription.machine">
 <code class="sig-name descname">machine</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDescription.machine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child MachineDescription</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="mcdecoder.core.McdDecisionNode">
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McdDecisionNode</code><span class="sig-paren">(</span><em class="sig-param">index: int, mask: int, fixed_bit_nodes: Dict[int, McdDecisionNode], arbitrary_bit_node: Optional[McdDecisionNode], instructions: List[mcdecoder.core.InstructionDecoder]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.McdDecisionNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Node of a McdDecisionTree.</p>
+<p>It has two types of child nodes:</p>
+<ul class="simple">
+<li><p>Fixed bit node: A node related to fixed bits. It is decided by a threshold value.</p></li>
+<li><p>Arbitrary bit node: A node related to arbitrary bits. It isn’t decided by a threshold value and pass through to the node.</p></li>
+</ul>
+<dl class="attribute">
+<dt id="mcdecoder.core.McdDecisionNode.arbitrary_bit_node">
+<code class="sig-name descname">arbitrary_bit_node</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.arbitrary_bit_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Arbitrary bit McdDecisionNode</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.McdDecisionNode.fixed_bit_nodes">
+<code class="sig-name descname">fixed_bit_nodes</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.fixed_bit_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of a threshold value and its fixed bit McdDecisionNode</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.McdDecisionNode.index">
+<code class="sig-name descname">index</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index number of a node in a tree</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.McdDecisionNode.instructions">
+<code class="sig-name descname">instructions</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.instructions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instructions decided by a node</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.McdDecisionNode.mask">
+<code class="sig-name descname">mask</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mask of threshold bit positions</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mcdecoder.core.McdDecisionNode.nodes">
+<em class="property">property </em><code class="sig-name descname">nodes</code><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>This node and its descendants.</p>
+<p>The nodes are ordered in the way of depth-first search.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="mcdecoder.core.McdDecisionTree">
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McdDecisionTree</code><span class="sig-paren">(</span><em class="sig-param">encoding_element_bit_length: int</em>, <em class="sig-param">length_of_encoding_elements: int</em>, <em class="sig-param">root_node: mcdecoder.core.McdDecisionNode</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.McdDecisionTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Decision tree to find a matched instruction for a code</p>
+<dl class="attribute">
+<dt id="mcdecoder.core.McdDecisionTree.encoding_element_bit_length">
+<code class="sig-name descname">encoding_element_bit_length</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionTree.encoding_element_bit_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bit length of an encoding element</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.McdDecisionTree.length_of_encoding_elements">
+<code class="sig-name descname">length_of_encoding_elements</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionTree.length_of_encoding_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length of encoding elements</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.McdDecisionTree.root_node">
+<code class="sig-name descname">root_node</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionTree.root_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Root node of a decision tree</p>
 </dd></dl>
 
 </dd></dl>
