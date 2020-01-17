@@ -28,4 +28,4 @@ instructions:
   - name: instruction1000
     format: 1000 xxxx xxxx 0000 xxxx xxxx xxxx xxxx
 decoder:
-  namespace: dt
+  namespace: dt32x1

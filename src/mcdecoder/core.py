@@ -5,7 +5,8 @@ import itertools
 import json
 import os.path
 from typing import (
-    Any, Callable, Dict, List, Literal, Optional, Tuple, TypedDict, cast)
+    Any, Callable, Dict, Iterable, List, Literal, Optional, Tuple, TypedDict,
+    cast)
 
 import jsonschema
 import lark
@@ -378,17 +379,17 @@ class McdDecisionNode:
     """Instructions decided by a node"""
 
     @property
-    def nodes(self) -> List['McdDecisionNode']:
-        """This node and its descendants"""
-        nodes: List['McdDecisionNode'] = []
-        nodes.append(self)
-        nodes.extend(itertools.chain.from_iterable(
-            node.nodes for node in self.fixed_bit_nodes.values()))
+    def nodes(self) -> Iterable['McdDecisionNode']:
+        """
+        This node and its descendants.
 
-        if self.arbitrary_bit_node is not None:
-            nodes.extend(self.arbitrary_bit_node.nodes)
-
-        return nodes
+        The nodes are ordered in the way of depth-first search.
+        """
+        arbitrary_nodes_and_descendants: Iterable['McdDecisionNode'] = self.arbitrary_bit_node.nodes \
+            if self.arbitrary_bit_node is not None else []
+        fixed_bit_nodes_and_descendants = itertools.chain.from_iterable(
+            node.nodes for node in self.fixed_bit_nodes.values())
+        return itertools.chain([self], fixed_bit_nodes_and_descendants, arbitrary_nodes_and_descendants)
 
 
 @dataclass

@@ -9,6 +9,8 @@ extern "C"
 #include "out/riscv_mcdecoder.h"
 #include "out/pc_mcdecoder.h"
 #include "out/cc_mcdecoder.h"
+#include "out/dt16x2_mcdecoder.h"
+#include "out/dt32x1_mcdecoder.h"
 }
 
 TEST(op_parse, should_decode_32bit_instructions)
@@ -245,6 +247,94 @@ TEST(op_parse, should_not_decode_condition_unmatched_instructions)
 
   // add
   EXPECT_NE(result_add, 0);
+}
+
+TEST(op_parse, should_match_according_to_decision_tree_16x2)
+{
+  // constants
+  dt16x2_uint8 machine_codes[] = {
+      0x00, 0x00, 0xf1, 0x00, /* instruction0000_0001 */
+      0x00, 0x00, 0xf2, 0x00, /* instruction0000_0010 */
+      0x00, 0x00, 0xf8, 0x00, /* instruction0000_1000 */
+      0x00, 0x1f, 0x10, 0x00, /* instruction0001_0001 */
+      0xf0, 0x50, 0x00, 0xff, /* instruction0101_ab */
+      0xf0, 0x8f, 0xff, 0xff, /* instruction1000 */
+  };
+
+  // actions
+  dt16x2_OpDecodedCodeType decoded_codes[6];
+  dt16x2_OperationCodeType optypes[6];
+  int results[6];
+
+  results[0] = dt16x2_op_parse((dt16x2_uint16 *)&machine_codes[0 * 4], &decoded_codes[0], &optypes[0]);
+  results[1] = dt16x2_op_parse((dt16x2_uint16 *)&machine_codes[1 * 4], &decoded_codes[1], &optypes[1]);
+  results[2] = dt16x2_op_parse((dt16x2_uint16 *)&machine_codes[2 * 4], &decoded_codes[2], &optypes[2]);
+  results[3] = dt16x2_op_parse((dt16x2_uint16 *)&machine_codes[3 * 4], &decoded_codes[3], &optypes[3]);
+  results[4] = dt16x2_op_parse((dt16x2_uint16 *)&machine_codes[4 * 4], &decoded_codes[4], &optypes[4]);
+  results[5] = dt16x2_op_parse((dt16x2_uint16 *)&machine_codes[5 * 4], &decoded_codes[5], &optypes[5]);
+
+  // assertions
+  EXPECT_EQ(results[0], 0);
+  EXPECT_EQ(optypes[0].code_id, dt16x2_OpCodeId_instruction0000_0001);
+
+  EXPECT_EQ(results[1], 0);
+  EXPECT_EQ(optypes[1].code_id, dt16x2_OpCodeId_instruction0000_0010);
+
+  EXPECT_EQ(results[2], 0);
+  EXPECT_EQ(optypes[2].code_id, dt16x2_OpCodeId_instruction0000_1000);
+
+  EXPECT_EQ(results[3], 0);
+  EXPECT_EQ(optypes[3].code_id, dt16x2_OpCodeId_instruction0001_0001);
+
+  EXPECT_EQ(results[4], 0);
+  EXPECT_EQ(optypes[4].code_id, dt16x2_OpCodeId_instruction0101_ab);
+
+  EXPECT_EQ(results[5], 0);
+  EXPECT_EQ(optypes[5].code_id, dt16x2_OpCodeId_instruction1000);
+}
+
+TEST(op_parse, should_match_according_to_decision_tree_32x1)
+{
+  // constants
+  dt32x1_uint8 machine_codes[] = {
+      0xf1, 0x00, 0x00, 0x00, /* instruction0000_0001 */
+      0xf2, 0x00, 0x00, 0x00, /* instruction0000_0010 */
+      0xf8, 0x00, 0x00, 0x00, /* instruction0000_1000 */
+      0x10, 0x00, 0x00, 0x1f, /* instruction0001_0001 */
+      0x00, 0xff, 0xf0, 0x50, /* instruction0101_ab */
+      0xff, 0xff, 0xf0, 0x8f, /* instruction1000 */
+  };
+
+  // actions
+  dt32x1_OpDecodedCodeType decoded_codes[6];
+  dt32x1_OperationCodeType optypes[6];
+  int results[6];
+
+  results[0] = dt32x1_op_parse((dt32x1_uint16 *)&machine_codes[0 * 4], &decoded_codes[0], &optypes[0]);
+  results[1] = dt32x1_op_parse((dt32x1_uint16 *)&machine_codes[1 * 4], &decoded_codes[1], &optypes[1]);
+  results[2] = dt32x1_op_parse((dt32x1_uint16 *)&machine_codes[2 * 4], &decoded_codes[2], &optypes[2]);
+  results[3] = dt32x1_op_parse((dt32x1_uint16 *)&machine_codes[3 * 4], &decoded_codes[3], &optypes[3]);
+  results[4] = dt32x1_op_parse((dt32x1_uint16 *)&machine_codes[4 * 4], &decoded_codes[4], &optypes[4]);
+  results[5] = dt32x1_op_parse((dt32x1_uint16 *)&machine_codes[5 * 4], &decoded_codes[5], &optypes[5]);
+
+  // assertions
+  EXPECT_EQ(results[0], 0);
+  EXPECT_EQ(optypes[0].code_id, dt32x1_OpCodeId_instruction0000_0001);
+
+  EXPECT_EQ(results[1], 0);
+  EXPECT_EQ(optypes[1].code_id, dt32x1_OpCodeId_instruction0000_0010);
+
+  EXPECT_EQ(results[2], 0);
+  EXPECT_EQ(optypes[2].code_id, dt32x1_OpCodeId_instruction0000_1000);
+
+  EXPECT_EQ(results[3], 0);
+  EXPECT_EQ(optypes[3].code_id, dt32x1_OpCodeId_instruction0001_0001);
+
+  EXPECT_EQ(results[4], 0);
+  EXPECT_EQ(optypes[4].code_id, dt32x1_OpCodeId_instruction0101_ab);
+
+  EXPECT_EQ(results[5], 0);
+  EXPECT_EQ(optypes[5].code_id, dt32x1_OpCodeId_instruction1000);
 }
 
 TEST(op_parse, should_match_equality_condition)

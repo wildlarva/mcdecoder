@@ -31,3 +31,31 @@ int cc_op_exec_and_condition(struct TargetCore *core) { return 0; }
 int cc_op_exec_or_condition(struct TargetCore *core) { return 0; }
 int cc_op_exec_and_or_condition1(struct TargetCore *core) { return 0; }
 int cc_op_exec_and_or_condition2(struct TargetCore *core) { return 0; }
+
+int dt16x2_op_exec_instruction0000_0001(struct TargetCore *core) { return 0; }
+int dt16x2_op_exec_instruction0000_0010(struct TargetCore *core) { return 0; }
+int dt16x2_op_exec_instruction0000_1000(struct TargetCore *core) { return 0; }
+int dt16x2_op_exec_instruction0001_0001(struct TargetCore *core) { return 0; }
+int dt16x2_op_exec_instruction0001_0010(struct TargetCore *core) { return 0; }
+int dt16x2_op_exec_instruction0001_1000(struct TargetCore *core) { return 0; }
+int dt16x2_op_exec_instruction0100_0001(struct TargetCore *core) { return 0; }
+int dt16x2_op_exec_instruction0100_0010(struct TargetCore *core) { return 0; }
+int dt16x2_op_exec_instruction0100_1000(struct TargetCore *core) { return 0; }
+int dt16x2_op_exec_instruction0101_0001(struct TargetCore *core) { return 0; }
+int dt16x2_op_exec_instruction0101_0010(struct TargetCore *core) { return 0; }
+int dt16x2_op_exec_instruction0101_ab(struct TargetCore *core) { return 0; }
+int dt16x2_op_exec_instruction1000(struct TargetCore *core) { return 0; }
+
+int dt32x1_op_exec_instruction0000_0001(struct TargetCore *core) { return 0; }
+int dt32x1_op_exec_instruction0000_0010(struct TargetCore *core) { return 0; }
+int dt32x1_op_exec_instruction0000_1000(struct TargetCore *core) { return 0; }
+int dt32x1_op_exec_instruction0001_0001(struct TargetCore *core) { return 0; }
+int dt32x1_op_exec_instruction0001_0010(struct TargetCore *core) { return 0; }
+int dt32x1_op_exec_instruction0001_1000(struct TargetCore *core) { return 0; }
+int dt32x1_op_exec_instruction0100_0001(struct TargetCore *core) { return 0; }
+int dt32x1_op_exec_instruction0100_0010(struct TargetCore *core) { return 0; }
+int dt32x1_op_exec_instruction0100_1000(struct TargetCore *core) { return 0; }
+int dt32x1_op_exec_instruction0101_0001(struct TargetCore *core) { return 0; }
+int dt32x1_op_exec_instruction0101_0010(struct TargetCore *core) { return 0; }
+int dt32x1_op_exec_instruction0101_ab(struct TargetCore *core) { return 0; }
+int dt32x1_op_exec_instruction1000(struct TargetCore *core) { return 0; }

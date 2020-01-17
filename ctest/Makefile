@@ -1,4 +1,18 @@
 #----------------------------------------
+#	 Make variables
+#----------------------------------------
+DECODER_SRCS = \
+	out/arm_mcdecoder.c \
+	out/ab_mcdecoder.c \
+	out/at_mcdecoder.c \
+	out/atb_mcdecoder.c \
+	out/riscv_mcdecoder.c \
+	out/pc_mcdecoder.c \
+	out/cc_mcdecoder.c \
+	out/dt16x2_mcdecoder.c\
+	out/dt32x1_mcdecoder.c
+
+#----------------------------------------
 #	 Make Rules
 #----------------------------------------
 
@@ -9,7 +23,7 @@ all: setup generate
 test: all
 	make -f build.mk test
 
-generate: out/arm_mcdecoder.c out/ab_mcdecoder.c out/at_mcdecoder.c out/atb_mcdecoder.c out/riscv_mcdecoder.c out/pc_mcdecoder.c out/cc_mcdecoder.c
+generate: $(DECODER_SRCS)
 
 clean: setup
 	rm -vfr out
@@ -41,4 +55,10 @@ out/pc_mcdecoder.c: ../test/primitive_condition.yaml
 	mcdecoder generate --output out $<
 
 out/cc_mcdecoder.c: ../test/complex_condition.yaml
+	mcdecoder generate --output out $<
+
+out/dt16x2_mcdecoder.c: ../test/decision_tree_code16x2.yaml
+	mcdecoder generate --output out $<
+
+out/dt32x1_mcdecoder.c: ../test/decision_tree_code32x1.yaml
 	mcdecoder generate --output out $<

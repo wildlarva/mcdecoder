@@ -13,7 +13,9 @@ CXX_SRCS = \
 	out/atb_mcdecoder.c \
 	out/riscv_mcdecoder.c \
 	out/pc_mcdecoder.c \
-	out/cc_mcdecoder.c
+	out/cc_mcdecoder.c \
+	out/dt16x2_mcdecoder.c \
+	out/dt32x1_mcdecoder.c
 
 CXX_OBJ_FILES = \
 	build/test.o \
@@ -24,7 +26,9 @@ CXX_OBJ_FILES = \
 	build/atb_mcdecoder.o \
 	build/riscv_mcdecoder.o \
 	build/pc_mcdecoder.o \
-	build/cc_mcdecoder.o
+	build/cc_mcdecoder.o \
+	build/dt16x2_mcdecoder.o \
+	build/dt32x1_mcdecoder.o
 
 EXE_FILENAME = \
 	build/test
