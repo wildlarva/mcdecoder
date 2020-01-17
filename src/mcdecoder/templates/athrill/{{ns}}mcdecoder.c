@@ -73,7 +73,7 @@ typedef struct {
 /* function declarations */
 static {{ ns }}uint32 setbit_count({{ ns }}uint32 value);
 {% for tree in mcdecoder.decision_trees %}
-    {%- for node in tree.root_node.nodes %}
+    {%- for node in tree.root_node.all_nodes %}
         static int decision_node_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.index }}(OpDecodeContext *context, {{ ns }}uint32 code);
     {%- endfor -%}
 {%- endfor %}
@@ -128,7 +128,7 @@ static {{ ns }}uint32 setbit_count({{ ns }}uint32 value) {
 
 /* decision node functions */
 {% for tree in mcdecoder.decision_trees -%}
-    {%- for node in tree.root_node.nodes %}
+    {%- for node in tree.root_node.all_nodes %}
         static int decision_node_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.index }}(OpDecodeContext *context, {{ ns }}uint32 code) {
             {% for inst in node.instructions %}
                 if (op_parse_{{ inst.name }}(context) == 0) {

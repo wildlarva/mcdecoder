@@ -379,16 +379,16 @@ class McdDecisionNode:
     """Instructions decided by a node"""
 
     @property
-    def nodes(self) -> Iterable['McdDecisionNode']:
+    def all_nodes(self) -> Iterable['McdDecisionNode']:
         """
         This node and its descendants.
 
         The nodes are ordered in the way of depth-first search.
         """
-        arbitrary_nodes_and_descendants: Iterable['McdDecisionNode'] = self.arbitrary_bit_node.nodes \
+        arbitrary_nodes_and_descendants: Iterable['McdDecisionNode'] = self.arbitrary_bit_node.all_nodes \
             if self.arbitrary_bit_node is not None else []
         fixed_bit_nodes_and_descendants = itertools.chain.from_iterable(
-            node.nodes for node in self.fixed_bit_nodes.values())
+            node.all_nodes for node in self.fixed_bit_nodes.values())
         return itertools.chain([self], fixed_bit_nodes_and_descendants, arbitrary_nodes_and_descendants)
 
 
@@ -864,7 +864,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
         element) for element in instruction_encoding.elements)
 
     # Build fixed bits information
-    fixed_bits_mask, fixed_bits = _build_fixed_bits_info(instruction_encoding)
+    fixed_bits_mask, fixed_bits = _make_fixed_bits_info(instruction_encoding)
 
     # Save the start bit positions of field formats
     ff_start_bit_in_instruction = instruction_bit_size - 1
@@ -911,7 +911,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
 
     return InstructionDecoder(
         name=instruction_desc_model['name'],
-        _encoding=_instruction_bit_format(instruction_encoding),
+        _encoding=_instruction_encoding_string(instruction_encoding),
         encoding_element_bit_length=encoding_element_bit_length,
         length_of_encoding_elements=len(instruction_encoding.elements),
         fixed_bits_mask=fixed_bits_mask,
@@ -924,16 +924,16 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
     )
 
 
-def _build_fixed_bits_info(instruction_encoding: InstructionEncodingDescription) -> Tuple[int, int]:
+def _make_fixed_bits_info(instruction_encoding: InstructionEncodingDescription) -> Tuple[int, int]:
     """Build fixed bits information and returns fixed bit mask and fixed bits"""
-    instruction_bit_format = _instruction_bit_format(instruction_encoding)
-    fixed_bit_mask = int(instruction_bit_format.replace(
+    instruction_encoding_string = _instruction_encoding_string(instruction_encoding)
+    fixed_bit_mask = int(instruction_encoding_string.replace(
         '0', '1').replace('x', '0'), base=2)
-    fixed_bits = int(instruction_bit_format.replace('x', '0'), base=2)
+    fixed_bits = int(instruction_encoding_string.replace('x', '0'), base=2)
     return fixed_bit_mask, fixed_bits
 
 
-def _instruction_bit_format(instruction_encoding: InstructionEncodingDescription) -> str:
+def _instruction_encoding_string(instruction_encoding: InstructionEncodingDescription) -> str:
     field_encodings = itertools.chain.from_iterable(
         element.fields for element in instruction_encoding.elements)
     return ''.join(field.bits_format for field in field_encodings)
@@ -1071,6 +1071,8 @@ def _create_instruction_condition_parser() -> lark.Lark:
 def _create_decision_trees(instruction_decoders: List[InstructionDecoder]) -> List[McdDecisionTree]:
     # Collect all encodings
     instruction_decoder_vec = np.array(instruction_decoders, dtype=np.object)
+
+    # N x M matrix of instructions and encoding forms(encoding_element_bit_length and length_of_encoding_elements)
     encoding_form_mat = np.array([(instruction.encoding_element_bit_length, instruction.length_of_encoding_elements)
                                   for instruction in instruction_decoder_vec])
     unique_encoding_form_mat = np.unique(encoding_form_mat, axis=0)
@@ -1084,6 +1086,7 @@ def _create_decision_trees(instruction_decoders: List[InstructionDecoder]) -> Li
         matched_instruction_decoder_vec = instruction_decoder_vec[(
             encoding_form_mat == encoding_form_vec).all(axis=1)]
 
+        # N x M matrix of instructions and encoding bits
         str_encoding_mat = np.array([list(instruction._encoding)
                                      for instruction in matched_instruction_decoder_vec])
         encoding_mat: np.ndarray = np.empty_like(
@@ -1127,18 +1130,19 @@ def _create_decision_node(context: _DecisionTreeCreateContext, encoding_mat: np.
         # Evaluate bit positions if they're appropriate for decision threshold
         zero_count_vec = np.sum(encoding_mat == 0, axis=0)
         one_count_vec = np.sum(encoding_mat == 1, axis=0)
-        value_vec = (zero_count_vec * one_count_vec + 1) * \
+        score_vec = (zero_count_vec * one_count_vec + 1) * \
             (zero_count_vec + one_count_vec)
 
         # Determine bit positions for threshold
-        prime_index = np.argmax(value_vec)
+        prime_threshold_index = np.argmax(score_vec)
         threshold_test_vec = (
-            x_encoding_mat == x_encoding_mat[:, prime_index].reshape(-1, 1)).all(axis=0)
+            x_encoding_mat == x_encoding_mat[:, prime_threshold_index].reshape(-1, 1)).all(axis=0)
         threshold_bitpos_vec = bitpos_vec[threshold_test_vec]
 
-        threshold_value_mat = encoding_mat[:, threshold_test_vec]
-        unique_threshold_value_mat: np.ndarray = np.unique(
-            threshold_value_mat, axis=0)
+        # N x M matrix of instructions and threshold bits
+        threshold_encoding_mat = encoding_mat[:, threshold_test_vec]
+        unique_threshold_encoding_mat: np.ndarray = np.unique(
+            threshold_encoding_mat, axis=0)
 
         # Left data for children
         left_test_vec = np.logical_not(  # type: ignore # TODO pyright can't recognize numpy.logical_not
@@ -1146,27 +1150,27 @@ def _create_decision_node(context: _DecisionTreeCreateContext, encoding_mat: np.
         left_encoding_mat = encoding_mat[:, left_test_vec]
         left_bitpos_vec = bitpos_vec[left_test_vec]
 
-        # Categorize fixed bit nodes and arbitrary bit node
+        # Categorize nodes for fixed bits and arbitrary bits
         ab_vec: np.ndarray = np.full_like(
             threshold_bitpos_vec, _ARBITRARY_BIT_INT)
-        ab_test_vec = (unique_threshold_value_mat == ab_vec).all(axis=1)
+        ab_test_vec = (unique_threshold_encoding_mat == ab_vec).all(axis=1)
+        exists_ab = np.any(ab_test_vec)
         fb_test_vec = np.logical_not(  # type: ignore # TODO pyright can't recognize numpy.logical_not
             ab_test_vec)
-        fb_threshold_value_mat = unique_threshold_value_mat[fb_test_vec]
-        exists_ab = np.any(ab_test_vec)
+        fb_threshold_encoding_mat = unique_threshold_encoding_mat[fb_test_vec]
 
-        # Save index
+        # Increment index
         index = context.index
         context.index += 1
 
         # Create child fixed bit nodes
         fixed_bit_nodes: Dict[int, McdDecisionNode] = {}
-        for threshold_value_vec in fb_threshold_value_mat:
-            child_test_vec = (threshold_value_mat ==
-                              threshold_value_vec).all(axis=1)
+        for threshold_encoding_vec in fb_threshold_encoding_mat:
+            child_test_vec = (threshold_encoding_mat ==
+                              threshold_encoding_vec).all(axis=1)
 
             total_threshold_value = 0
-            for threshold_value, threshold_bitpos in zip(threshold_value_vec, threshold_bitpos_vec):
+            for threshold_value, threshold_bitpos in zip(threshold_encoding_vec, threshold_bitpos_vec):
                 total_threshold_value |= threshold_value << threshold_bitpos
 
             fixed_bit_nodes[total_threshold_value] = _create_decision_node(
@@ -1175,7 +1179,7 @@ def _create_decision_node(context: _DecisionTreeCreateContext, encoding_mat: np.
         # Create child arbitrary bit nodes
         arbitrary_bit_node: Optional[McdDecisionNode] = None
         if exists_ab:
-            child_test_vec = (threshold_value_mat == ab_vec).all(axis=1)
+            child_test_vec = (threshold_encoding_mat == ab_vec).all(axis=1)
             arbitrary_bit_node = _create_decision_node(
                 context, left_encoding_mat[child_test_vec], instruction_decoder_vec[child_test_vec], left_bitpos_vec)
 
