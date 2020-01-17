@@ -205,10 +205,10 @@ Here is an overview of MC description.</p>
     <span class="c1"># Encoding format of the instruction</span>
     <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
 
-    <span class="c1"># [optional] Bit condition when the instruction applys</span>
+    <span class="c1"># [optional] Condition when the instruction applys</span>
     <span class="nt">match_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(cond in_range 0-14 and S == 1) or cond == 15</span>
 
-    <span class="c1"># [optional] Bit condition when the instruction does not apply</span>
+    <span class="c1"># [optional] Condition when the instruction does not apply</span>
     <span class="nt">unmatch_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond == 15</span>
 
     <span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] Container of user-defined data for the instruction</span>
@@ -401,8 +401,10 @@ in a given value range(inclusive).</p>
 <p>Expression: <code class="code docutils literal notranslate"><span class="pre">&lt;function&gt;(&lt;field_object&gt;)</span></code></p>
 </dd>
 <dt>&lt;function&gt;</dt><dd><p>Function name that its result is to be tested</p>
-<p>Supported functions are:
-* <code class="code docutils literal notranslate"><span class="pre">setbit_count</span></code>: Count the set bit count of a given argument.</p>
+<p>Supported functions are:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">setbit_count</span></code>: Count the set bit count of a given argument.</p></li>
+</ul>
 </dd>
 <dt>&lt;field_object&gt;</dt><dd><p>Field object to be tested</p>
 <p>Expression: <code class="code docutils literal notranslate"><span class="pre">&lt;field&gt;[&lt;field_element_index&gt;]</span></code></p>
