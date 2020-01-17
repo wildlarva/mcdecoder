@@ -286,7 +286,7 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionFieldDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, start_bit: int, type_bit_size: int, subfield_decoders: List[mcdecoder.core.InstructionSubfieldDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionFieldDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, _start_bit: int, type_bit_size: int, subfield_decoders: List[mcdecoder.core.InstructionSubfieldDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decoder for an instruction field</p>
 <dl class="attribute">
@@ -299,12 +299,6 @@
 <dt>
 <code class="sig-name descname">name</code><em class="property"> = None</em></dt>
 <dd><p>Name of a field</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="sig-name descname">start_bit</code><em class="property"> = None</em></dt>
-<dd><p>MSB of a field in an instruction</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -605,6 +599,13 @@ to test an instruction field is in a value range(inclusive)</p>
 <li><p>Fixed bit node: A node related to fixed bits. It is decided by a threshold value.</p></li>
 <li><p>Arbitrary bit node: A node related to arbitrary bits. It isn’t decided by a threshold value and pass through to the node.</p></li>
 </ul>
+<dl class="method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">all_nodes</code></dt>
+<dd><p>This node and its descendants.</p>
+<p>The nodes are ordered in the way of depth-first search.</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt>
 <code class="sig-name descname">arbitrary_bit_node</code><em class="property"> = None</em></dt>
@@ -633,13 +634,6 @@ to test an instruction field is in a value range(inclusive)</p>
 <dt>
 <code class="sig-name descname">mask</code><em class="property"> = None</em></dt>
 <dd><p>Mask of threshold bit positions</p>
-</dd></dl>
-
-<dl class="method">
-<dt>
-<em class="property">property </em><code class="sig-name descname">nodes</code></dt>
-<dd><p>This node and its descendants.</p>
-<p>The nodes are ordered in the way of depth-first search.</p>
 </dd></dl>
 
 </dd></dl>

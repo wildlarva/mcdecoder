@@ -883,7 +883,7 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="class">
 <dt id="mcdecoder.core.InstructionFieldDecoder">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionFieldDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, start_bit: int, type_bit_size: int, subfield_decoders: List[mcdecoder.core.InstructionSubfieldDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecoder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionFieldDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, _start_bit: int, type_bit_size: int, subfield_decoders: List[mcdecoder.core.InstructionSubfieldDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decoder for an instruction field</p>
 <dl class="attribute">
@@ -896,12 +896,6 @@ to test an instruction field is in a value range(inclusive)</p>
 <dt id="mcdecoder.core.InstructionFieldDecoder.name">
 <code class="sig-name descname">name</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecoder.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of a field</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="mcdecoder.core.InstructionFieldDecoder.start_bit">
-<code class="sig-name descname">start_bit</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecoder.start_bit" title="Permalink to this definition">¶</a></dt>
-<dd><p>MSB of a field in an instruction</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -1128,6 +1122,13 @@ to test an instruction field is in a value range(inclusive)</p>
 <li><p>Fixed bit node: A node related to fixed bits. It is decided by a threshold value.</p></li>
 <li><p>Arbitrary bit node: A node related to arbitrary bits. It isn’t decided by a threshold value and pass through to the node.</p></li>
 </ul>
+<dl class="method">
+<dt id="mcdecoder.core.McdDecisionNode.all_nodes">
+<em class="property">property </em><code class="sig-name descname">all_nodes</code><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.all_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>This node and its descendants.</p>
+<p>The nodes are ordered in the way of depth-first search.</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="mcdecoder.core.McdDecisionNode.arbitrary_bit_node">
 <code class="sig-name descname">arbitrary_bit_node</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.arbitrary_bit_node" title="Permalink to this definition">¶</a></dt>
@@ -1156,13 +1157,6 @@ to test an instruction field is in a value range(inclusive)</p>
 <dt id="mcdecoder.core.McdDecisionNode.mask">
 <code class="sig-name descname">mask</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mask of threshold bit positions</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="mcdecoder.core.McdDecisionNode.nodes">
-<em class="property">property </em><code class="sig-name descname">nodes</code><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>This node and its descendants.</p>
-<p>The nodes are ordered in the way of depth-first search.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1325,7 +1319,7 @@ Each element holds the boolean result whether a code is matched for an instructi
 <dd class="field-odd"><p><strong>base</strong> – Base of integer</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A bit length for one character</p>
+<dd class="field-even"><p>Bit length for one character</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1358,7 +1352,7 @@ Each element holds the boolean result whether a code is matched for an instructi
 <dd class="field-odd"><p><strong>bit_size</strong> – Bit length of a mask</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A mask with bit_size bits</p>
+<dd class="field-even"><p>Mask with bit_size bits</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1405,7 +1399,7 @@ Each element holds the boolean result whether a code is matched for an instructi
 <dd class="field-odd"><p><strong>base</strong> – Base of integer</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A string length for one byte</p>
+<dd class="field-even"><p>String length for one byte</p>
 </dd>
 </dl>
 </dd></dl>
