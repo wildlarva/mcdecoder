@@ -30,15 +30,15 @@
                     },
                     "format": {
                         "type": "string",
-                        "pattern": "^[A-Za-z0-9_:\\[\\],|/\\u0020\\u0009\\u000a\\u000d]*$"
+                        "pattern": "^[A-Za-z0-9_:\\[\\],|/\\u0020\\u0009\\u000a\\u000d]+$"
                     },
                     "match_condition": {
                         "type": "string",
-                        "pattern": "^[A-Za-z0-9_!=><\\-\\[\\],()\\u0020\\u0009\\u000a\\u000d]*$"
+                        "pattern": "^[A-Za-z0-9_!=><\\-\\[\\],()\\u0020\\u0009\\u000a\\u000d]+$"
                     },
                     "unmatch_condition": {
                         "type": "string",
-                        "pattern": "^[A-Za-z0-9_!=><\\-\\[\\],()\\u0020\\u0009\\u000a\\u000d]*$"
+                        "pattern": "^[A-Za-z0-9_!=><\\-\\[\\],()\\u0020\\u0009\\u000a\\u000d]+$"
                     },
                     "extras": {},
                     "field_extras": {
