@@ -1,8 +1,7 @@
 machine: # Describes a machine
   byteorder: little # Byte order of a machine
-  extras: # [optional] Container of user-defined data for a machine
-    # Any structure can be defined here
-    arch_type: arm # This is an example structure
+  extras: # [optional] User-defined data for a machine
+    arch_type: arm
 
 instructions: # Describes instructions
   - name: add_1 # Name of an instruction
@@ -16,18 +15,13 @@ instructions: # Describes instructions
     # [optional] Condition when an instruction does not apply
     unmatch_condition: cond == 15
 
-    extras: # [optional] Container of user-defined data for an instruction
-      # Any structure can be defined here
+    extras: # [optional] User-defined data for an instruction
       clocks: 10
-    
-    # [optional] Container of user-defined data for each field
-    field_extras:
-      # Any structure can be defined in a mapping value
-      Rn: {type: register} # This is an example structure
+    field_extras: # [optional] User-defined data for each field
+      Rn: {type: register}
 
 decoder: # [optional] Decoder information of the global scope
   namespace: ns # [optional] Namespace for the symbols of a generated decoder
 
-extras: # [optional] Container of user-defined data of the global scope
-    # Any structure can be defined here
-    compiler: gcc # This is an example structure
+extras: # [optional] User-defined data for the global scope
+  compiler: gcc
