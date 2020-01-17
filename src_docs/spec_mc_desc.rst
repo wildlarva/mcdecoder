@@ -67,7 +67,7 @@ instructions.format: Encoding format of an instruction
 ========================================================================================================
 
 :code:`format` defines the encoding format of an instruction.
-Instruction can be split into multiple parts
+Instruction can be split into multiple parts,
 which are named instruction fields.
 One field can be split into several bit ranges.
 Each bit range is called a subfield in a field.
@@ -82,11 +82,18 @@ Here is an example of instruction fields
     format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12
 
 Here is an example of instruction subfields
-(the field 'imm' is split into several bit positions).
+(the field 'imm' is split into several bit ranges).
 
 .. code-block:: yaml
 
     format: 000:funct3|x:imm[5]|xxxx x:dest|xxx xx:imm[4:0]|01:op
+
+Here is another example of instruction subfields
+(the field 'offset' is split into adjacent bit ranges).
+
+.. code-block:: yaml
+
+    format: 111:funct3|x xxxx x:offset[5:3,8:6]|xxx xx:src|10:op
 
 Here is an example of encoding elements in an instruction (2 words of 16-bit).
 
@@ -97,7 +104,7 @@ Here is an example of encoding elements in an instruction (2 words of 16-bit).
 Expression: :code:`<field_bits>:<field_name>[<field_bit_ranges>]|... // ...`
 
 Fields are separated by bar symbol(:code:`|`).
-If an instruction is constructed by multiple N-byte words,
+If an instruction is constructed by multiple encoding elements,
 they're split by double-slash symbol(:code:`//`).
 
 where
@@ -119,6 +126,7 @@ where
 
     Expression: :code:`<subfield_start>:<subfield_end>,...`
 
+    It takes multiple adjacent bit ranges.
     Bit ranges are separated by comma symbol(:code:`,`).
 
 <subfield_start>
@@ -144,7 +152,8 @@ The following condition types are supported.
 
 These conditions can be combined with a logical operator :code:`and` or
 :code:`or`.
-You can also use :code:`(` and :code:`)` for readability.
+You can also use :code:`(` and :code:`)` for grouping conditions or
+just for readability.
 
 Equality condition
 -----------------------
@@ -242,6 +251,19 @@ where
     :code:`0xf`, etc.
 
 See also the common expressions below.
+
+Complex condition
+-------------------------
+
+The conditions explained before can be combined together.
+
+Here's an example of a combination of the conditions.
+
+.. code-block:: yaml
+
+    match_condition: |
+      Rn != 15
+      and (cond in_range 10-11 or cond in [13, 15])
 
 Common expressions
 --------------------------------------
