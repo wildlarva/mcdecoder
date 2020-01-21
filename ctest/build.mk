@@ -7,11 +7,16 @@ include $(BUILD_DIR)/conanbuildinfo.mak
 #----------------------------------------
 
 COMMON_TEST_DIR = ../test
-TEMPLATE_DIR = templates
+SRC_TEMPLATE_DIR = ../src/mcdecoder/templates
+TEST_TEMPLATE_DIR = templates
 STEPS_DIR = features/step_definitions
 DECODER_DIR = out
+
 ATHRILL_DECODER_DIR = $(DECODER_DIR)/athrill
 ATHRILL_BUILD_DIR = $(BUILD_DIR)/athrill
+
+MCDECODER_DECODER_DIR = $(DECODER_DIR)/mcdecoder
+MCDECODER_BUILD_DIR = $(BUILD_DIR)/mcdecoder
 
 # <decoder name>:<MC description file name>
 DECODERS = \
@@ -63,6 +68,32 @@ ATHRILL_CXX_INCLUDES += $(COMMON_CXX_INCLUDES)
 ATHRILL_CXX_OBJ_FILES = $(patsubst %.cpp, $(ATHRILL_BUILD_DIR)/%.o, $(notdir $(ATHRILL_CXX_SRCS)))
 ATHRILL_EXE_FILENAME = $(ATHRILL_BUILD_DIR)/test
 
+MCDECODER_DECODER_SRCS = \
+	$(foreach element, $(DECODERS), $(MCDECODER_DECODER_DIR)/$(strip $(firstword $(subst :, , $(element))))_mcdecoder.c)
+
+MCDECODER_HELPER_SRCS = \
+	$(foreach element, $(DECODERS), $(MCDECODER_DECODER_DIR)/$(strip $(firstword $(subst :, , $(element))))_mcdhelper.cpp)
+
+MCDECODER_CSRCS = $(MCDECODER_DECODER_SRCS)
+
+MCDECODER_CINCLUDES = \
+	$(MCDECODER_DECODER_DIR)
+
+MCDECODER_COBJ_FILES = $(patsubst %.c, $(MCDECODER_BUILD_DIR)/%.o, $(notdir $(MCDECODER_CSRCS)))
+
+MCDECODER_CXX_SRCS = \
+	mcdecoder_setup.cpp
+
+MCDECODER_CXX_SRCS += $(MCDECODER_HELPER_SRCS)
+
+MCDECODER_CXX_INCLUDES = \
+	$(MCDECODER_DECODER_DIR)
+
+MCDECODER_CXX_INCLUDES += $(COMMON_CXX_INCLUDES)
+
+MCDECODER_CXX_OBJ_FILES = $(patsubst %.cpp, $(MCDECODER_BUILD_DIR)/%.o, $(notdir $(MCDECODER_CXX_SRCS)))
+MCDECODER_EXE_FILENAME = $(MCDECODER_BUILD_DIR)/test
+
 
 #----------------------------------------
 #	 Prepare flags from variables
@@ -94,6 +125,17 @@ ATHRILL_CXXFLAGS = \
 ATHRILL_LDFLAGS = $(COMMON_LDFLAGS)
 ATHRILL_LDLIBS = $(COMMON_LDLIBS)
 
+MCDECODER_CFLAGS = \
+	$(COMMON_CFLAGS) \
+	$(addprefix -I, $(MCDECODER_CINCLUDES))
+
+MCDECODER_CXXFLAGS = \
+	$(COMMON_CXXFLAGS) \
+	$(addprefix -I, $(MCDECODER_CXX_INCLUDES))
+
+MCDECODER_LDFLAGS = $(COMMON_LDFLAGS)
+MCDECODER_LDLIBS = $(COMMON_LDLIBS)
+
 
 #----------------------------------------
 #	 Make Commands
@@ -111,6 +153,12 @@ ATHRILL_COMPILE_C_COMMAND = \
 ATHRILL_COMPILE_CXX_COMMAND = \
 	g++ -c $(ATHRILL_CXXFLAGS) $< -o $@
 
+MCDECODER_COMPILE_C_COMMAND = \
+	gcc -c $(MCDECODER_CFLAGS) $< -o $@
+
+MCDECODER_COMPILE_CXX_COMMAND = \
+	g++ -c $(MCDECODER_CXXFLAGS) $< -o $@
+
 
 #----------------------------------------
 #	 Make Rules
@@ -120,24 +168,19 @@ ATHRILL_COMPILE_CXX_COMMAND = \
 
 all: exe
 
-generate: $(ATHRILL_DECODER_SRCS)
+generate: $(ATHRILL_DECODER_SRCS) $(MCDECODER_DECODER_SRCS)
 
-exe: generate $(ATHRILL_EXE_FILENAME)
+exe: generate $(ATHRILL_EXE_FILENAME) $(MCDECODER_EXE_FILENAME)
 
 clean:
 	rm -vf $(COMMON_COBJ_FILES) $(COMMON_CXX_OBJ_FILES)
 	rm -vfr $(ATHRILL_BUILD_DIR)
+	rm -vfr $(MCDECODER_BUILD_DIR)
 	rm -vfr $(DECODER_DIR)
 
 test: exe
 	$(ATHRILL_EXE_FILENAME) & bundle exec cucumber
-
-$(ATHRILL_EXE_FILENAME) : $(ATHRILL_BUILD_DIR) $(COMMON_COBJ_FILES) $(COMMON_CXX_OBJ_FILES) $(ATHRILL_COBJ_FILES) $(ATHRILL_CXX_OBJ_FILES)
-	g++ $(COMMON_COBJ_FILES) $(COMMON_CXX_OBJ_FILES) $(ATHRILL_COBJ_FILES) $(ATHRILL_CXX_OBJ_FILES) \
-	$(ATHRILL_CXXFLAGS) $(ATHRILL_LDFLAGS) $(ATHRILL_LDLIBS) -o $(ATHRILL_EXE_FILENAME)
-
-$(ATHRILL_BUILD_DIR):
-	mkdir -p $(ATHRILL_BUILD_DIR)
+	$(MCDECODER_EXE_FILENAME) & bundle exec cucumber
 
 $(BUILD_DIR)/%.o: %.c
 	$(COMMON_COMPILE_C_COMMAND)
@@ -147,6 +190,13 @@ $(BUILD_DIR)/%.o: %.cpp
 
 $(BUILD_DIR)/%.o: $(STEPS_DIR)/%.cpp
 	$(COMMON_COMPILE_CXX_COMMAND)
+
+$(ATHRILL_EXE_FILENAME) : $(ATHRILL_BUILD_DIR) $(COMMON_COBJ_FILES) $(COMMON_CXX_OBJ_FILES) $(ATHRILL_COBJ_FILES) $(ATHRILL_CXX_OBJ_FILES)
+	g++ $(COMMON_COBJ_FILES) $(COMMON_CXX_OBJ_FILES) $(ATHRILL_COBJ_FILES) $(ATHRILL_CXX_OBJ_FILES) \
+	$(ATHRILL_CXXFLAGS) $(ATHRILL_LDFLAGS) $(ATHRILL_LDLIBS) -o $(ATHRILL_EXE_FILENAME)
+
+$(ATHRILL_BUILD_DIR):
+	mkdir -p $(ATHRILL_BUILD_DIR)
 
 $(ATHRILL_BUILD_DIR)/%.o: %.c
 	$(ATHRILL_COMPILE_C_COMMAND)
@@ -160,13 +210,43 @@ $(ATHRILL_BUILD_DIR)/%.o: $(ATHRILL_DECODER_DIR)/%.c
 $(ATHRILL_BUILD_DIR)/%.o: $(ATHRILL_DECODER_DIR)/%.cpp
 	$(ATHRILL_COMPILE_CXX_COMMAND)
 
+$(MCDECODER_EXE_FILENAME) : $(MCDECODER_BUILD_DIR) $(COMMON_COBJ_FILES) $(COMMON_CXX_OBJ_FILES) $(MCDECODER_COBJ_FILES) $(MCDECODER_CXX_OBJ_FILES)
+	g++ $(COMMON_COBJ_FILES) $(COMMON_CXX_OBJ_FILES) $(MCDECODER_COBJ_FILES) $(MCDECODER_CXX_OBJ_FILES) \
+	$(MCDECODER_CXXFLAGS) $(MCDECODER_LDFLAGS) $(MCDECODER_LDLIBS) -o $(MCDECODER_EXE_FILENAME)
+
+$(MCDECODER_BUILD_DIR):
+	mkdir -p $(MCDECODER_BUILD_DIR)
+
+$(MCDECODER_BUILD_DIR)/%.o: %.c
+	$(MCDECODER_COMPILE_C_COMMAND)
+
+$(MCDECODER_BUILD_DIR)/%.o: %.cpp
+	$(MCDECODER_COMPILE_CXX_COMMAND)
+
+$(MCDECODER_BUILD_DIR)/%.o: $(MCDECODER_DECODER_DIR)/%.c
+	$(MCDECODER_COMPILE_C_COMMAND)
+
+$(MCDECODER_BUILD_DIR)/%.o: $(MCDECODER_DECODER_DIR)/%.cpp
+	$(MCDECODER_COMPILE_CXX_COMMAND)
+
 define athrill-decoder-target
 $(ATHRILL_DECODER_DIR)/$1_mcdecoder.c $(ATHRILL_DECODER_DIR)/$1_mcdhelper.cpp: $(COMMON_TEST_DIR)/$2.yaml
-	mcdecoder generate --output $(ATHRILL_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml; \
-	mcdecoder generate --template $(TEMPLATE_DIR)/athrill_helper --output $(ATHRILL_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
+	mcdecoder generate --output $(ATHRILL_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
+	mcdecoder generate --template $(TEST_TEMPLATE_DIR)/athrill_helper --output $(ATHRILL_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
 
 endef
 
 $(foreach element, $(DECODERS), $(eval \
 	$(call athrill-decoder-target,$(strip $(firstword $(subst :, , $(element)))),$(strip $(word 2, $(subst :, , $(element))))) \
+	))
+
+define mcdecoder-decoder-target
+$(MCDECODER_DECODER_DIR)/$1_mcdecoder.c $(MCDECODER_DECODER_DIR)/$1_mcdhelper.cpp: $(COMMON_TEST_DIR)/$2.yaml
+	mcdecoder generate --template $(SRC_TEMPLATE_DIR)/mcdecoder --output $(MCDECODER_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
+	mcdecoder generate --template $(TEST_TEMPLATE_DIR)/mcdecoder_helper --output $(MCDECODER_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
+
+endef
+
+$(foreach element, $(DECODERS), $(eval \
+	$(call mcdecoder-decoder-target,$(strip $(firstword $(subst :, , $(element)))),$(strip $(word 2, $(subst :, , $(element))))) \
 	))
