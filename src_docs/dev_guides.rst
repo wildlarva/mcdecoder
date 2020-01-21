@@ -29,6 +29,7 @@ How to setup environment for development
 
     # Install python tools and libraries
     pip install -r requirements.txt
+    conan remote add helmesjo https://api.bintray.com/conan/helmesjo/public-conan
 
     # Install ruby tools
     sudo gem install bundler
