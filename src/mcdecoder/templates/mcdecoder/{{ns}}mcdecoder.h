@@ -20,7 +20,7 @@ typedef enum {
 	{{ ns }}InstructionId_kUnknown,
 } {{ ns }}InstructionId;
 
-#define {{ ns }}INSTRUCTION_ID_MAX {{ ns }}kInstructionUnknown
+#define {{ ns }}INSTRUCTION_ID_MAX {{ ns }}InstructionId_kUnknown
 
 {% for inst in instruction_decoders %}
 typedef struct {
