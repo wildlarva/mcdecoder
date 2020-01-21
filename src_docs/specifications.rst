@@ -7,5 +7,6 @@ Specifications
 
     spec_commandline_options
     spec_mc_desc
+    spec_mcdecoder_api
     spec_template_var
     spec_mcdecoder_model
