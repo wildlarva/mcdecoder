@@ -26,6 +26,7 @@ jobs:
         # install python tools and libraries
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        conan remote add helmesjo https://api.bintray.com/conan/helmesjo/public-conan
 
         # install ruby tools
         gem install bundler
