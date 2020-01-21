@@ -406,6 +406,8 @@ class McdDecisionTree:
 @dataclass
 class McDecoder:
     """Decoder itself. The root model element of MC decoder model"""
+    namespace: Optional[str]
+    """Namespace of generated codes"""
     namespace_prefix: str
     """Namespace prefix of generated codes"""
     machine_decoder: MachineDecoder
@@ -503,6 +505,7 @@ def create_mcdecoder_model(mcfile_path: str) -> McDecoder:
 
     extras = mc_desc_model['extras'] if 'extras' in mc_desc_model else None
     return McDecoder(
+        namespace=namespace,
         namespace_prefix=_make_namespace_prefix(namespace),
         machine_decoder=machine_decoder,
         instruction_decoders=instruction_decoders,

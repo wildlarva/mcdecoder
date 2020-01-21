@@ -7,13 +7,17 @@ Requirements for development
 =============================================
 
 * Ubuntu 18.x or above
-* Python 3.8 (with pip and venv)
+* Python 3.8 or above (with pip and venv)
+* Ruby 2.5 or above (with RubyGems)
 
 =============================================
 How to setup environment for development
 =============================================
 
 .. code-block:: bash
+
+    # Install platform tools
+    sudo apt install graphviz
 
     # Clone mcdecoder
     git clone https://github.com/wildlarva/mcdecoder.git
@@ -26,8 +30,9 @@ How to setup environment for development
     # Install python tools and libraries
     pip install -r requirements.txt
 
-    # Install other tools
-    sudo apt install graphviz
+    # Install ruby tools
+    sudo gem install bundler
+    bundle install
 
     # Install mcdecoder
     pip install -e .

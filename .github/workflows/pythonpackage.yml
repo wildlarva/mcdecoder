@@ -19,8 +19,13 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        # install python tools and libraries
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
+        # install ruby tools
+        gem install bundler
+        bundle install
     - name: Lint with flake8
       run: |
         pip install flake8

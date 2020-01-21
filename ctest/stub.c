@@ -4,6 +4,9 @@
 #include "out/atb_mcdecoder.h"
 #include "out/riscv_mcdecoder.h"
 #include "out/pc_mcdecoder.h"
+#include "out/cc_mcdecoder.h"
+#include "out/dt16x2_mcdecoder.h"
+#include "out/dt32x1_mcdecoder.h"
 
 int arm_op_exec_add_1(struct TargetCore *cpu) { return 0; }
 int arm_op_exec_push_1(struct TargetCore *cpu) { return 0; }
