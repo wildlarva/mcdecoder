@@ -7,20 +7,24 @@ include $(BUILD_DIR)/conanbuildinfo.mak
 #----------------------------------------
 
 COMMON_TEST_DIR = ../test
-TEMPLATE_DIR = ../src/mcdecoder/templates
+TEMPLATE_DIR = templates
 STEPS_DIR = features/step_definitions
 DECODER_DIR = out
 
+# <decoder name>:<MC description file name>
+DECODERS = \
+	arm:arm \
+	ab:arm_big \
+	at:arm_thumb \
+	atb:arm_thumb_big \
+	riscv:riscv \
+	pc:primitive_condition \
+	cc:complex_condition \
+	dt16x2:decision_tree_code16x2 \
+	dt32x1:decision_tree_code32x1
+
 DECODER_SRCS = \
-	$(DECODER_DIR)/arm_mcdecoder.c \
-	$(DECODER_DIR)/ab_mcdecoder.c \
-	$(DECODER_DIR)/at_mcdecoder.c \
-	$(DECODER_DIR)/atb_mcdecoder.c \
-	$(DECODER_DIR)/riscv_mcdecoder.c \
-	$(DECODER_DIR)/pc_mcdecoder.c \
-	$(DECODER_DIR)/cc_mcdecoder.c \
-	$(DECODER_DIR)/dt16x2_mcdecoder.c \
-	$(DECODER_DIR)/dt32x1_mcdecoder.c
+	$(foreach element, $(DECODERS), $(DECODER_DIR)/$(strip $(firstword $(subst :, , $(element))))_mcdecoder.c)
 
 CSRCS = \
 	stub.c
@@ -28,7 +32,7 @@ CSRCS = \
 CSRCS += $(DECODER_SRCS)
 
 HELPER_SRCS = \
-	$(patsubst %_mcdecoder.c, %_mcdhelper.cpp, $(DECODER_SRCS))
+	$(foreach element, $(DECODERS), $(DECODER_DIR)/$(strip $(firstword $(subst :, , $(element))))_mcdhelper.cpp)
 
 CPP_SRCS = \
 	mcdhelper.cpp \
@@ -77,10 +81,6 @@ CREATE_EXE_COMMAND = \
 	$(CXXFLAGS) $(LDFLAGS) $(LDLIBS) \
 	-o $(EXE_FILENAME)
 
-CREATE_DECODER_COMMAND = \
-	mcdecoder generate --output $(DECODER_DIR) $<; \
-	mcdecoder generate --template $(TEMPLATE_DIR)/athrill_helper --output $(DECODER_DIR) $<
-
 
 #----------------------------------------
 #	 Make Rules
@@ -119,29 +119,13 @@ $(BUILD_DIR)/%.o: $(DECODER_DIR)/%.cpp
 $(BUILD_DIR)/%.o: $(STEPS_DIR)/%.cpp
 	$(COMPILE_CXX_COMMAND)
 
-$(DECODER_DIR)/arm_mcdecoder.c $(DECODER_DIR)/arm_mcdhelper.cpp: $(COMMON_TEST_DIR)/arm.yaml
-	$(CREATE_DECODER_COMMAND)
+define decoder-target
+$(DECODER_DIR)/$1_mcdecoder.c $(DECODER_DIR)/$1_mcdhelper.cpp: $(COMMON_TEST_DIR)/$2.yaml
+	mcdecoder generate --output $(DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml; \
+	mcdecoder generate --template $(TEMPLATE_DIR)/athrill_helper --output $(DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
 
-$(DECODER_DIR)/ab_mcdecoder.c $(DECODER_DIR)/ab_mcdhelper.cpp: $(COMMON_TEST_DIR)/arm_big.yaml
-	$(CREATE_DECODER_COMMAND)
+endef
 
-$(DECODER_DIR)/at_mcdecoder.c $(DECODER_DIR)/at_mcdhelper.cpp: $(COMMON_TEST_DIR)/arm_thumb.yaml
-	$(CREATE_DECODER_COMMAND)
-
-$(DECODER_DIR)/atb_mcdecoder.c $(DECODER_DIR)/atb_mcdhelper.cpp: $(COMMON_TEST_DIR)/arm_thumb_big.yaml
-	$(CREATE_DECODER_COMMAND)
-
-$(DECODER_DIR)/riscv_mcdecoder.c $(DECODER_DIR)/riscv_mcdhelper.cpp: $(COMMON_TEST_DIR)/riscv.yaml
-	$(CREATE_DECODER_COMMAND)
-
-$(DECODER_DIR)/pc_mcdecoder.c $(DECODER_DIR)/pc_mcdhelper.cpp: $(COMMON_TEST_DIR)/primitive_condition.yaml
-	$(CREATE_DECODER_COMMAND)
-
-$(DECODER_DIR)/cc_mcdecoder.c $(DECODER_DIR)/cc_mcdhelper.cpp: $(COMMON_TEST_DIR)/complex_condition.yaml
-	$(CREATE_DECODER_COMMAND)
-
-$(DECODER_DIR)/dt16x2_mcdecoder.c $(DECODER_DIR)/dt16x2_mcdhelper.cpp: $(COMMON_TEST_DIR)/decision_tree_code16x2.yaml
-	$(CREATE_DECODER_COMMAND)
-
-$(DECODER_DIR)/dt32x1_mcdecoder.c $(DECODER_DIR)/dt32x1_mcdhelper.cpp: $(COMMON_TEST_DIR)/decision_tree_code32x1.yaml
-	$(CREATE_DECODER_COMMAND)
+$(foreach element, $(DECODERS), $(eval \
+	$(call decoder-target,$(strip $(firstword $(subst :, , $(element)))),$(strip $(word 2, $(subst :, , $(element))))) \
+	))

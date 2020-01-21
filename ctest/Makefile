@@ -10,6 +10,7 @@ BUILD_DIR = build
 #----------------------------------------
 
 .PHONY: clean generate setup test
+
 all: setup
 	make -f build.mk all
 
