@@ -1,12 +1,12 @@
-#include "out/arm_mcdecoder.h"
-#include "out/ab_mcdecoder.h"
-#include "out/at_mcdecoder.h"
-#include "out/atb_mcdecoder.h"
-#include "out/riscv_mcdecoder.h"
-#include "out/pc_mcdecoder.h"
-#include "out/cc_mcdecoder.h"
-#include "out/dt16x2_mcdecoder.h"
-#include "out/dt32x1_mcdecoder.h"
+#include "arm_mcdecoder.h"
+#include "ab_mcdecoder.h"
+#include "at_mcdecoder.h"
+#include "atb_mcdecoder.h"
+#include "riscv_mcdecoder.h"
+#include "pc_mcdecoder.h"
+#include "cc_mcdecoder.h"
+#include "dt16x2_mcdecoder.h"
+#include "dt32x1_mcdecoder.h"
 
 int arm_op_exec_add_1(struct TargetCore *cpu) { return 0; }
 int arm_op_exec_push_1(struct TargetCore *cpu) { return 0; }

@@ -10,6 +10,8 @@ COMMON_TEST_DIR = ../test
 TEMPLATE_DIR = templates
 STEPS_DIR = features/step_definitions
 DECODER_DIR = out
+ATHRILL_DECODER_DIR = $(DECODER_DIR)/athrill
+ATHRILL_BUILD_DIR = $(BUILD_DIR)/athrill
 
 # <decoder name>:<MC description file name>
 DECODERS = \
@@ -23,63 +25,91 @@ DECODERS = \
 	dt16x2:decision_tree_code16x2 \
 	dt32x1:decision_tree_code32x1
 
-DECODER_SRCS = \
-	$(foreach element, $(DECODERS), $(DECODER_DIR)/$(strip $(firstword $(subst :, , $(element))))_mcdecoder.c)
-
-CSRCS = \
-	stub.c
-
-CSRCS += $(DECODER_SRCS)
-
-HELPER_SRCS = \
-	$(foreach element, $(DECODERS), $(DECODER_DIR)/$(strip $(firstword $(subst :, , $(element))))_mcdhelper.cpp)
-
-CPP_SRCS = \
+COMMON_CXX_SRCS = \
 	mcdhelper.cpp \
 	$(STEPS_DIR)/mcdecoder_steps.cpp
 
-CPP_SRCS += $(HELPER_SRCS)
+COMMON_CXX_INCLUDES = \
+	.
 
-CXX_OBJ_FILES = \
-	$(patsubst %.c, $(BUILD_DIR)/%.o, $(notdir $(CSRCS))) \
-	$(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir $(CPP_SRCS)))
+COMMON_CXX_OBJ_FILES = $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir $(COMMON_CXX_SRCS)))
 
-CXX_INCLUDES = \
-	. \
-	$(DECODER_DIR)
+ATHRILL_DECODER_SRCS = \
+	$(foreach element, $(DECODERS), $(ATHRILL_DECODER_DIR)/$(strip $(firstword $(subst :, , $(element))))_mcdecoder.c)
 
-EXE_FILENAME = \
-	$(BUILD_DIR)/test
+ATHRILL_HELPER_SRCS = \
+	$(foreach element, $(DECODERS), $(ATHRILL_DECODER_DIR)/$(strip $(firstword $(subst :, , $(element))))_mcdhelper.cpp)
+
+ATHRILL_CSRCS = \
+	stub.c
+
+ATHRILL_CSRCS += $(ATHRILL_DECODER_SRCS)
+
+ATHRILL_CINCLUDES = \
+	$(ATHRILL_DECODER_DIR)
+
+ATHRILL_COBJ_FILES = $(patsubst %.c, $(ATHRILL_BUILD_DIR)/%.o, $(notdir $(ATHRILL_CSRCS)))
+
+ATHRILL_CXX_SRCS = \
+	athrill_setup.cpp
+
+ATHRILL_CXX_SRCS += $(ATHRILL_HELPER_SRCS)
+
+ATHRILL_CXX_INCLUDES = \
+	$(ATHRILL_DECODER_DIR)
+
+ATHRILL_CXX_INCLUDES += $(COMMON_CXX_INCLUDES)
+
+ATHRILL_CXX_OBJ_FILES = $(patsubst %.cpp, $(ATHRILL_BUILD_DIR)/%.o, $(notdir $(ATHRILL_CXX_SRCS)))
+ATHRILL_EXE_FILENAME = $(ATHRILL_BUILD_DIR)/test
 
 
 #----------------------------------------
 #	 Prepare flags from variables
 #----------------------------------------
 
-CFLAGS += $(CONAN_CFLAGS)
-CXXFLAGS += $(CONAN_CXXFLAGS)
-CPPFLAGS += $(addprefix -I, $(CONAN_INCLUDE_DIRS))
-CPPFLAGS += $(addprefix -D, $(CONAN_DEFINES))
-CPPFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
-CPPFLAGS += $(addprefix -I, $(CXX_INCLUDES))
-LDFLAGS += $(addprefix -L, $(CONAN_LIB_DIRS))
-LDLIBS += $(addprefix -l, $(CONAN_LIBS))
+COMMON_CFLAGS = \
+	$(CONAN_CFLAGS) \
+	$(addprefix -I, $(CONAN_INCLUDE_DIRS)) \
+	$(addprefix -D, $(CONAN_DEFINES)) \
+
+COMMON_CXXFLAGS = -D_GLIBCXX_USE_CXX11_ABI=0
+COMMON_CXXFLAGS += \
+	$(CONAN_CXXFLAGS) \
+	$(addprefix -I, $(CONAN_INCLUDE_DIRS)) \
+	$(addprefix -D, $(CONAN_DEFINES)) \
+	$(addprefix -I, $(COMMON_CXX_INCLUDES))
+
+COMMON_LDFLAGS = $(addprefix -L, $(CONAN_LIB_DIRS))
+COMMON_LDLIBS = $(addprefix -l, $(CONAN_LIBS))
+
+ATHRILL_CFLAGS = \
+	$(COMMON_CFLAGS) \
+	$(addprefix -I, $(ATHRILL_CINCLUDES))
+
+ATHRILL_CXXFLAGS = \
+	$(COMMON_CXXFLAGS) \
+	$(addprefix -I, $(ATHRILL_CXX_INCLUDES))
+
+ATHRILL_LDFLAGS = $(COMMON_LDFLAGS)
+ATHRILL_LDLIBS = $(COMMON_LDLIBS)
 
 
 #----------------------------------------
 #	 Make Commands
 #----------------------------------------
 
-COMPILE_CXX_COMMAND = \
-	g++ -c $(CPPFLAGS) $(CXXFLAGS) $< -o $@
+COMMON_COMPILE_C_COMMAND = \
+	gcc -c $(COMMON_CFLAGS) $< -o $@
 
-COMPILE_C_COMMAND = \
-	gcc -c $(CFLAGS) $< -o $@
+COMMON_COMPILE_CXX_COMMAND = \
+	g++ -c $(COMMON_CXXFLAGS) $< -o $@
 
-CREATE_EXE_COMMAND = \
-	g++ $(CXX_OBJ_FILES) \
-	$(CXXFLAGS) $(LDFLAGS) $(LDLIBS) \
-	-o $(EXE_FILENAME)
+ATHRILL_COMPILE_C_COMMAND = \
+	gcc -c $(ATHRILL_CFLAGS) $< -o $@
+
+ATHRILL_COMPILE_CXX_COMMAND = \
+	g++ -c $(ATHRILL_CXXFLAGS) $< -o $@
 
 
 #----------------------------------------
@@ -90,42 +120,53 @@ CREATE_EXE_COMMAND = \
 
 all: exe
 
-generate: $(DECODER_SRCS)
+generate: $(ATHRILL_DECODER_SRCS)
 
-exe: generate $(EXE_FILENAME)
+exe: generate $(ATHRILL_EXE_FILENAME)
 
 clean:
-	rm -vf $(EXE_FILENAME) $(CXX_OBJ_FILES)
+	rm -vf $(COMMON_COBJ_FILES) $(COMMON_CXX_OBJ_FILES)
+	rm -vfr $(ATHRILL_BUILD_DIR)
 	rm -vfr $(DECODER_DIR)
 
 test: exe
-	$(EXE_FILENAME) & bundle exec cucumber
+	$(ATHRILL_EXE_FILENAME) & bundle exec cucumber
 
-$(EXE_FILENAME) : $(CXX_OBJ_FILES)
-	$(CREATE_EXE_COMMAND)
+$(ATHRILL_EXE_FILENAME) : $(ATHRILL_BUILD_DIR) $(COMMON_COBJ_FILES) $(COMMON_CXX_OBJ_FILES) $(ATHRILL_COBJ_FILES) $(ATHRILL_CXX_OBJ_FILES)
+	g++ $(COMMON_COBJ_FILES) $(COMMON_CXX_OBJ_FILES) $(ATHRILL_COBJ_FILES) $(ATHRILL_CXX_OBJ_FILES) \
+	$(ATHRILL_CXXFLAGS) $(ATHRILL_LDFLAGS) $(ATHRILL_LDLIBS) -o $(ATHRILL_EXE_FILENAME)
+
+$(ATHRILL_BUILD_DIR):
+	mkdir -p $(ATHRILL_BUILD_DIR)
 
 $(BUILD_DIR)/%.o: %.c
-	$(COMPILE_C_COMMAND)
-
-$(BUILD_DIR)/%.o: $(DECODER_DIR)/%.c
-	$(COMPILE_C_COMMAND)
+	$(COMMON_COMPILE_C_COMMAND)
 
 $(BUILD_DIR)/%.o: %.cpp
-	$(COMPILE_CXX_COMMAND)
-
-$(BUILD_DIR)/%.o: $(DECODER_DIR)/%.cpp
-	$(COMPILE_CXX_COMMAND)
+	$(COMMON_COMPILE_CXX_COMMAND)
 
 $(BUILD_DIR)/%.o: $(STEPS_DIR)/%.cpp
-	$(COMPILE_CXX_COMMAND)
+	$(COMMON_COMPILE_CXX_COMMAND)
 
-define decoder-target
-$(DECODER_DIR)/$1_mcdecoder.c $(DECODER_DIR)/$1_mcdhelper.cpp: $(COMMON_TEST_DIR)/$2.yaml
-	mcdecoder generate --output $(DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml; \
-	mcdecoder generate --template $(TEMPLATE_DIR)/athrill_helper --output $(DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
+$(ATHRILL_BUILD_DIR)/%.o: %.c
+	$(ATHRILL_COMPILE_C_COMMAND)
+
+$(ATHRILL_BUILD_DIR)/%.o: %.cpp
+	$(ATHRILL_COMPILE_CXX_COMMAND)
+
+$(ATHRILL_BUILD_DIR)/%.o: $(ATHRILL_DECODER_DIR)/%.c
+	$(ATHRILL_COMPILE_C_COMMAND)
+
+$(ATHRILL_BUILD_DIR)/%.o: $(ATHRILL_DECODER_DIR)/%.cpp
+	$(ATHRILL_COMPILE_CXX_COMMAND)
+
+define athrill-decoder-target
+$(ATHRILL_DECODER_DIR)/$1_mcdecoder.c $(ATHRILL_DECODER_DIR)/$1_mcdhelper.cpp: $(COMMON_TEST_DIR)/$2.yaml
+	mcdecoder generate --output $(ATHRILL_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml; \
+	mcdecoder generate --template $(TEMPLATE_DIR)/athrill_helper --output $(ATHRILL_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
 
 endef
 
 $(foreach element, $(DECODERS), $(eval \
-	$(call decoder-target,$(strip $(firstword $(subst :, , $(element)))),$(strip $(word 2, $(subst :, , $(element))))) \
+	$(call athrill-decoder-target,$(strip $(firstword $(subst :, , $(element)))),$(strip $(word 2, $(subst :, , $(element))))) \
 	))
