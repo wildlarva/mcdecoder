@@ -52,10 +52,11 @@ typedef struct {
 /**
  * Decode an instruction
  *
- * @param request decoding request
- * @param result decoding result
+ * @param request Decoding request
+ * @param result Decoding result
+ * @return True if decoding succeeded. False otherwise
  */
-extern bool {{ ns }}decode_instruction(const {{ ns }}DecodeRequest *request, {{ ns }}DecodeResult *result);
+extern bool {{ ns }}DecodeInstruction(const {{ ns }}DecodeRequest *request, {{ ns }}DecodeResult *result);
 
 
 #endif /* !_{{ ns }}MC_DECODER_H_ */

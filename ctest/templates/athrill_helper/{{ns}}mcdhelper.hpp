@@ -3,7 +3,8 @@ namespace mcdhelper {
 
 #pragma region Functions
 
-    extern void setup_decoder(void);
+/** Setup a decoder */
+extern void SetupDecoder(void);
 
 #pragma endregion Functions
 

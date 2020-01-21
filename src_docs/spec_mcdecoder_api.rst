@@ -6,7 +6,7 @@ MC decoder API specification
 Usage
 *********************************
 
-Here's an example of :code:`decode_instruction` usage (without namespace).
+Here's an example of :code:`DecodeInstruction` usage (without namespace).
 
 .. code-block:: c
 
@@ -20,7 +20,7 @@ Here's an example of :code:`decode_instruction` usage (without namespace).
     bool succeeded;
 
     request.codes = &codes[0];
-    succeeded = decode_instruction(&request, &result);
+    succeeded = DecodeInstruction(&request, &result);
 
     /* Decoding succeeded? */
     if (succeeded) {
@@ -96,8 +96,8 @@ Types
 
         where
 
+        * <type>: Appropriate unsigned integer type for the field: :code:`uint8_t`, :code:`uint16_t` or :code:`uint32_t`
         * <field>: Field name
-        * <type>: Appropriate unsigned integer type for the field: :code:`uint8_t`, :code:`uint16_t` or :code:`uint32_t`.
 
 *********************************
 Macros
@@ -111,10 +111,10 @@ Macros
 Functions
 *********************************
 
-.. c:function:: bool decode_instruction(const DecodeRequest *request, DecodeResult *result)
+.. c:function:: bool DecodeInstruction(const DecodeRequest *request, DecodeResult *result)
 
     Decode an instruction
 
-    :param request: decoding request
-    :param result: decoding result
-    :return: :code:`true` if an instruction matches codes. :code:`false` otherwise.
+    :param request: Decoding request
+    :param result: Decoding result
+    :return: :code:`true` if an instruction matches codes. :code:`false` otherwise

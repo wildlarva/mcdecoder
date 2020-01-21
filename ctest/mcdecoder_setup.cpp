@@ -8,15 +8,20 @@
 #include "dt16x2_mcdhelper.hpp"
 #include "dt32x1_mcdhelper.hpp"
 
-void setup_decoders()
+namespace mcdhelper
 {
-    arm::mcdhelper::setup_decoder();
-    ab::mcdhelper::setup_decoder();
-    at::mcdhelper::setup_decoder();
-    atb::mcdhelper::setup_decoder();
-    riscv::mcdhelper::setup_decoder();
-    pc::mcdhelper::setup_decoder();
-    cc::mcdhelper::setup_decoder();
-    dt16x2::mcdhelper::setup_decoder();
-    dt32x1::mcdhelper::setup_decoder();
+
+void SetupDecoders()
+{
+    arm::mcdhelper::SetupDecoder();
+    ab::mcdhelper::SetupDecoder();
+    at::mcdhelper::SetupDecoder();
+    atb::mcdhelper::SetupDecoder();
+    riscv::mcdhelper::SetupDecoder();
+    pc::mcdhelper::SetupDecoder();
+    cc::mcdhelper::SetupDecoder();
+    dt16x2::mcdhelper::SetupDecoder();
+    dt32x1::mcdhelper::SetupDecoder();
 }
+
+} // namespace mcdhelper

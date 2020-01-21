@@ -4,7 +4,7 @@
         {%- if object.element_index is none -%}
             context->result->instruction.{{ instruction.name }}.{{ object.field }}
         {%- else -%}
-            bit_element(context->result->instruction.{{ instruction.name }}.{{ object.field }}, {{ object.element_index }})
+            BitElement(context->result->instruction.{{ instruction.name }}.{{ object.field }}, {{ object.element_index }})
         {%- endif -%}
     {%- elif object.type == 'immediate' -%}
         {{ object.value }}
@@ -52,21 +52,30 @@ typedef struct {
     uint32_t code32x1;
 } DecodeContext;
 
+typedef uint32_t (*SetBitCountFunction)(uint32_t value);
+
 
 /*
  * Internal function declarations
  */
 
-static uint8_t bit_element(uint32_t value, uint8_t element_index);
-static uint32_t setbit_count(uint32_t value);
+static uint8_t BitElement(uint32_t value, uint8_t element_index);
+static uint32_t SetBitCount(uint32_t value);
 {% for tree in mcdecoder.decision_trees -%}
     {% for node in tree.root_node.all_nodes -%}
-        static bool decision_node_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.index }}(DecodeContext *context, uint32_t code);
+        static bool DecisionNode_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.index }}(DecodeContext *context, uint32_t code);
     {% endfor %}
 {% endfor %}
 {% for inst in instruction_decoders -%}
-    static bool decode_instruction_{{ inst.name }}(DecodeContext *context);
+    static bool DecodeInstruction_{{ inst.name }}(DecodeContext *context);
 {% endfor %}
+
+
+/*
+ * Internal global variables
+ */
+
+static const SetBitCountFunction setbit_count = SetBitCount;
 
 
 /*
@@ -74,7 +83,7 @@ static uint32_t setbit_count(uint32_t value);
  */
 
 /* decode function */
-bool {{ ns }}decode_instruction(const {{ ns }}DecodeRequest *request, {{ ns }}DecodeResult *result) {
+bool {{ ns }}DecodeInstruction(const {{ ns }}DecodeRequest *request, {{ ns }}DecodeResult *result) {
     const uint8_t *raw_code = request->codes;
     {% if machine_decoder.byteorder == 'little' -%}
         uint16_t word1_16bit = *((uint16_t *) &raw_code[0]);
@@ -95,7 +104,7 @@ bool {{ ns }}decode_instruction(const {{ ns }}DecodeRequest *request, {{ ns }}De
         context.code32x1 = context.code16x2;
     {% endif %}
     {% for tree in mcdecoder.decision_trees -%}
-        if (decision_node_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ tree.root_node.index }}(&context, context.code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }})) {
+        if (DecisionNode_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ tree.root_node.index }}(&context, context.code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }})) {
             return true;
         }
     {% endfor %}
@@ -108,11 +117,11 @@ bool {{ ns }}decode_instruction(const {{ ns }}DecodeRequest *request, {{ ns }}De
  */
 
 /* functions for conditions */
-static uint8_t bit_element(uint32_t value, uint8_t element_index) {
+static uint8_t BitElement(uint32_t value, uint8_t element_index) {
     return (value & (1u << element_index)) >> element_index;
 }
 
-static uint32_t setbit_count(uint32_t value) {
+static uint32_t SetBitCount(uint32_t value) {
     uint32_t count = 0;
     while (value) {
         count += value & 1;
@@ -123,7 +132,7 @@ static uint32_t setbit_count(uint32_t value) {
 
 /* individual decode functions */
 {% for inst in instruction_decoders %}
-    static bool decode_instruction_{{ inst.name }}(DecodeContext *context) {
+    static bool DecodeInstruction_{{ inst.name }}(DecodeContext *context) {
         if ((context->code{{ inst.encoding_element_bit_length }}x{{ inst.length_of_encoding_elements }} & (0x{{ '%08x'|format(inst.fixed_bits_mask) }}l)) != (0x{{ '%08x'|format(inst.fixed_bits) }}l)) {
             return false;
         }
@@ -156,9 +165,9 @@ static uint32_t setbit_count(uint32_t value) {
 /* decision node functions */
 {% for tree in mcdecoder.decision_trees -%}
     {% for node in tree.root_node.all_nodes -%}
-        static bool decision_node_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.index }}(DecodeContext *context, uint32_t code) {
+        static bool DecisionNode_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.index }}(DecodeContext *context, uint32_t code) {
             {% for inst in node.instructions -%}
-                if (decode_instruction_{{ inst.name }}(context)) {
+                if (DecodeInstruction_{{ inst.name }}(context)) {
                     return true;
                 }
             {% endfor %}
@@ -166,7 +175,7 @@ static uint32_t setbit_count(uint32_t value) {
                 switch (code & 0x{{ '%08x'|format(node.mask) }}) {
                     {% for threshold_value, child_node in node.fixed_bit_nodes.items() -%}
                         case 0x{{ '%08x'|format(threshold_value) }}:
-                            if (decision_node_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ child_node.index }}(context, code)) {
+                            if (DecisionNode_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ child_node.index }}(context, code)) {
                                 return true;
                             }
                             break;
@@ -174,7 +183,7 @@ static uint32_t setbit_count(uint32_t value) {
                 }
             {% endif %}
             {% if node.arbitrary_bit_node -%}
-                if (decision_node_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.arbitrary_bit_node.index }}(context, code)) {
+                if (DecisionNode_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.arbitrary_bit_node.index }}(context, code)) {
                     return true;
                 }
             {% endif %}

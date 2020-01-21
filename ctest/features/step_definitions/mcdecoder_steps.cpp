@@ -12,15 +12,13 @@ using cucumber::ScenarioScope;
 struct McdCtx
 {
     std::string decoder_name;
-    bool result_code;
+    bool succeeded;
     mcdhelper::DecodeResult result;
 };
 
-extern void setup_decoders();
-
 BEFORE_ALL()
 {
-    setup_decoders();
+    mcdhelper::SetupDecoders();
 }
 
 GIVEN("^decoding instructions with the decoder \"([^\"]+)\"$")
@@ -38,36 +36,36 @@ WHEN("^I decode \"([^\"]+)\"$")
 
     // Get the byte length of code
     // In hex string, 2 characters correspond to 1 byte
-    const int byte_char_len = 2;
-    int byte_length = std::min((int)(code_str.length() / byte_char_len), 4);
+    const int kByteCharLen = 2;
+    int byte_length = std::min((int)(code_str.length() / kByteCharLen), 4);
 
     // Convert hex string to integer array
     uint8_t codes[4];
     for (int i = 0; i < byte_length; i++)
     {
-        codes[i] = std::stoul(code_str.substr(i * byte_char_len, byte_char_len), nullptr, 16);
+        codes[i] = std::stoul(code_str.substr(i * kByteCharLen, kByteCharLen), nullptr, 16);
     }
 
     // Decode
     mcdhelper::DecodeRequest request;
     request.decoder_name = context->decoder_name;
-    request.codes = (const uint8_t *)&codes[0];
+    request.codes = (const uint8_t*)&codes[0];
 
-    context->result_code = mcdhelper::decode_instruction(request, &context->result);
+    context->succeeded = mcdhelper::DecodeInstruction(request, &context->result);
 }
 
 THEN("^the decoding should be succeeded$")
 {
     ScenarioScope<McdCtx> context;
 
-    EXPECT_TRUE(context->result_code);
+    EXPECT_TRUE(context->succeeded);
 }
 
 THEN("^the decoding should be failed$")
 {
     ScenarioScope<McdCtx> context;
 
-    EXPECT_FALSE(context->result_code);
+    EXPECT_FALSE(context->succeeded);
 }
 
 THEN("^the instruction should be \"([^\"]+)\"$")
@@ -97,8 +95,8 @@ THEN("^the fields \"([^\"]+)\" should be \"([^\"]+)\"$")
     // Test the fields
     for (int i = 0; i < fields.size(); i++)
     {
-        const std::string &field = fields[i];
-        const std::string &str_expected_value = str_expected_values[i];
+        const std::string& field = fields[i];
+        const std::string& str_expected_value = str_expected_values[i];
         uint32_t expected_value = std::stoul(str_expected_value, nullptr, 16);
 
         EXPECT_EQ(expected_value, context->result.fields[field]);

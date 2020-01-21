@@ -5,34 +5,60 @@
 namespace mcdhelper
 {
 
-#pragma region Data types
+#pragma region Types
 
-typedef struct
+/** Decoding request */
+struct DecodeRequest
 {
-    std::string decoder_name; // Name of a decoder
-    const uint8_t *codes; // Codes to be input
-} DecodeRequest;
+    std::string decoder_name; /** Name of a decoder */
+    const uint8_t* codes;     /** Codes to be input */
+};
 
-typedef struct
+/** Decoding result */
+struct DecodeResult
 {
-    std::string instruction_name; // Name of a matched instruction
-    std::map<std::string, uint32_t> fields; // Decoded field values
-} DecodeResult;
+    std::string instruction_name;           /** Name of a matched instruction */
+    std::map<std::string, uint32_t> fields; /** Decoded field values */
+};
 
-typedef bool (*DecodeFunction)(const DecodeRequest &request, DecodeResult *result);
+/**
+ * Decoding function
+ * 
+ * @param request Decoding request
+ * @param result Decoding result
+ * @return True if decoding succeeded. False otherwise
+ */
+typedef bool (*DecodeFunction)(const DecodeRequest& request, DecodeResult* result);
 
-typedef struct
+/** Decoder information */
+struct Decoder
 {
-    std::string decoder_name;  // Name of a decoder
-    DecodeFunction decode_function; // Function to decode an instruction
-} Decoder;
+    std::string decoder_name;       /** Name of a decoder */
+    DecodeFunction decode_function; /** Function to decode an instruction */
+};
 
-#pragma endregion Data types
+#pragma endregion Types
 
 #pragma region Functions
 
-extern bool decode_instruction(const DecodeRequest &request, DecodeResult *result);
-extern void regist_decoder(const Decoder &decoder);
+/**
+ * Decode an instruction
+ * 
+ * @param request Decoding request
+ * @param result Decoding result
+ * @return True if decoding succeeded. False otherwise
+ */
+extern bool DecodeInstruction(const DecodeRequest& request, DecodeResult* result);
+
+/**
+ * Register a decoder
+ * 
+ * @param decoder Decoder to be registered
+ */
+extern void RegistDecoder(const Decoder& decoder);
+
+/** Hook to setup decoders */
+extern void SetupDecoders();
 
 #pragma endregion Functions
 

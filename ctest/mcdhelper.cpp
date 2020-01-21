@@ -3,15 +3,15 @@
 namespace mcdhelper
 {
 
-#pragma region Global variables
+#pragma region Internal global variables
 
 static std::map<std::string, Decoder> decoders;
 
-#pragma endregion Global variables
+#pragma endregion Internal global variables
 
 #pragma region External functions
 
-bool decode_instruction(const DecodeRequest &request, DecodeResult *result)
+bool DecodeInstruction(const DecodeRequest& request, DecodeResult* result)
 {
     std::map<std::string, Decoder>::iterator pair = decoders.find(request.decoder_name);
     if (pair == decoders.end())
@@ -22,7 +22,7 @@ bool decode_instruction(const DecodeRequest &request, DecodeResult *result)
     return pair->second.decode_function(request, result);
 }
 
-void regist_decoder(const Decoder &decoder)
+void RegistDecoder(const Decoder& decoder)
 {
     decoders[decoder.decoder_name] = decoder;
 }
