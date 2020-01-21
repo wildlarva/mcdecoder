@@ -171,12 +171,16 @@
 <h2>Requirements for development<a class="headerlink" href="#requirements-for-development" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Ubuntu 18.x or above</p></li>
-<li><p>Python 3.8 (with pip and venv)</p></li>
+<li><p>Python 3.8 or above (with pip and venv)</p></li>
+<li><p>Ruby 2.5 or above (with RubyGems)</p></li>
 </ul>
 </div>
 <div class="section" id="how-to-setup-environment-for-development">
 <h2>How to setup environment for development<a class="headerlink" href="#how-to-setup-environment-for-development" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone mcdecoder</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install platform tools</span>
+sudo apt install graphviz
+
+<span class="c1"># Clone mcdecoder</span>
 git clone https://github.com/wildlarva/mcdecoder.git
 
 <span class="c1"># Create virtual environment and switch to it</span>
@@ -187,8 +191,9 @@ python3.8 -m venv env
 <span class="c1"># Install python tools and libraries</span>
 pip install -r requirements.txt
 
-<span class="c1"># Install other tools</span>
-sudo apt install graphviz
+<span class="c1"># Install ruby tools</span>
+sudo gem install bundler
+bundle install
 
 <span class="c1"># Install mcdecoder</span>
 pip install -e .

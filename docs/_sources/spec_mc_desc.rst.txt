@@ -228,7 +228,7 @@ In-a-range condition
 It defines a condition to test that a field value is
 in a given value range(inclusive).
 
-When the field 'cond' is in a range 10 to 15,
+When the field 'cond' is in a range from 10 to 15,
 
 .. code-block:: yaml
 

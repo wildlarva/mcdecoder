@@ -1033,7 +1033,7 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="class">
 <dt id="mcdecoder.core.McDecoder">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McDecoder</code><span class="sig-paren">(</span><em class="sig-param">namespace_prefix: str, machine_decoder: mcdecoder.core.MachineDecoder, instruction_decoders: List[mcdecoder.core.InstructionDecoder], decision_trees: List[mcdecoder.core.McdDecisionTree], extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.McDecoder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McDecoder</code><span class="sig-paren">(</span><em class="sig-param">namespace: Optional[str], namespace_prefix: str, machine_decoder: mcdecoder.core.MachineDecoder, instruction_decoders: List[mcdecoder.core.InstructionDecoder], decision_trees: List[mcdecoder.core.McdDecisionTree], extras: Optional[Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.McDecoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decoder itself. The root model element of MC decoder model</p>
 <dl class="attribute">
@@ -1058,6 +1058,12 @@ to test an instruction field is in a value range(inclusive)</p>
 <dt id="mcdecoder.core.McDecoder.machine_decoder">
 <code class="sig-name descname">machine_decoder</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDecoder.machine_decoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child MachineDecoder</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="mcdecoder.core.McDecoder.namespace">
+<code class="sig-name descname">namespace</code><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDecoder.namespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Namespace of generated codes</p>
 </dd></dl>
 
 <dl class="attribute">
