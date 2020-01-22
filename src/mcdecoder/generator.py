@@ -27,7 +27,7 @@ def generate(mcfile_path: str, type: Optional[str] = None, template_directory: O
     """
     # Default output directory to the current
     if type is None:
-        type = 'mcdecoder'
+        type = 'c_decoder'
 
     # Check if the generator exists
     if not (type in _GENERATOR_TYPES):
