@@ -15,18 +15,18 @@ Here is an overview of MC description.
 .. literalinclude:: spec_mc_desc.yaml
 
 **********************************************
-machine: Describes a machine
+machine
 **********************************************
 
 :code:`machine` describes the specification of a machine.
 
-machine.byteorder: Byte order of a machine
+machine.byteorder
 ========================================================================================================
 
 :code:`byteorder` is the byte order of a machine.
 It can be :code:`big` (big endian) or :code:`little` (little endian).
 
-machine.extras: User-defined data for a machine
+machine.extras
 ========================================================================================================
 
 :code:`extras` defines user-defined data for a machine.
@@ -48,25 +48,27 @@ Here is an example of defining a sequence as user-defined data.
       - 20
 
 **********************************************
-instructions: Describes instructions
+instructions
 **********************************************
 
 :code:`instructions` describes the specification of instructions.
 Each list element in :code:`instructions` represents an instruction.
 
-instructions.name: Name of an instruction
+instructions.name
 ========================================================================================================
 
 :code:`name` defines the name of an instruction.
 
-instructions.format: Encoding format of an instruction
+instructions.format
 ========================================================================================================
 
 :code:`format` defines the encoding format of an instruction.
+
 Instruction can be split into multiple parts,
 which are named instruction fields.
 One field can be split into several bit ranges.
 Each bit range is called a subfield in a field.
+
 An instruction can be constructed by multiple N-byte words.
 Each word is called an encoding element in an instruction.
 
@@ -135,10 +137,10 @@ where
 
     NOTE: This is an LSB in a field, not in an instruction.
 
-instructions.match_condition: Condition an instruction applys
+instructions.match_condition
 ========================================================================================================
 
-:code:`match_condition` defines the bit condition when an instruction applys.
+:code:`match_condition` defines the condition when an instruction applys.
 The following condition types are supported.
 
 * Equality: The equality between a field value and a given value.
@@ -305,7 +307,7 @@ Common expressions
     Base 2, 10 or 16 integer values like :code:`15`, :code:`0b1111`,
     :code:`0xf`, etc.
 
-instructions.unmatch_condition: Condition an instruction doesn't apply
+instructions.unmatch_condition
 ===================================================================================
 
 :code:`unmatch_condition` defines the condition
@@ -313,7 +315,7 @@ when an instruction does not apply.
 The expression is the same as that of :code:`match_condition`.
 :code:`unmatch_condition` is mutually exclusive with :code:`match_condition`.
 
-instructions.extras: User-defined data for an instruction
+instructions.extras
 ========================================================================================================
 
 :code:`extras` defines user-defined data for an instruction.
@@ -334,7 +336,7 @@ Here is an example of defining a sequence as user-defined data.
       - 10
       - 20
 
-instructions.field_extras: User-defined data for each field
+instructions.field_extras
 ================================================================================
 
 :code:`field_extras` defines user-defined data for each field.
@@ -359,23 +361,23 @@ Here is an example of defining a sequence as user-defined data.
       imm12: [30, 40] # User-defined data for the field 'imm12'
 
 ********************************************************************************************
-decoder: Decoder information of the global scope
+decoder
 ********************************************************************************************
 
-:code:`decoder` is a decoder information that isn't related to a machine,
-an instruction and a field.
+:code:`decoder` is a decoder information for the global scope,
+which isn't related to a machine, an instruction and a field.
 
-decoder.namespace: Namespace for the symbols of a generated decoder
+decoder.namespace
 ========================================================================================================
 
 :code:`namespace` defines the namespace for the symbols of a generated decoder.
 
 ******************************************************************************************************
-extras: User-defined data of the global scope
+extras
 ******************************************************************************************************
 
-:code:`extras` defines user-defined data that isn't related to a machine,
-an instruction and a field.
+:code:`extras` defines user-defined data for the global scope,
+which isn't related to a machine, an instruction and a field.
 Any structure can be defined as user-defined data.
 
 Here is an example of defining a mapping as user-defined data.
@@ -398,7 +400,7 @@ Here is an example of defining a sequence as user-defined data.
 Additional specifications
 *************************
 
-!include: Split a description into multiple files
+!include tag
 =========================================================
 
 You can split a description into multiple files by using :code:`!include` tag.

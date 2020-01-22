@@ -6,7 +6,6 @@ machine:
 instructions:
   - name: add_1
     format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12
-    unmatch_condition: cond == 15
     extras:
       # User-defined data for the instruction 'add_1'
       clocks: 10
@@ -16,7 +15,6 @@ instructions:
       imm12: {type: immediate} # User-defined data for the field 'imm12'
   - name: push_1
     format: xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list
-    match_condition: cond in_range 0-14
     # No user-defined data are defined for the instruction 'push_1'
 decoder:
   namespace: arm
