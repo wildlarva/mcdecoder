@@ -1,6 +1,6 @@
 # README: mcdecoder
 
-mcdecoder (Machine Code Decoder) is a set of tools to implement a machine code decoder. It includes tools to:
+The mcdecoder (Machine Code Decoder) is a set of tools to implement a machine code decoder. It includes tools to:
 
 - Generate a decoder for a user-defined machine code specification
 - Emulate a decoder for a binary data and show decoded result
@@ -49,8 +49,8 @@ For more details, follow Installation steps below and go on to [Quickstart tutor
 - Learners of the basics about machine codes
   - Hands-on approach to learn: write and test actual machine codes
 
-Implementing and maintaining a decoder are tough and cumbersome. mcdecoder soothes these pains by generating a decoder.
-mcdecoder was originally developed for [athrill](https://github.com/tmori/athrill/), a CPU emulator.
+Implementing and maintaining a decoder are tough and cumbersome. The mcdecoder soothes these pains by generating a decoder.
+The mcdecoder was originally developed for [athrill](https://github.com/tmori/athrill/), a CPU emulator.
 It will be independent from athrill and be a more general tool in the near future.
 
 ## Requirements

@@ -1,5 +1,5 @@
 ################################
-mcdecoder documentation
+The mcdecoder documentation
 ################################
 
 .. toctree::

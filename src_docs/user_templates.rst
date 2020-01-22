@@ -4,7 +4,7 @@ User templates
 
 Some users need user-specific decoder codes or
 some codes to support decoders like constant tables.
-mcdecoder allows users to define user-specific code templates
+The mcdecoder allows users to define user-specific code templates
 to generate those codes.
 This is called user templates.
 
@@ -36,7 +36,7 @@ Make :code:`arm.yaml` that contains the following content.
 =============================================
 
 Second, you must define user-defined templates.
-mcdecoder uses :download:`Jinja2 <https://jinja.palletsprojects.com/>` syntax for templates.
+The mcdecoder uses :download:`Jinja2 <https://jinja.palletsprojects.com/>` syntax for templates.
 See :download:`Template Designer Documentation <https://jinja.palletsprojects.com/templates/>` to understand the template syntax.
 
 You can use template variables in your template, such as
