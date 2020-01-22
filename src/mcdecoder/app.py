@@ -92,11 +92,11 @@ def _create_parser() -> argparse.ArgumentParser:
               mcdecoder generate --template user_templates --output out mc.yaml
             '''))  # noqa: W293
     generator_group = generate_parser.add_mutually_exclusive_group()
-    generator_group.add_argument('--type', dest='generator_type', help=textwrap.dedent('''\
+    generator_group.add_argument('--type', metavar='type', dest='generator_type', help=textwrap.dedent('''\
         The type of a generator used for generating codes. Possible generators are:
 
-        * mcdecoder: Standard decoder API
-        * athrill: Decoder API for athrill
+        * c_decoder: Generating standard decoder API in C
+        * athrill: Generating decoder API for athrill
         '''))
     generator_group.add_argument(
         '--template', metavar='templatedir', dest='template_directory',

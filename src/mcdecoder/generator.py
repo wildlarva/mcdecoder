@@ -57,7 +57,7 @@ def generate(mcfile_path: str, type: Optional[str] = None, template_directory: O
 
 # region Internal global variables
 
-_GENERATOR_TYPES: FrozenSet[str] = frozenset(['mcdecoder', 'athrill'])
+_GENERATOR_TYPES: FrozenSet[str] = frozenset(['c_decoder', 'athrill'])
 """Generator types for generating codes"""
 
 
