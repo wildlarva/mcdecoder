@@ -147,6 +147,15 @@ Development structure and dependencies
     node [shape=box]
     edge [style=dotted]
 
+    subgraph cluster_conan {
+        label = "Conan"
+
+        cucumber_cpp [label = "Cucumber-Cpp"]
+        google_test [label = "Google Test"]
+
+        cucumber_cpp -> google_test
+    }
+
     subgraph cluster_sphinx {
         label = "Sphinx"
 
@@ -154,18 +163,20 @@ Development structure and dependencies
         sphinx_jsonschema [label = "Sphinx\nJSON Schema"]
         sphinx_rtd_theme [label = "Read the Docs\nSphinx Theme"]
         m2r [label = "M2R"]
-        graphviz [label = "Graphviz"]
     }
 
-    subgraph cluster_conan {
-        label = "Conan"
+    subgraph cluster_bundler {
+        label = "Bundler"
 
-        google_test [label = "Google Test"]
+        cucumber [label = "Cucumber"]
     }
+
+    graphviz [label = "Graphviz"]
 
     mcdecoder -> pytest
+    mcdecoder -> cucumber -> cucumber_cpp
     mcdecoder -> sphinx_rtd_theme [lhead=cluster_sphinx]
-    mcdecoder -> google_test [lhead=cluster_conan]
+    sphinx_rtd_theme -> graphviz [ltail=cluster_sphinx]
 
 Packages
 ================================================
@@ -177,7 +188,10 @@ Packages
     ============================= ==========================================================
     mcdecoder                     This project
     pytest                        Used to test mcdecoder
+    Bundler                       Used to fix the version of Cucumber
+    Cucumber                      Used to test generated decoders
     Conan                         Used to manage packages of C/C++
+    Cucumber-Cpp                  Used to test generated decoders in C/C++
     Google Test                   Used to test generated decoders in C/C++
     Sphinx                        Used to build documents
     sphinx-argparse               Used to build documents about command line options
