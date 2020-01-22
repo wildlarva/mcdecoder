@@ -11,7 +11,7 @@ from . import common, core
 # region External functions
 
 
-def check(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None) -> int:
+def check(mcfile: str, bit_pattern: str, base: Literal[2, 16] = 16) -> int:
     """
     Implementation of the sub-command 'check'.
 
@@ -26,10 +26,6 @@ def check(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None) -> int:
     :param base: Base of integer that specifies the expression of binary data
     :return: Exit code of mcdecoder
     """
-    # Default
-    if base is None:
-        base = 16
-
     # Check and output progress
     print('-' * 80)
     print('Checking instructions...')

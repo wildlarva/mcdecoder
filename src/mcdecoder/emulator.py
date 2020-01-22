@@ -5,7 +5,7 @@ from . import common, core
 # region External functions
 
 
-def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None, byteorder: Literal['big', 'little'] = None) -> int:
+def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = 16, byteorder: Literal['big', 'little'] = 'big') -> int:
     """
     Implementation of the sub-command 'emulate'.
 
@@ -20,12 +20,6 @@ def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = None, byteorde
     :param byteorder: Byte order of bit_pattern
     :return: Exit code of mcdecoder
     """
-    # Default
-    if base is None:
-        base = 16
-    if byteorder is None:
-        byteorder = 'big'
-
     # Emulate
     instruction_results = _emulate(mcfile, bit_pattern, base, byteorder)
 

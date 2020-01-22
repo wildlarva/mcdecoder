@@ -478,15 +478,15 @@ class InstructionDecodeResult:
 # region External functions
 
 
-def create_mcdecoder_model(mcfile_path: str) -> McDecoder:
+def create_mcdecoder_model(mcfile: str) -> McDecoder:
     """
     Create a model which contains information of MC decoder
 
-    :param mcfile_path: Path to an MC description file
+    :param mcfile: Path to an MC description file
     :return: Created McDecoder
     """
     # Load MC description
-    mc_desc_model = load_mc_description_model(mcfile_path)
+    mc_desc_model = load_mc_description_model(mcfile)
 
     # Create machine and instruction decoders
     machine_decoder = _create_machine_decoder_model(mc_desc_model['machine'])
@@ -514,16 +514,16 @@ def create_mcdecoder_model(mcfile_path: str) -> McDecoder:
     )
 
 
-def load_mc_description_model(mcfile_path: str) -> McDescription:
+def load_mc_description_model(mcfile: str) -> McDescription:
     """
     Load an MC description file and validate against the schema
 
-    :param mcfile_path: Path to an MC description file
+    :param mcfile: Path to an MC description file
     :return: Loaded McDescription
     """
     # Load MC description
-    _yaml_include_context.base_dir = os.path.dirname(mcfile_path)
-    with open(mcfile_path, 'rb') as file:
+    _yaml_include_context.base_dir = os.path.dirname(mcfile)
+    with open(mcfile, 'rb') as file:
         mc_desc_model = yaml.load(file, Loader=yaml.Loader)
 
     # Validate
@@ -671,8 +671,8 @@ class _InstructionEncodingDescriptionTransformer(lark.Transformer):
             -> InstructionEncodingElementDescription:
         return InstructionEncodingElementDescription(fields=field_encodings)
 
-    def field_encoding(self, field_bits: str, field_name: str = None,
-                       field_bit_ranges: List[BitRangeDescription] = None) -> InstructionFieldEncodingDescription:
+    def field_encoding(self, field_bits: str, field_name: Optional[str] = None,
+                       field_bit_ranges: Optional[List[BitRangeDescription]] = None) -> InstructionFieldEncodingDescription:
         if field_bit_ranges is None:
             field_bit_ranges = [BitRangeDescription(
                 start=len(field_bits) - 1, end=0)]
@@ -687,7 +687,7 @@ class _InstructionEncodingDescriptionTransformer(lark.Transformer):
     def field_bit_ranges(self, field_bit_ranges: List[BitRangeDescription]) -> List[BitRangeDescription]:
         return field_bit_ranges
 
-    def field_bit_range(self, subfield_start: int, subfield_end: int = None) -> BitRangeDescription:
+    def field_bit_range(self, subfield_start: int, subfield_end: Optional[int] = None) -> BitRangeDescription:
         if subfield_end is None:
             subfield_end = subfield_start
         return BitRangeDescription(start=subfield_start, end=subfield_end)

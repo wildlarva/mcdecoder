@@ -9,7 +9,7 @@ from . import common, core
 # region External functions
 
 
-def generate(mcfile_path: str, type: Optional[str] = None, template_directory: Optional[str] = None,
+def generate(mcfile: str, type: Optional[str] = None, template_directory: Optional[str] = None,
              output_directory: str = '.') -> int:
     """
     Implementation the sub-command 'generate'.
@@ -19,7 +19,7 @@ def generate(mcfile_path: str, type: Optional[str] = None, template_directory: O
     If output_directory is not specified, it is defaulted to the current directory.
     If template_directory is not specified, the default decoder template (athrill decoder) is used.
 
-    :param mcfile_path: Path to an MC description file
+    :param mcfile: Path to an MC description file
     :param type: Code type to generate
     :param template_directory: Path to a directory including template files
     :param output_directory: Path to an output directory of generated codes
@@ -35,7 +35,7 @@ def generate(mcfile_path: str, type: Optional[str] = None, template_directory: O
         return 1
 
     # Create decoder model
-    mcdecoder_model = core.create_mcdecoder_model(mcfile_path)
+    mcdecoder_model = core.create_mcdecoder_model(mcfile)
 
     # Create template loader
     if template_directory is None:
