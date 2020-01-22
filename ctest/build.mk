@@ -45,10 +45,7 @@ ATHRILL_DECODER_SRCS = \
 ATHRILL_HELPER_SRCS = \
 	$(foreach element, $(DECODERS), $(ATHRILL_DECODER_DIR)/$(strip $(firstword $(subst :, , $(element))))_mcdhelper.cc)
 
-ATHRILL_CSRCS = \
-	stub.c
-
-ATHRILL_CSRCS += $(ATHRILL_DECODER_SRCS)
+ATHRILL_CSRCS = $(ATHRILL_DECODER_SRCS)
 
 ATHRILL_CINCLUDES = \
 	$(ATHRILL_DECODER_DIR)

@@ -50,16 +50,5 @@ typedef struct {
 
 extern int {{ ns }}op_parse({{ ns }}uint16 code[{{ ns }}OP_DECODE_MAX], {{ ns }}OpDecodedCodeType *decoded_code, {{ ns }}OperationCodeType *optype);
 
-struct TargetCore;
-typedef struct {
-	int clocks;
-	int (*exec) (struct TargetCore *cpu);
-} {{ ns }}OpExecType;
-extern {{ ns }}OpExecType {{ ns }}op_exec_table[{{ ns }}OpCodeId_Num];
-
-{% for inst in instruction_decoders -%}
-extern int {{ ns }}op_exec_{{ inst.name }}(struct TargetCore *core);
-{% endfor -%}
-
 
 #endif /* !_{{ ns }}MC_DECODER_H_ */

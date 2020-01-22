@@ -184,9 +184,3 @@ int {{ ns }}op_parse({{ ns }}uint16 code[{{ ns }}OP_DECODE_MAX], {{ ns }}OpDecod
     {% endfor %}
     return 1;
 }
-
-{{ ns }}OpExecType {{ ns }}op_exec_table[{{ ns }}OpCodeId_Num] = {
-    {% for inst in instruction_decoders %}
-	{ 1, {{ ns }}op_exec_{{ inst.name }} },		/* {{ inst.name }} */
-    {% endfor %}
-};

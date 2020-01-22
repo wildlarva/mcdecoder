@@ -14,6 +14,8 @@ To use user templates, follow the steps below:
 2. Create user-defined template files
 3. Generate codes with the created template
 
+Here's a tutorial for user templates.
+
 1. Add user-defined data to an MC description
 =============================================
 
