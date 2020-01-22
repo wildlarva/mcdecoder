@@ -2,87 +2,71 @@
 #define _MC_DECODER_H_
 
 #include <stdint.h>
+#include <stdbool.h>
 
-typedef uint8_t uint8;
-typedef uint16_t uint16;
-typedef uint32_t uint32;
 
-#define OP_CODE_FORMAT_NUM OP_CODE_FORMAT_UNKNOWN
+/*
+ * Types
+ */
 
-typedef enum
-{
+/** Decoding request */
+typedef struct {
+	const uint8_t *codes;	/** Codes to be input */
+} DecodeRequest;
 
-	OP_CODE_FORMAT_add_immediate_a1,
+/** Instruction id to identify a decoded instruction */
+typedef enum {
+	InstructionId_k_add_immediate_a1,	/** add_immediate_a1 */
+	InstructionId_k_push_a1,	/** push_a1 */
+	
+	InstructionId_kUnknown, /** Unknown instruction */
+} InstructionId;
 
-	OP_CODE_FORMAT_push_a1,
+/** Number of instruction ids */
+#define INSTRUCTION_ID_MAX InstructionId_kUnknown
 
-	OP_CODE_FORMAT_UNKNOWN,
-} OpCodeFormatId;
 
-typedef enum
-{
+	/** Decoding result for add_immediate_a1 */
+	typedef struct {
+		uint8_t cond;	/** Bit 31-28: Decoding result for cond */
+		uint8_t S;	/** Bit 20-20: Decoding result for S */
+		uint8_t Rn;	/** Bit 19-16: Decoding result for Rn */
+		uint8_t Rd;	/** Bit 15-12: Decoding result for Rd */
+		uint16_t imm12;	/** Bit 11-0: Decoding result for imm12 */
+		
+	} InstructionDecodeResult_add_immediate_a1;
 
-	OpCodeId_add_immediate_a1,
+	/** Decoding result for push_a1 */
+	typedef struct {
+		uint8_t cond;	/** Bit 31-28: Decoding result for cond */
+		uint16_t register_list;	/** Bit 15-0: Decoding result for register_list */
+		
+	} InstructionDecodeResult_push_a1;
 
-	OpCodeId_push_a1,
 
-	OpCodeId_Num,
-} OpCodeId;
+/** Decoding result */
+typedef struct {
+	InstructionId instruction_id;	/** Decoded instruction id */
+    union {
+		InstructionDecodeResult_add_immediate_a1 add_immediate_a1;	/** Decoding result for add_immediate_a1 */
+		InstructionDecodeResult_push_a1 push_a1;	/** Decoding result for push_a1 */
+		
+    } instruction;	/** Decoding result for an instruction */
+} DecodeResult;
 
-typedef struct
-{
-	OpCodeFormatId format_id;
-	OpCodeId code_id;
-} OperationCodeType;
 
-typedef struct
-{
+/*
+ * Functions
+ */
 
-	uint8 cond; /* 31-28 */
+/**
+ * Decode an instruction
+ *
+ * @param request Decoding request
+ * @param result Decoding result
+ * @return True if decoding succeeded. False otherwise
+ */
+extern bool DecodeInstruction(const DecodeRequest *request, DecodeResult *result);
 
-	uint8 S; /* 20-20 */
 
-	uint8 Rn; /* 19-16 */
-
-	uint8 Rd; /* 15-12 */
-
-	uint16 imm12; /* 11-0 */
-
-} OpCodeFormatType_add_immediate_a1;
-
-typedef struct
-{
-
-	uint8 cond; /* 31-28 */
-
-	uint16 register_list; /* 15-0 */
-
-} OpCodeFormatType_push_a1;
-
-typedef struct
-{
-	OpCodeFormatId type_id;
-	union {
-
-		OpCodeFormatType_add_immediate_a1 add_immediate_a1;
-
-		OpCodeFormatType_push_a1 push_a1;
-
-	} code;
-} OpDecodedCodeType;
-
-#define OP_DECODE_MAX (3)
-
-extern int op_parse(uint16 code[OP_DECODE_MAX], OpDecodedCodeType *decoded_code, OperationCodeType *optype);
-
-struct TargetCore;
-typedef struct
-{
-	int clocks;
-	int (*exec)(struct TargetCore *cpu);
-} OpExecType;
-extern OpExecType op_exec_table[OpCodeId_Num];
-
-extern int op_exec_add_immediate_a1(struct TargetCore *core);
-extern int op_exec_push_a1(struct TargetCore *core);
 #endif /* !_MC_DECODER_H_ */

@@ -1,148 +1,175 @@
-
-
 #include "mcdecoder.h"
 
-typedef struct
-{
-    uint16 *code;
-    OpDecodedCodeType *decoded_code;
-    OperationCodeType *optype;
-    uint16 code16;
-    uint32 code32;
-} OpDecodeContext;
 
-/* op constants */
+/*
+ * Types
+ */
 
-/* add_immediate_a1 */
-#define OP_FB_MASK_add_immediate_a1 (0x0fe00000l) /* fixed bits mask */
-#define OP_FB_add_immediate_a1 (0x02800000l)      /* fixed bits */
+typedef struct {
+    const DecodeRequest *request;
+    DecodeResult *result;
+    uint16_t code16x1;
+    uint32_t code16x2;
+    uint32_t code32x1;
+} DecodeContext;
 
-/* 0th subfield of the field 'cond' */
-#define OP_SF_MASK_add_immediate_a1_cond_0 (0xf0000000l) /* subfield mask */
-#define OP_SF_EBII_add_immediate_a1_cond_0 (28)          /* subfield end bit position in instruction */
-#define OP_SF_EBIF_add_immediate_a1_cond_0 (0)           /* subfield end bit position in field */
+typedef uint32_t (*SetBitCountFunction)(uint32_t value);
 
-/* 0th subfield of the field 'S' */
-#define OP_SF_MASK_add_immediate_a1_S_0 (0x00100000l) /* subfield mask */
-#define OP_SF_EBII_add_immediate_a1_S_0 (20)          /* subfield end bit position in instruction */
-#define OP_SF_EBIF_add_immediate_a1_S_0 (0)           /* subfield end bit position in field */
 
-/* 0th subfield of the field 'Rn' */
-#define OP_SF_MASK_add_immediate_a1_Rn_0 (0x000f0000l) /* subfield mask */
-#define OP_SF_EBII_add_immediate_a1_Rn_0 (16)          /* subfield end bit position in instruction */
-#define OP_SF_EBIF_add_immediate_a1_Rn_0 (0)           /* subfield end bit position in field */
+/*
+ * Internal function declarations
+ */
 
-/* 0th subfield of the field 'Rd' */
-#define OP_SF_MASK_add_immediate_a1_Rd_0 (0x0000f000l) /* subfield mask */
-#define OP_SF_EBII_add_immediate_a1_Rd_0 (12)          /* subfield end bit position in instruction */
-#define OP_SF_EBIF_add_immediate_a1_Rd_0 (0)           /* subfield end bit position in field */
+static bool DecisionNode_code32x1_0(DecodeContext *context, uint32_t code);
+    static bool DecisionNode_code32x1_1(DecodeContext *context, uint32_t code);
+    static bool DecisionNode_code32x1_2(DecodeContext *context, uint32_t code);
+    
 
-/* 0th subfield of the field 'imm12' */
-#define OP_SF_MASK_add_immediate_a1_imm12_0 (0x00000fffl) /* subfield mask */
-#define OP_SF_EBII_add_immediate_a1_imm12_0 (0)           /* subfield end bit position in instruction */
-#define OP_SF_EBIF_add_immediate_a1_imm12_0 (0)           /* subfield end bit position in field */
+static bool DecodeInstruction_add_immediate_a1(DecodeContext *context);
+static bool DecodeInstruction_push_a1(DecodeContext *context);
 
-/* push_a1 */
-#define OP_FB_MASK_push_a1 (0x0fff0000l) /* fixed bits mask */
-#define OP_FB_push_a1 (0x092d0000l)      /* fixed bits */
+static uint32_t SetBitCount(uint32_t value);
+static uint8_t BitElement(uint32_t value, uint8_t element_index);
 
-/* 0th subfield of the field 'cond' */
-#define OP_SF_MASK_push_a1_cond_0 (0xf0000000l) /* subfield mask */
-#define OP_SF_EBII_push_a1_cond_0 (28)          /* subfield end bit position in instruction */
-#define OP_SF_EBIF_push_a1_cond_0 (0)           /* subfield end bit position in field */
 
-/* 0th subfield of the field 'register_list' */
-#define OP_SF_MASK_push_a1_register_list_0 (0x0000ffffl) /* subfield mask */
-#define OP_SF_EBII_push_a1_register_list_0 (0)           /* subfield end bit position in instruction */
-#define OP_SF_EBIF_push_a1_register_list_0 (0)           /* subfield end bit position in field */
+/*
+ * Internal global variables
+ */
 
-/* individual op parse functions */
+static const SetBitCountFunction setbit_count = SetBitCount;
 
-/* add_immediate_a1 */
-static int op_parse_add_immediate_a1(OpDecodeContext *context)
-{
-    if ((context->code32 & OP_FB_MASK_add_immediate_a1) != OP_FB_add_immediate_a1)
-    {
-        return 1;
-    }
 
-    context->optype->code_id = OpCodeId_add_immediate_a1;
-    context->optype->format_id = OP_CODE_FORMAT_add_immediate_a1;
-    context->decoded_code->type_id = OP_CODE_FORMAT_add_immediate_a1;
+/*
+ * External function definitions
+ */
 
-    context->decoded_code->code.add_immediate_a1.cond =
+/* decode function */
+bool DecodeInstruction(const DecodeRequest *request, DecodeResult *result) {
+    const uint8_t *raw_code = request->codes;
+    uint16_t word1_16bit = *((uint16_t *) &raw_code[0]);
+        uint16_t word2_16bit = *((uint16_t *) &raw_code[2]);
+    
 
-        (((context->code32 & OP_SF_MASK_add_immediate_a1_cond_0) >> OP_SF_EBII_add_immediate_a1_cond_0) << OP_SF_EBIF_add_immediate_a1_cond_0);
-
-    context->decoded_code->code.add_immediate_a1.S =
-
-        (((context->code32 & OP_SF_MASK_add_immediate_a1_S_0) >> OP_SF_EBII_add_immediate_a1_S_0) << OP_SF_EBIF_add_immediate_a1_S_0);
-
-    context->decoded_code->code.add_immediate_a1.Rn =
-
-        (((context->code32 & OP_SF_MASK_add_immediate_a1_Rn_0) >> OP_SF_EBII_add_immediate_a1_Rn_0) << OP_SF_EBIF_add_immediate_a1_Rn_0);
-
-    context->decoded_code->code.add_immediate_a1.Rd =
-
-        (((context->code32 & OP_SF_MASK_add_immediate_a1_Rd_0) >> OP_SF_EBII_add_immediate_a1_Rd_0) << OP_SF_EBIF_add_immediate_a1_Rd_0);
-
-    context->decoded_code->code.add_immediate_a1.imm12 =
-
-        (((context->code32 & OP_SF_MASK_add_immediate_a1_imm12_0) >> OP_SF_EBII_add_immediate_a1_imm12_0) << OP_SF_EBIF_add_immediate_a1_imm12_0);
-
-    return 0;
+    DecodeContext context;
+    context.request = request;
+    context.result = result;
+    context.code16x1 = word1_16bit;
+    context.code16x2 = (((uint32_t) word1_16bit) << 16) | ((uint32_t) word2_16bit);
+    context.code32x1 = *((uint32_t *) &raw_code[0]);
+    
+    if (DecisionNode_code32x1_0(&context, context.code32x1)) {
+            return true;
+        }
+    
+    return false;
 }
 
-/* push_a1 */
-static int op_parse_push_a1(OpDecodeContext *context)
-{
-    if ((context->code32 & OP_FB_MASK_push_a1) != OP_FB_push_a1)
-    {
-        return 1;
+
+/*
+ * Internal function definitions
+ */
+
+/* decision node functions */
+static bool DecisionNode_code32x1_0(DecodeContext *context, uint32_t code) {
+            
+            switch (code & 0x0fe00000) {
+                    case 0x02800000:
+                            if (DecisionNode_code32x1_1(context, code)) {
+                                return true;
+                            }
+                            break;
+                    case 0x09200000:
+                            if (DecisionNode_code32x1_2(context, code)) {
+                                return true;
+                            }
+                            break;
+                    
+                default:
+                    break;
+                }
+            
+            
+            return false;
+        }
+    static bool DecisionNode_code32x1_1(DecodeContext *context, uint32_t code) {
+            if (DecodeInstruction_add_immediate_a1(context)) {
+                    return true;
+                }
+            
+            
+            
+            return false;
+        }
+    static bool DecisionNode_code32x1_2(DecodeContext *context, uint32_t code) {
+            if (DecodeInstruction_push_a1(context)) {
+                    return true;
+                }
+            
+            
+            
+            return false;
+        }
+    
+
+
+/* individual decode functions */
+
+    static bool DecodeInstruction_add_immediate_a1(DecodeContext *context) {
+        if ((context->code32x1 & (0x0fe00000l)) != (0x02800000l)) {
+            return false;
+        }
+
+        context->result->instruction_id = InstructionId_k_add_immediate_a1;
+        context->result->instruction.add_immediate_a1.cond =
+            (((context->code32x1 & (0xf0000000l)) >> (28)) << (0));
+            
+        context->result->instruction.add_immediate_a1.S =
+            (((context->code32x1 & (0x00100000l)) >> (20)) << (0));
+            
+        context->result->instruction.add_immediate_a1.Rn =
+            (((context->code32x1 & (0x000f0000l)) >> (16)) << (0));
+            
+        context->result->instruction.add_immediate_a1.Rd =
+            (((context->code32x1 & (0x0000f000l)) >> (12)) << (0));
+            
+        context->result->instruction.add_immediate_a1.imm12 =
+            (((context->code32x1 & (0x00000fffl)) >> (0)) << (0));
+            
+        
+        
+        
+        return true;
     }
 
-    context->optype->code_id = OpCodeId_push_a1;
-    context->optype->format_id = OP_CODE_FORMAT_push_a1;
-    context->decoded_code->type_id = OP_CODE_FORMAT_push_a1;
+    static bool DecodeInstruction_push_a1(DecodeContext *context) {
+        if ((context->code32x1 & (0x0fff0000l)) != (0x092d0000l)) {
+            return false;
+        }
 
-    context->decoded_code->code.push_a1.cond =
+        context->result->instruction_id = InstructionId_k_push_a1;
+        context->result->instruction.push_a1.cond =
+            (((context->code32x1 & (0xf0000000l)) >> (28)) << (0));
+            
+        context->result->instruction.push_a1.register_list =
+            (((context->code32x1 & (0x0000ffffl)) >> (0)) << (0));
+            
+        
+        
+        
+        return true;
+    }
 
-        (((context->code32 & OP_SF_MASK_push_a1_cond_0) >> OP_SF_EBII_push_a1_cond_0) << OP_SF_EBIF_push_a1_cond_0);
 
-    context->decoded_code->code.push_a1.register_list =
-
-        (((context->code32 & OP_SF_MASK_push_a1_register_list_0) >> OP_SF_EBII_push_a1_register_list_0) << OP_SF_EBIF_push_a1_register_list_0);
-
-    return 0;
+/* functions for conditions */
+static uint32_t SetBitCount(uint32_t value) {
+    uint32_t count = 0;
+    while (value) {
+        count += value & 1;
+        value >>= 1;
+    }
+    return count;
 }
 
-/* op parse function */
-int op_parse(uint16 code[OP_DECODE_MAX], OpDecodedCodeType *decoded_code, OperationCodeType *optype)
-{
-    OpDecodeContext context;
-    context.code = &code[0];
-    context.decoded_code = decoded_code;
-    context.optype = optype;
-    context.code16 = (uint16)code[0];
-    context.code32 = *((uint32 *)&code[0]);
-
-    if (op_parse_add_immediate_a1(&context) == 0)
-    {
-        return 0;
-    }
-
-    if (op_parse_push_a1(&context) == 0)
-    {
-        return 0;
-    }
-
-    return 1;
+static uint8_t BitElement(uint32_t value, uint8_t element_index) {
+    return (value & (1u << element_index)) >> element_index;
 }
-
-OpExecType op_exec_table[OpCodeId_Num] = {
-
-    {1, op_exec_add_immediate_a1}, /* add_immediate_a1 */
-
-    {1, op_exec_push_a1}, /* push_a1 */
-
-};

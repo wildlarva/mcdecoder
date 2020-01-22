@@ -1,4 +1,5 @@
 import os
+from typing import FrozenSet, Optional
 
 import jinja2
 
@@ -8,7 +9,8 @@ from . import common, core
 # region External functions
 
 
-def generate(mcfile_path: str, output_directory: str = None, template_directory: str = None) -> int:
+def generate(mcfile_path: str, type: Optional[str] = None, template_directory: Optional[str] = None,
+             output_directory: str = '.') -> int:
     """
     Implementation the sub-command 'generate'.
 
@@ -18,20 +20,26 @@ def generate(mcfile_path: str, output_directory: str = None, template_directory:
     If template_directory is not specified, the default decoder template (athrill decoder) is used.
 
     :param mcfile_path: Path to an MC description file
-    :param output_directory: Path to an output directory of generated codes
+    :param type: Code type to generate
     :param template_directory: Path to a directory including template files
+    :param output_directory: Path to an output directory of generated codes
     :return: Exit code of mcdecoder
     """
     # Default output directory to the current
-    if output_directory is None:
-        output_directory = '.'
+    if type is None:
+        type = 'mcdecoder'
+
+    # Check if the generator exists
+    if not (type in _GENERATOR_TYPES):
+        print(f'Unknown generator type: {type}')
+        return 1
 
     # Create decoder model
     mcdecoder_model = core.create_mcdecoder_model(mcfile_path)
 
     # Create template loader
     if template_directory is None:
-        loader = jinja2.PackageLoader('mcdecoder', 'templates/athrill')
+        loader = jinja2.PackageLoader('mcdecoder', f'templates/{type}')
     else:
         loader = jinja2.FileSystemLoader(template_directory)
 
@@ -46,6 +54,14 @@ def generate(mcfile_path: str, output_directory: str = None, template_directory:
 
 
 # endregion
+
+# region Internal global variables
+
+_GENERATOR_TYPES: FrozenSet[str] = frozenset(['mcdecoder', 'athrill'])
+"""Generator types for generating codes"""
+
+
+# region Internal global variables
 
 # region Internal functions
 

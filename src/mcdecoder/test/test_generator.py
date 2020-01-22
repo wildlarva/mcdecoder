@@ -12,10 +12,19 @@ from ..core import (
 from ..generator import _generate, generate
 
 
-def test_generate_without_template_dir() -> None:
+def test_generate_without_arguments() -> None:
     shutil.rmtree('out', ignore_errors=True)
 
     assert generate('test/arm.yaml', output_directory='out') == 0
+    assert os.path.isfile('out/arm_mcdecoder.c') is True
+    assert os.path.isfile('out/arm_mcdecoder.h') is True
+
+
+def test_generate_with_type() -> None:
+    shutil.rmtree('out', ignore_errors=True)
+
+    assert generate('test/arm.yaml', type='athrill',
+                    output_directory='out') == 0
     assert os.path.isfile('out/arm_mcdecoder.c') is True
     assert os.path.isfile('out/arm_mcdecoder.h') is True
 

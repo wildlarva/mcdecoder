@@ -231,7 +231,7 @@ $(MCDECODER_BUILD_DIR)/%.o: $(MCDECODER_DECODER_DIR)/%.cc
 
 define athrill-decoder-target
 $(ATHRILL_DECODER_DIR)/$1_mcdecoder.c $(ATHRILL_DECODER_DIR)/$1_mcdhelper.cc: $(COMMON_TEST_DIR)/$2.yaml
-	mcdecoder generate --output $(ATHRILL_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
+	mcdecoder generate --type athrill --output $(ATHRILL_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
 	mcdecoder generate --template $(TEST_TEMPLATE_DIR)/athrill_helper --output $(ATHRILL_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
 
 endef
@@ -242,7 +242,7 @@ $(foreach element, $(DECODERS), $(eval \
 
 define mcdecoder-decoder-target
 $(MCDECODER_DECODER_DIR)/$1_mcdecoder.c $(MCDECODER_DECODER_DIR)/$1_mcdhelper.cc: $(COMMON_TEST_DIR)/$2.yaml
-	mcdecoder generate --template $(SRC_TEMPLATE_DIR)/mcdecoder --output $(MCDECODER_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
+	mcdecoder generate --output $(MCDECODER_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
 	mcdecoder generate --template $(TEST_TEMPLATE_DIR)/mcdecoder_helper --output $(MCDECODER_DECODER_DIR) $(COMMON_TEST_DIR)/$2.yaml
 
 endef

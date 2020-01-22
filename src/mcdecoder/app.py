@@ -29,8 +29,8 @@ def run_app(argv: List[str]) -> int:
 
     # Run an individual command
     if args.command == 'generate':
-        return generator.generate(
-            cast(str, args.mcfile), output_directory=args.output_directory, template_directory=args.template_directory)
+        return generator.generate(cast(str, args.mcfile), type=args.generator_type, template_directory=args.template_directory,
+                                  output_directory=cast(str, args.output_directory))
 
     elif args.command == 'export':
         return exporter.export(cast(str, args.mcfile), cast(str, args.output_file))
@@ -56,6 +56,7 @@ class _Arguments:
     mcfile: Optional[str]
     output_directory: Optional[str]
     output_file: Optional[str]
+    generator_type: Optional[str]
     template_directory: Optional[str]
     bit_pattern: Optional[str]
     base: Optional[Literal[2, 16]]
@@ -83,23 +84,33 @@ def _create_parser() -> argparse.ArgumentParser:
               
               # Generate a decoder to 'out' directory
               mcdecoder generate --output out mc.yaml
+
+              # Generate codes with the generator 'athrill'
+              mcdecoder generate --type athrill --output out mc.yaml
               
               # Generate codes according to user-defined template files in 'user_templates' directory
               mcdecoder generate --template user_templates --output out mc.yaml
             '''))  # noqa: W293
-    generate_parser.add_argument(
-        '--output', metavar='outdir', dest='output_directory', default='.', help='A path to an output directory (default: .)')
-    generate_parser.add_argument(
+    generator_group = generate_parser.add_mutually_exclusive_group()
+    generator_group.add_argument('--type', dest='generator_type', help=textwrap.dedent('''\
+        The type of a generator used for generating codes. Possible generators are:
+
+        * mcdecoder: Standard decoder API
+        * athrill: Decoder API for athrill
+        '''))
+    generator_group.add_argument(
         '--template', metavar='templatedir', dest='template_directory',
         help='A path to a directoy including user-defined template files')
+    generate_parser.add_argument(
+        '--output', metavar='outdir', dest='output_directory', default='.', help='A path to an output directory (default: .)')
     generate_parser.add_argument(
         'mcfile', help='A path to a machine code description file')
 
     # Create a subparser for the command 'export'
     export_parser = subparsers.add_parser(
-        'export', formatter_class=argparse.RawTextHelpFormatter, help='Export an MC description as another format. Currently, mcdecoder only supports CSV format', description='Export an MC description as another format. Currently, mcdecoder only supports CSV format', epilog=textwrap.dedent('''\
+        'export', formatter_class=argparse.RawTextHelpFormatter, help='Export an MC description as another format. Currently, mcdecoder only supports CSV format', description='Export an MC description as another format. Currently, mcdecoder only supports CSV format', epilog=textwrap.dedent('''
             Usage::
-              
+
               # Export a MC description as CSV format
               mcdecoder export --output mc.csv mc.yaml
             '''))  # noqa: W293
@@ -112,13 +123,13 @@ def _create_parser() -> argparse.ArgumentParser:
     emulate_parser = subparsers.add_parser(
         'emulate', formatter_class=argparse.RawTextHelpFormatter, help='Emulate a decoder by inputting binary data', description='Emulate a decoder by inputting binary data', epilog=textwrap.dedent('''\
             Usage::
-              
+
               # Emulate a decoder when inputting e92d4800
               mcdecoder emulate --pattern e92d4800 mc.yaml
-              
+
               # Emulate a decoder when inputting '1110 1001 0010 1101 0100 1000 0000 0000'
               mcdecoder emulate --base 2 --pattern '1110 1001 0010 1101 0100 1000 0000 0000' mc.yaml
-              
+
               # Emulate a decoder when inputting e92d4800 as little endian
               mcdecoder emulate --byteorder little --pattern 00482de9 mc.yaml
             '''))  # noqa: W293
@@ -143,13 +154,13 @@ def _create_parser() -> argparse.ArgumentParser:
               * Duplicate instructions are defined for a certain binary data
 
             Usage::
-              
+
               # Check by inputting the range from 092d4800 to f92d4800 to a decoder
               mcdecoder check --pattern x92d4800 mc.yaml
-              
+
               # Check by inputting the range from '1010 1001 0010 1101 0100 1000 0000 0000' to '1110 1001 0010 1101 0100 1000 0000 0000' to a decoder
               mcdecoder check --base 2 --pattern '1x10 1001 0010 1101 0100 1000 0000 0000' mc.yaml
-              
+
               # Check by inputting the range from 002d4800 to ff2d4800 to a decoder
               mcdecoder check --pattern xx2d4800 mc.yaml
             '''))  # noqa: E501, W293
