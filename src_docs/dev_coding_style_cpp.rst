@@ -20,6 +20,8 @@ This project
     <base>_<generated>.
     The generated part is optional.
 
+    Examples:
+
     * Type: DecodeRequest, DecodeResult_add, etc.
     * Constant: kInstructionIdMax, kDecodeErrorsMax, etc.
     * Function: DecodeInstruction, PrintInstruction_add, etc.
