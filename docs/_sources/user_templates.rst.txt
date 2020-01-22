@@ -14,7 +14,6 @@ To use user templates, follow the steps below:
 2. Create user-defined template files
 3. Generate codes with the created template
 
-=============================================
 1. Add user-defined data to an MC description
 =============================================
 
@@ -31,7 +30,6 @@ Make :code:`arm.yaml` that contains the following content.
    :language: yaml
    :caption: arm.yaml
 
-=============================================
 2. Create user-defined template files
 =============================================
 
@@ -61,7 +59,6 @@ create the following template files.
    :language: jinja
    :caption: templates/{{ns}}constants.c
 
-=============================================
 3. Generate codes with the created template
 =============================================
 
@@ -88,7 +85,6 @@ And the generated files will be:
 
 You can see :download:`example files in this tutorial in github <https://github.com/wildlarva/mcdecoder/blob/master/examples/user_templates>`.
 
-=============================================
 What's next?
 =============================================
 

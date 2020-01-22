@@ -88,8 +88,14 @@
 <li class="toctree-l1 current"><a class="reference internal" href="specifications.html">Specifications</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="spec_commandline_options.html">Command line option specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spec_mc_desc.html">MC description specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_mcdecoder_api.html">MC decoder API specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spec_template_var.html">Template variable specification</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">MC decoder model specification</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MC decoder model specification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#decoders">Decoders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conditions">Conditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decision-tree">Decision tree</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a></li>
@@ -161,6 +167,8 @@
             
   <div class="section" id="mc-decoder-model-specification">
 <h1>MC decoder model specification<a class="headerlink" href="#mc-decoder-model-specification" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="decoders">
+<h2>Decoders<a class="headerlink" href="#decoders" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McDecoder</code><span class="sig-paren">(</span><em class="sig-param">namespace: Optional[str], namespace_prefix: str, machine_decoder: mcdecoder.core.MachineDecoder, instruction_decoders: List[mcdecoder.core.InstructionDecoder], decision_trees: List[mcdecoder.core.McdDecisionTree], extras: Optional[Any]</em><span class="sig-paren">)</span></dt>
@@ -358,6 +366,9 @@
 
 </dd></dl>
 
+</div>
+<div class="section" id="conditions">
+<h2>Conditions<a class="headerlink" href="#conditions" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDecoderCondition</code></dt>
@@ -570,6 +581,9 @@ to test an instruction field is in a value range(inclusive)</p>
 
 </dd></dl>
 
+</div>
+<div class="section" id="decision-tree">
+<h2>Decision tree<a class="headerlink" href="#decision-tree" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt>
 <em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McdDecisionTree</code><span class="sig-paren">(</span><em class="sig-param">encoding_element_bit_length: int</em>, <em class="sig-param">length_of_encoding_elements: int</em>, <em class="sig-param">root_node: mcdecoder.core.McdDecisionNode</em><span class="sig-paren">)</span></dt>
@@ -644,6 +658,7 @@ to test an instruction field is in a value range(inclusive)</p>
 
 </dd></dl>
 
+</div>
 </div>
 
 

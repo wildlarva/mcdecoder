@@ -194,12 +194,13 @@
 </div>
 </li>
 <li><p>Use the decoder from a client</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">OpDecodedCodeType</span> <span class="n">decoded_code</span><span class="p">;</span>
-<span class="n">OperationCodeType</span> <span class="n">optype</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">result</span><span class="p">;</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">const</span> <span class="kt">uint8_t</span> <span class="n">kMachineCodes</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x8D</span><span class="p">,</span> <span class="mh">0xE2</span><span class="p">,</span> <span class="p">};</span>
+<span class="n">DecodeRequest</span> <span class="n">request</span><span class="p">;</span>
+<span class="n">DecodeResult</span> <span class="n">result</span><span class="p">;</span>
+<span class="kt">bool</span> <span class="n">succeeded</span><span class="p">;</span>
 
-<span class="n">uint8</span> <span class="n">machine_codes</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x8D</span><span class="p">,</span> <span class="mh">0xE2</span><span class="p">,</span> <span class="p">};</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">op_parse</span><span class="p">((</span><span class="n">uint16</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">machine_codes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">decoded_code</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">optype</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="n">codes</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">kMachineCodes</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="n">succeeded</span> <span class="o">=</span> <span class="n">DecodeInstruction</span><span class="p">(</span><span class="o">&amp;</span><span class="n">request</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">result</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>

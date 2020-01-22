@@ -98,6 +98,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="spec_mc_desc.html">MC description specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spec_mcdecoder_api.html">MC decoder API specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spec_template_var.html">Template variable specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spec_mcdecoder_model.html">MC decoder model specification</a></li>
 </ul>
@@ -189,7 +190,7 @@
 <div class="section" id="generate">
 <h3>generate<a class="headerlink" href="#generate" title="Permalink to this headline">¶</a></h3>
 <p>Generate a decoder or other codes to support a decoder</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder generate <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--output outdir<span class="o">]</span> <span class="o">[</span>--template templatedir<span class="o">]</span> mcfile
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder generate <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--type <span class="nb">type</span> <span class="p">|</span> --template templatedir<span class="o">]</span> <span class="o">[</span>--output outdir<span class="o">]</span> mcfile
 </pre></div>
 </div>
 <div class="section" id="Positional Arguments_repeat1">
@@ -203,18 +204,28 @@
 <div class="section" id="Named Arguments">
 <h4>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
-<dt><kbd>--output</kbd></dt>
-<dd><p>A path to an output directory (default: .)</p>
-<p>Default: “.”</p>
+<dt><kbd>--type</kbd></dt>
+<dd><p>The type of a generator used for generating codes. Possible generators are:</p>
+<ul class="simple">
+<li><p>c_decoder: Generating standard decoder API in C</p></li>
+<li><p>athrill: Generating decoder API for athrill</p></li>
+</ul>
 </dd>
 <dt><kbd>--template</kbd></dt>
 <dd><p>A path to a directoy including user-defined template files</p>
+</dd>
+<dt><kbd>--output</kbd></dt>
+<dd><p>A path to an output directory (default: .)</p>
+<p>Default: “.”</p>
 </dd>
 </dl>
 </div>
 <p>Usage:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a decoder to &#39;out&#39; directory</span>
 mcdecoder generate --output out mc.yaml
+
+<span class="c1"># Generate codes with the generator &#39;athrill&#39;</span>
+mcdecoder generate --type athrill --output out mc.yaml
 
 <span class="c1"># Generate codes according to user-defined template files in &#39;user_templates&#39; directory</span>
 mcdecoder generate --template user_templates --output out mc.yaml

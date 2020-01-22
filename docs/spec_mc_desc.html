@@ -37,7 +37,7 @@
   <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Template variable specification" href="spec_template_var.html" />
+    <link rel="next" title="MC decoder API specification" href="spec_mcdecoder_api.html" />
     <link rel="prev" title="Command line option specification" href="spec_commandline_options.html" /> 
 </head>
 
@@ -89,32 +89,33 @@
 <li class="toctree-l2"><a class="reference internal" href="spec_commandline_options.html">Command line option specification</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">MC description specification</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#machine-describes-a-machine">machine: Describes a machine</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#machine-byteorder-byte-order-of-a-machine">machine.byteorder: Byte order of a machine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#machine-extras-user-defined-data-for-a-machine">machine.extras: User-defined data for a machine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#machine">machine</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#machine-byteorder">machine.byteorder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#machine-extras">machine.extras</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#instructions-describes-instructions">instructions: Describes instructions</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#instructions-name-name-of-an-instruction">instructions.name: Name of an instruction</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#instructions-format-encoding-format-of-an-instruction">instructions.format: Encoding format of an instruction</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#instructions-match-condition-condition-an-instruction-applys">instructions.match_condition: Condition an instruction applys</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#instructions-unmatch-condition-condition-an-instruction-doesn-t-apply">instructions.unmatch_condition: Condition an instruction doesn’t apply</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#instructions-extras-user-defined-data-for-an-instruction">instructions.extras: User-defined data for an instruction</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#instructions-field-extras-user-defined-data-for-each-field">instructions.field_extras: User-defined data for each field</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#instructions">instructions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#instructions-name">instructions.name</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#instructions-format">instructions.format</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#instructions-match-condition">instructions.match_condition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#instructions-unmatch-condition">instructions.unmatch_condition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#instructions-extras">instructions.extras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#instructions-field-extras">instructions.field_extras</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#decoder-decoder-information-of-the-global-scope">decoder: Decoder information of the global scope</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#decoder-namespace-namespace-for-the-symbols-of-a-generated-decoder">decoder.namespace: Namespace for the symbols of a generated decoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decoder">decoder</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#decoder-namespace">decoder.namespace</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#extras-user-defined-data-of-the-global-scope">extras: User-defined data of the global scope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extras">extras</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#additional-specifications">Additional specifications</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#include-split-a-description-into-multiple-files">!include: Split a description into multiple files</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#include-tag">!include tag</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#schema-specification">Schema specification</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="spec_mcdecoder_api.html">MC decoder API specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spec_template_var.html">Template variable specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spec_mcdecoder_model.html">MC decoder model specification</a></li>
 </ul>
@@ -223,16 +224,16 @@ Here is an overview of MC description.</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="machine-describes-a-machine">
-<h2>machine: Describes a machine<a class="headerlink" href="#machine-describes-a-machine" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="machine">
+<h2>machine<a class="headerlink" href="#machine" title="Permalink to this headline">¶</a></h2>
 <p><code class="code docutils literal notranslate"><span class="pre">machine</span></code> describes the specification of a machine.</p>
-<div class="section" id="machine-byteorder-byte-order-of-a-machine">
-<h3>machine.byteorder: Byte order of a machine<a class="headerlink" href="#machine-byteorder-byte-order-of-a-machine" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="machine-byteorder">
+<h3>machine.byteorder<a class="headerlink" href="#machine-byteorder" title="Permalink to this headline">¶</a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">byteorder</span></code> is the byte order of a machine.
 It can be <code class="code docutils literal notranslate"><span class="pre">big</span></code> (big endian) or <code class="code docutils literal notranslate"><span class="pre">little</span></code> (little endian).</p>
 </div>
-<div class="section" id="machine-extras-user-defined-data-for-a-machine">
-<h3>machine.extras: User-defined data for a machine<a class="headerlink" href="#machine-extras-user-defined-data-for-a-machine" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="machine-extras">
+<h3>machine.extras<a class="headerlink" href="#machine-extras" title="Permalink to this headline">¶</a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">extras</span></code> defines user-defined data for a machine.
 Any structure can be defined as user-defined data.</p>
 <p>Here is an example of defining a mapping as user-defined data.</p>
@@ -248,22 +249,22 @@ Any structure can be defined as user-defined data.</p>
 </div>
 </div>
 </div>
-<div class="section" id="instructions-describes-instructions">
-<h2>instructions: Describes instructions<a class="headerlink" href="#instructions-describes-instructions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="instructions">
+<h2>instructions<a class="headerlink" href="#instructions" title="Permalink to this headline">¶</a></h2>
 <p><code class="code docutils literal notranslate"><span class="pre">instructions</span></code> describes the specification of instructions.
 Each list element in <code class="code docutils literal notranslate"><span class="pre">instructions</span></code> represents an instruction.</p>
-<div class="section" id="instructions-name-name-of-an-instruction">
-<h3>instructions.name: Name of an instruction<a class="headerlink" href="#instructions-name-name-of-an-instruction" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="instructions-name">
+<h3>instructions.name<a class="headerlink" href="#instructions-name" title="Permalink to this headline">¶</a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">name</span></code> defines the name of an instruction.</p>
 </div>
-<div class="section" id="instructions-format-encoding-format-of-an-instruction">
-<h3>instructions.format: Encoding format of an instruction<a class="headerlink" href="#instructions-format-encoding-format-of-an-instruction" title="Permalink to this headline">¶</a></h3>
-<p><code class="code docutils literal notranslate"><span class="pre">format</span></code> defines the encoding format of an instruction.
-Instruction can be split into multiple parts,
+<div class="section" id="instructions-format">
+<h3>instructions.format<a class="headerlink" href="#instructions-format" title="Permalink to this headline">¶</a></h3>
+<p><code class="code docutils literal notranslate"><span class="pre">format</span></code> defines the encoding format of an instruction.</p>
+<p>Instruction can be split into multiple parts,
 which are named instruction fields.
 One field can be split into several bit ranges.
-Each bit range is called a subfield in a field.
-An instruction can be constructed by multiple N-byte words.
+Each bit range is called a subfield in a field.</p>
+<p>An instruction can be constructed by multiple N-byte words.
 Each word is called an encoding element in an instruction.</p>
 <p>Here is an example of instruction fields
 (the fields ‘cond’, ‘S’, ‘Rn’, ‘Rd’ and ‘imm12’).</p>
@@ -311,9 +312,9 @@ Bit ranges are separated by comma symbol(<code class="code docutils literal notr
 </dd>
 </dl>
 </div>
-<div class="section" id="instructions-match-condition-condition-an-instruction-applys">
-<h3>instructions.match_condition: Condition an instruction applys<a class="headerlink" href="#instructions-match-condition-condition-an-instruction-applys" title="Permalink to this headline">¶</a></h3>
-<p><code class="code docutils literal notranslate"><span class="pre">match_condition</span></code> defines the bit condition when an instruction applys.
+<div class="section" id="instructions-match-condition">
+<h3>instructions.match_condition<a class="headerlink" href="#instructions-match-condition" title="Permalink to this headline">¶</a></h3>
+<p><code class="code docutils literal notranslate"><span class="pre">match_condition</span></code> defines the condition when an instruction applys.
 The following condition types are supported.</p>
 <ul class="simple">
 <li><p>Equality: The equality between a field value and a given value.</p></li>
@@ -438,15 +439,15 @@ in a given value range(inclusive).</p>
 </dl>
 </div>
 </div>
-<div class="section" id="instructions-unmatch-condition-condition-an-instruction-doesn-t-apply">
-<h3>instructions.unmatch_condition: Condition an instruction doesn’t apply<a class="headerlink" href="#instructions-unmatch-condition-condition-an-instruction-doesn-t-apply" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="instructions-unmatch-condition">
+<h3>instructions.unmatch_condition<a class="headerlink" href="#instructions-unmatch-condition" title="Permalink to this headline">¶</a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">unmatch_condition</span></code> defines the condition
 when an instruction does not apply.
 The expression is the same as that of <code class="code docutils literal notranslate"><span class="pre">match_condition</span></code>.
 <code class="code docutils literal notranslate"><span class="pre">unmatch_condition</span></code> is mutually exclusive with <code class="code docutils literal notranslate"><span class="pre">match_condition</span></code>.</p>
 </div>
-<div class="section" id="instructions-extras-user-defined-data-for-an-instruction">
-<h3>instructions.extras: User-defined data for an instruction<a class="headerlink" href="#instructions-extras-user-defined-data-for-an-instruction" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="instructions-extras">
+<h3>instructions.extras<a class="headerlink" href="#instructions-extras" title="Permalink to this headline">¶</a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">extras</span></code> defines user-defined data for an instruction.
 Any structure can be defined as user-defined data.</p>
 <p>Here is an example of defining a mapping as user-defined data.</p>
@@ -461,8 +462,8 @@ Any structure can be defined as user-defined data.</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="instructions-field-extras-user-defined-data-for-each-field">
-<h3>instructions.field_extras: User-defined data for each field<a class="headerlink" href="#instructions-field-extras-user-defined-data-for-each-field" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="instructions-field-extras">
+<h3>instructions.field_extras<a class="headerlink" href="#instructions-field-extras" title="Permalink to this headline">¶</a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">field_extras</span></code> defines user-defined data for each field.
 Each mapping key in <code class="code docutils literal notranslate"><span class="pre">field_extras</span></code> represents a field
 defining user-defined data and its value holds user-defined data for the field.
@@ -481,19 +482,19 @@ Any structure can be defined as user-defined data.</p>
 </div>
 </div>
 </div>
-<div class="section" id="decoder-decoder-information-of-the-global-scope">
-<h2>decoder: Decoder information of the global scope<a class="headerlink" href="#decoder-decoder-information-of-the-global-scope" title="Permalink to this headline">¶</a></h2>
-<p><code class="code docutils literal notranslate"><span class="pre">decoder</span></code> is a decoder information that isn’t related to a machine,
-an instruction and a field.</p>
-<div class="section" id="decoder-namespace-namespace-for-the-symbols-of-a-generated-decoder">
-<h3>decoder.namespace: Namespace for the symbols of a generated decoder<a class="headerlink" href="#decoder-namespace-namespace-for-the-symbols-of-a-generated-decoder" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="decoder">
+<h2>decoder<a class="headerlink" href="#decoder" title="Permalink to this headline">¶</a></h2>
+<p><code class="code docutils literal notranslate"><span class="pre">decoder</span></code> is a decoder information for the global scope,
+which isn’t related to a machine, an instruction and a field.</p>
+<div class="section" id="decoder-namespace">
+<h3>decoder.namespace<a class="headerlink" href="#decoder-namespace" title="Permalink to this headline">¶</a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">namespace</span></code> defines the namespace for the symbols of a generated decoder.</p>
 </div>
 </div>
-<div class="section" id="extras-user-defined-data-of-the-global-scope">
-<h2>extras: User-defined data of the global scope<a class="headerlink" href="#extras-user-defined-data-of-the-global-scope" title="Permalink to this headline">¶</a></h2>
-<p><code class="code docutils literal notranslate"><span class="pre">extras</span></code> defines user-defined data that isn’t related to a machine,
-an instruction and a field.
+<div class="section" id="extras">
+<h2>extras<a class="headerlink" href="#extras" title="Permalink to this headline">¶</a></h2>
+<p><code class="code docutils literal notranslate"><span class="pre">extras</span></code> defines user-defined data for the global scope,
+which isn’t related to a machine, an instruction and a field.
 Any structure can be defined as user-defined data.</p>
 <p>Here is an example of defining a mapping as user-defined data.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extras</span><span class="p">:</span>
@@ -510,8 +511,8 @@ Any structure can be defined as user-defined data.</p>
 </div>
 <div class="section" id="additional-specifications">
 <h2>Additional specifications<a class="headerlink" href="#additional-specifications" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="include-split-a-description-into-multiple-files">
-<h3>!include: Split a description into multiple files<a class="headerlink" href="#include-split-a-description-into-multiple-files" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="include-tag">
+<h3>!include tag<a class="headerlink" href="#include-tag" title="Permalink to this headline">¶</a></h3>
 <p>You can split a description into multiple files by using <code class="code docutils literal notranslate"><span class="pre">!include</span></code> tag.
 You can use it anywhere in a description and
 the contents of specified files will be inserted into the place
@@ -730,7 +731,7 @@ to specify multiple files.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="spec_template_var.html" class="btn btn-neutral float-right" title="Template variable specification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="spec_mcdecoder_api.html" class="btn btn-neutral float-right" title="MC decoder API specification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="spec_commandline_options.html" class="btn btn-neutral float-left" title="Command line option specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

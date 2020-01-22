@@ -434,13 +434,8 @@ about <code class="code docutils literal notranslate"><span class="pre">generate
 <div class="section" id="run-the-decoder-from-a-c-client-code">
 <h2>5. Run the decoder from a C client code<a class="headerlink" href="#run-the-decoder-from-a-c-client-code" title="Permalink to this headline">¶</a></h2>
 <p>Create a C client code to test the function of the generated decoder.
-Use a decoder API <code class="code docutils literal notranslate"><span class="pre">op_parse</span></code> in the client and define the stubs of
-instruction execution callback <code class="code docutils literal notranslate"><span class="pre">op_exec_&lt;instruction&gt;</span></code>.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* Decoder API */</span>
-<span class="kt">int</span> <span class="nf">op_parse</span><span class="p">(</span><span class="n">uint16</span> <span class="n">code</span><span class="p">[</span><span class="n">OP_DECODE_MAX</span><span class="p">],</span> <span class="n">OpDecodedCodeType</span> <span class="o">*</span><span class="n">decoded_code</span><span class="p">,</span> <span class="n">OperationCodeType</span> <span class="o">*</span><span class="n">optype</span><span class="p">);</span>
-
-<span class="cm">/* Instruction execution callback */</span>
-<span class="kt">int</span> <span class="n">op_exec_</span><span class="o">&lt;</span><span class="n">instruction</span><span class="o">&gt;</span><span class="p">(</span><span class="k">struct</span> <span class="n">TargetCore</span> <span class="o">*</span><span class="n">core</span><span class="p">);</span>
+Use a decoder API <code class="code docutils literal notranslate"><span class="pre">DecodeInstruction</span></code> in the client.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">bool</span> <span class="nf">DecodeInstruction</span><span class="p">(</span><span class="k">const</span> <span class="n">DecodeRequest</span> <span class="o">*</span><span class="n">request</span><span class="p">,</span> <span class="n">DecodeResult</span> <span class="o">*</span><span class="n">result</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>In the client code, input the machine code <code class="code docutils literal notranslate"><span class="pre">e28db004</span></code>
@@ -448,55 +443,49 @@ as you did with <code class="code docutils literal notranslate"><span class="pre
 <p>Make the following C client code.</p>
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text">client.c</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;out/mcdecoder.h&quot;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;out/mcdecoder.h&quot;</span><span class="cp"></span>
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
   <span class="cm">/* Machine codes to be decoded */</span>
-  <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">machine_codes</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x8D</span><span class="p">,</span> <span class="mh">0xE2</span><span class="p">,</span> <span class="cm">/* add     fp, sp, #4 */</span>
+  <span class="k">const</span> <span class="kt">uint8_t</span> <span class="n">kMachineCodes</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x8D</span><span class="p">,</span> <span class="mh">0xE2</span><span class="p">,</span> <span class="cm">/* add FP, SP, #4 */</span>
   <span class="p">};</span>
 
-  <span class="cm">/* Arguments for the decode API */</span>
-  <span class="n">OpDecodedCodeType</span> <span class="n">decoded_code</span><span class="p">;</span>
-  <span class="n">OperationCodeType</span> <span class="n">optype</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">result</span><span class="p">;</span>
+  <span class="cm">/* Decode an instruction */</span>
+  <span class="n">DecodeRequest</span> <span class="n">request</span><span class="p">;</span>
+  <span class="n">DecodeResult</span> <span class="n">result</span><span class="p">;</span>
+  <span class="kt">bool</span> <span class="n">succeeded</span><span class="p">;</span>
 
-  <span class="cm">/* Decode */</span>
-  <span class="n">result</span> <span class="o">=</span> <span class="n">op_parse</span><span class="p">((</span><span class="n">uint16</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">machine_codes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">decoded_code</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">optype</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Decode failed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Decode succeeded.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-    <span class="k">switch</span> <span class="p">(</span><span class="n">optype</span><span class="p">.</span><span class="n">code_id</span><span class="p">)</span>
-    <span class="p">{</span>
-    <span class="k">case</span> <span class="nl">OpCodeId_add_immediate_a1</span><span class="p">:</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Instruction: add_immediate_a1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Rn = %d, Rd = %d, imm12 = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">decoded_code</span><span class="p">.</span><span class="n">code</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">Rn</span><span class="p">,</span> <span class="n">decoded_code</span><span class="p">.</span><span class="n">code</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">Rd</span><span class="p">,</span> <span class="n">decoded_code</span><span class="p">.</span><span class="n">code</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">imm12</span><span class="p">);</span>
-      <span class="k">break</span><span class="p">;</span>
-    <span class="k">case</span> <span class="nl">OpCodeId_push_a1</span><span class="p">:</span>
-      <span class="cm">/* nop */</span>
-      <span class="k">break</span><span class="p">;</span>
-    <span class="k">default</span><span class="o">:</span>
-      <span class="k">break</span><span class="p">;</span>
+  <span class="n">request</span><span class="p">.</span><span class="n">codes</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">kMachineCodes</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+  <span class="n">succeeded</span> <span class="o">=</span> <span class="n">DecodeInstruction</span><span class="p">(</span><span class="o">&amp;</span><span class="n">request</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">result</span><span class="p">);</span>
+
+  <span class="cm">/* Decoding succeeded? */</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">succeeded</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Decoding failed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Decoding succeeded.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+    <span class="cm">/* Which instruction is decoded? */</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">instruction_id</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="nl">InstructionId_k_add_immediate_a1</span><span class="p">:</span>
+        <span class="cm">/* Get the decoded result of add_immediate_a1 */</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Instruction: add_immediate_a1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Rn: %d</span><span class="se">\n</span><span class="s">Rd: %d</span><span class="se">\n</span><span class="s">imm12: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">Rn</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">Rd</span><span class="p">,</span>
+               <span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">imm12</span><span class="p">);</span>
+        <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="nl">InstructionId_k_push_a1</span><span class="p">:</span>
+        <span class="cm">/* Handle push_a1 */</span>
+        <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="nl">InstructionId_kUnknown</span><span class="p">:</span>
+        <span class="cm">/* Handle an unknown instruction */</span>
+        <span class="k">break</span><span class="p">;</span>
+      <span class="k">default</span><span class="o">:</span>
+        <span class="k">break</span><span class="p">;</span>
     <span class="p">}</span>
   <span class="p">}</span>
 
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="cm">/* Stubs for instruction execution callbacks */</span>
-<span class="kt">int</span> <span class="nf">op_exec_add_immediate_a1</span><span class="p">(</span><span class="k">struct</span> <span class="n">TargetCore</span> <span class="o">*</span><span class="n">cpu</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">op_exec_push_a1</span><span class="p">(</span><span class="k">struct</span> <span class="n">TargetCore</span> <span class="o">*</span><span class="n">cpu</span><span class="p">)</span>
-<span class="p">{</span>
   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
@@ -508,19 +497,23 @@ as you did with <code class="code docutils literal notranslate"><span class="pre
 </pre></div>
 </div>
 <p>The result will be:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Decode succeeded.
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Decoding succeeded.
 Instruction: add_immediate_a1
-<span class="nv">Rn</span> <span class="o">=</span> <span class="m">13</span>, <span class="nv">Rd</span> <span class="o">=</span> <span class="m">11</span>, <span class="nv">imm12</span> <span class="o">=</span> <span class="m">4</span>
+Rn: <span class="m">13</span>
+Rd: <span class="m">11</span>
+imm12: <span class="m">4</span>
 </pre></div>
 </div>
 <p>Good! It coincides with the result of <code class="code docutils literal notranslate"><span class="pre">mcdecoder</span> <span class="pre">emulate</span></code> and
 the tutorial is over.</p>
-<p>You can see <a class="reference download external" download="" href="https://github.com/wildlarva/mcdecoder/blob/master/examples/quickstart"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">files</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">tutorial</span> <span class="pre">in</span> <span class="pre">github</span></code></a>.</p>
+<p>See <a class="reference internal" href="spec_mcdecoder_api.html"><span class="doc">MC decoder API specification</span></a> for more details about the decoder API.
+You can see <a class="reference download external" download="" href="https://github.com/wildlarva/mcdecoder/blob/master/examples/quickstart"><code class="xref download docutils literal notranslate"><span class="pre">example</span> <span class="pre">files</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">tutorial</span> <span class="pre">in</span> <span class="pre">github</span></code></a>.</p>
 </div>
 <div class="section" id="what-s-next">
 <h2>What’s next?<a class="headerlink" href="#what-s-next" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="spec_mc_desc.html"><span class="doc">More details about MC description</span></a></p></li>
+<li><p><a class="reference internal" href="spec_mcdecoder_api.html"><span class="doc">More details about MC decoder API</span></a></p></li>
 <li><p><a class="reference internal" href="spec_commandline_options.html"><span class="doc">More details about mcdecoder emulate and generate</span></a></p></li>
 <li><p><a class="reference internal" href="spec_commandline_options.html"><span class="doc">Other useful mcdecoder commands</span></a></p>
 <ul>

@@ -1,0 +1,266 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>C++ coding style &mdash; mcdecoder  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="C coding style" href="dev_coding_style_c.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> mcdecoder
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="guides.html">User guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="dev_guides.html">Developer guides</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_design.html">Internal design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_modules.html">Internal modules and members</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="dev_coding_style.html">Coding style</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="dev_coding_style_python.html">Python coding style</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev_coding_style_c.html">C coding style</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">C++ coding style</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#exceptions-to-the-rule">Exceptions to the rule</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mcdecoder</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="dev_docs.html">Documents for mcdecoder developers</a> &raquo;</li>
+        
+          <li><a href="dev_coding_style.html">Coding style</a> &raquo;</li>
+        
+      <li>C++ coding style</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/dev_coding_style_cpp.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="c-coding-style">
+<h1>C++ coding style<a class="headerlink" href="#c-coding-style" title="Permalink to this headline">¶</a></h1>
+<p>The coding style of mcdecoder in C++ is based on <a class="reference download external" download="" href="https://google.github.io/styleguide/cppguide.html"><code class="xref download docutils literal notranslate"><span class="pre">Google</span> <span class="pre">C++</span> <span class="pre">Style</span> <span class="pre">Guide</span></code></a>.
+The mcdecoder adds some modifications to it
+because some codes in mcdecoder are generated by a tool.</p>
+<div class="section" id="exceptions-to-the-rule">
+<h2>Exceptions to the rule<a class="headerlink" href="#exceptions-to-the-rule" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="naming">
+<h3>Naming<a class="headerlink" href="#naming" title="Permalink to this headline">¶</a></h3>
+<p>For type names, constant names, function names and enumerator names:</p>
+<dl class="simple">
+<dt>This project</dt><dd><p>You can use underscores to split the base part and the generated part:
+&lt;base&gt;_&lt;generated&gt;.
+The generated part is optional.</p>
+<ul class="simple">
+<li><p>Type: DecodeRequest, DecodeResult_add, etc.</p></li>
+<li><p>Constant: kInstructionIdMax, kDecodeErrorsMax, etc.</p></li>
+<li><p>Function: DecodeInstruction, PrintInstruction_add, etc.</p></li>
+<li><p>Enumeration type: InstructionId, DecodeErrors_add, etc.</p></li>
+<li><p>Enumerator: kUnknown, k_add, etc.</p></li>
+</ul>
+</dd>
+<dt>Original</dt><dd><p>With no underscores.</p>
+</dd>
+<dt>Rationale</dt><dd><p>To clarify the boundary between the fixed part and
+the generated part of a type name, we put underscore symbol between them.</p>
+</dd>
+</dl>
+<p>You can see also <a class="reference download external" download="" href="https://google.github.io/styleguide/cppguide.html#Naming"><code class="xref download docutils literal notranslate"><span class="pre">the</span> <span class="pre">original</span> <span class="pre">'Naming'</span></code></a>.</p>
+</div>
+<div class="section" id="comments-comment-style">
+<h3>Comments / Comment Style<a class="headerlink" href="#comments-comment-style" title="Permalink to this headline">¶</a></h3>
+<dl class="simple">
+<dt>This project</dt><dd><p>Use <code class="code docutils literal notranslate"><span class="pre">/**</span> <span class="pre">*/</span></code> in API comments and <code class="code docutils literal notranslate"><span class="pre">//</span></code> for others.</p>
+</dd>
+<dt>Original</dt><dd><p>You can use either the <code class="code docutils literal notranslate"><span class="pre">//</span></code> or the <code class="code docutils literal notranslate"><span class="pre">/*</span> <span class="pre">*/</span></code> syntax.
+Be consistent with how you comment and what style you use where.</p>
+</dd>
+<dt>Rationale</dt><dd><p>For API comments for Doxygen, <code class="code docutils literal notranslate"><span class="pre">/**</span> <span class="pre">*/</span></code> is much more common and
+you can tell the difference between API comments and other comments
+more easily.</p>
+</dd>
+</dl>
+<p>You can see also <a class="reference download external" download="" href="https://google.github.io/styleguide/cppguide.html#Comment_Style"><code class="xref download docutils literal notranslate"><span class="pre">the</span> <span class="pre">original</span> <span class="pre">'Comments</span> <span class="pre">/</span> <span class="pre">Comment</span> <span class="pre">Style'</span></code></a>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="dev_coding_style_c.html" class="btn btn-neutral float-left" title="C coding style" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, wildlarva
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -196,7 +196,6 @@ See <a class="reference internal" href="spec_mc_desc.html"><span class="doc">MC 
 <span class="nt">instructions</span><span class="p">:</span>
   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_1</span>
     <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
-    <span class="nt">unmatch_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond == 15</span>
     <span class="nt">extras</span><span class="p">:</span>
       <span class="c1"># User-defined data for the instruction &#39;add_1&#39;</span>
       <span class="nt">clocks</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
@@ -206,7 +205,6 @@ See <a class="reference internal" href="spec_mc_desc.html"><span class="doc">MC 
       <span class="nt">imm12</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span> <span class="nv">immediate</span><span class="p p-Indicator">}</span> <span class="c1"># User-defined data for the field &#39;imm12&#39;</span>
   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">push_1</span>
     <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list</span>
-    <span class="nt">match_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond in_range 0-14</span>
     <span class="c1"># No user-defined data are defined for the instruction &#39;push_1&#39;</span>
 <span class="nt">decoder</span><span class="p">:</span>
   <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">arm</span>

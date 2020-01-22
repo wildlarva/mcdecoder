@@ -2,7 +2,6 @@
 Developer guides
 ################################
 
-=============================================
 Requirements for development
 =============================================
 
@@ -10,7 +9,6 @@ Requirements for development
 * Python 3.8 or above (with pip and venv)
 * Ruby 2.5 or above (with RubyGems)
 
-=============================================
 How to setup environment for development
 =============================================
 
@@ -41,7 +39,6 @@ How to setup environment for development
 After the installation, changes to the cloned directory will be
 immediately reflected to mcdecoder you installed.
 
-=============================================
 How to run tests for mcdecoder
 =============================================
 
@@ -54,7 +51,6 @@ How to run tests for mcdecoder
     # Run tests
     pytest
 
-=============================================
 How to run tests for generated decoders
 =============================================
 
@@ -68,7 +64,6 @@ How to run tests for generated decoders
     make -C ctest clean test
 
 
-=============================================
 How to build documents
 =============================================
 
