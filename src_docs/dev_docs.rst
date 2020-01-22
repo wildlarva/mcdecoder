@@ -8,3 +8,4 @@ Documents for mcdecoder developers
     dev_guides
     dev_design
     dev_modules
+    dev_coding_style

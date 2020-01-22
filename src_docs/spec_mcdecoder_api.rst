@@ -6,20 +6,20 @@ MC decoder API specification
 Usage
 *********************************
 
-Here's an example of :code:`DecodeInstruction` usage (without namespace).
+Here's an example of using :code:`DecodeInstruction` (without namespace).
 
 .. code-block:: c
 
     #include "mcdecoder.h"
 
     /* Decode an instruction */
-    const uint8_t codes[] = { 0x00, 0x48, 0x2d, 0xe9, };
+    const uint8_t kCodes[] = { 0x00, 0x48, 0x2d, 0xe9, };
 
     DecodeRequest request;
     DecodeResult result;
     bool succeeded;
 
-    request.codes = &codes[0];
+    request.codes = &kCodes[0];
     succeeded = DecodeInstruction(&request, &result);
 
     /* Decoding succeeded? */
@@ -27,7 +27,7 @@ Here's an example of :code:`DecodeInstruction` usage (without namespace).
         /* Which instruction is decoded? */
         switch (result.instruction_id) {
         case InstructionId_k_push:
-            /* Get a decoded result for push */
+            /* Get the decoded result for push */
             printf("instruction: push\n");
             printf("cond: %d\n", result.instruction.push.cond);
             printf("register_list: %d\n", result.instruction.push.register_list);
@@ -89,6 +89,10 @@ Types
 .. c:type:: struct InstructionDecodeResult_<instruction>
 
     Decoding result for <instruction>
+
+    where
+
+    * <instruction>: Instruction name
 
     .. c:member:: <type> <field>
 

@@ -143,16 +143,11 @@ about :code:`generate` sub-command if you'd like.
 *********************************************************************
 
 Create a C client code to test the function of the generated decoder.
-Use a decoder API :code:`op_parse` in the client and define the stubs of
-instruction execution callback :code:`op_exec_<instruction>`.
+Use a decoder API :code:`DecodeInstruction` in the client.
 
 .. code-block:: c
 
-    /* Decoder API */
-    int op_parse(uint16 code[OP_DECODE_MAX], OpDecodedCodeType *decoded_code, OperationCodeType *optype);
-
-    /* Instruction execution callback */
-    int op_exec_<instruction>(struct TargetCore *core);
+    bool DecodeInstruction(const DecodeRequest *request, DecodeResult *result);
 
 In the client code, input the machine code :code:`e28db004`
 as you did with :code:`mcdecoder emulate` and check if the result is the same.
@@ -174,9 +169,11 @@ The result will be:
 
 .. code-block:: bash
 
-    Decode succeeded.
+    Decoding succeeded.
     Instruction: add_immediate_a1
-    Rn = 13, Rd = 11, imm12 = 4
+    Rn: 13
+    Rd: 11
+    imm12: 4
 
 Good! It coincides with the result of :code:`mcdecoder emulate` and
 the tutorial is over.

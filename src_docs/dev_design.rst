@@ -6,7 +6,6 @@ Internal design
 Runtime environment
 *********************************
 
-================================================
 Runtime structure and dependencies
 ================================================
 
@@ -36,7 +35,6 @@ Runtime structure and dependencies
     lark [label = "Lark"]
     numpy [label = "NumPy"]
 
-================================================
 Modules in mcdecoder
 ================================================
 
@@ -97,7 +95,6 @@ Modules in mcdecoder
   so its performance is so important.
 * All modules have dependencies to common module.
 
-================================================
 Other important files in mcdecoder
 ================================================
 
@@ -117,7 +114,6 @@ Other important files in mcdecoder
     |grammars/\*.lark|Lark files to parse an MC description             |
     +----------------+--------------------------------------------------+
 
-==================================
 Dependencies to external packages
 ==================================
 
@@ -142,7 +138,6 @@ Dependencies to external packages
 Development environment
 *********************************
 
-================================================
 Development structure and dependencies
 ================================================
 
@@ -172,7 +167,6 @@ Development structure and dependencies
     mcdecoder -> sphinx_rtd_theme [lhead=cluster_sphinx]
     mcdecoder -> google_test [lhead=cluster_conan]
 
-================================================
 Packages
 ================================================
 
@@ -193,7 +187,6 @@ Packages
     Graphviz                      Used to show diagrams in documents
     ============================= ==========================================================
 
-==================================
 Directories
 ==================================
 

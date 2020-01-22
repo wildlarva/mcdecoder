@@ -29,12 +29,13 @@ mcdecoder (Machine Code Decoder) is a set of tools to implement a machine code d
 3. Use the decoder from a client
 
     ```c
-    OpDecodedCodeType decoded_code;
-    OperationCodeType optype;
-    int result;
+    const uint8_t kMachineCodes[] = { 0x04, 0xB0, 0x8D, 0xE2, };
+    DecodeRequest request;
+    DecodeResult result;
+    bool succeeded;
 
-    uint8 machine_codes[] = { 0x04, 0xB0, 0x8D, 0xE2, };
-    result = op_parse((uint16 *) &machine_codes[0], &decoded_code, &optype);
+    request.codes = &kMachineCodes[0];
+    succeeded = DecodeInstruction(&request, &result);
     ```
 
 For more details, follow Installation steps below and go on to [Quickstart tutorial](https://wildlarva.github.io/mcdecoder/quickstart.html).

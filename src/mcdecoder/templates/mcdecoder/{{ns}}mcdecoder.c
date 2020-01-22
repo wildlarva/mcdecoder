@@ -59,8 +59,6 @@ typedef uint32_t (*SetBitCountFunction)(uint32_t value);
  * Internal function declarations
  */
 
-static uint8_t BitElement(uint32_t value, uint8_t element_index);
-static uint32_t SetBitCount(uint32_t value);
 {% for tree in mcdecoder.decision_trees -%}
     {% for node in tree.root_node.all_nodes -%}
         static bool DecisionNode_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.index }}(DecodeContext *context, uint32_t code);
@@ -69,6 +67,8 @@ static uint32_t SetBitCount(uint32_t value);
 {% for inst in instruction_decoders -%}
     static bool DecodeInstruction_{{ inst.name }}(DecodeContext *context);
 {% endfor %}
+static uint32_t SetBitCount(uint32_t value);
+static uint8_t BitElement(uint32_t value, uint8_t element_index);
 
 
 /*
@@ -116,19 +116,37 @@ bool {{ ns }}DecodeInstruction(const {{ ns }}DecodeRequest *request, {{ ns }}Dec
  * Internal function definitions
  */
 
-/* functions for conditions */
-static uint8_t BitElement(uint32_t value, uint8_t element_index) {
-    return (value & (1u << element_index)) >> element_index;
-}
-
-static uint32_t SetBitCount(uint32_t value) {
-    uint32_t count = 0;
-    while (value) {
-        count += value & 1;
-        value >>= 1;
-    }
-    return count;
-}
+/* decision node functions */
+{% for tree in mcdecoder.decision_trees -%}
+    {% for node in tree.root_node.all_nodes -%}
+        static bool DecisionNode_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.index }}(DecodeContext *context, uint32_t code) {
+            {% for inst in node.instructions -%}
+                if (DecodeInstruction_{{ inst.name }}(context)) {
+                    return true;
+                }
+            {% endfor %}
+            {% if node.fixed_bit_nodes -%}
+                switch (code & 0x{{ '%08x'|format(node.mask) }}) {
+                    {% for threshold_value, child_node in node.fixed_bit_nodes.items() -%}
+                        case 0x{{ '%08x'|format(threshold_value) }}:
+                            if (DecisionNode_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ child_node.index }}(context, code)) {
+                                return true;
+                            }
+                            break;
+                    {% endfor %}
+                default:
+                    break;
+                }
+            {% endif %}
+            {% if node.arbitrary_bit_node -%}
+                if (DecisionNode_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.arbitrary_bit_node.index }}(context, code)) {
+                    return true;
+                }
+            {% endif %}
+            return false;
+        }
+    {% endfor %}
+{% endfor %}
 
 /* individual decode functions */
 {% for inst in instruction_decoders %}
@@ -162,32 +180,16 @@ static uint32_t SetBitCount(uint32_t value) {
     }
 {% endfor %}
 
-/* decision node functions */
-{% for tree in mcdecoder.decision_trees -%}
-    {% for node in tree.root_node.all_nodes -%}
-        static bool DecisionNode_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.index }}(DecodeContext *context, uint32_t code) {
-            {% for inst in node.instructions -%}
-                if (DecodeInstruction_{{ inst.name }}(context)) {
-                    return true;
-                }
-            {% endfor %}
-            {% if node.fixed_bit_nodes -%}
-                switch (code & 0x{{ '%08x'|format(node.mask) }}) {
-                    {% for threshold_value, child_node in node.fixed_bit_nodes.items() -%}
-                        case 0x{{ '%08x'|format(threshold_value) }}:
-                            if (DecisionNode_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ child_node.index }}(context, code)) {
-                                return true;
-                            }
-                            break;
-                    {% endfor %}
-                }
-            {% endif %}
-            {% if node.arbitrary_bit_node -%}
-                if (DecisionNode_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.arbitrary_bit_node.index }}(context, code)) {
-                    return true;
-                }
-            {% endif %}
-            return false;
-        }
-    {% endfor %}
-{% endfor %}
+/* functions for conditions */
+static uint32_t SetBitCount(uint32_t value) {
+    uint32_t count = 0;
+    while (value) {
+        count += value & 1;
+        value >>= 1;
+    }
+    return count;
+}
+
+static uint8_t BitElement(uint32_t value, uint8_t element_index) {
+    return (value & (1u << element_index)) >> element_index;
+}

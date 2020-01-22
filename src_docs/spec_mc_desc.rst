@@ -20,14 +20,12 @@ machine: Describes a machine
 
 :code:`machine` describes the specification of a machine.
 
-========================================================================================================
 machine.byteorder: Byte order of a machine
 ========================================================================================================
 
 :code:`byteorder` is the byte order of a machine.
 It can be :code:`big` (big endian) or :code:`little` (little endian).
 
-========================================================================================================
 machine.extras: User-defined data for a machine
 ========================================================================================================
 
@@ -56,13 +54,11 @@ instructions: Describes instructions
 :code:`instructions` describes the specification of instructions.
 Each list element in :code:`instructions` represents an instruction.
 
-========================================================================================================
 instructions.name: Name of an instruction
 ========================================================================================================
 
 :code:`name` defines the name of an instruction.
 
-========================================================================================================
 instructions.format: Encoding format of an instruction
 ========================================================================================================
 
@@ -139,7 +135,6 @@ where
 
     NOTE: This is an LSB in a field, not in an instruction.
 
-========================================================================================================
 instructions.match_condition: Condition an instruction applys
 ========================================================================================================
 
@@ -310,7 +305,6 @@ Common expressions
     Base 2, 10 or 16 integer values like :code:`15`, :code:`0b1111`,
     :code:`0xf`, etc.
 
-===================================================================================
 instructions.unmatch_condition: Condition an instruction doesn't apply
 ===================================================================================
 
@@ -319,7 +313,6 @@ when an instruction does not apply.
 The expression is the same as that of :code:`match_condition`.
 :code:`unmatch_condition` is mutually exclusive with :code:`match_condition`.
 
-========================================================================================================
 instructions.extras: User-defined data for an instruction
 ========================================================================================================
 
@@ -341,7 +334,6 @@ Here is an example of defining a sequence as user-defined data.
       - 10
       - 20
 
-================================================================================
 instructions.field_extras: User-defined data for each field
 ================================================================================
 
@@ -373,7 +365,6 @@ decoder: Decoder information of the global scope
 :code:`decoder` is a decoder information that isn't related to a machine,
 an instruction and a field.
 
-========================================================================================================
 decoder.namespace: Namespace for the symbols of a generated decoder
 ========================================================================================================
 
@@ -407,7 +398,6 @@ Here is an example of defining a sequence as user-defined data.
 Additional specifications
 *************************
 
-=========================================================
 !include: Split a description into multiple files
 =========================================================
 

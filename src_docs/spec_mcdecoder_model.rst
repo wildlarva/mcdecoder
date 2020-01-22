@@ -1,5 +1,10 @@
+###############################
 MC decoder model specification
-==============================
+###############################
+
+*********************************
+Decoders
+*********************************
 
 .. autoclass:: mcdecoder.core.McDecoder
     :noindex:
@@ -15,6 +20,10 @@ MC decoder model specification
 
 .. autoclass:: mcdecoder.core.InstructionSubfieldDecoder
     :noindex:
+
+*********************************
+Conditions
+*********************************
 
 .. autoclass:: mcdecoder.core.InstructionDecoderCondition
     :noindex:
@@ -45,6 +54,10 @@ MC decoder model specification
 
 .. autoclass:: mcdecoder.core.FunctionIdConditionObject
     :noindex:
+
+*********************************
+Decision tree
+*********************************
 
 .. autoclass:: mcdecoder.core.McdDecisionTree
     :noindex:
