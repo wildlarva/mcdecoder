@@ -67,7 +67,7 @@ python3.8 -m pip install .
 
 ## License
 
-The mcdecoder uses MIT License. See [LICENSE](LICENSE) for more details.
+The mcdecoder uses MIT License. See [LICENSE](https://github.com/wildlarva/mcdecoder/blob/master/LICENSE) for more details.
 
 ## More details about usage
 
