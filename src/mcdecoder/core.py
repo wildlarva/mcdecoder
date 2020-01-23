@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from dataclasses import dataclass
 import glob
 import importlib.resources
@@ -8,10 +9,13 @@ from typing import (
     Any, Callable, Dict, Iterable, List, Literal, Optional, Tuple, TypedDict,
     cast)
 
+import deprecation
 import jsonschema
 import lark
 import numpy as np
 import yaml
+
+from . import __version__
 
 
 # region External classes
@@ -186,12 +190,33 @@ class InstructionSubfieldDecoder:
     """Index number of a subfield in a field: 0th to (n-1)th"""
     mask: int
     """Mask of a subfield in an instruction"""
-    start_bit_in_instruction: int
+    msb_in_instruction: int
     """MSB of a subfield in an instruction"""
-    end_bit_in_instruction: int
+    lsb_in_instruction: int
     """LSB of a subfield in an instruction"""
-    end_bit_in_field: int
+    lsb_in_field: int
     """LSB of a subfield in a field"""
+
+    @property
+    @deprecation.deprecated(deprecated_in='0.1a6', removed_in='0.1b1', current_version=__version__.__version__,
+                            details='Use msb_in_instruction instead')
+    def start_bit_in_instruction(self) -> int:
+        """MSB of a subfield in an instruction"""
+        return self.msb_in_instruction
+
+    @property
+    @deprecation.deprecated(deprecated_in='0.1a6', removed_in='0.1b1', current_version=__version__.__version__,
+                            details='Use lsb_in_instruction instead')
+    def end_bit_in_instruction(self) -> int:
+        """LSB of a subfield in an instruction"""
+        return self.lsb_in_instruction
+
+    @property
+    @deprecation.deprecated(deprecated_in='0.1a6', removed_in='0.1b1', current_version=__version__.__version__,
+                            details='Use lsb_in_field instead')
+    def end_bit_in_field(self) -> int:
+        """LSB of a subfield in a field"""
+        return self.lsb_in_field
 
 
 @dataclass
@@ -199,14 +224,28 @@ class InstructionFieldDecoder:
     """Decoder for an instruction field"""
     name: str
     """Name of a field"""
-    _start_bit: int
-    """MSB of a field in an instruction"""
-    type_bit_size: int
-    """Bit size of a data type used for a field"""
-    subfield_decoders: List[InstructionSubfieldDecoder]
+    type_bit_length: int
+    """Bit length of a data type used for a field"""
+    subfields: List[InstructionSubfieldDecoder]
     """Child InstructionSubfieldDecoders"""
     extras: Optional[Any]
     """User-defined data for a field"""
+    _msb: int
+    """MSB of a field in an instruction"""
+
+    @property
+    @deprecation.deprecated(deprecated_in='0.1a6', removed_in='0.1b1', current_version=__version__.__version__,
+                            details='Use type_bit_length instead')
+    def type_bit_size(self) -> int:
+        """Bit length of a data type used for a field"""
+        return self.type_bit_length
+
+    @property
+    @deprecation.deprecated(deprecated_in='0.1a6', removed_in='0.1b1', current_version=__version__.__version__,
+                            details='Use subfields instead')
+    def subfield_decoders(self) -> List[InstructionSubfieldDecoder]:
+        """Child InstructionSubfieldDecoders"""
+        return self.subfields
 
 
 @dataclass
@@ -216,7 +255,11 @@ class InstructionDecoderConditionObject:
 
     Each subclass must have a string attribute 'type' to express the type of a subclass.
     """
-    pass
+
+    @property
+    @abstractmethod
+    def type(self) -> str:
+        """Type of InstructionDecoderConditionObject"""
 
 
 @dataclass
@@ -226,8 +269,11 @@ class FieldIdConditionObject(InstructionDecoderConditionObject):
     """Name of a field to be tested"""
     element_index: Optional[int]
     """Bit element index of a field to be tested"""
-    type: str = 'field'
-    """Type of InstructionDecoderConditionObject. It's always 'field' for FieldIdConditionObject"""
+
+    @property
+    def type(self) -> str:
+        """Type of InstructionDecoderConditionObject. It's always 'field' for FieldIdConditionObject"""
+        return 'field'
 
 
 @dataclass
@@ -235,8 +281,11 @@ class ImmediateIdConditionObject(InstructionDecoderConditionObject):
     """Immediate value object/subject subclass for InstructionDecoderConditionObject"""
     value: int
     """Value to be tested"""
-    type: str = 'immediate'
-    """Type of InstructionDecoderConditionObject. It's always 'immediate' for ImmediateIdConditionObject"""
+
+    @property
+    def type(self) -> str:
+        """Type of InstructionDecoderConditionObject. It's always 'immediate' for ImmediateIdConditionObject"""
+        return 'immediate'
 
 
 @dataclass
@@ -246,8 +295,11 @@ class FunctionIdConditionObject(InstructionDecoderConditionObject):
     """Name of a function to be called"""
     argument: FieldIdConditionObject
     """Argument FieldIdConditionObject"""
-    type: str = 'function'
-    """Type of InstructionDecoderConditionObject. It's always 'function' for FunctionIdConditionObject"""
+
+    @property
+    def type(self) -> str:
+        """Type of InstructionDecoderConditionObject. It's always 'function' for FunctionIdConditionObject"""
+        return 'function'
 
 
 @dataclass
@@ -257,7 +309,11 @@ class InstructionDecoderCondition:
 
     Each subclass must have a string attribute 'type' to express the type of a subclass.
     """
-    pass
+
+    @property
+    @abstractmethod
+    def type(self) -> str:
+        """Type of InstructionDecoderCondition"""
 
 
 @dataclass
@@ -265,8 +321,11 @@ class AndIdCondition(InstructionDecoderCondition):
     """'and' condition subclass for InstructionDecoderCondition to combine conditions with AND operator"""
     conditions: List[InstructionDecoderCondition]
     """Child InstructionDecoderConditions combined with logical AND operation"""
-    type: str = 'and'
-    """Type of InstructionDecoderCondition. It's always 'and' for AndIdCondition"""
+
+    @property
+    def type(self) -> str:
+        """Type of InstructionDecoderCondition. It's always 'and' for AndIdCondition"""
+        return 'and'
 
 
 @dataclass
@@ -274,8 +333,11 @@ class OrIdCondition(InstructionDecoderCondition):
     """'or' condition subclass for InstructionDecoderCondition to combine conditions with OR operator"""
     conditions: List[InstructionDecoderCondition]
     """Child InstructionDecoderConditions combined with logical OR operation"""
-    type: str = 'or'
-    """Type of InstructionDecoderCondition. It's always 'or' for OrIdCondition"""
+
+    @property
+    def type(self) -> str:
+        """Type of InstructionDecoderCondition. It's always 'or' for OrIdCondition"""
+        return 'or'
 
 
 @dataclass
@@ -291,8 +353,11 @@ class EqualityIdCondition(InstructionDecoderCondition):
     """Operator to test"""
     object: InstructionDecoderConditionObject
     """Objective InstructionDecoderConditionObject to test with"""
-    type: str = 'equality'
-    """Type of InstructionDecoderCondition. It's always 'equality' for EqualityIdCondition"""
+
+    @property
+    def type(self) -> str:
+        """Type of InstructionDecoderCondition. It's always 'equality' for EqualityIdCondition"""
+        return 'equality'
 
 
 @dataclass
@@ -302,8 +367,11 @@ class InIdCondition(InstructionDecoderCondition):
     """Subjective InstructionDecoderConditionObject to be tested"""
     values: List[int]
     """Value set a field must be in"""
-    type: str = 'in'
-    """Type of InstructionDecoderCondition. It's always 'in' for InIdCondition"""
+
+    @property
+    def type(self) -> str:
+        """Type of InstructionDecoderCondition. It's always 'in' for InIdCondition"""
+        return 'in'
 
 
 @dataclass
@@ -318,8 +386,11 @@ class InRangeIdCondition(InstructionDecoderCondition):
     """Start of a value range a field must be in"""
     value_end: int
     """End of a value range a field must be in"""
-    type: str = 'in_range'
-    """Type of InstructionDecoderCondition. It's always 'in_range' for InRangeIdCondition"""
+
+    @property
+    def type(self) -> str:
+        """Type of InstructionDecoderCondition. It's always 'in_range' for InRangeIdCondition"""
+        return 'in_range'
 
 
 @dataclass
@@ -327,26 +398,47 @@ class InstructionDecoder:
     """Decoder for an instruction"""
     name: str
     """Name of an instruction"""
-    _encoding: str
-    """Encoding of an instruction"""
     encoding_element_bit_length: int
     """Bit length of an encoding element"""
     length_of_encoding_elements: int
     """Length of encoding elements"""
-    fixed_bits_mask: int
+    fixed_bit_mask: int
     """Mask of fixed bit positions of an instruction"""
     fixed_bits: int
     """Fixed bits of an instruction"""
-    type_bit_size: int
-    """Bit size of a data type used for an instruction"""
+    type_bit_length: int
+    """Bit length of a data type used for an instruction"""
     match_condition: Optional[InstructionDecoderCondition]
     """Condition an instruction must satisfy"""
     unmatch_condition: Optional[InstructionDecoderCondition]
     """Condition an instruction must not satisfy"""
-    field_decoders: List[InstructionFieldDecoder]
+    fields: List[InstructionFieldDecoder]
     """Child InstructionFieldDecoders"""
     extras: Optional[Any]
     """User-defined data for an instruction"""
+    _encoding: str
+    """Encoding of an instruction"""
+
+    @property
+    @deprecation.deprecated(deprecated_in='0.1a6', removed_in='0.1b1', current_version=__version__.__version__,
+                            details='Use type_bit_length instead')
+    def type_bit_size(self) -> int:
+        """Bit length of a data type used for an instruction"""
+        return self.type_bit_length
+
+    @property
+    @deprecation.deprecated(deprecated_in='0.1a6', removed_in='0.1b1', current_version=__version__.__version__,
+                            details='Use fixed_bit_mask instead')
+    def fixed_bits_mask(self) -> int:
+        """Mask of fixed bit positions of an instruction"""
+        return self.fixed_bit_mask
+
+    @property
+    @deprecation.deprecated(deprecated_in='0.1a6', removed_in='0.1b1', current_version=__version__.__version__,
+                            details='Use fields instead')
+    def field_decoders(self) -> List[InstructionFieldDecoder]:
+        """Child InstructionFieldDecoders"""
+        return self.fields
 
 
 @dataclass
@@ -411,14 +503,28 @@ class McDecoder:
     """Namespace of generated codes"""
     namespace_prefix: str
     """Namespace prefix of generated codes"""
-    machine_decoder: MachineDecoder
+    machine: MachineDecoder
     """Child MachineDecoder"""
-    instruction_decoders: List[InstructionDecoder]
+    instructions: List[InstructionDecoder]
     """Child InstructionDecoders"""
     decision_trees: List[McdDecisionTree]
-    """Child McdDecisionTree"""
+    """Child McdDecisionTrees"""
     extras: Optional[Any]
     """User-defined data not related to a machine, an instruction and a field"""
+
+    @property
+    @deprecation.deprecated(deprecated_in='0.1a6', removed_in='0.1b1', current_version=__version__.__version__,
+                            details='Use machine instead')
+    def machine_decoder(self) -> MachineDecoder:
+        """Child MachineDecoder"""
+        return self.machine
+
+    @property
+    @deprecation.deprecated(deprecated_in='0.1a6', removed_in='0.1b1', current_version=__version__.__version__,
+                            details='Use instructions instead')
+    def instruction_decoders(self) -> List[InstructionDecoder]:
+        """Child InstructionDecoders"""
+        return self.instructions
 
 # endregion
 
@@ -469,8 +575,16 @@ class InstructionDecodeResult:
     """Decoding result of an instruction"""
     decoder: InstructionDecoder
     """Corresponding InstructionDecoder"""
-    field_results: List[InstructionFieldDecodeResult]
+    fields: List[InstructionFieldDecodeResult]
     """Child InstructionFieldDecodeResults"""
+
+    @property
+    @deprecation.deprecated(deprecated_in='0.1a6', removed_in='0.1b1', current_version=__version__.__version__,
+                            details='Use fields instead')
+    def field_results(self) -> List[InstructionFieldDecodeResult]:
+        """Child InstructionFieldDecodeResults"""
+        return self.fields
+
 
 # endregion
 
@@ -508,8 +622,8 @@ def create_mcdecoder_model(mcfile: str) -> McDecoder:
     return McDecoder(
         namespace=namespace,
         namespace_prefix=_make_namespace_prefix(namespace),
-        machine_decoder=machine_decoder,
-        instruction_decoders=instruction_decoders,
+        machine=machine_decoder,
+        instructions=instruction_decoders,
         decision_trees=decision_trees,
         extras=extras,
     )
@@ -646,7 +760,7 @@ def decode_instruction(context: DecodeContext, instruction_decoder: InstructionD
         field_results.append(InstructionFieldDecodeResult(
             decoder=field_decoder, value=value))
 
-    return InstructionDecodeResult(decoder=instruction_decoder, field_results=field_results)
+    return InstructionDecodeResult(decoder=instruction_decoder, fields=field_results)
 
 # endregion
 
@@ -895,7 +1009,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
 
     # Sort field decoders according to start bit position
     field_decoders = sorted(
-        field_decoders, key=lambda field: field._start_bit, reverse=True)
+        field_decoders, key=lambda field: field._msb, reverse=True)
 
     # Create instruction decode conditions
     if 'match_condition' in instruction_desc_model:
@@ -918,10 +1032,10 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
         _encoding=_instruction_encoding_string(instruction_encoding),
         encoding_element_bit_length=encoding_element_bit_length,
         length_of_encoding_elements=len(instruction_encoding.elements),
-        fixed_bits_mask=fixed_bits_mask,
+        fixed_bit_mask=fixed_bits_mask,
         fixed_bits=fixed_bits,
-        type_bit_size=_calc_type_bit_size(instruction_bit_size),
-        field_decoders=field_decoders,
+        type_bit_length=_calc_type_bit_size(instruction_bit_size),
+        fields=field_decoders,
         match_condition=match_condition,
         unmatch_condition=unmatch_condition,
         extras=instruction_extras,
@@ -981,8 +1095,8 @@ def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruct
 
             # Create subfield decoder
             sf_decoder = InstructionSubfieldDecoder(
-                index=sf_index, mask=sf_mask, start_bit_in_instruction=sf_start_bit_in_instruction,
-                end_bit_in_instruction=sf_end_bit_in_instruction, end_bit_in_field=bit_range.end)
+                index=sf_index, mask=sf_mask, msb_in_instruction=sf_start_bit_in_instruction,
+                lsb_in_instruction=sf_end_bit_in_instruction, lsb_in_field=bit_range.end)
             sf_decoders.append(sf_decoder)
 
             # Update the field start bit position
@@ -995,14 +1109,14 @@ def _create_field_decoder(field_name: str, field_extras: Optional[Any], instruct
     # Create field decoder
     return InstructionFieldDecoder(
         name=field_name,
-        _start_bit=field_start_bit_in_instruction,
-        type_bit_size=_calc_type_bit_size(start_bit_in_field + 1),
-        subfield_decoders=sf_decoders,
+        _msb=field_start_bit_in_instruction,
+        type_bit_length=_calc_type_bit_size(start_bit_in_field + 1),
+        subfields=sf_decoders,
         extras=field_extras)
 
 
 def _calc_type_bit_size(bit_size: int) -> int:
-    """Calculate the bit size of a data type which can express the given bit size"""
+    """Calculate the bit length of a data type which can express the given bit length"""
     if bit_size <= 8:
         return 8
     elif bit_size <= 16:

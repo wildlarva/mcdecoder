@@ -50,27 +50,27 @@ def test__generate() -> None:
     mcdecoder_model = McDecoder(
         namespace='ns',
         namespace_prefix='ns_',
-        machine_decoder=MachineDecoder(byteorder='little', extras=None),
-        instruction_decoders=[
+        machine=MachineDecoder(byteorder='little', extras=None),
+        instructions=[
             InstructionDecoder(
                 name='add_1',
                 _encoding='xxxx0010100xxxxxxxxxxxxxxxxxxxxx',
                 encoding_element_bit_length=32,
                 length_of_encoding_elements=1,
-                fixed_bits_mask=0x0fe00000,
+                fixed_bit_mask=0x0fe00000,
                 fixed_bits=0x02800000,
-                type_bit_size=32,
-                field_decoders=[
+                type_bit_length=32,
+                fields=[
                     InstructionFieldDecoder(
-                        name='cond', _start_bit=31, type_bit_size=8,
-                        subfield_decoders=[
-                            InstructionSubfieldDecoder(index=0, mask=0xf0000000, start_bit_in_instruction=31,
-                                                       end_bit_in_instruction=28, end_bit_in_field=0)
+                        name='cond', _msb=31, type_bit_length=8,
+                        subfields=[
+                            InstructionSubfieldDecoder(index=0, mask=0xf0000000, msb_in_instruction=31,
+                                                       lsb_in_instruction=28, lsb_in_field=0)
                         ], extras=None),
                     InstructionFieldDecoder(
-                        name='S', _start_bit=20, type_bit_size=8, subfield_decoders=[
-                            InstructionSubfieldDecoder(index=0, mask=0x00100000, start_bit_in_instruction=20,
-                                                       end_bit_in_instruction=20, end_bit_in_field=0)
+                        name='S', _msb=20, type_bit_length=8, subfields=[
+                            InstructionSubfieldDecoder(index=0, mask=0x00100000, msb_in_instruction=20,
+                                                       lsb_in_instruction=20, lsb_in_field=0)
                         ], extras=None),
                 ],
                 match_condition=EqualityIdCondition(
@@ -84,17 +84,17 @@ def test__generate() -> None:
                 _encoding='xxxx0010100xxxxxxxxxxxxxxxxxxxxx',
                 encoding_element_bit_length=32,
                 length_of_encoding_elements=1,
-                fixed_bits_mask=0x0fe00000,
+                fixed_bit_mask=0x0fe00000,
                 fixed_bits=0x02800000,
-                type_bit_size=32,
-                field_decoders=[
-                    InstructionFieldDecoder(name='cond', _start_bit=31, type_bit_size=8, subfield_decoders=[
-                        InstructionSubfieldDecoder(index=0, mask=0xf0000000, start_bit_in_instruction=31,
-                                                   end_bit_in_instruction=28, end_bit_in_field=0)
+                type_bit_length=32,
+                fields=[
+                    InstructionFieldDecoder(name='cond', _msb=31, type_bit_length=8, subfields=[
+                        InstructionSubfieldDecoder(index=0, mask=0xf0000000, msb_in_instruction=31,
+                                                   lsb_in_instruction=28, lsb_in_field=0)
                     ], extras=None),
-                    InstructionFieldDecoder(name='register_list', _start_bit=15, type_bit_size=16, subfield_decoders=[
-                        InstructionSubfieldDecoder(index=0, mask=0x0000ffff, start_bit_in_instruction=15,
-                                                   end_bit_in_instruction=0, end_bit_in_field=0)
+                    InstructionFieldDecoder(name='register_list', _msb=15, type_bit_length=16, subfields=[
+                        InstructionSubfieldDecoder(index=0, mask=0x0000ffff, msb_in_instruction=15,
+                                                   lsb_in_instruction=0, lsb_in_field=0)
                     ], extras=None),
                 ],
                 match_condition=AndIdCondition(conditions=cast(List[InstructionDecoderCondition], [
@@ -112,17 +112,17 @@ def test__generate() -> None:
                 _encoding='xxxx0010100xxxxxxxxxxxxxxxxxxxxx',
                 encoding_element_bit_length=32,
                 length_of_encoding_elements=1,
-                fixed_bits_mask=0x0fe00000,
+                fixed_bit_mask=0x0fe00000,
                 fixed_bits=0x02800000,
-                type_bit_size=32,
-                field_decoders=[
-                    InstructionFieldDecoder(name='cond', _start_bit=31, type_bit_size=8, subfield_decoders=[
-                        InstructionSubfieldDecoder(index=0, mask=0xf0000000, start_bit_in_instruction=31,
-                                                   end_bit_in_instruction=28, end_bit_in_field=0)
+                type_bit_length=32,
+                fields=[
+                    InstructionFieldDecoder(name='cond', _msb=31, type_bit_length=8, subfields=[
+                        InstructionSubfieldDecoder(index=0, mask=0xf0000000, msb_in_instruction=31,
+                                                   lsb_in_instruction=28, lsb_in_field=0)
                     ], extras=None),
-                    InstructionFieldDecoder(name='register_list', _start_bit=15, type_bit_size=16, subfield_decoders=[
-                        InstructionSubfieldDecoder(index=0, mask=0x0000ffff, start_bit_in_instruction=15,
-                                                   end_bit_in_instruction=0, end_bit_in_field=0)
+                    InstructionFieldDecoder(name='register_list', _msb=15, type_bit_length=16, subfields=[
+                        InstructionSubfieldDecoder(index=0, mask=0x0000ffff, msb_in_instruction=15,
+                                                   lsb_in_instruction=0, lsb_in_field=0)
                     ], extras=None),
                 ],
                 match_condition=None,
