@@ -23,6 +23,7 @@ Runtime structure and dependencies
 
         mcdecoder [label = "mcdecoder (command)"]
         common
+        __version__
         templates [label = "templates/*/*"]
         schemas [label = "schemas/*.json"]
         grammars [label = "grammars/*.lark"]
@@ -80,6 +81,8 @@ Modules in mcdecoder
     |               |                                                  |
     |               |Provides utilities and more to other modules.     |
     +---------------+--------------------------------------------------+
+    |__version__    |Provides the version number of mcdecoder          |
+    +---------------+--------------------------------------------------+
 
 * Modules for sub-commands, such as generator, exporter, emulator
   and checker, provide the features of each sub-command.
@@ -93,7 +96,7 @@ Modules in mcdecoder
   the related features of core module.
   This module does billions of calculations for checking,
   so its performance is so important.
-* All modules have dependencies to common module.
+* All modules have dependencies to common and __version__ module.
 
 Other important files in mcdecoder
 ================================================

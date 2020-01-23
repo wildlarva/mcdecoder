@@ -49,3 +49,11 @@ common
 *********************************
 
 .. automodule:: mcdecoder.common
+
+*********************************
+__version__
+*********************************
+
+.. automodule:: mcdecoder.__version__
+
+.. autodata:: mcdecoder.__version__.__version__
