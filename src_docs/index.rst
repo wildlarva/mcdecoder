@@ -9,6 +9,7 @@ The mcdecoder documentation
     guides
     specifications
     dev_docs
+    Back to GitHub <https://github.com/wildlarva/mcdecoder>
 
 *********************************
 Indices
