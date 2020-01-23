@@ -52,6 +52,11 @@ def test_run_app_generate_with_template_dir() -> None:
     assert os.path.isfile('out/arm_template.h') is True
 
 
+def test_run_app_generate_conflict_type_and_template_dir() -> None:
+    assert run_app(['mcdecoder', 'generate', '--type', 'athrill', '--template',
+                    'test/user_templates', '--output', 'out', 'test/arm.yaml']) == 2
+
+
 def test_run_app_generate_with_output_dir() -> None:
     shutil.rmtree('out', ignore_errors=True)
 
