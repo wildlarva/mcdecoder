@@ -21,6 +21,10 @@ def test_run_app_help() -> None:
     assert run_app(['mcdecoder', 'generate', '-h']) == 0
 
 
+def test_run_app_version() -> None:
+    assert run_app(['mcdecoder', '--version']) == 0
+
+
 def test_run_app_generate_without_arguments() -> None:
     shutil.rmtree('out', ignore_errors=True)
 

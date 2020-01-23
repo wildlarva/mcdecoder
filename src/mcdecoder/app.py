@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import textwrap
 from typing import List, Literal, Optional, cast
 
-from . import checker, emulator, exporter, generator
+from . import __version__, checker, emulator, exporter, generator
 
 # region External functions
 
@@ -36,10 +36,12 @@ def run_app(argv: List[str]) -> int:
         return exporter.export(cast(str, args.mcfile), cast(str, args.output_file))
 
     elif args.command == 'emulate':
-        return emulator.emulate(cast(str, args.mcfile), cast(str, args.bit_pattern),
-                                base=args.base, byteorder=args.byteorder)
+        assert args.base is not None
+        assert args.byteorder is not None
+        return emulator.emulate(cast(str, args.mcfile), cast(str, args.bit_pattern), base=args.base, byteorder=args.byteorder)
 
     elif args.command == 'check':
+        assert args.base is not None
         return checker.check(cast(str, args.mcfile), cast(str, args.bit_pattern), base=args.base)
 
     return 0
@@ -76,6 +78,8 @@ def _create_parser() -> argparse.ArgumentParser:
         description='A toolset for a machine code decoder')
     subparsers = parser.add_subparsers(
         dest='command', metavar='command', required=True)
+    parser.add_argument('--version', action='version',
+                        version=f'mcdecoder {__version__.__version__}')
 
     # Create a subparser for the command 'generate'
     generate_parser = subparsers.add_parser(

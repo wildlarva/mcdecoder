@@ -13,6 +13,7 @@ import lark
 import numpy as np
 import yaml
 
+
 # region External classes
 
 # region MC description models loaded from yaml files
@@ -929,7 +930,8 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
 
 def _make_fixed_bits_info(instruction_encoding: InstructionEncodingDescription) -> Tuple[int, int]:
     """Build fixed bits information and returns fixed bit mask and fixed bits"""
-    instruction_encoding_string = _instruction_encoding_string(instruction_encoding)
+    instruction_encoding_string = _instruction_encoding_string(
+        instruction_encoding)
     fixed_bit_mask = int(instruction_encoding_string.replace(
         '0', '1').replace('x', '0'), base=2)
     fixed_bits = int(instruction_encoding_string.replace('x', '0'), base=2)
