@@ -88,6 +88,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="specifications.html">Specifications</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Command line option specification</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Positional Arguments">Positional Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Sub-commands:">Sub-commands:</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#generate">generate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#export">export</a></li>
@@ -104,6 +105,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/wildlarva/mcdecoder">Back to GitHub</a></li>
 </ul>
 
             
@@ -174,7 +176,7 @@
 <h1>Command line option specification<a class="headerlink" href="#command-line-option-specification" title="Permalink to this headline">¶</a></h1>
 <p><p>A toolset for a machine code decoder</p>
 </p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>usage: mcdecoder <span class="o">[</span>-h<span class="o">]</span> <span class="nb">command</span> ...
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>usage: mcdecoder <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span> <span class="nb">command</span> ...
 </pre></div>
 </div>
 <div class="section" id="Positional Arguments">
@@ -182,6 +184,14 @@
 <dl class="option-list">
 <dt><kbd>command</kbd></dt>
 <dd><p>Possible choices: generate, export, emulate, check</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments">
+<h2>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="option-list">
+<dt><kbd>--version</kbd></dt>
+<dd><p>show program’s version number and exit</p>
 </dd>
 </dl>
 </div>
@@ -201,8 +211,8 @@
 </dd>
 </dl>
 </div>
-<div class="section" id="Named Arguments">
-<h4>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="Named Arguments_repeat1">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat1" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--type</kbd></dt>
 <dd><p>The type of a generator used for generating codes. Possible generators are:</p>
@@ -246,8 +256,8 @@ mcdecoder generate --template user_templates --output out mc.yaml
 </dd>
 </dl>
 </div>
-<div class="section" id="Named Arguments_repeat1">
-<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat1" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="Named Arguments_repeat2">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat2" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--output</kbd></dt>
 <dd><p>A path to an output file</p>
@@ -274,8 +284,8 @@ mcdecoder <span class="nb">export</span> --output mc.csv mc.yaml
 </dd>
 </dl>
 </div>
-<div class="section" id="Named Arguments_repeat2">
-<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat2" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="Named Arguments_repeat3">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat3" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--pattern</kbd></dt>
 <dd><p>A binary/hex string as input binary data for a decoder</p>
@@ -318,8 +328,8 @@ mcdecoder emulate --byteorder little --pattern 00482de9 mc.yaml
 </dd>
 </dl>
 </div>
-<div class="section" id="Named Arguments_repeat3">
-<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat3" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="Named Arguments_repeat4">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat4" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
 <dt><kbd>--pattern</kbd></dt>
 <dd><p>A binary/hex string as input binary data for a decoder.

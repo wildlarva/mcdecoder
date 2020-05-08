@@ -86,6 +86,7 @@
 <li class="toctree-l1"><a class="reference internal" href="guides.html">User guides</a></li>
 <li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/wildlarva/mcdecoder">Back to GitHub</a></li>
 </ul>
 
             
@@ -152,7 +153,8 @@
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
- <a href="#A"><strong>A</strong></a>
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
@@ -172,6 +174,14 @@
  | <a href="#V"><strong>V</strong></a>
  
 </div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="dev_modules.html#mcdecoder.__version__.__version__">__version__ (in module mcdecoder.__version__)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -307,9 +317,9 @@
       </ul></li>
       <li><a href="dev_modules.html#mcdecoder.core.BitRangeDescription.end">end (mcdecoder.core.BitRangeDescription attribute)</a>
 </li>
-      <li><a href="dev_modules.html#mcdecoder.core.InstructionSubfieldDecoder.end_bit_in_field">end_bit_in_field (mcdecoder.core.InstructionSubfieldDecoder attribute)</a>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionSubfieldDecoder.end_bit_in_field">end_bit_in_field() (mcdecoder.core.InstructionSubfieldDecoder property)</a>
 </li>
-      <li><a href="dev_modules.html#mcdecoder.core.InstructionSubfieldDecoder.end_bit_in_instruction">end_bit_in_instruction (mcdecoder.core.InstructionSubfieldDecoder attribute)</a>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionSubfieldDecoder.end_bit_in_instruction">end_bit_in_instruction() (mcdecoder.core.InstructionSubfieldDecoder property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -347,29 +357,37 @@
         <li><a href="dev_modules.html#mcdecoder.core.FieldInstructionConditionObjectDescription.field">(mcdecoder.core.FieldInstructionConditionObjectDescription attribute)</a>
 </li>
       </ul></li>
-      <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoder.field_decoders">field_decoders (mcdecoder.core.InstructionDecoder attribute)</a>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoder.field_decoders">field_decoders() (mcdecoder.core.InstructionDecoder property)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.InstructionDescription.field_extras">field_extras (mcdecoder.core.InstructionDescription attribute)</a>
 </li>
-      <li><a href="dev_modules.html#mcdecoder.core.InstructionDecodeResult.field_results">field_results (mcdecoder.core.InstructionDecodeResult attribute)</a>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionDecodeResult.field_results">field_results() (mcdecoder.core.InstructionDecodeResult property)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.FieldIdConditionObject">FieldIdConditionObject (class in mcdecoder.core)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.FieldInstructionConditionObjectDescription">FieldInstructionConditionObjectDescription (class in mcdecoder.core)</a>
 </li>
-      <li><a href="dev_modules.html#mcdecoder.core.InstructionEncodingElementDescription.fields">fields (mcdecoder.core.InstructionEncodingElementDescription attribute)</a>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoder.fields">fields (mcdecoder.core.InstructionDecoder attribute)</a>
+
+      <ul>
+        <li><a href="dev_modules.html#mcdecoder.core.InstructionDecodeResult.fields">(mcdecoder.core.InstructionDecodeResult attribute)</a>
 </li>
-      <li><a href="dev_modules.html#mcdecoder.core.find_matched_instructions">find_matched_instructions() (in module mcdecoder.core)</a>
+        <li><a href="dev_modules.html#mcdecoder.core.InstructionEncodingElementDescription.fields">(mcdecoder.core.InstructionEncodingElementDescription attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="dev_modules.html#mcdecoder.core.find_matched_instructions">find_matched_instructions() (in module mcdecoder.core)</a>
+</li>
       <li><a href="dev_modules.html#mcdecoder.core.find_matched_instructions_vectorized">find_matched_instructions_vectorized() (in module mcdecoder.core)</a>
+</li>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoder.fixed_bit_mask">fixed_bit_mask (mcdecoder.core.InstructionDecoder attribute)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.McdDecisionNode.fixed_bit_nodes">fixed_bit_nodes (mcdecoder.core.McdDecisionNode attribute)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoder.fixed_bits">fixed_bits (mcdecoder.core.InstructionDecoder attribute)</a>
 </li>
-      <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoder.fixed_bits_mask">fixed_bits_mask (mcdecoder.core.InstructionDecoder attribute)</a>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoder.fixed_bits_mask">fixed_bits_mask() (mcdecoder.core.InstructionDecoder property)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.InstructionDescription.format">format (mcdecoder.core.InstructionDescription attribute)</a>
 </li>
@@ -415,7 +433,7 @@
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.InRangeInstructionConditionDescription">InRangeInstructionConditionDescription (class in mcdecoder.core)</a>
 </li>
-      <li><a href="dev_modules.html#mcdecoder.core.McDecoder.instruction_decoders">instruction_decoders (mcdecoder.core.McDecoder attribute)</a>
+      <li><a href="dev_modules.html#mcdecoder.core.McDecoder.instruction_decoders">instruction_decoders() (mcdecoder.core.McDecoder property)</a>
 </li>
       <li><a href="spec_mcdecoder_api.html#c.INSTRUCTION_ID_MAX">INSTRUCTION_ID_MAX (C macro)</a>
 </li>
@@ -425,10 +443,10 @@
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoder">InstructionDecoder (class in mcdecoder.core)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoderCondition">InstructionDecoderCondition (class in mcdecoder.core)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoderConditionObject">InstructionDecoderConditionObject (class in mcdecoder.core)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.InstructionDecodeResult">InstructionDecodeResult (class in mcdecoder.core)</a>
@@ -452,6 +470,8 @@
       <li><a href="dev_modules.html#mcdecoder.core.McdDecisionNode.instructions">instructions (mcdecoder.core.McdDecisionNode attribute)</a>
 
       <ul>
+        <li><a href="dev_modules.html#mcdecoder.core.McDecoder.instructions">(mcdecoder.core.McDecoder attribute)</a>
+</li>
         <li><a href="dev_modules.html#mcdecoder.core.McDescription.instructions">(mcdecoder.core.McDescription attribute)</a>
 </li>
       </ul></li>
@@ -469,11 +489,15 @@
         <li><a href="dev_modules.html#mcdecoder.core.McdDecisionTree.length_of_encoding_elements">(mcdecoder.core.McdDecisionTree attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="dev_modules.html#mcdecoder.core.load_mc_description_model">load_mc_description_model() (in module mcdecoder.core)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="dev_modules.html#mcdecoder.core.LogicalInstructionConditionDescription">LogicalInstructionConditionDescription (class in mcdecoder.core)</a>
+</li>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionSubfieldDecoder.lsb_in_field">lsb_in_field (mcdecoder.core.InstructionSubfieldDecoder attribute)</a>
+</li>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionSubfieldDecoder.lsb_in_instruction">lsb_in_instruction (mcdecoder.core.InstructionSubfieldDecoder attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -481,9 +505,13 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="dev_modules.html#mcdecoder.core.McDescription.machine">machine (mcdecoder.core.McDescription attribute)</a>
+      <li><a href="dev_modules.html#mcdecoder.core.McDecoder.machine">machine (mcdecoder.core.McDecoder attribute)</a>
+
+      <ul>
+        <li><a href="dev_modules.html#mcdecoder.core.McDescription.machine">(mcdecoder.core.McDescription attribute)</a>
 </li>
-      <li><a href="dev_modules.html#mcdecoder.core.McDecoder.machine_decoder">machine_decoder (mcdecoder.core.McDecoder attribute)</a>
+      </ul></li>
+      <li><a href="dev_modules.html#mcdecoder.core.McDecoder.machine_decoder">machine_decoder() (mcdecoder.core.McDecoder property)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.MachineDecoder">MachineDecoder (class in mcdecoder.core)</a>
 </li>
@@ -523,6 +551,8 @@
       </ul></li>
       <li><a href="dev_modules.html#module-mcdecoder.__main__">mcdecoder.__main__ (module)</a>
 </li>
+      <li><a href="dev_modules.html#module-mcdecoder.__version__">mcdecoder.__version__ (module)</a>
+</li>
       <li><a href="dev_modules.html#module-mcdecoder.app">mcdecoder.app (module)</a>
 </li>
       <li><a href="dev_modules.html#module-mcdecoder.checker">mcdecoder.checker (module)</a>
@@ -540,6 +570,8 @@
       <li><a href="dev_modules.html#mcdecoder.core.McDecoderDescription">McDecoderDescription (class in mcdecoder.core)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.McDescription">McDescription (class in mcdecoder.core)</a>
+</li>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionSubfieldDecoder.msb_in_instruction">msb_in_instruction (mcdecoder.core.InstructionSubfieldDecoder attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -623,12 +655,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="dev_modules.html#mcdecoder.core.BitRangeDescription.start">start (mcdecoder.core.BitRangeDescription attribute)</a>
 </li>
-      <li><a href="dev_modules.html#mcdecoder.core.InstructionSubfieldDecoder.start_bit_in_instruction">start_bit_in_instruction (mcdecoder.core.InstructionSubfieldDecoder attribute)</a>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionSubfieldDecoder.start_bit_in_instruction">start_bit_in_instruction() (mcdecoder.core.InstructionSubfieldDecoder property)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.common.string_length_for_byte">string_length_for_byte() (in module mcdecoder.common)</a>
 </li>
-      <li><a href="dev_modules.html#mcdecoder.core.InstructionFieldDecoder.subfield_decoders">subfield_decoders (mcdecoder.core.InstructionFieldDecoder attribute)</a>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionFieldDecoder.subfield_decoders">subfield_decoders() (mcdecoder.core.InstructionFieldDecoder property)</a>
 </li>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionFieldDecoder.subfields">subfields (mcdecoder.core.InstructionFieldDecoder attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="dev_modules.html#mcdecoder.core.EqualityIdCondition.subject">subject (mcdecoder.core.EqualityIdCondition attribute)</a>
 
       <ul>
@@ -651,30 +687,40 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="dev_modules.html#mcdecoder.common.trim_whitespace">trim_whitespace() (in module mcdecoder.common)</a>
 </li>
-      <li><a href="dev_modules.html#mcdecoder.core.AndIdCondition.type">type (mcdecoder.core.AndIdCondition attribute)</a>
+      <li><a href="dev_modules.html#mcdecoder.core.AndIdCondition.type">type() (mcdecoder.core.AndIdCondition property)</a>
 
       <ul>
-        <li><a href="dev_modules.html#mcdecoder.core.EqualityIdCondition.type">(mcdecoder.core.EqualityIdCondition attribute)</a>
+        <li><a href="dev_modules.html#mcdecoder.core.EqualityIdCondition.type">(mcdecoder.core.EqualityIdCondition property)</a>
 </li>
-        <li><a href="dev_modules.html#mcdecoder.core.FieldIdConditionObject.type">(mcdecoder.core.FieldIdConditionObject attribute)</a>
+        <li><a href="dev_modules.html#mcdecoder.core.FieldIdConditionObject.type">(mcdecoder.core.FieldIdConditionObject property)</a>
 </li>
-        <li><a href="dev_modules.html#mcdecoder.core.FunctionIdConditionObject.type">(mcdecoder.core.FunctionIdConditionObject attribute)</a>
+        <li><a href="dev_modules.html#mcdecoder.core.FunctionIdConditionObject.type">(mcdecoder.core.FunctionIdConditionObject property)</a>
 </li>
-        <li><a href="dev_modules.html#mcdecoder.core.ImmediateIdConditionObject.type">(mcdecoder.core.ImmediateIdConditionObject attribute)</a>
+        <li><a href="dev_modules.html#mcdecoder.core.ImmediateIdConditionObject.type">(mcdecoder.core.ImmediateIdConditionObject property)</a>
 </li>
-        <li><a href="dev_modules.html#mcdecoder.core.InIdCondition.type">(mcdecoder.core.InIdCondition attribute)</a>
+        <li><a href="dev_modules.html#mcdecoder.core.InIdCondition.type">(mcdecoder.core.InIdCondition property)</a>
 </li>
-        <li><a href="dev_modules.html#mcdecoder.core.InRangeIdCondition.type">(mcdecoder.core.InRangeIdCondition attribute)</a>
+        <li><a href="dev_modules.html#mcdecoder.core.InRangeIdCondition.type">(mcdecoder.core.InRangeIdCondition property)</a>
 </li>
-        <li><a href="dev_modules.html#mcdecoder.core.OrIdCondition.type">(mcdecoder.core.OrIdCondition attribute)</a>
+        <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoderCondition.type">(mcdecoder.core.InstructionDecoderCondition property)</a>
+</li>
+        <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoderConditionObject.type">(mcdecoder.core.InstructionDecoderConditionObject property)</a>
+</li>
+        <li><a href="dev_modules.html#mcdecoder.core.OrIdCondition.type">(mcdecoder.core.OrIdCondition property)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoder.type_bit_size">type_bit_size (mcdecoder.core.InstructionDecoder attribute)</a>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoder.type_bit_length">type_bit_length (mcdecoder.core.InstructionDecoder attribute)</a>
 
       <ul>
-        <li><a href="dev_modules.html#mcdecoder.core.InstructionFieldDecoder.type_bit_size">(mcdecoder.core.InstructionFieldDecoder attribute)</a>
+        <li><a href="dev_modules.html#mcdecoder.core.InstructionFieldDecoder.type_bit_length">(mcdecoder.core.InstructionFieldDecoder attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="dev_modules.html#mcdecoder.core.InstructionDecoder.type_bit_size">type_bit_size() (mcdecoder.core.InstructionDecoder property)</a>
+
+      <ul>
+        <li><a href="dev_modules.html#mcdecoder.core.InstructionFieldDecoder.type_bit_size">(mcdecoder.core.InstructionFieldDecoder property)</a>
 </li>
       </ul></li>
   </ul></td>

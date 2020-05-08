@@ -98,6 +98,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/wildlarva/mcdecoder">Back to GitHub</a></li>
 </ul>
 
             
@@ -168,7 +169,7 @@
 <h1>User templates<a class="headerlink" href="#user-templates" title="Permalink to this headline">¶</a></h1>
 <p>Some users need user-specific decoder codes or
 some codes to support decoders like constant tables.
-mcdecoder allows users to define user-specific code templates
+The mcdecoder allows users to define user-specific code templates
 to generate those codes.
 This is called user templates.</p>
 <p>To use user templates, follow the steps below:</p>
@@ -177,6 +178,7 @@ This is called user templates.</p>
 <li><p>Create user-defined template files</p></li>
 <li><p>Generate codes with the created template</p></li>
 </ol>
+<p>Here’s a tutorial for user templates.</p>
 <div class="section" id="add-user-defined-data-to-an-mc-description">
 <h2>1. Add user-defined data to an MC description<a class="headerlink" href="#add-user-defined-data-to-an-mc-description" title="Permalink to this headline">¶</a></h2>
 <p>First, you may need to add some user-specific data to your MC description file.
@@ -218,7 +220,7 @@ See <a class="reference internal" href="spec_mc_desc.html"><span class="doc">MC 
 <div class="section" id="create-user-defined-template-files">
 <h2>2. Create user-defined template files<a class="headerlink" href="#create-user-defined-template-files" title="Permalink to this headline">¶</a></h2>
 <p>Second, you must define user-defined templates.
-mcdecoder uses <a class="reference download external" download="" href="https://jinja.palletsprojects.com/"><code class="xref download docutils literal notranslate"><span class="pre">Jinja2</span></code></a> syntax for templates.
+The mcdecoder uses <a class="reference download external" download="" href="https://jinja.palletsprojects.com/"><code class="xref download docutils literal notranslate"><span class="pre">Jinja2</span></code></a> syntax for templates.
 See <a class="reference download external" download="" href="https://jinja.palletsprojects.com/templates/"><code class="xref download docutils literal notranslate"><span class="pre">Template</span> <span class="pre">Designer</span> <span class="pre">Documentation</span></code></a> to understand the template syntax.</p>
 <p>You can use template variables in your template, such as
 <code class="code docutils literal notranslate"><span class="pre">instruction_decoders</span></code> (decoder information about instructions)

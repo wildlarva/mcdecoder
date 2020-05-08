@@ -99,6 +99,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/wildlarva/mcdecoder">Back to GitHub</a></li>
 </ul>
 
             
@@ -171,13 +172,13 @@
 <h2>Decoders<a class="headerlink" href="#decoders" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McDecoder</code><span class="sig-paren">(</span><em class="sig-param">namespace: Optional[str], namespace_prefix: str, machine_decoder: mcdecoder.core.MachineDecoder, instruction_decoders: List[mcdecoder.core.InstructionDecoder], decision_trees: List[mcdecoder.core.McdDecisionTree], extras: Optional[Any]</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McDecoder</code><span class="sig-paren">(</span><em class="sig-param">namespace: Optional[str], namespace_prefix: str, machine: mcdecoder.core.MachineDecoder, instructions: List[mcdecoder.core.InstructionDecoder], decision_trees: List[mcdecoder.core.McdDecisionTree], extras: Optional[Any]</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decoder itself. The root model element of MC decoder model</p>
 <dl class="attribute">
 <dt>
 <code class="sig-name descname">decision_trees</code><em class="property"> = None</em></dt>
-<dd><p>Child McdDecisionTree</p>
+<dd><p>Child McdDecisionTrees</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -186,16 +187,34 @@
 <dd><p>User-defined data not related to a machine, an instruction and a field</p>
 </dd></dl>
 
+<dl class="method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">instruction_decoders</code></dt>
+<dd><p>Child InstructionDecoders</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.1a6.*: </span>This will be removed in 0.1b1. Use instructions instead</p>
+</div>
+</dd></dl>
+
 <dl class="attribute">
 <dt>
-<code class="sig-name descname">instruction_decoders</code><em class="property"> = None</em></dt>
+<code class="sig-name descname">instructions</code><em class="property"> = None</em></dt>
 <dd><p>Child InstructionDecoders</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt>
-<code class="sig-name descname">machine_decoder</code><em class="property"> = None</em></dt>
+<code class="sig-name descname">machine</code><em class="property"> = None</em></dt>
 <dd><p>Child MachineDecoder</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">machine_decoder</code></dt>
+<dd><p>Child MachineDecoder</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.1a6.*: </span>This will be removed in 0.1b1. Use machine instead</p>
+</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -233,7 +252,7 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, _encoding: str, encoding_element_bit_length: int, length_of_encoding_elements: int, fixed_bits_mask: int, fixed_bits: int, type_bit_size: int, match_condition: Optional[mcdecoder.core.InstructionDecoderCondition], unmatch_condition: Optional[mcdecoder.core.InstructionDecoderCondition], field_decoders: List[mcdecoder.core.InstructionFieldDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, encoding_element_bit_length: int, length_of_encoding_elements: int, fixed_bit_mask: int, fixed_bits: int, type_bit_length: int, match_condition: Optional[mcdecoder.core.InstructionDecoderCondition], unmatch_condition: Optional[mcdecoder.core.InstructionDecoderCondition], fields: List[mcdecoder.core.InstructionFieldDecoder], extras: Optional[Any], _encoding: str</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decoder for an instruction</p>
 <dl class="attribute">
@@ -248,10 +267,25 @@
 <dd><p>User-defined data for an instruction</p>
 </dd></dl>
 
+<dl class="method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">field_decoders</code></dt>
+<dd><p>Child InstructionFieldDecoders</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.1a6.*: </span>This will be removed in 0.1b1. Use fields instead</p>
+</div>
+</dd></dl>
+
 <dl class="attribute">
 <dt>
-<code class="sig-name descname">field_decoders</code><em class="property"> = None</em></dt>
+<code class="sig-name descname">fields</code><em class="property"> = None</em></dt>
 <dd><p>Child InstructionFieldDecoders</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">fixed_bit_mask</code><em class="property"> = None</em></dt>
+<dd><p>Mask of fixed bit positions of an instruction</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -260,10 +294,13 @@
 <dd><p>Fixed bits of an instruction</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="sig-name descname">fixed_bits_mask</code><em class="property"> = None</em></dt>
+<em class="property">property </em><code class="sig-name descname">fixed_bits_mask</code></dt>
 <dd><p>Mask of fixed bit positions of an instruction</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.1a6.*: </span>This will be removed in 0.1b1. Use fixed_bit_mask instead</p>
+</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -286,8 +323,17 @@
 
 <dl class="attribute">
 <dt>
-<code class="sig-name descname">type_bit_size</code><em class="property"> = None</em></dt>
-<dd><p>Bit size of a data type used for an instruction</p>
+<code class="sig-name descname">type_bit_length</code><em class="property"> = None</em></dt>
+<dd><p>Bit length of a data type used for an instruction</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">type_bit_size</code></dt>
+<dd><p>Bit length of a data type used for an instruction</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.1a6.*: </span>This will be removed in 0.1b1. Use type_bit_length instead</p>
+</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -300,7 +346,7 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionFieldDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, _start_bit: int, type_bit_size: int, subfield_decoders: List[mcdecoder.core.InstructionSubfieldDecoder], extras: Optional[Any]</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionFieldDecoder</code><span class="sig-paren">(</span><em class="sig-param">name: str, type_bit_length: int, subfields: List[mcdecoder.core.InstructionSubfieldDecoder], extras: Optional[Any], _msb: int</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decoder for an instruction field</p>
 <dl class="attribute">
@@ -315,35 +361,59 @@
 <dd><p>Name of a field</p>
 </dd></dl>
 
+<dl class="method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">subfield_decoders</code></dt>
+<dd><p>Child InstructionSubfieldDecoders</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.1a6.*: </span>This will be removed in 0.1b1. Use subfields instead</p>
+</div>
+</dd></dl>
+
 <dl class="attribute">
 <dt>
-<code class="sig-name descname">subfield_decoders</code><em class="property"> = None</em></dt>
+<code class="sig-name descname">subfields</code><em class="property"> = None</em></dt>
 <dd><p>Child InstructionSubfieldDecoders</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt>
-<code class="sig-name descname">type_bit_size</code><em class="property"> = None</em></dt>
-<dd><p>Bit size of a data type used for a field</p>
+<code class="sig-name descname">type_bit_length</code><em class="property"> = None</em></dt>
+<dd><p>Bit length of a data type used for a field</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">type_bit_size</code></dt>
+<dd><p>Bit length of a data type used for a field</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.1a6.*: </span>This will be removed in 0.1b1. Use type_bit_length instead</p>
+</div>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionSubfieldDecoder</code><span class="sig-paren">(</span><em class="sig-param">index: int</em>, <em class="sig-param">mask: int</em>, <em class="sig-param">start_bit_in_instruction: int</em>, <em class="sig-param">end_bit_in_instruction: int</em>, <em class="sig-param">end_bit_in_field: int</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionSubfieldDecoder</code><span class="sig-paren">(</span><em class="sig-param">index: int</em>, <em class="sig-param">mask: int</em>, <em class="sig-param">msb_in_instruction: int</em>, <em class="sig-param">lsb_in_instruction: int</em>, <em class="sig-param">lsb_in_field: int</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decoder for an instruction subfield</p>
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="sig-name descname">end_bit_in_field</code><em class="property"> = None</em></dt>
+<em class="property">property </em><code class="sig-name descname">end_bit_in_field</code></dt>
 <dd><p>LSB of a subfield in a field</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.1a6.*: </span>This will be removed in 0.1b1. Use lsb_in_field instead</p>
+</div>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="sig-name descname">end_bit_in_instruction</code><em class="property"> = None</em></dt>
+<em class="property">property </em><code class="sig-name descname">end_bit_in_instruction</code></dt>
 <dd><p>LSB of a subfield in an instruction</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.1a6.*: </span>This will be removed in 0.1b1. Use lsb_in_instruction instead</p>
+</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -354,14 +424,35 @@
 
 <dl class="attribute">
 <dt>
+<code class="sig-name descname">lsb_in_field</code><em class="property"> = None</em></dt>
+<dd><p>LSB of a subfield in a field</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">lsb_in_instruction</code><em class="property"> = None</em></dt>
+<dd><p>LSB of a subfield in an instruction</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
 <code class="sig-name descname">mask</code><em class="property"> = None</em></dt>
 <dd><p>Mask of a subfield in an instruction</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt>
-<code class="sig-name descname">start_bit_in_instruction</code><em class="property"> = None</em></dt>
+<code class="sig-name descname">msb_in_instruction</code><em class="property"> = None</em></dt>
 <dd><p>MSB of a subfield in an instruction</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">property </em><code class="sig-name descname">start_bit_in_instruction</code></dt>
+<dd><p>MSB of a subfield in an instruction</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.1a6.*: </span>This will be removed in 0.1b1. Use msb_in_instruction instead</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -375,11 +466,17 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Condition of instruction encoding when an instruction applys.</p>
 <p>Each subclass must have a string attribute ‘type’ to express the type of a subclass.</p>
+<dl class="method">
+<dt>
+<em class="property">abstract property </em><code class="sig-name descname">type</code></dt>
+<dd><p>Type of InstructionDecoderCondition</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">AndIdCondition</code><span class="sig-paren">(</span><em class="sig-param">conditions: List[mcdecoder.core.InstructionDecoderCondition], type: str = 'and'</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">AndIdCondition</code><span class="sig-paren">(</span><em class="sig-param">conditions: List[mcdecoder.core.InstructionDecoderCondition]</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <a class="reference internal" href="dev_modules.html#mcdecoder.core.InstructionDecoderCondition" title="mcdecoder.core.InstructionDecoderCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecoderCondition</span></code></a></p>
 <p>‘and’ condition subclass for InstructionDecoderCondition to combine conditions with AND operator</p>
 <dl class="attribute">
@@ -388,9 +485,9 @@
 <dd><p>Child InstructionDecoderConditions combined with logical AND operation</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="sig-name descname">type</code><em class="property"> = 'and'</em></dt>
+<em class="property">property </em><code class="sig-name descname">type</code></dt>
 <dd><p>Type of InstructionDecoderCondition. It’s always ‘and’ for AndIdCondition</p>
 </dd></dl>
 
@@ -398,7 +495,7 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">OrIdCondition</code><span class="sig-paren">(</span><em class="sig-param">conditions: List[mcdecoder.core.InstructionDecoderCondition], type: str = 'or'</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">OrIdCondition</code><span class="sig-paren">(</span><em class="sig-param">conditions: List[mcdecoder.core.InstructionDecoderCondition]</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <a class="reference internal" href="dev_modules.html#mcdecoder.core.InstructionDecoderCondition" title="mcdecoder.core.InstructionDecoderCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecoderCondition</span></code></a></p>
 <p>‘or’ condition subclass for InstructionDecoderCondition to combine conditions with OR operator</p>
 <dl class="attribute">
@@ -407,9 +504,9 @@
 <dd><p>Child InstructionDecoderConditions combined with logical OR operation</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="sig-name descname">type</code><em class="property"> = 'or'</em></dt>
+<em class="property">property </em><code class="sig-name descname">type</code></dt>
 <dd><p>Type of InstructionDecoderCondition. It’s always ‘or’ for OrIdCondition</p>
 </dd></dl>
 
@@ -417,7 +514,7 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">EqualityIdCondition</code><span class="sig-paren">(</span><em class="sig-param">subject: mcdecoder.core.InstructionDecoderConditionObject</em>, <em class="sig-param">operator: str</em>, <em class="sig-param">object: mcdecoder.core.InstructionDecoderConditionObject</em>, <em class="sig-param">type: str = 'equality'</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">EqualityIdCondition</code><span class="sig-paren">(</span><em class="sig-param">subject: mcdecoder.core.InstructionDecoderConditionObject</em>, <em class="sig-param">operator: str</em>, <em class="sig-param">object: mcdecoder.core.InstructionDecoderConditionObject</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <a class="reference internal" href="dev_modules.html#mcdecoder.core.InstructionDecoderCondition" title="mcdecoder.core.InstructionDecoderCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecoderCondition</span></code></a></p>
 <p>Equality condition subclass for InstructionDecoderCondition to test a field value’s equality with a value.</p>
 <p>Supported operators are ==, !=, &gt;, &gt;=, &lt; and &lt;=.</p>
@@ -439,9 +536,9 @@
 <dd><p>Subjective InstructionDecoderConditionObject to be tested</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="sig-name descname">type</code><em class="property"> = 'equality'</em></dt>
+<em class="property">property </em><code class="sig-name descname">type</code></dt>
 <dd><p>Type of InstructionDecoderCondition. It’s always ‘equality’ for EqualityIdCondition</p>
 </dd></dl>
 
@@ -449,7 +546,7 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InIdCondition</code><span class="sig-paren">(</span><em class="sig-param">subject: mcdecoder.core.InstructionDecoderConditionObject, values: List[int], type: str = 'in'</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InIdCondition</code><span class="sig-paren">(</span><em class="sig-param">subject: mcdecoder.core.InstructionDecoderConditionObject, values: List[int]</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <a class="reference internal" href="dev_modules.html#mcdecoder.core.InstructionDecoderCondition" title="mcdecoder.core.InstructionDecoderCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecoderCondition</span></code></a></p>
 <p>‘in’ condition subclass for InstructionDecoderCondition to test an instruction field is in a value set</p>
 <dl class="attribute">
@@ -458,9 +555,9 @@
 <dd><p>Subjective InstructionDecoderConditionObject to be tested</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="sig-name descname">type</code><em class="property"> = 'in'</em></dt>
+<em class="property">property </em><code class="sig-name descname">type</code></dt>
 <dd><p>Type of InstructionDecoderCondition. It’s always ‘in’ for InIdCondition</p>
 </dd></dl>
 
@@ -474,7 +571,7 @@
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InRangeIdCondition</code><span class="sig-paren">(</span><em class="sig-param">subject: mcdecoder.core.InstructionDecoderConditionObject</em>, <em class="sig-param">value_start: int</em>, <em class="sig-param">value_end: int</em>, <em class="sig-param">type: str = 'in_range'</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InRangeIdCondition</code><span class="sig-paren">(</span><em class="sig-param">subject: mcdecoder.core.InstructionDecoderConditionObject</em>, <em class="sig-param">value_start: int</em>, <em class="sig-param">value_end: int</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <a class="reference internal" href="dev_modules.html#mcdecoder.core.InstructionDecoderCondition" title="mcdecoder.core.InstructionDecoderCondition"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecoderCondition</span></code></a></p>
 <p>‘in_range’ condition subclass for InstructionDecoderCondition
 to test an instruction field is in a value range(inclusive)</p>
@@ -484,9 +581,9 @@ to test an instruction field is in a value range(inclusive)</p>
 <dd><p>Subjective InstructionDecoderConditionObject to be tested</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="sig-name descname">type</code><em class="property"> = 'in_range'</em></dt>
+<em class="property">property </em><code class="sig-name descname">type</code></dt>
 <dd><p>Type of InstructionDecoderCondition. It’s always ‘in_range’ for InRangeIdCondition</p>
 </dd></dl>
 
@@ -510,11 +607,17 @@ to test an instruction field is in a value range(inclusive)</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Object or subject of InstructionDecoderCondition.</p>
 <p>Each subclass must have a string attribute ‘type’ to express the type of a subclass.</p>
+<dl class="method">
+<dt>
+<em class="property">abstract property </em><code class="sig-name descname">type</code></dt>
+<dd><p>Type of InstructionDecoderConditionObject</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">FieldIdConditionObject</code><span class="sig-paren">(</span><em class="sig-param">field: str, element_index: Optional[int], type: str = 'field'</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">FieldIdConditionObject</code><span class="sig-paren">(</span><em class="sig-param">field: str, element_index: Optional[int]</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <a class="reference internal" href="dev_modules.html#mcdecoder.core.InstructionDecoderConditionObject" title="mcdecoder.core.InstructionDecoderConditionObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecoderConditionObject</span></code></a></p>
 <p>Field object/subject subclass for InstructionDecoderConditionObject</p>
 <dl class="attribute">
@@ -529,9 +632,9 @@ to test an instruction field is in a value range(inclusive)</p>
 <dd><p>Name of a field to be tested</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="sig-name descname">type</code><em class="property"> = 'field'</em></dt>
+<em class="property">property </em><code class="sig-name descname">type</code></dt>
 <dd><p>Type of InstructionDecoderConditionObject. It’s always ‘field’ for FieldIdConditionObject</p>
 </dd></dl>
 
@@ -539,12 +642,12 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">ImmediateIdConditionObject</code><span class="sig-paren">(</span><em class="sig-param">value: int</em>, <em class="sig-param">type: str = 'immediate'</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">ImmediateIdConditionObject</code><span class="sig-paren">(</span><em class="sig-param">value: int</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <a class="reference internal" href="dev_modules.html#mcdecoder.core.InstructionDecoderConditionObject" title="mcdecoder.core.InstructionDecoderConditionObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecoderConditionObject</span></code></a></p>
 <p>Immediate value object/subject subclass for InstructionDecoderConditionObject</p>
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="sig-name descname">type</code><em class="property"> = 'immediate'</em></dt>
+<em class="property">property </em><code class="sig-name descname">type</code></dt>
 <dd><p>Type of InstructionDecoderConditionObject. It’s always ‘immediate’ for ImmediateIdConditionObject</p>
 </dd></dl>
 
@@ -558,7 +661,7 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="class">
 <dt>
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">FunctionIdConditionObject</code><span class="sig-paren">(</span><em class="sig-param">function: str</em>, <em class="sig-param">argument: mcdecoder.core.FieldIdConditionObject</em>, <em class="sig-param">type: str = 'function'</em><span class="sig-paren">)</span></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">FunctionIdConditionObject</code><span class="sig-paren">(</span><em class="sig-param">function: str</em>, <em class="sig-param">argument: mcdecoder.core.FieldIdConditionObject</em><span class="sig-paren">)</span></dt>
 <dd><p>Bases: <a class="reference internal" href="dev_modules.html#mcdecoder.core.InstructionDecoderConditionObject" title="mcdecoder.core.InstructionDecoderConditionObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">mcdecoder.core.InstructionDecoderConditionObject</span></code></a></p>
 <p>Uses the result of a function call as an object/subject. It is a subclass for InstructionDecoderConditionObject</p>
 <dl class="attribute">
@@ -573,9 +676,9 @@ to test an instruction field is in a value range(inclusive)</p>
 <dd><p>Name of a function to be called</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt>
-<code class="sig-name descname">type</code><em class="property"> = 'function'</em></dt>
+<em class="property">property </em><code class="sig-name descname">type</code></dt>
 <dd><p>Type of InstructionDecoderConditionObject. It’s always ‘function’ for FunctionIdConditionObject</p>
 </dd></dl>
 

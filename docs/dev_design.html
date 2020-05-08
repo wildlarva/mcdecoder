@@ -108,6 +108,7 @@
 <li class="toctree-l2"><a class="reference internal" href="dev_coding_style.html">Coding style</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/wildlarva/mcdecoder">Back to GitHub</a></li>
 </ul>
 
             
@@ -180,7 +181,7 @@
 <h2>Runtime environment<a class="headerlink" href="#runtime-environment" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="runtime-structure-and-dependencies">
 <h3>Runtime structure and dependencies<a class="headerlink" href="#runtime-structure-and-dependencies" title="Permalink to this headline">¶</a></h3>
-<div class="graphviz"><img src="_images/graphviz-9a03fb66a778642997f6d27ad1240e8ea40893da.png" alt="digraph runtime {
+<div class="graphviz"><img src="_images/graphviz-aa6f6f549c3d4c0f35d35bec9168692ab3dadc48.png" alt="digraph runtime {
 node [shape=box]
 edge [style=dotted]
 
@@ -193,6 +194,7 @@ subgraph cluster_mcdecoder {
 
     mcdecoder [label = &quot;mcdecoder (command)&quot;]
     common
+    __version__
     templates [label = &quot;templates/*/*&quot;]
     schemas [label = &quot;schemas/*.json&quot;]
     grammars [label = &quot;grammars/*.lark&quot;]
@@ -265,6 +267,9 @@ Uses vectorized calculations for performance.</p>
 <p>Provides utilities and more to other modules.</p>
 </td>
 </tr>
+<tr class="row-even"><td><p>__version__</p></td>
+<td><p>Provides the version number of mcdecoder</p></td>
+</tr>
 </tbody>
 </table>
 <ul class="simple">
@@ -280,7 +285,7 @@ converting the base of integer values, etc.</p></li>
 the related features of core module.
 This module does billions of calculations for checking,
 so its performance is so important.</p></li>
-<li><p>All modules have dependencies to common module.</p></li>
+<li><p>All modules have dependencies to common and __version__ module.</p></li>
 </ul>
 </div>
 <div class="section" id="other-important-files-in-mcdecoder">
@@ -350,10 +355,19 @@ so its performance is so important.</p></li>
 <h2>Development environment<a class="headerlink" href="#development-environment" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="development-structure-and-dependencies">
 <h3>Development structure and dependencies<a class="headerlink" href="#development-structure-and-dependencies" title="Permalink to this headline">¶</a></h3>
-<div class="graphviz"><img src="_images/graphviz-b553eb93a7afe81a2ea747d3acf6dc7d8bdb3b03.png" alt="digraph develop {
+<div class="graphviz"><img src="_images/graphviz-96f0cfc3878fa62c02c32da5fe068913320457d7.png" alt="digraph develop {
 compound = true
 node [shape=box]
 edge [style=dotted]
+
+subgraph cluster_conan {
+    label = &quot;Conan&quot;
+
+    cucumber_cpp [label = &quot;Cucumber-Cpp&quot;]
+    google_test [label = &quot;Google Test&quot;]
+
+    cucumber_cpp -&gt; google_test
+}
 
 subgraph cluster_sphinx {
     label = &quot;Sphinx&quot;
@@ -362,18 +376,20 @@ subgraph cluster_sphinx {
     sphinx_jsonschema [label = &quot;Sphinx\nJSON Schema&quot;]
     sphinx_rtd_theme [label = &quot;Read the Docs\nSphinx Theme&quot;]
     m2r [label = &quot;M2R&quot;]
-    graphviz [label = &quot;Graphviz&quot;]
 }
 
-subgraph cluster_conan {
-    label = &quot;Conan&quot;
+subgraph cluster_bundler {
+    label = &quot;Bundler&quot;
 
-    google_test [label = &quot;Google Test&quot;]
+    cucumber [label = &quot;Cucumber&quot;]
 }
+
+graphviz [label = &quot;Graphviz&quot;]
 
 mcdecoder -&gt; pytest
+mcdecoder -&gt; cucumber -&gt; cucumber_cpp
 mcdecoder -&gt; sphinx_rtd_theme [lhead=cluster_sphinx]
-mcdecoder -&gt; google_test [lhead=cluster_conan]
+sphinx_rtd_theme -&gt; graphviz [ltail=cluster_sphinx]
 }" class="graphviz" /></div>
 </div>
 <div class="section" id="packages">
@@ -395,28 +411,37 @@ mcdecoder -&gt; google_test [lhead=cluster_conan]
 <tr class="row-odd"><td><p>pytest</p></td>
 <td><p>Used to test mcdecoder</p></td>
 </tr>
+<tr class="row-even"><td><p>Bundler</p></td>
+<td><p>Used to fix the version of Cucumber</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cucumber</p></td>
+<td><p>Used to test generated decoders</p></td>
+</tr>
 <tr class="row-even"><td><p>Conan</p></td>
 <td><p>Used to manage packages of C/C++</p></td>
 </tr>
-<tr class="row-odd"><td><p>Google Test</p></td>
+<tr class="row-odd"><td><p>Cucumber-Cpp</p></td>
 <td><p>Used to test generated decoders in C/C++</p></td>
 </tr>
-<tr class="row-even"><td><p>Sphinx</p></td>
+<tr class="row-even"><td><p>Google Test</p></td>
+<td><p>Used to test generated decoders in C/C++</p></td>
+</tr>
+<tr class="row-odd"><td><p>Sphinx</p></td>
 <td><p>Used to build documents</p></td>
 </tr>
-<tr class="row-odd"><td><p>sphinx-argparse</p></td>
+<tr class="row-even"><td><p>sphinx-argparse</p></td>
 <td><p>Used to build documents about command line options</p></td>
 </tr>
-<tr class="row-even"><td><p>Sphinx JSON Schema</p></td>
+<tr class="row-odd"><td><p>Sphinx JSON Schema</p></td>
 <td><p>Used to build documents about the schema of MC description</p></td>
 </tr>
-<tr class="row-odd"><td><p>Read the Docs Sphinx Theme</p></td>
+<tr class="row-even"><td><p>Read the Docs Sphinx Theme</p></td>
 <td><p>Used to improve usability of generated documents</p></td>
 </tr>
-<tr class="row-even"><td><p>M2R</p></td>
+<tr class="row-odd"><td><p>M2R</p></td>
 <td><p>Used to import README.md to Sphinx</p></td>
 </tr>
-<tr class="row-odd"><td><p>Graphviz</p></td>
+<tr class="row-even"><td><p>Graphviz</p></td>
 <td><p>Used to show diagrams in documents</p></td>
 </tr>
 </tbody>
