@@ -10,6 +10,14 @@ def test_create_mcdecoder_model_namespace() -> None:
     mcdecoder_model.namespace_prefix == 'arm_'
 
 
+def test_create_mcdecoder_model_with_config() -> None:
+    mcdecoder_model = create_mcdecoder_model(
+        'test/with_config.yaml')
+
+    instruction = mcdecoder_model.instructions[0]
+    assert instruction.extras['extra_attribute'] == 'extra_content'
+
+
 def test_create_mcdecoder_model_extras() -> None:
     mcdecoder_model = create_mcdecoder_model(
         'test/arm.yaml')

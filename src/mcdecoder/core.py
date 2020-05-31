@@ -2,12 +2,23 @@ from abc import abstractmethod
 from dataclasses import dataclass
 import glob
 import importlib.resources
+import importlib.util
 import itertools
 import json
 import os.path
+from types import ModuleType
 from typing import (
-    Any, Callable, Dict, Iterable, List, Literal, Optional, Tuple, TypedDict,
-    cast)
+    Any,
+    Callable,
+    Dict,
+    Iterable,
+    List,
+    Literal,
+    Optional,
+    Tuple,
+    TypedDict,
+    cast,
+)
 
 import deprecation
 import jsonschema
@@ -51,6 +62,8 @@ class McDecoderDescription(TypedDict):
     """Decoder information that isn't related to a machine, an instruction and a field"""
     namespace: Optional[str]
     """Namespace for the symbols of a generated decoder"""
+    process_instruction_hook: Optional[str]
+    """Hook function to process model for an instruction decoder"""
 
 
 class McDescription(TypedDict):
@@ -603,6 +616,12 @@ def create_mcdecoder_model(mcfile: str) -> McDecoder:
     # Load MC description
     mc_desc_model = load_mc_description_model(mcfile)
 
+    # Load config
+    config_file = os.path.join(os.path.dirname(mcfile), 'config.py')
+    config_module: Optional[ModuleType] = None
+    if os.path.isfile(config_file):
+        config_module = _load_config_module(config_file)
+
     # Create machine and instruction decoders
     machine_decoder = _create_machine_decoder_model(mc_desc_model['machine'])
     instruction_decoders = [_create_instruction_decoder_model(
@@ -613,13 +632,14 @@ def create_mcdecoder_model(mcfile: str) -> McDecoder:
 
     # Create MC decoder
     namespace: Optional[str] = None
+    decoder_desc_model: Optional[McDecoderDescription] = None
     if 'decoder' in mc_desc_model:
         decoder_desc_model = mc_desc_model['decoder']
         if 'namespace' in decoder_desc_model:
             namespace = decoder_desc_model['namespace']
 
     extras = mc_desc_model['extras'] if 'extras' in mc_desc_model else None
-    return McDecoder(
+    mcd = McDecoder(
         namespace=namespace,
         namespace_prefix=_make_namespace_prefix(namespace),
         machine=machine_decoder,
@@ -627,6 +647,21 @@ def create_mcdecoder_model(mcfile: str) -> McDecoder:
         decision_trees=decision_trees,
         extras=extras,
     )
+
+    # Process model
+    process_instruction_hook: Optional[Callable[[
+        InstructionDecoder], None]] = None
+    if config_module is not None:
+        if decoder_desc_model is not None:
+            if 'process_instruction_hook' in decoder_desc_model:
+                process_instruction_hook = getattr(config_module, cast(
+                    str, decoder_desc_model['process_instruction_hook']))
+
+    if process_instruction_hook is not None:
+        for instruction_decoder in instruction_decoders:
+            process_instruction_hook(instruction_decoder)
+
+    return mcd
 
 
 def load_mc_description_model(mcfile: str) -> McDescription:
@@ -645,6 +680,14 @@ def load_mc_description_model(mcfile: str) -> McDescription:
     _validate_mc_desc_model(mc_desc_model)
 
     return cast(McDescription, mc_desc_model)
+
+
+def _load_config_module(config_file: str) -> ModuleType:
+    spec = importlib.util.spec_from_file_location(
+        'mcdecoder.config', config_file)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def parse_instruction_encoding(instruction_encoding: str) -> InstructionEncodingDescription:

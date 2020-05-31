@@ -62,6 +62,10 @@
                 "namespace": {
                     "type": "string",
                     "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
+                },
+                "process_instruction_hook": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
                 }
             },
             "additionalProperties": false

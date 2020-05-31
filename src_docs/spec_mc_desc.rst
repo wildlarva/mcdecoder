@@ -372,6 +372,31 @@ decoder.namespace
 
 :code:`namespace` defines the namespace for the symbols of a generated decoder.
 
+decoder.process_instruction_hook
+========================================================================================================
+
+.. warning::
+
+    This is an experimental feature. The name and forms of this attribute might be changed in the future release.
+
+:code:`process_instruction_hook` defines the name of the hook function to to process user-specific information into a different form.
+
+Here's an example of defining a hook function to process user-specific information.
+
+.. code-block:: yaml
+
+    decoder:
+      process_instruction_hook: process_instruction
+
+.. code-block:: python
+    :caption: config.py
+
+    from mcdecoder.core import InstructionDecoder
+
+    def process_instruction(instruction: InstructionDecoder) -> None:
+        extra_value = instruction.extras['extra_attribute']
+        instruction.extras['extra_attribute'] = 'processed ' + extra_value
+
 ******************************************************************************************************
 extras
 ******************************************************************************************************

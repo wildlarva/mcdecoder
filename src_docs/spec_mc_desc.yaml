@@ -22,6 +22,8 @@ instructions: # Describes instructions
 
 decoder: # [optional] Decoder information of the global scope
   namespace: ns # [optional] Namespace for the symbols of a generated decoder
+  # [optional] Name of the hook function to process user-specific information for an instruction
+  process_instruction_hook: process_instruction
 
 extras: # [optional] User-defined data for the global scope
   compiler: gcc
