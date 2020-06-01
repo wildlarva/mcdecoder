@@ -6,7 +6,7 @@
  */
 
 {%- for inst in instruction_decoders -%}
-    {%- for field in inst.field_decoders -%}
+    {%- for field in inst.fields -%}
         {# Example usage of user-defined data for fields #}
         {# Check if the attribute 'type' exists #}
         {%- if field.extras.type -%}

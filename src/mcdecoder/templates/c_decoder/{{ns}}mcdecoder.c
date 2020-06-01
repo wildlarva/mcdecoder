@@ -151,15 +151,15 @@ bool {{ ns }}DecodeInstruction(const {{ ns }}DecodeRequest *request, {{ ns }}Dec
 /* individual decode functions */
 {% for inst in instruction_decoders %}
     static bool DecodeInstruction_{{ inst.name }}(DecodeContext *context) {
-        if ((context->code{{ inst.encoding_element_bit_length }}x{{ inst.length_of_encoding_elements }} & (0x{{ '%08x'|format(inst.fixed_bits_mask) }}l)) != (0x{{ '%08x'|format(inst.fixed_bits) }}l)) {
+        if ((context->code{{ inst.encoding_element_bit_length }}x{{ inst.length_of_encoding_elements }} & (0x{{ '%08x'|format(inst.fixed_bit_mask) }}l)) != (0x{{ '%08x'|format(inst.fixed_bits) }}l)) {
             return false;
         }
 
         context->result->instruction_id = {{ ns }}InstructionId_k_{{ inst.name }};
-        {% for field in inst.field_decoders -%}
+        {% for field in inst.fields -%}
             context->result->instruction.{{ inst.name }}.{{ field.name }} =
-            {% for sf in field.subfield_decoders -%}
-                {% if not loop.first %}| {% endif %}(((context->code{{ inst.encoding_element_bit_length }}x{{ inst.length_of_encoding_elements }} & (0x{{ '%08x'|format(sf.mask) }}l)) >> ({{ sf.end_bit_in_instruction }})) << ({{ sf.end_bit_in_field }})){% if loop.last %};{% endif %}
+            {% for sf in field.subfields -%}
+                {% if not loop.first %}| {% endif %}(((context->code{{ inst.encoding_element_bit_length }}x{{ inst.length_of_encoding_elements }} & (0x{{ '%08x'|format(sf.mask) }}l)) >> ({{ sf.lsb_in_instruction }})) << ({{ sf.lsb_in_field }})){% if loop.last %};{% endif %}
             {% endfor %}
         {% endfor %}
         {% if inst.match_condition -%}

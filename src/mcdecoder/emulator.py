@@ -34,7 +34,7 @@ def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = 16, byteorder:
             print(f'instruction: {instruction_result.decoder.name}\n')
 
             # Output about fields
-            for field_result in instruction_result.field_results:
+            for field_result in instruction_result.fields:
                 print(
                     f'{field_result.decoder.name}: {field_result.value}, {field_result.value:#x}, {field_result.value:#b}')
     else:

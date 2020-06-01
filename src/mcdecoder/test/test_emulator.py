@@ -32,9 +32,9 @@ def test__emulate_with_base2_big_endian() -> None:
 
     (instruction_push,) = instructions
     assert instruction_push.decoder.name == 'push_1'
-    assert len(instruction_push.field_results) == 2
+    assert len(instruction_push.fields) == 2
 
-    field_cond, field_register_list = instruction_push.field_results
+    field_cond, field_register_list = instruction_push.fields
     assert field_cond.decoder.name == 'cond'
     assert field_cond.value == 0x0e
 
@@ -49,9 +49,9 @@ def test__emulate_with_base16_big_endian_code32x1() -> None:
 
     (instruction_push,) = instructions
     assert instruction_push.decoder.name == 'push_1'
-    assert len(instruction_push.field_results) == 2
+    assert len(instruction_push.fields) == 2
 
-    field_cond, field_register_list = instruction_push.field_results
+    field_cond, field_register_list = instruction_push.fields
     assert field_cond.decoder.name == 'cond'
     assert field_cond.value == 0x0e
 
@@ -66,9 +66,9 @@ def test__emulate_with_base16_big_endian_code16x2() -> None:
 
     (instruction_push,) = instructions
     assert instruction_push.decoder.name == 'push_1'
-    assert len(instruction_push.field_results) == 2
+    assert len(instruction_push.fields) == 2
 
-    field_m, field_register_list = instruction_push.field_results
+    field_m, field_register_list = instruction_push.fields
     assert field_m.decoder.name == 'M'
     assert field_m.value == 0x1
 
@@ -83,9 +83,9 @@ def test__emulate_with_base2_little_endian() -> None:
 
     (instruction_push,) = instructions
     assert instruction_push.decoder.name == 'push_1'
-    assert len(instruction_push.field_results) == 2
+    assert len(instruction_push.fields) == 2
 
-    field_cond, field_register_list = instruction_push.field_results
+    field_cond, field_register_list = instruction_push.fields
     assert field_cond.decoder.name == 'cond'
     assert field_cond.value == 0x0e
 
@@ -100,9 +100,9 @@ def test__emulate_with_base16_little_endian_code32x1() -> None:
 
     (instruction_push,) = instructions
     assert instruction_push.decoder.name == 'push_1'
-    assert len(instruction_push.field_results) == 2
+    assert len(instruction_push.fields) == 2
 
-    field_cond, field_register_list = instruction_push.field_results
+    field_cond, field_register_list = instruction_push.fields
     assert field_cond.decoder.name == 'cond'
     assert field_cond.value == 0x0e
 
@@ -117,9 +117,9 @@ def test__emulate_with_base16_little_endian_code16x2() -> None:
 
     (instruction_push,) = instructions
     assert instruction_push.decoder.name == 'push_1'
-    assert len(instruction_push.field_results) == 2
+    assert len(instruction_push.fields) == 2
 
-    field_m, field_register_list = instruction_push.field_results
+    field_m, field_register_list = instruction_push.fields
     assert field_m.decoder.name == 'M'
     assert field_m.value == 0x1
 
@@ -134,9 +134,9 @@ def test__emulate_insufficient_bits_base2() -> None:
 
     (instruction_push,) = instructions
     assert instruction_push.decoder.name == 'push_1'
-    assert len(instruction_push.field_results) == 2
+    assert len(instruction_push.fields) == 2
 
-    field_cond, field_register_list = instruction_push.field_results
+    field_cond, field_register_list = instruction_push.fields
     assert field_cond.decoder.name == 'cond'
     assert field_cond.value == 0x0e
 
@@ -151,9 +151,9 @@ def test__emulate_insufficient_bits_base16() -> None:
 
     (instruction_push,) = instructions
     assert instruction_push.decoder.name == 'push_1'
-    assert len(instruction_push.field_results) == 2
+    assert len(instruction_push.fields) == 2
 
-    field_cond, field_register_list = instruction_push.field_results
+    field_cond, field_register_list = instruction_push.fields
     assert field_cond.decoder.name == 'cond'
     assert field_cond.value == 0x0e
 
@@ -168,9 +168,9 @@ def test__emulate_excessive_bits_base2() -> None:
 
     (instruction_push,) = instructions
     assert instruction_push.decoder.name == 'push_1'
-    assert len(instruction_push.field_results) == 2
+    assert len(instruction_push.fields) == 2
 
-    field_cond, field_register_list = instruction_push.field_results
+    field_cond, field_register_list = instruction_push.fields
     assert field_cond.decoder.name == 'cond'
     assert field_cond.value == 0x0e
 
@@ -185,9 +185,9 @@ def test__emulate_excessive_bits_base16() -> None:
 
     (instruction_push,) = instructions
     assert instruction_push.decoder.name == 'push_1'
-    assert len(instruction_push.field_results) == 2
+    assert len(instruction_push.fields) == 2
 
-    field_cond, field_register_list = instruction_push.field_results
+    field_cond, field_register_list = instruction_push.fields
     assert field_cond.decoder.name == 'cond'
     assert field_cond.value == 0x0e
 

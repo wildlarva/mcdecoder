@@ -185,7 +185,7 @@ def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitP
 
     # N x M matrix of detected duplicates and instructions holding boolean whether an instruction is matched
     duplicate_instruction_mat = np.full(
-        (1, len(mcdecoder.instruction_decoders)), False)
+        (1, len(mcdecoder.instructions)), False)
 
     context = _CheckContext(bit_pattern=bit_pattern, decode_context=decode_context,
                             duplicate_instruction_mat=duplicate_instruction_mat)
@@ -433,7 +433,7 @@ def _detect_duplicate_instruction_pairs(context: _CheckContext) -> List[List[str
     # Make unique instruction pair combinations
     if len(duplicate_instruction_mat) > 0:
         instruction_name_vec = np.array(
-            [instruction.name for instruction in context.decode_context.mcdecoder.instruction_decoders])
+            [instruction.name for instruction in context.decode_context.mcdecoder.instructions])
 
         duplicate_instruction_mat = np.unique(
             duplicate_instruction_mat, axis=0)

@@ -31,8 +31,8 @@ typedef struct {
 
 {% for inst in instruction_decoders %}
 typedef struct {
-	{% for field in inst.field_decoders %}
-		{{ ns }}uint{{ field.type_bit_size }} {{ field.name }};	/* {% for sf in field.subfield_decoders %}{{ sf.start_bit_in_instruction }}-{{ sf.end_bit_in_instruction }}{% if not loop.last %}, {% endif %}{% endfor %} */
+	{% for field in inst.fields %}
+		{{ ns }}uint{{ field.type_bit_length }} {{ field.name }};	/* {% for sf in field.subfields %}{{ sf.msb_in_instruction }}-{{ sf.lsb_in_instruction }}{% if not loop.last %}, {% endif %}{% endfor %} */
 	{% endfor %}
 } {{ ns }}OpCodeFormatType_{{ inst.name }};
 {% endfor %}

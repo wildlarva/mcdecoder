@@ -71,8 +71,8 @@ def _generate(mcdecoder_model: core.McDecoder, output_directory: str, template_l
     # Make template arguments
     template_args = {
         'mcdecoder': mcdecoder_model,
-        'machine_decoder': mcdecoder_model.machine_decoder,
-        'instruction_decoders': mcdecoder_model.instruction_decoders,
+        'machine_decoder': mcdecoder_model.machine,
+        'instruction_decoders': mcdecoder_model.instructions,
         # Shorthand for mcdecoder.namespace_prefix
         'ns': mcdecoder_model.namespace_prefix,
         'extras': mcdecoder_model.extras,  # Shorthand for mcdecoder.extras

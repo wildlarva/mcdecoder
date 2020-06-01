@@ -750,7 +750,7 @@ def find_matched_instructions(context: DecodeContext) -> List[InstructionDecoder
     test_mat = find_matched_instructions_vectorized(context_vectorized)
 
     instruction_vec = np.array(
-        context.mcdecoder.instruction_decoders, dtype=np.object)
+        context.mcdecoder.instructions, dtype=np.object)
     return list(instruction_vec[test_mat[0]])
 
 
@@ -764,12 +764,12 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
     """
     # Vectorize the attributes of instruction decoders
     instruction_fields_mat = np.array([(instruction.encoding_element_bit_length, instruction.length_of_encoding_elements,
-                                        instruction.fixed_bits_mask, instruction.fixed_bits)
-                                       for instruction in context.mcdecoder.instruction_decoders])
+                                        instruction.fixed_bit_mask, instruction.fixed_bits)
+                                       for instruction in context.mcdecoder.instructions])
 
     encoding_element_bit_length_vec = instruction_fields_mat[:, 0]
     length_of_encoding_elements_vec = instruction_fields_mat[:, 1]
-    fixed_bits_mask_vec = instruction_fields_mat[:, 2]
+    fixed_bit_mask_vec = instruction_fields_mat[:, 2]
     fixed_bits_vec = instruction_fields_mat[:, 3]
 
     # Test instructions what form of codes they need
@@ -788,10 +788,10 @@ def find_matched_instructions_vectorized(context: DecodeContextVectorized) -> np
     code_mat[:, code32x1_test_vec] = context.code32x1_vec.reshape(-1, 1)
 
     # N x M matrix of codes and instructions holding fixed bits test boolean values
-    fb_test_mat = (code_mat & fixed_bits_mask_vec) == fixed_bits_vec
+    fb_test_mat = (code_mat & fixed_bit_mask_vec) == fixed_bits_vec
 
     test_mat = fb_test_mat
-    for i, instruction_decoder in enumerate(context.mcdecoder.instruction_decoders):
+    for i, instruction_decoder in enumerate(context.mcdecoder.instructions):
         if instruction_decoder.match_condition is not None:
             test_vec = _test_instruction_condition_vectorized(
                 code_mat[:, i], instruction_decoder.match_condition, instruction_decoder)
@@ -819,7 +819,7 @@ def decode_instruction(context: DecodeContext, instruction_decoder: InstructionD
     code = _get_appropriate_code(context, instruction_decoder)
 
     field_results: List[InstructionFieldDecodeResult] = []
-    for field_decoder in instruction_decoder.field_decoders:
+    for field_decoder in instruction_decoder.fields:
         value = _decode_field(code, field_decoder)
         field_results.append(InstructionFieldDecodeResult(
             decoder=field_decoder, value=value))
@@ -1046,7 +1046,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
         element) for element in instruction_encoding.elements)
 
     # Build fixed bits information
-    fixed_bits_mask, fixed_bits = _make_fixed_bits_info(instruction_encoding)
+    fixed_bit_mask, fixed_bits = _make_fixed_bits_info(instruction_encoding)
 
     # Save the start bit positions of field formats
     ff_start_bit_in_instruction = instruction_bit_size - 1
@@ -1096,7 +1096,7 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
         _encoding=_instruction_encoding_string(instruction_encoding),
         encoding_element_bit_length=encoding_element_bit_length,
         length_of_encoding_elements=len(instruction_encoding.elements),
-        fixed_bit_mask=fixed_bits_mask,
+        fixed_bit_mask=fixed_bit_mask,
         fixed_bits=fixed_bits,
         type_bit_length=_calc_type_bit_size(instruction_bit_size),
         fields=field_decoders,
@@ -1401,9 +1401,9 @@ def _print_node(node: McdDecisionNode, level: int) -> None:
 
 def _decode_field(code: int, field_decoder: InstructionFieldDecoder) -> int:
     value = 0
-    for sf_decoder in field_decoder.subfield_decoders:
+    for sf_decoder in field_decoder.subfields:
         value |= ((code & sf_decoder.mask) >>
-                  sf_decoder.end_bit_in_instruction) << sf_decoder.end_bit_in_field
+                  sf_decoder.lsb_in_instruction) << sf_decoder.lsb_in_field
     return value
 
 
@@ -1479,7 +1479,7 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
 def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: InstructionDecoderConditionObject,
                                              instruction_decoder: InstructionDecoder) -> np.ndarray:
     if isinstance(object, FieldIdConditionObject):
-        field_decoder = next((field for field in instruction_decoder.field_decoders if field.name ==
+        field_decoder = next((field for field in instruction_decoder.fields if field.name ==
                               object.field), None)
         if field_decoder is None:
             return np.zeros_like(code_vec)
@@ -1510,9 +1510,9 @@ def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: Instr
 
 def _decode_field_vectorized(code_vec: np.ndarray, field_decoder: InstructionFieldDecoder) -> np.ndarray:
     value_vec = np.zeros_like(code_vec)
-    for sf_decoder in field_decoder.subfield_decoders:
+    for sf_decoder in field_decoder.subfields:
         value_vec |= ((code_vec & sf_decoder.mask) >>
-                      sf_decoder.end_bit_in_instruction) << sf_decoder.end_bit_in_field
+                      sf_decoder.lsb_in_instruction) << sf_decoder.lsb_in_field
     return value_vec
 
 

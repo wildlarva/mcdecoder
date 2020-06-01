@@ -28,8 +28,8 @@ typedef enum {
 {% for inst in instruction_decoders %}
 	/** Decoding result for {{ inst.name }} */
 	typedef struct {
-		{% for field in inst.field_decoders -%}
-			uint{{ field.type_bit_size }}_t {{ field.name }};	/** Bit {% for sf in field.subfield_decoders %}{{ sf.start_bit_in_instruction }}-{{ sf.end_bit_in_instruction }}{% if not loop.last %}, {% endif %}{% endfor %}: Decoding result for {{ field.name }} */
+		{% for field in inst.fields -%}
+			uint{{ field.type_bit_length }}_t {{ field.name }};	/** Bit {% for sf in field.subfields %}{{ sf.msb_in_instruction }}-{{ sf.lsb_in_instruction }}{% if not loop.last %}, {% endif %}{% endfor %}: Decoding result for {{ field.name }} */
 		{% endfor %}
 	} {{ ns }}InstructionDecodeResult_{{ inst.name }};
 {% endfor %}

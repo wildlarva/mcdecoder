@@ -55,14 +55,14 @@ typedef struct {
 /* op constants */
 {% for inst in instruction_decoders %}
     /* {{ inst.name }} */
-    #define OP_FB_MASK_{{ inst.name }} (0x{{ '%08x'|format(inst.fixed_bits_mask) }}l) /* fixed bits mask */
+    #define OP_FB_MASK_{{ inst.name }} (0x{{ '%08x'|format(inst.fixed_bit_mask) }}l) /* fixed bits mask */
     #define OP_FB_{{ inst.name }} (0x{{ '%08x'|format(inst.fixed_bits) }}l) /* fixed bits */
-    {% for field in inst.field_decoders %}
-        {% for sf in field.subfield_decoders %}
+    {% for field in inst.fields %}
+        {% for sf in field.subfields %}
             /* {{ sf.index }}th subfield of the field '{{ field.name }}' */
             #define OP_SF_MASK_{{ inst.name }}_{{ field.name }}_{{ sf.index }} (0x{{ '%08x'|format(sf.mask) }}l) /* subfield mask */
-            #define OP_SF_EBII_{{ inst.name }}_{{ field.name }}_{{ sf.index }} ({{ sf.end_bit_in_instruction }}) /* subfield end bit position in instruction */
-            #define OP_SF_EBIF_{{ inst.name }}_{{ field.name }}_{{ sf.index }} ({{ sf.end_bit_in_field }}) /* subfield end bit position in field */
+            #define OP_SF_EBII_{{ inst.name }}_{{ field.name }}_{{ sf.index }} ({{ sf.lsb_in_instruction }}) /* subfield end bit position in instruction */
+            #define OP_SF_EBIF_{{ inst.name }}_{{ field.name }}_{{ sf.index }} ({{ sf.lsb_in_field }}) /* subfield end bit position in field */
         {% endfor %}
     {% endfor %}
 {% endfor %}
@@ -102,9 +102,9 @@ static {{ ns }}uint32 setbit_count({{ ns }}uint32 value) {
         context->optype->code_id = {{ ns }}OpCodeId_{{ inst.name }};
         context->optype->format_id = {{ ns }}OP_CODE_FORMAT_{{ inst.name }};
         context->decoded_code->type_id = {{ ns }}OP_CODE_FORMAT_{{ inst.name }};
-        {% for field in inst.field_decoders %}
+        {% for field in inst.fields %}
             context->decoded_code->code.{{ inst.name }}.{{ field.name }} =
-            {% for sf in field.subfield_decoders %}
+            {% for sf in field.subfields %}
                 {% if not loop.first %}| {% endif %}(((context->code{{ inst.encoding_element_bit_length }}x{{ inst.length_of_encoding_elements }} & OP_SF_MASK_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) >> OP_SF_EBII_{{ inst.name }}_{{ field.name }}_{{ sf.index }}) << OP_SF_EBIF_{{ inst.name }}_{{ field.name }}_{{ sf.index }}){% if loop.last %};{% endif %}
             {% endfor %}
         {% endfor %}
