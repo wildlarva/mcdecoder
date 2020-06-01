@@ -458,7 +458,7 @@ Here's an example of including instructions from other files.
 .. literalinclude:: ../examples/include/instructions/push_instructions.yaml
     :caption: instructions/push_instructions.yaml
 
-You can see this :download:`example in github <https://github.com/wildlarva/mcdecoder/blob/master/examples/include>`.
+You can see this `example in github <https://github.com/wildlarva/mcdecoder/blob/master/examples/include>`__.
 
 Expression: :code:`!include <path-included>`
 

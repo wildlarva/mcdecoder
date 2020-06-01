@@ -179,7 +179,7 @@ Good! It coincides with the result of :code:`mcdecoder emulate` and
 the tutorial is over.
 
 See :doc:`spec_mcdecoder_api` for more details about the decoder API.
-You can see :download:`example files in the tutorial in github <https://github.com/wildlarva/mcdecoder/blob/master/examples/quickstart>`.
+You can see `example files in the tutorial in github <https://github.com/wildlarva/mcdecoder/blob/master/examples/quickstart>`__.
 
 *********************************************************************
 What's next?

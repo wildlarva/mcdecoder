@@ -36,8 +36,8 @@ Make :code:`arm.yaml` that contains the following content.
 =============================================
 
 Second, you must define user-defined templates.
-The mcdecoder uses :download:`Jinja2 <https://jinja.palletsprojects.com/>` syntax for templates.
-See :download:`Template Designer Documentation <https://jinja.palletsprojects.com/templates/>` to understand the template syntax.
+The mcdecoder uses `Jinja2 <https://jinja.palletsprojects.com/>`__ syntax for templates.
+See `Template Designer Documentation <https://jinja.palletsprojects.com/templates/>`__ to understand the template syntax.
 
 You can use template variables in your template, such as
 :code:`instruction_decoders` (decoder information about instructions)
@@ -85,13 +85,13 @@ And the generated files will be:
    :language: c
    :caption: out/arm_constants.c
 
-You can see :download:`example files in this tutorial in github <https://github.com/wildlarva/mcdecoder/blob/master/examples/user_templates>`.
+You can see `example files in this tutorial in github <https://github.com/wildlarva/mcdecoder/blob/master/examples/user_templates>`__.
 
 What's next?
 =============================================
 
 * :doc:`More details about MC description <spec_mc_desc>`
-* :download:`More details about Jinja2 template syntax <https://jinja.palletsprojects.com/templates/>`
+* `More details about Jinja2 template syntax <https://jinja.palletsprojects.com/templates/>`__
 * :doc:`More details about template variables <spec_template_var>`
 * :doc:`More details about MC decoder model <spec_mcdecoder_model>`
 * :doc:`More details about mcdecoder generate <spec_commandline_options>`
