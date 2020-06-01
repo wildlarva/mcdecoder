@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -85,7 +85,7 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="guides.html">User guides</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">README</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">README: mcdecoder</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#quickstart">Quickstart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#who-is-mcdecoder-for">Who is mcdecoder for</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
@@ -181,13 +181,15 @@
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
 <li><p>Define your machine code specification</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># arm.yaml</span>
-<span class="nt">machine</span><span class="p">:</span>
-  <span class="nt">byteorder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">little</span>
-<span class="nt">instructions</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_immediate_a1</span>
-    <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">arm.yaml</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span> <span class="nt">machine</span><span class="p">:</span>
+   <span class="nt">byteorder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">little</span>
+ <span class="nt">instructions</span><span class="p">:</span>
+   <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_immediate_a1</span>
+     <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
 </pre></div>
+</div>
 </div>
 </li>
 <li><p>Generate a decoder</p>
@@ -207,7 +209,7 @@
 </div>
 </li>
 </ol>
-<p>For more details, follow Installation steps below and go on to <a class="reference external" href="https://wildlarva.github.io/mcdecoder/quickstart.html">Quickstart tutorial</a>.</p>
+<p>For more details, follow Installation steps below and go on to <a class="reference internal" href="quickstart.html"><span class="doc">Quickstart tutorial</span></a>.</p>
 </div>
 <div class="section" id="who-is-mcdecoder-for">
 <h2>Who is mcdecoder for<a class="headerlink" href="#who-is-mcdecoder-for" title="Permalink to this headline">¶</a></h2>
@@ -229,8 +231,7 @@
 </li>
 </ul>
 <p>Implementing and maintaining a decoder are tough and cumbersome. The mcdecoder soothes these pains by generating a decoder.
-The mcdecoder was originally developed for <a class="reference external" href="https://github.com/tmori/athrill/">athrill</a>, a CPU emulator.
-It will be independent from athrill and be a more general tool in the near future.</p>
+The mcdecoder was originally developed for <a class="reference external" href="https://github.com/tmori/athrill/">athrill</a>, a CPU emulator. It will be independent from athrill and be a more general tool in the near future.</p>
 </div>
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
@@ -252,11 +253,11 @@ python3.8 -m pip install .
 </div>
 <div class="section" id="more-details-about-usage">
 <h2>More details about usage<a class="headerlink" href="#more-details-about-usage" title="Permalink to this headline">¶</a></h2>
-<p>See <a class="reference external" href="https://wildlarva.github.io/mcdecoder/">documents for mcdecoder users</a>.</p>
+<p>See <a class="reference internal" href="guides.html"><span class="doc">documents for mcdecoder users</span></a>.</p>
 </div>
 <div class="section" id="for-developers-of-mcdecoder">
 <h2>For developers of mcdecoder<a class="headerlink" href="#for-developers-of-mcdecoder" title="Permalink to this headline">¶</a></h2>
-<p>See <a class="reference external" href="https://wildlarva.github.io/mcdecoder/dev_docs.html">documents for mcdecoder developers</a>.</p>
+<p>See <a class="reference internal" href="dev_docs.html"><span class="doc">documents for mcdecoder developers</span></a>.</p>
 </div>
 </div>
 

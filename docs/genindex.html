@@ -22,10 +22,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -283,13 +283,13 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="spec_mcdecoder_api.html#c.DecodeRequest">DecodeRequest (C type)</a>
+      <li><a href="spec_mcdecoder_api.html#c.DecodeRequest">DecodeRequest (C struct)</a>
 </li>
       <li><a href="spec_mcdecoder_api.html#c.DecodeRequest.codes">DecodeRequest.codes (C member)</a>
 </li>
-      <li><a href="spec_mcdecoder_api.html#c.DecodeResult">DecodeResult (C type)</a>
+      <li><a href="spec_mcdecoder_api.html#c.DecodeResult">DecodeResult (C struct)</a>
 </li>
-      <li><a href="spec_mcdecoder_api.html#c.DecodeResult.instruction">DecodeResult.instruction (C member)</a>
+      <li><a href="spec_mcdecoder_api.html#c.DecodeResult.instruction">DecodeResult.instruction (C union)</a>
 </li>
       <li><a href="spec_mcdecoder_api.html#c.DecodeResult.instruction_id">DecodeResult.instruction_id (C member)</a>
 </li>
@@ -435,7 +435,7 @@
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.McDecoder.instruction_decoders">instruction_decoders() (mcdecoder.core.McDecoder property)</a>
 </li>
-      <li><a href="spec_mcdecoder_api.html#c.INSTRUCTION_ID_MAX">INSTRUCTION_ID_MAX (C macro)</a>
+      <li><a href="spec_mcdecoder_api.html#c.INSTRUCTION_ID_MAX">INSTRUCTION_ID_MAX (C var)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.InstructionConditionDescription">InstructionConditionDescription (class in mcdecoder.core)</a>
 </li>
@@ -463,9 +463,9 @@
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.InstructionFieldEncodingDescription">InstructionFieldEncodingDescription (class in mcdecoder.core)</a>
 </li>
-      <li><a href="spec_mcdecoder_api.html#c.InstructionId">InstructionId (C type)</a>
+      <li><a href="spec_mcdecoder_api.html#c.InstructionId">InstructionId (C enum)</a>
 </li>
-      <li><a href="spec_mcdecoder_api.html#c.InstructionId.InstructionId_kUnknown">InstructionId.InstructionId_kUnknown (C member)</a>
+      <li><a href="spec_mcdecoder_api.html#c.InstructionId.InstructionId_kUnknown">InstructionId.InstructionId_kUnknown (C enumerator)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.McdDecisionNode.instructions">instructions (mcdecoder.core.McdDecisionNode attribute)</a>
 
@@ -493,6 +493,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="dev_modules.html#mcdecoder.core.LoadError">LoadError</a>
+</li>
       <li><a href="dev_modules.html#mcdecoder.core.LogicalInstructionConditionDescription">LogicalInstructionConditionDescription (class in mcdecoder.core)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.InstructionSubfieldDecoder.lsb_in_field">lsb_in_field (mcdecoder.core.InstructionSubfieldDecoder attribute)</a>
@@ -539,8 +541,6 @@
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.McdDecisionTree">McdDecisionTree (class in mcdecoder.core)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="dev_modules.html#mcdecoder.core.McDecoder">McDecoder (class in mcdecoder.core)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.DecodeContext.mcdecoder">mcdecoder (mcdecoder.core.DecodeContext attribute)</a>
@@ -549,28 +549,100 @@
         <li><a href="dev_modules.html#mcdecoder.core.DecodeContextVectorized.mcdecoder">(mcdecoder.core.DecodeContextVectorized attribute)</a>
 </li>
       </ul></li>
-      <li><a href="dev_modules.html#module-mcdecoder.__main__">mcdecoder.__main__ (module)</a>
+      <li>
+    mcdecoder.__main__
+
+      <ul>
+        <li><a href="dev_modules.html#module-mcdecoder.__main__">module</a>
 </li>
-      <li><a href="dev_modules.html#module-mcdecoder.__version__">mcdecoder.__version__ (module)</a>
+      </ul></li>
+      <li>
+    mcdecoder.__version__
+
+      <ul>
+        <li><a href="dev_modules.html#module-mcdecoder.__version__">module</a>
 </li>
-      <li><a href="dev_modules.html#module-mcdecoder.app">mcdecoder.app (module)</a>
+      </ul></li>
+      <li>
+    mcdecoder.app
+
+      <ul>
+        <li><a href="dev_modules.html#module-mcdecoder.app">module</a>
 </li>
-      <li><a href="dev_modules.html#module-mcdecoder.checker">mcdecoder.checker (module)</a>
+      </ul></li>
+      <li>
+    mcdecoder.checker
+
+      <ul>
+        <li><a href="dev_modules.html#module-mcdecoder.checker">module</a>
 </li>
-      <li><a href="dev_modules.html#module-mcdecoder.common">mcdecoder.common (module)</a>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    mcdecoder.common
+
+      <ul>
+        <li><a href="dev_modules.html#module-mcdecoder.common">module</a>
 </li>
-      <li><a href="dev_modules.html#module-mcdecoder.core">mcdecoder.core (module)</a>
+      </ul></li>
+      <li>
+    mcdecoder.core
+
+      <ul>
+        <li><a href="dev_modules.html#module-mcdecoder.core">module</a>
 </li>
-      <li><a href="dev_modules.html#module-mcdecoder.emulator">mcdecoder.emulator (module)</a>
+      </ul></li>
+      <li>
+    mcdecoder.emulator
+
+      <ul>
+        <li><a href="dev_modules.html#module-mcdecoder.emulator">module</a>
 </li>
-      <li><a href="dev_modules.html#module-mcdecoder.exporter">mcdecoder.exporter (module)</a>
+      </ul></li>
+      <li>
+    mcdecoder.exporter
+
+      <ul>
+        <li><a href="dev_modules.html#module-mcdecoder.exporter">module</a>
 </li>
-      <li><a href="dev_modules.html#module-mcdecoder.generator">mcdecoder.generator (module)</a>
+      </ul></li>
+      <li>
+    mcdecoder.generator
+
+      <ul>
+        <li><a href="dev_modules.html#module-mcdecoder.generator">module</a>
 </li>
+      </ul></li>
       <li><a href="dev_modules.html#mcdecoder.core.McDecoderDescription">McDecoderDescription (class in mcdecoder.core)</a>
 </li>
       <li><a href="dev_modules.html#mcdecoder.core.McDescription">McDescription (class in mcdecoder.core)</a>
 </li>
+      <li><a href="dev_modules.html#mcdecoder.core.LoadError.message">message (mcdecoder.core.LoadError attribute)</a>
+</li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="dev_modules.html#module-mcdecoder.__main__">mcdecoder.__main__</a>
+</li>
+        <li><a href="dev_modules.html#module-mcdecoder.__version__">mcdecoder.__version__</a>
+</li>
+        <li><a href="dev_modules.html#module-mcdecoder.app">mcdecoder.app</a>
+</li>
+        <li><a href="dev_modules.html#module-mcdecoder.checker">mcdecoder.checker</a>
+</li>
+        <li><a href="dev_modules.html#module-mcdecoder.common">mcdecoder.common</a>
+</li>
+        <li><a href="dev_modules.html#module-mcdecoder.core">mcdecoder.core</a>
+</li>
+        <li><a href="dev_modules.html#module-mcdecoder.emulator">mcdecoder.emulator</a>
+</li>
+        <li><a href="dev_modules.html#module-mcdecoder.exporter">mcdecoder.exporter</a>
+</li>
+        <li><a href="dev_modules.html#module-mcdecoder.generator">mcdecoder.generator</a>
+</li>
+      </ul></li>
       <li><a href="dev_modules.html#mcdecoder.core.InstructionSubfieldDecoder.msb_in_instruction">msb_in_instruction (mcdecoder.core.InstructionSubfieldDecoder attribute)</a>
 </li>
   </ul></td>
@@ -634,6 +706,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="dev_modules.html#mcdecoder.core.parse_instruction_encoding">parse_instruction_encoding() (in module mcdecoder.core)</a>
+</li>
+      <li><a href="dev_modules.html#mcdecoder.core.McDecoderDescription.process_instruction_hook">process_instruction_hook (mcdecoder.core.McDecoderDescription attribute)</a>
 </li>
   </ul></td>
 </tr></table>

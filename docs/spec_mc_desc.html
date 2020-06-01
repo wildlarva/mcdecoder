@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -105,6 +105,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#decoder">decoder</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#decoder-namespace">decoder.namespace</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#decoder-process-instruction-hook">decoder.process_instruction_hook</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#extras">extras</a></li>
@@ -219,6 +220,8 @@ Here is an overview of MC description.</p>
 
 <span class="nt">decoder</span><span class="p">:</span> <span class="c1"># [optional] Decoder information of the global scope</span>
   <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ns</span> <span class="c1"># [optional] Namespace for the symbols of a generated decoder</span>
+  <span class="c1"># [optional] Name of the hook function to process user-specific information for an instruction</span>
+  <span class="nt">process_instruction_hook</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">process_instruction</span>
 
 <span class="nt">extras</span><span class="p">:</span> <span class="c1"># [optional] User-defined data for the global scope</span>
   <span class="nt">compiler</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gcc</span>
@@ -491,6 +494,34 @@ which isn’t related to a machine, an instruction and a field.</p>
 <h3>decoder.namespace<a class="headerlink" href="#decoder-namespace" title="Permalink to this headline">¶</a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">namespace</span></code> defines the namespace for the symbols of a generated decoder.</p>
 </div>
+<div class="section" id="decoder-process-instruction-hook">
+<h3>decoder.process_instruction_hook<a class="headerlink" href="#decoder-process-instruction-hook" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is an experimental feature. The name and form of this attribute might be changed in the future release.</p>
+</div>
+<p><code class="code docutils literal notranslate"><span class="pre">process_instruction_hook</span></code> defines the name of the hook function to process user-specific information for an instruction into a different form.
+The hook function must be defined in the python config file named <code class="code docutils literal notranslate"><span class="pre">config.py</span></code>. Yoo must put the config file in the same directory as the MC description file.</p>
+<p>The signature of the hook function is</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="o">&lt;</span><span class="n">name_of_hook_function</span><span class="o">&gt;</span><span class="p">(</span><span class="n">instruction</span><span class="p">:</span> <span class="n">InstructionDecoder</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>Here’s an example of defining a hook function to process user-specific information.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">decoder</span><span class="p">:</span>
+  <span class="nt">process_instruction_hook</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">process_instruction</span>
+</pre></div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">config.py</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mcdecoder.core</span> <span class="kn">import</span> <span class="n">InstructionDecoder</span>
+
+<span class="k">def</span> <span class="nf">process_instruction</span><span class="p">(</span><span class="n">instruction</span><span class="p">:</span> <span class="n">InstructionDecoder</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">extra_value</span> <span class="o">=</span> <span class="n">instruction</span><span class="o">.</span><span class="n">extras</span><span class="p">[</span><span class="s1">&#39;extra_attribute&#39;</span><span class="p">]</span>
+    <span class="n">instruction</span><span class="o">.</span><span class="n">extras</span><span class="p">[</span><span class="s1">&#39;extra_attribute&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;processed &#39;</span> <span class="o">+</span> <span class="n">extra_value</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <div class="section" id="extras">
 <h2>extras<a class="headerlink" href="#extras" title="Permalink to this headline">¶</a></h2>
@@ -527,24 +558,24 @@ The behavior depends on the types of the contents of included files:</p>
 <li><p>Mixture: Prompt an error.</p></li>
 </ul>
 <p>Here’s an example of including instructions from other files.</p>
-<div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">arm.yaml</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">arm.yaml</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span>
   <span class="nt">byteorder</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">little</span>
 <span class="nt">instructions</span><span class="p">:</span> <span class="kt">!include</span> <span class="l l-Scalar l-Scalar-Plain">instructions/*_instructions.yaml</span>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">instructions/add_instructions.yaml</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">instructions/add_instructions.yaml</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">add_1</span>
   <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
   <span class="nt">unmatch_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond == 15</span>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">instructions/push_instructions.yaml</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">instructions/push_instructions.yaml</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">push_1</span>
   <span class="nt">format</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list</span>
   <span class="nt">match_condition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cond in_range 0-14</span>
@@ -642,7 +673,7 @@ to specify multiple files.</p>
 <td><p><em>string</em></p></td>
 </tr>
 <tr class="row-even"><td><p>pattern</p></td>
-<td><p>^[A-Za-z0-9_:[],|/u0020u0009u000au000d]+$</p></td>
+<td><p>^[A-Za-z0-9_:\[\],|/\u0020\u0009\u000a\u000d]+$</p></td>
 </tr>
 <tr class="row-odd"><td rowspan="2"><ul class="simple">
 <li><p>match_condition</p></li>
@@ -652,7 +683,7 @@ to specify multiple files.</p>
 <td><p><em>string</em></p></td>
 </tr>
 <tr class="row-even"><td><p>pattern</p></td>
-<td><p>^[A-Za-z0-9_!=&gt;&lt;-[],()u0020u0009u000au000d]+$</p></td>
+<td><p>^[A-Za-z0-9_!=&gt;&lt;-\[\],()\u0020\u0009\u000a\u000d]+$</p></td>
 </tr>
 <tr class="row-odd"><td rowspan="2"><ul class="simple">
 <li><p>unmatch_condition</p></li>
@@ -662,7 +693,7 @@ to specify multiple files.</p>
 <td><p><em>string</em></p></td>
 </tr>
 <tr class="row-even"><td><p>pattern</p></td>
-<td><p>^[A-Za-z0-9_!=&gt;&lt;-[],()u0020u0009u000au000d]+$</p></td>
+<td><p>^[A-Za-z0-9_!=&gt;&lt;-\[\],()\u0020\u0009\u000a\u000d]+$</p></td>
 </tr>
 <tr class="row-odd"><td colspan="3"><ul class="simple">
 <li><p>extras</p></li>
@@ -689,7 +720,7 @@ to specify multiple files.</p>
 <tr class="row-even"><td><p>additionalProperties</p></td>
 <td colspan="2"><p>False</p></td>
 </tr>
-<tr class="row-odd"><td rowspan="5"><ul class="simple">
+<tr class="row-odd"><td rowspan="7"><ul class="simple">
 <li><p>decoder</p></li>
 </ul>
 </td>
@@ -700,6 +731,16 @@ to specify multiple files.</p>
 </tr>
 <tr class="row-odd"><td rowspan="2"><ul class="simple">
 <li><p>namespace</p></li>
+</ul>
+</td>
+<td><p>type</p></td>
+<td colspan="2"><p><em>string</em></p></td>
+</tr>
+<tr class="row-even"><td><p>pattern</p></td>
+<td colspan="2"><p>^[A-Za-z][A-Za-z0-9_]*$</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><ul class="simple">
+<li><p>process_instruction_hook</p></li>
 </ul>
 </td>
 <td><p>type</p></td>

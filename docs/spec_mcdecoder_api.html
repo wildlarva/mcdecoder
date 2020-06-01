@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -204,33 +204,33 @@
 </div>
 <div class="section" id="types">
 <h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
-<dl class="type">
+<dl class="c struct">
 <dt id="c.DecodeRequest">
-struct <code class="sig-name descname">DecodeRequest</code><a class="headerlink" href="#c.DecodeRequest" title="Permalink to this definition">¶</a></dt>
+<em class="property">struct </em><code class="sig-name descname">DecodeRequest</code><a class="headerlink" href="#c.DecodeRequest" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Decoding request</p>
-<dl class="member">
+<dl class="c member">
 <dt id="c.DecodeRequest.codes">
-const uint8_t *<code class="sig-name descname">codes</code><a class="headerlink" href="#c.DecodeRequest.codes" title="Permalink to this definition">¶</a></dt>
+<em class="property">const</em> uint8_t *<code class="sig-name descname">codes</code><a class="headerlink" href="#c.DecodeRequest.codes" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Codes to be input</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="type">
+<dl class="c struct">
 <dt id="c.DecodeResult">
-struct <code class="sig-name descname">DecodeResult</code><a class="headerlink" href="#c.DecodeResult" title="Permalink to this definition">¶</a></dt>
+<em class="property">struct </em><code class="sig-name descname">DecodeResult</code><a class="headerlink" href="#c.DecodeResult" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Decoding result</p>
-<dl class="member">
+<dl class="c member">
 <dt id="c.DecodeResult.instruction_id">
-<a class="reference internal" href="#c.InstructionId" title="InstructionId">InstructionId</a> <code class="sig-name descname">instruction_id</code><a class="headerlink" href="#c.DecodeResult.instruction_id" title="Permalink to this definition">¶</a></dt>
+<a class="reference internal" href="#c.InstructionId" title="InstructionId">InstructionId</a> <code class="sig-name descname">instruction_id</code><a class="headerlink" href="#c.DecodeResult.instruction_id" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Decoded instruction id</p>
 </dd></dl>
 
-<dl class="member">
+<dl class="c union">
 <dt id="c.DecodeResult.instruction">
-unnamed union <code class="sig-name descname">instruction</code><a class="headerlink" href="#c.DecodeResult.instruction" title="Permalink to this definition">¶</a></dt>
+<em class="property">union </em><code class="sig-name descname">instruction</code><a class="headerlink" href="#c.DecodeResult.instruction" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Decoding result for an instruction</p>
-<dl class="member">
+<dl class="c member">
 <dt>
 <code class="sig-name descname">InstructionDecodeResult_&lt;instruction&gt; &lt;instruction&gt;</code></dt>
 <dd><p>Decoding result for &lt;instruction&gt;</p>
@@ -244,11 +244,11 @@ unnamed union <code class="sig-name descname">instruction</code><a class="header
 
 </dd></dl>
 
-<dl class="type">
+<dl class="c enum">
 <dt id="c.InstructionId">
-enum <code class="sig-name descname">InstructionId</code><a class="headerlink" href="#c.InstructionId" title="Permalink to this definition">¶</a></dt>
+<em class="property">enum </em><code class="sig-name descname">InstructionId</code><a class="headerlink" href="#c.InstructionId" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Instruction id to identify a decoded instruction</p>
-<dl class="member">
+<dl class="c enumerator">
 <dt>
 <code class="sig-name descname">InstructionId_k_&lt;instruction&gt;</code></dt>
 <dd><p>Id for &lt;instruction&gt;</p>
@@ -258,23 +258,23 @@ enum <code class="sig-name descname">InstructionId</code><a class="headerlink" h
 </ul>
 </dd></dl>
 
-<dl class="member">
+<dl class="c enumerator">
 <dt id="c.InstructionId.InstructionId_kUnknown">
-<code class="sig-name descname">InstructionId_kUnknown</code><a class="headerlink" href="#c.InstructionId.InstructionId_kUnknown" title="Permalink to this definition">¶</a></dt>
+<em class="property">enumerator </em><code class="sig-name descname">InstructionId_kUnknown</code><a class="headerlink" href="#c.InstructionId.InstructionId_kUnknown" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Id for an unknown instruction</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="type">
+<dl class="c struct">
 <dt>
-<code class="sig-name descname">struct InstructionDecodeResult_&lt;instruction&gt;</code></dt>
+<code class="sig-name descname">InstructionDecodeResult_&lt;instruction&gt;</code></dt>
 <dd><p>Decoding result for &lt;instruction&gt;</p>
 <p>where</p>
 <ul class="simple">
 <li><p>&lt;instruction&gt;: Instruction name</p></li>
 </ul>
-<dl class="member">
+<dl class="c member">
 <dt>
 <code class="sig-name descname">&lt;type&gt; &lt;field&gt;</code></dt>
 <dd><p>Decoding result for &lt;field&gt;</p>
@@ -290,18 +290,18 @@ enum <code class="sig-name descname">InstructionId</code><a class="headerlink" h
 </div>
 <div class="section" id="macros">
 <h2>Macros<a class="headerlink" href="#macros" title="Permalink to this headline">¶</a></h2>
-<dl class="macro">
+<dl class="c var">
 <dt id="c.INSTRUCTION_ID_MAX">
-<a class="reference internal" href="#c.InstructionId" title="InstructionId">InstructionId</a> <code class="sig-name descname">INSTRUCTION_ID_MAX</code><a class="headerlink" href="#c.INSTRUCTION_ID_MAX" title="Permalink to this definition">¶</a></dt>
+<a class="reference internal" href="#c.InstructionId" title="InstructionId">InstructionId</a> <code class="sig-name descname">INSTRUCTION_ID_MAX</code><a class="headerlink" href="#c.INSTRUCTION_ID_MAX" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Number of instruction ids</p>
 </dd></dl>
 
 </div>
 <div class="section" id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="c function">
 <dt id="c.DecodeInstruction">
-bool <code class="sig-name descname">DecodeInstruction</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.DecodeRequest" title="DecodeRequest">DecodeRequest</a><em> *request</em>, <a class="reference internal" href="#c.DecodeResult" title="DecodeResult">DecodeResult</a><em> *result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.DecodeInstruction" title="Permalink to this definition">¶</a></dt>
+bool <code class="sig-name descname">DecodeInstruction</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#c.DecodeRequest" title="DecodeRequest">DecodeRequest</a> *<em>request</em>, <a class="reference internal" href="#c.DecodeResult" title="DecodeResult">DecodeResult</a> *<em>result</em><span class="sig-paren">)</span><a class="headerlink" href="#c.DecodeInstruction" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Decode an instruction</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
