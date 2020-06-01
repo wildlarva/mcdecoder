@@ -3,11 +3,10 @@ deprecation<2.1
 Jinja2
 jsonschema
 lark-parser
-m2r
 numpy
 pytest
 PyYAML
-Sphinx
+Sphinx>=3
 sphinx-argparse
 sphinx-jsonschema
 sphinx_rtd_theme

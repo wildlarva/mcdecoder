@@ -377,9 +377,16 @@ decoder.process_instruction_hook
 
 .. warning::
 
-    This is an experimental feature. The name and forms of this attribute might be changed in the future release.
+    This is an experimental feature. The name and form of this attribute might be changed in the future release.
 
-:code:`process_instruction_hook` defines the name of the hook function to to process user-specific information into a different form.
+:code:`process_instruction_hook` defines the name of the hook function to process user-specific information for an instruction into a different form.
+The hook function must be defined in the python config file named :code:`config.py`. Yoo must put the config file in the same directory as the MC description file.
+
+The signature of the hook function is
+
+.. code-block:: python
+
+    def <name_of_hook_function>(instruction: InstructionDecoder) -> None:
 
 Here's an example of defining a hook function to process user-specific information.
 

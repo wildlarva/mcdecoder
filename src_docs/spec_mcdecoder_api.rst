@@ -42,7 +42,7 @@ Here's an example of using :code:`DecodeInstruction` (without namespace).
 Types
 *********************************
 
-.. c:type:: struct DecodeRequest
+.. c:struct:: DecodeRequest
 
     Decoding request
 
@@ -50,7 +50,7 @@ Types
 
         Codes to be input
 
-.. c:type:: struct DecodeResult
+.. c:struct:: DecodeResult
 
     Decoding result
 
@@ -58,7 +58,7 @@ Types
 
         Decoded instruction id
 
-    .. c:member:: unnamed union instruction
+    .. c:union:: instruction
 
         Decoding result for an instruction
 
@@ -70,11 +70,11 @@ Types
 
             * <instruction>: Instruction name
 
-.. c:type:: enum InstructionId
+.. c:enum:: InstructionId
 
     Instruction id to identify a decoded instruction
 
-    .. c:member:: InstructionId_k_<instruction>
+    .. c:enumerator:: InstructionId_k_<instruction>
 
         Id for <instruction>
 
@@ -82,11 +82,11 @@ Types
 
         * <instruction>: Instruction name
 
-    .. c:member:: InstructionId_kUnknown
+    .. c:enumerator:: InstructionId_kUnknown
 
         Id for an unknown instruction
 
-.. c:type:: struct InstructionDecodeResult_<instruction>
+.. c:struct:: InstructionDecodeResult_<instruction>
 
     Decoding result for <instruction>
 
@@ -107,7 +107,7 @@ Types
 Macros
 *********************************
 
-.. c:macro:: InstructionId INSTRUCTION_ID_MAX
+.. c:var:: InstructionId INSTRUCTION_ID_MAX
 
     Number of instruction ids
 

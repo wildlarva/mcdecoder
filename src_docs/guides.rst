@@ -6,6 +6,6 @@ User guides
     :maxdepth: 2
     :caption: Contents:
 
-    README <README>
+    README
     quickstart
     user_templates
