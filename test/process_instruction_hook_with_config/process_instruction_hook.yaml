@@ -1,0 +1,7 @@
+machine:
+  byteorder: little
+instructions:
+  - name: add_1
+    format: xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12
+decoder:
+  process_instruction_hook: process_instruction

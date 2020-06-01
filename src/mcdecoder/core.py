@@ -31,6 +31,18 @@ from . import __version__
 
 # region External classes
 
+# region Exceptions
+
+class LoadError(Exception):
+    """Raised when an error occurs while loading"""
+    message: str
+    """explanation of the error"""
+
+    def __init__(self, message) -> None:
+        self.message = message
+
+# endregion Exceptions
+
 # region MC description models loaded from yaml files
 
 
@@ -612,6 +624,7 @@ def create_mcdecoder_model(mcfile: str) -> McDecoder:
 
     :param mcfile: Path to an MC description file
     :return: Created McDecoder
+    :raises LoadError: if there's an invalid or inconsistent information
     """
     # Load MC description
     mc_desc_model = load_mc_description_model(mcfile)
@@ -651,11 +664,19 @@ def create_mcdecoder_model(mcfile: str) -> McDecoder:
     # Process model
     process_instruction_hook: Optional[Callable[[
         InstructionDecoder], None]] = None
-    if config_module is not None:
-        if decoder_desc_model is not None:
-            if 'process_instruction_hook' in decoder_desc_model:
-                process_instruction_hook = getattr(config_module, cast(
-                    str, decoder_desc_model['process_instruction_hook']))
+    if decoder_desc_model is not None:
+        if 'process_instruction_hook' in decoder_desc_model:
+            process_instruction_hook_name = cast(
+                str, decoder_desc_model['process_instruction_hook'])
+            if config_module is None:
+                raise LoadError(
+                    "There must be config.py for the attribute decoder.process_instruction_hook.")
+            if not hasattr(config_module, process_instruction_hook_name):
+                raise LoadError(
+                    f"You must define '{process_instruction_hook_name}' in config.py")
+
+            process_instruction_hook = getattr(
+                config_module, process_instruction_hook_name)
 
     if process_instruction_hook is not None:
         for instruction_decoder in instruction_decoders:
@@ -1517,6 +1538,8 @@ _FUNCTION_NAME_TO_FUNCTION: Dict[str, Callable[[np.ndarray], np.ndarray]] = {
     'setbit_count': _setbit_count,
 }
 """
+
+
 Dictionary to define built-in functions for an instruction condition.
 Its entry is a pair of a function name and a function.
 """

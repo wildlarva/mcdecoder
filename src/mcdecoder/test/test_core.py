@@ -1,6 +1,14 @@
+import pytest
+
 from ..core import (
-    EqualityIdCondition, FieldIdConditionObject, ImmediateIdConditionObject, InRangeIdCondition,
-    create_mcdecoder_model, load_mc_description_model)
+    EqualityIdCondition,
+    FieldIdConditionObject,
+    ImmediateIdConditionObject,
+    InRangeIdCondition,
+    LoadError,
+    create_mcdecoder_model,
+    load_mc_description_model,
+)
 
 
 def test_create_mcdecoder_model_namespace() -> None:
@@ -12,10 +20,16 @@ def test_create_mcdecoder_model_namespace() -> None:
 
 def test_create_mcdecoder_model_with_config() -> None:
     mcdecoder_model = create_mcdecoder_model(
-        'test/with_config.yaml')
+        'test/process_instruction_hook_with_config/process_instruction_hook.yaml')
 
     instruction = mcdecoder_model.instructions[0]
     assert instruction.extras['extra_attribute'] == 'extra_content'
+
+
+def test_create_mcdecoder_model_without_config() -> None:
+    with pytest.raises(LoadError):
+        create_mcdecoder_model(
+            'test/process_instruction_hook_without_config/process_instruction_hook.yaml')
 
 
 def test_create_mcdecoder_model_extras() -> None:
