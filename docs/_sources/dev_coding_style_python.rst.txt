@@ -2,7 +2,7 @@
 Python coding style
 ################################
 
-The coding style of mcdecoder in Python is based on :download:`Google Python Style Guide <https://google.github.io/styleguide/pyguide.html>`.
+The coding style of mcdecoder in Python is based on `Google Python Style Guide <https://google.github.io/styleguide/pyguide.html>`__.
 The mcdecoder adds some modifications to it
 because of the environment for development.
 
@@ -25,4 +25,4 @@ Rationale
     so you must specify the packages in relative directories
     to resolve the conflict.
 
-You can see also :download:`the original 'Python Language Rules / Imports' <https://google.github.io/styleguide/pyguide.html#22-imports>`.
+You can see also `the original 'Python Language Rules / Imports' <https://google.github.io/styleguide/pyguide.html#22-imports>`__.
