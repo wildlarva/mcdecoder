@@ -7,7 +7,12 @@ Requirements for development
 
 * Ubuntu 18.x or above
 * Python 3.8 or above (with pip and venv)
-* Ruby 2.5 or above (with RubyGems)
+
+  * Recommended packages: python3.8, python3-pip and python3.8-venv
+
+* Ruby 2.5 or above (with RubyGems and Ruby header files)
+
+  * Recommended packages: ruby and ruby-dev
 
 How to setup environment for development
 =============================================
