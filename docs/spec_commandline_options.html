@@ -273,7 +273,7 @@ mcdecoder <span class="nb">export</span> --output mc.csv mc.yaml
 <div class="section" id="emulate">
 <h3>emulate<a class="headerlink" href="#emulate" title="Permalink to this headline">¶</a></h3>
 <p>Emulate a decoder by inputting binary data</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder emulate <span class="o">[</span>-h<span class="o">]</span> --pattern pattern <span class="o">[</span>--base <span class="o">{</span><span class="m">2</span>,16<span class="o">}]</span> <span class="o">[</span>--byteorder <span class="o">{</span>big,little<span class="o">}]</span> mcfile
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder emulate <span class="o">[</span>-h<span class="o">]</span> --input indata <span class="o">[</span>--base <span class="o">{</span><span class="m">2</span>,16<span class="o">}]</span> <span class="o">[</span>--byteorder <span class="o">{</span>big,little<span class="o">}]</span> mcfile
 </pre></div>
 </div>
 <div class="section" id="Positional Arguments_repeat3">
@@ -287,8 +287,9 @@ mcdecoder <span class="nb">export</span> --output mc.csv mc.yaml
 <div class="section" id="Named Arguments_repeat3">
 <h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat3" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
-<dt><kbd>--pattern</kbd></dt>
-<dd><p>A binary/hex string as input binary data for a decoder</p>
+<dt><kbd>--input, --pattern</kbd></dt>
+<dd><p>A binary/hex string as input binary data for a decoder.
+–pattern will be deprecated since 0.1b1</p>
 </dd>
 <dt><kbd>--base</kbd></dt>
 <dd><p>Possible choices: 2, 16</p>
@@ -304,20 +305,20 @@ mcdecoder <span class="nb">export</span> --output mc.csv mc.yaml
 </div>
 <p>Usage:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Emulate a decoder when inputting e92d4800</span>
-mcdecoder emulate --pattern e92d4800 mc.yaml
+mcdecoder emulate --input e92d4800 mc.yaml
 
 <span class="c1"># Emulate a decoder when inputting &#39;1110 1001 0010 1101 0100 1000 0000 0000&#39;</span>
-mcdecoder emulate --base <span class="m">2</span> --pattern <span class="s1">&#39;1110 1001 0010 1101 0100 1000 0000 0000&#39;</span> mc.yaml
+mcdecoder emulate --base <span class="m">2</span> --input <span class="s1">&#39;1110 1001 0010 1101 0100 1000 0000 0000&#39;</span> mc.yaml
 
 <span class="c1"># Emulate a decoder when inputting e92d4800 as little endian</span>
-mcdecoder emulate --byteorder little --pattern 00482de9 mc.yaml
+mcdecoder emulate --byteorder little --input 00482de9 mc.yaml
 </pre></div>
 </div>
 </div>
 <div class="section" id="check">
 <h3>check<a class="headerlink" href="#check" title="Permalink to this headline">¶</a></h3>
 <p>Check the instruction validity of MC description by inputting binary data to a decoder</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder check <span class="o">[</span>-h<span class="o">]</span> --pattern pattern <span class="o">[</span>--base <span class="o">{</span><span class="m">2</span>,16<span class="o">}]</span> mcfile
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder check <span class="o">[</span>-h<span class="o">]</span> --input indata <span class="o">[</span>--base <span class="o">{</span><span class="m">2</span>,16<span class="o">}]</span> mcfile
 </pre></div>
 </div>
 <div class="section" id="Positional Arguments_repeat4">
@@ -331,9 +332,10 @@ mcdecoder emulate --byteorder little --pattern 00482de9 mc.yaml
 <div class="section" id="Named Arguments_repeat4">
 <h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat4" title="Permalink to this headline">¶</a></h4>
 <dl class="option-list">
-<dt><kbd>--pattern</kbd></dt>
+<dt><kbd>--input, --pattern</kbd></dt>
 <dd><p>A binary/hex string as input binary data for a decoder.
-‘x’ character acts as a wildcard which corresponds to a range 0-1 for binary or 0-f for hex</p>
+‘x’ character acts as a wildcard which corresponds to a range 0-1 for binary or 0-f for hex.
+–pattern will be deprecated since 0.1b1</p>
 </dd>
 <dt><kbd>--base</kbd></dt>
 <dd><p>Possible choices: 2, 16</p>
@@ -352,13 +354,13 @@ mcdecoder emulate --byteorder little --pattern 00482de9 mc.yaml
 </div></blockquote>
 <p>Usage:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check by inputting the range from 092d4800 to f92d4800 to a decoder</span>
-mcdecoder check --pattern x92d4800 mc.yaml
+mcdecoder check --input x92d4800 mc.yaml
 
 <span class="c1"># Check by inputting the range from &#39;1010 1001 0010 1101 0100 1000 0000 0000&#39; to &#39;1110 1001 0010 1101 0100 1000 0000 0000&#39; to a decoder</span>
-mcdecoder check --base <span class="m">2</span> --pattern <span class="s1">&#39;1x10 1001 0010 1101 0100 1000 0000 0000&#39;</span> mc.yaml
+mcdecoder check --base <span class="m">2</span> --input <span class="s1">&#39;1x10 1001 0010 1101 0100 1000 0000 0000&#39;</span> mc.yaml
 
 <span class="c1"># Check by inputting the range from 002d4800 to ff2d4800 to a decoder</span>
-mcdecoder check --pattern xx2d4800 mc.yaml
+mcdecoder check --input xx2d4800 mc.yaml
 </pre></div>
 </div>
 </div>

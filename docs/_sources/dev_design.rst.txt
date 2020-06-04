@@ -165,7 +165,6 @@ Development structure and dependencies
         sphinx_argparse [label = "sphinx-\nargparse"]
         sphinx_jsonschema [label = "Sphinx\nJSON Schema"]
         sphinx_rtd_theme [label = "Read the Docs\nSphinx Theme"]
-        m2r [label = "M2R"]
     }
 
     subgraph cluster_bundler {
@@ -200,7 +199,6 @@ Packages
     sphinx-argparse               Used to build documents about command line options
     Sphinx JSON Schema            Used to build documents about the schema of MC description
     Read the Docs Sphinx Theme    Used to improve usability of generated documents
-    M2R                           Used to import README.md to Sphinx
     Graphviz                      Used to show diagrams in documents
     ============================= ==========================================================
 

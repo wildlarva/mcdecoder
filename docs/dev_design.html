@@ -355,7 +355,7 @@ so its performance is so important.</p></li>
 <h2>Development environment<a class="headerlink" href="#development-environment" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="development-structure-and-dependencies">
 <h3>Development structure and dependencies<a class="headerlink" href="#development-structure-and-dependencies" title="Permalink to this headline">¶</a></h3>
-<div class="graphviz"><img src="_images/graphviz-96f0cfc3878fa62c02c32da5fe068913320457d7.png" alt="digraph develop {
+<div class="graphviz"><img src="_images/graphviz-ba7cd910c085a112f80f2428b65f096b2b86a967.png" alt="digraph develop {
 compound = true
 node [shape=box]
 edge [style=dotted]
@@ -375,7 +375,6 @@ subgraph cluster_sphinx {
     sphinx_argparse [label = &quot;sphinx-\nargparse&quot;]
     sphinx_jsonschema [label = &quot;Sphinx\nJSON Schema&quot;]
     sphinx_rtd_theme [label = &quot;Read the Docs\nSphinx Theme&quot;]
-    m2r [label = &quot;M2R&quot;]
 }
 
 subgraph cluster_bundler {
@@ -438,10 +437,7 @@ sphinx_rtd_theme -&gt; graphviz [ltail=cluster_sphinx]
 <tr class="row-even"><td><p>Read the Docs Sphinx Theme</p></td>
 <td><p>Used to improve usability of generated documents</p></td>
 </tr>
-<tr class="row-odd"><td><p>M2R</p></td>
-<td><p>Used to import README.md to Sphinx</p></td>
-</tr>
-<tr class="row-even"><td><p>Graphviz</p></td>
+<tr class="row-odd"><td><p>Graphviz</p></td>
 <td><p>Used to show diagrams in documents</p></td>
 </tr>
 </tbody>
