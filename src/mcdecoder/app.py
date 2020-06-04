@@ -129,17 +129,19 @@ def _create_parser() -> argparse.ArgumentParser:
             Usage::
 
               # Emulate a decoder when inputting e92d4800
-              mcdecoder emulate --pattern e92d4800 mc.yaml
+              mcdecoder emulate --input e92d4800 mc.yaml
 
               # Emulate a decoder when inputting '1110 1001 0010 1101 0100 1000 0000 0000'
-              mcdecoder emulate --base 2 --pattern '1110 1001 0010 1101 0100 1000 0000 0000' mc.yaml
+              mcdecoder emulate --base 2 --input '1110 1001 0010 1101 0100 1000 0000 0000' mc.yaml
 
               # Emulate a decoder when inputting e92d4800 as little endian
-              mcdecoder emulate --byteorder little --pattern 00482de9 mc.yaml
+              mcdecoder emulate --byteorder little --input 00482de9 mc.yaml
             '''))  # noqa: W293
     emulate_parser.add_argument(
-        '--pattern', metavar='pattern', dest='bit_pattern', required=True,
-        help=textwrap.dedent('A binary/hex string as input binary data for a decoder'))
+        '--input', '--pattern', metavar='indata', dest='bit_pattern', required=True,
+        help=textwrap.dedent('''\
+            A binary/hex string as input binary data for a decoder.
+            --pattern will be deprecated since 0.1b1'''))
     emulate_parser.add_argument(
         '--base', choices=[2, 16], default=16, type=int, help='The base of a binary/hex string (default: 16)')
     emulate_parser.add_argument(
@@ -160,19 +162,19 @@ def _create_parser() -> argparse.ArgumentParser:
             Usage::
 
               # Check by inputting the range from 092d4800 to f92d4800 to a decoder
-              mcdecoder check --pattern x92d4800 mc.yaml
+              mcdecoder check --input x92d4800 mc.yaml
 
               # Check by inputting the range from '1010 1001 0010 1101 0100 1000 0000 0000' to '1110 1001 0010 1101 0100 1000 0000 0000' to a decoder
-              mcdecoder check --base 2 --pattern '1x10 1001 0010 1101 0100 1000 0000 0000' mc.yaml
+              mcdecoder check --base 2 --input '1x10 1001 0010 1101 0100 1000 0000 0000' mc.yaml
 
               # Check by inputting the range from 002d4800 to ff2d4800 to a decoder
-              mcdecoder check --pattern xx2d4800 mc.yaml
+              mcdecoder check --input xx2d4800 mc.yaml
             '''))  # noqa: E501, W293
     emulate_parser.add_argument(
-        '--pattern', metavar='pattern', dest='bit_pattern', required=True, help=textwrap.dedent('''\
+        '--input', '--pattern', metavar='indata', dest='bit_pattern', required=True, help=textwrap.dedent('''\
             A binary/hex string as input binary data for a decoder.
-            'x' character acts as a wildcard which corresponds to a range 0-1 for binary or 0-f for hex
-            '''))
+            'x' character acts as a wildcard which corresponds to a range 0-1 for binary or 0-f for hex.
+            --pattern will be deprecated since 0.1b1'''))
     emulate_parser.add_argument(
         '--base', choices=[2, 16], default=16, type=int, help='The base of a binary/hex string (default: 16)')
     emulate_parser.add_argument(
