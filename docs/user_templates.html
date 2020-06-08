@@ -239,10 +239,10 @@ create the following template files.</p>
 <span class="x">/*</span>
 <span class="x"> * This file is generated for:</span>
 <span class="x"> *   - Compiler: </span><span class="cp">{{</span> <span class="nv">extras.compiler</span> <span class="cp">}}</span><span class="x"></span>
-<span class="x"> *   - Architecture: </span><span class="cp">{{</span> <span class="nv">machine_decoder.extras.arch_type</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x"> *   - Architecture: </span><span class="cp">{{</span> <span class="nv">machine.extras.arch_type</span> <span class="cp">}}</span><span class="x"></span>
 <span class="x"> */</span>
 
-<span class="cp">{%</span>- <span class="k">for</span> <span class="nv">inst</span> <span class="k">in</span> <span class="nv">instruction_decoders</span> -<span class="cp">%}</span><span class="x"></span>
+<span class="cp">{%</span>- <span class="k">for</span> <span class="nv">inst</span> <span class="k">in</span> <span class="nv">instructions</span> -<span class="cp">%}</span><span class="x"></span>
 <span class="x">    </span><span class="cp">{%</span>- <span class="k">for</span> <span class="nv">field</span> <span class="k">in</span> <span class="nv">inst.fields</span> -<span class="cp">%}</span><span class="x"></span>
 <span class="x">        </span><span class="c">{# Example usage of user-defined data for fields #}</span><span class="x"></span>
 <span class="x">        </span><span class="c">{# Check if the attribute &#39;type&#39; exists #}</span><span class="x"></span>
@@ -262,12 +262,12 @@ create the following template files.</p>
 <span class="x">/*</span>
 <span class="x"> * This file is generated for:</span>
 <span class="x"> *   - Compiler: </span><span class="cp">{{</span> <span class="nv">extras.compiler</span> <span class="cp">}}</span><span class="x"></span>
-<span class="x"> *   - Architecture: </span><span class="cp">{{</span> <span class="nv">machine_decoder.extras.arch_type</span> <span class="cp">}}</span><span class="x"></span>
+<span class="x"> *   - Architecture: </span><span class="cp">{{</span> <span class="nv">machine.extras.arch_type</span> <span class="cp">}}</span><span class="x"></span>
 <span class="x"> */</span>
 <span class="x">#include &quot;</span><span class="cp">{{</span> <span class="nv">ns</span> <span class="cp">}}</span><span class="x">constants.h&quot;</span>
 
 <span class="x">const uint8 CLOCKS[] = {</span>
-<span class="x">    </span><span class="cp">{%</span>- <span class="k">for</span> <span class="nv">inst</span> <span class="k">in</span> <span class="nv">instruction_decoders</span> -<span class="cp">%}</span><span class="x"></span>
+<span class="x">    </span><span class="cp">{%</span>- <span class="k">for</span> <span class="nv">inst</span> <span class="k">in</span> <span class="nv">instructions</span> -<span class="cp">%}</span><span class="x"></span>
 <span class="x">        </span><span class="c">{# Example usage of user-defined data for instructions #}</span><span class="x"></span>
 <span class="x">        </span><span class="c">{# Check if the attribute &#39;clocks&#39; exists #}</span><span class="x"></span>
 <span class="x">        </span><span class="cp">{%</span>- <span class="k">if</span> <span class="nv">inst.extras.clocks</span> -<span class="cp">%}</span><span class="x"></span>
