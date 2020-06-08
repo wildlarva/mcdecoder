@@ -14,7 +14,7 @@ Template variable specification
                                                      Shorthand for :code:`mcdecoder.machine`.
 
                                                      Deprecated and will be removed in version 0.1b1
-    instructions         Sequence of                 Decoding information about instructions
+    instructions         Sequence of                 Decoding information about instructions.
                          :code:`InstructionDecoder`  Shorthand for :code:`mcdecoder.instructions`
     instruction_decoders Sequence of                 Decoding information about instructions.
                          :code:`InstructionDecoder`  Shorthand for :code:`mcdecoder.instructions`.
