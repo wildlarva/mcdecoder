@@ -2,10 +2,10 @@
 /*
  * This file is generated for:
  *   - Compiler: {{ extras.compiler }}
- *   - Architecture: {{ machine_decoder.extras.arch_type }}
+ *   - Architecture: {{ machine.extras.arch_type }}
  */
 
-{%- for inst in instruction_decoders -%}
+{%- for inst in instructions -%}
     {%- for field in inst.fields -%}
         {# Example usage of user-defined data for fields #}
         {# Check if the attribute 'type' exists #}

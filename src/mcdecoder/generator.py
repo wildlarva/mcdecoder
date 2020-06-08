@@ -71,7 +71,11 @@ def _generate(mcdecoder_model: core.McDecoder, output_directory: str, template_l
     # Make template arguments
     template_args = {
         'mcdecoder': mcdecoder_model,
+        'machine': mcdecoder_model.machine,
+        # NOTE Deprecated and will be removed in version 0.1b1
         'machine_decoder': mcdecoder_model.machine,
+        'instructions': mcdecoder_model.instructions,
+        # NOTE Deprecated and will be removed in version 0.1b1
         'instruction_decoders': mcdecoder_model.instructions,
         # Shorthand for mcdecoder.namespace_prefix
         'ns': mcdecoder_model.namespace_prefix,

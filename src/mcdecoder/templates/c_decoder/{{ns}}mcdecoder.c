@@ -64,7 +64,7 @@ typedef uint32_t (*SetBitCountFunction)(uint32_t value);
         static bool DecisionNode_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.index }}(DecodeContext *context, uint32_t code);
     {% endfor %}
 {% endfor %}
-{% for inst in instruction_decoders -%}
+{% for inst in instructions -%}
     static bool DecodeInstruction_{{ inst.name }}(DecodeContext *context);
 {% endfor %}
 static uint32_t SetBitCount(uint32_t value);
@@ -85,7 +85,7 @@ static const SetBitCountFunction setbit_count = SetBitCount;
 /* decode function */
 bool {{ ns }}DecodeInstruction(const {{ ns }}DecodeRequest *request, {{ ns }}DecodeResult *result) {
     const uint8_t *raw_code = request->codes;
-    {% if machine_decoder.byteorder == 'little' -%}
+    {% if machine.byteorder == 'little' -%}
         uint16_t word1_16bit = *((uint16_t *) &raw_code[0]);
         uint16_t word2_16bit = *((uint16_t *) &raw_code[2]);
     {% else -%}
@@ -98,7 +98,7 @@ bool {{ ns }}DecodeInstruction(const {{ ns }}DecodeRequest *request, {{ ns }}Dec
     context.result = result;
     context.code16x1 = word1_16bit;
     context.code16x2 = (((uint32_t) word1_16bit) << 16) | ((uint32_t) word2_16bit);
-    {% if machine_decoder.byteorder == 'little' -%}
+    {% if machine.byteorder == 'little' -%}
         context.code32x1 = *((uint32_t *) &raw_code[0]);
     {% else -%}
         context.code32x1 = context.code16x2;
@@ -149,7 +149,7 @@ bool {{ ns }}DecodeInstruction(const {{ ns }}DecodeRequest *request, {{ ns }}Dec
 {% endfor %}
 
 /* individual decode functions */
-{% for inst in instruction_decoders %}
+{% for inst in instructions %}
     static bool DecodeInstruction_{{ inst.name }}(DecodeContext *context) {
         if ((context->code{{ inst.encoding_element_bit_length }}x{{ inst.length_of_encoding_elements }} & (0x{{ '%08x'|format(inst.fixed_bit_mask) }}l)) != (0x{{ '%08x'|format(inst.fixed_bits) }}l)) {
             return false;

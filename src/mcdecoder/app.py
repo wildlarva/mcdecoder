@@ -141,7 +141,7 @@ def _create_parser() -> argparse.ArgumentParser:
         '--input', '--pattern', metavar='indata', dest='bit_pattern', required=True,
         help=textwrap.dedent('''\
             A binary/hex string as input binary data for a decoder.
-            --pattern will be deprecated since 0.1b1'''))
+            --pattern is deprecated and will be removed in version 0.1b1'''))
     emulate_parser.add_argument(
         '--base', choices=[2, 16], default=16, type=int, help='The base of a binary/hex string (default: 16)')
     emulate_parser.add_argument(
@@ -174,7 +174,7 @@ def _create_parser() -> argparse.ArgumentParser:
         '--input', '--pattern', metavar='indata', dest='bit_pattern', required=True, help=textwrap.dedent('''\
             A binary/hex string as input binary data for a decoder.
             'x' character acts as a wildcard which corresponds to a range 0-1 for binary or 0-f for hex.
-            --pattern will be deprecated since 0.1b1'''))
+            --pattern is deprecated and will be removed in version 0.1b1'''))
     emulate_parser.add_argument(
         '--base', choices=[2, 16], default=16, type=int, help='The base of a binary/hex string (default: 16)')
     emulate_parser.add_argument(

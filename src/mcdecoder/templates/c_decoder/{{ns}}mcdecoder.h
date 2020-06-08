@@ -16,7 +16,7 @@ typedef struct {
 
 /** Instruction id to identify a decoded instruction */
 typedef enum {
-	{% for inst in instruction_decoders -%}
+	{% for inst in instructions -%}
 		{{ ns }}InstructionId_k_{{ inst.name }},	/** {{ inst.name }} */
 	{% endfor %}
 	{{ ns }}InstructionId_kUnknown, /** Unknown instruction */
@@ -25,7 +25,7 @@ typedef enum {
 /** Number of instruction ids */
 #define {{ ns }}INSTRUCTION_ID_MAX {{ ns }}InstructionId_kUnknown
 
-{% for inst in instruction_decoders %}
+{% for inst in instructions %}
 	/** Decoding result for {{ inst.name }} */
 	typedef struct {
 		{% for field in inst.fields -%}
@@ -38,7 +38,7 @@ typedef enum {
 typedef struct {
 	{{ ns }}InstructionId instruction_id;	/** Decoded instruction id */
     union {
-		{% for inst in instruction_decoders -%}
+		{% for inst in instructions -%}
         	{{ ns }}InstructionDecodeResult_{{ inst.name }} {{ inst.name }};	/** Decoding result for {{ inst.name }} */
 		{% endfor %}
     } instruction;	/** Decoding result for an instruction */

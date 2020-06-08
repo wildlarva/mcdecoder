@@ -53,7 +53,7 @@ typedef struct {
 } OpDecodeContext;
 
 /* op constants */
-{% for inst in instruction_decoders %}
+{% for inst in instructions %}
     /* {{ inst.name }} */
     #define OP_FB_MASK_{{ inst.name }} (0x{{ '%08x'|format(inst.fixed_bit_mask) }}l) /* fixed bits mask */
     #define OP_FB_{{ inst.name }} (0x{{ '%08x'|format(inst.fixed_bits) }}l) /* fixed bits */
@@ -77,7 +77,7 @@ static {{ ns }}uint32 setbit_count({{ ns }}uint32 value);
         static int decision_node_code{{ tree.encoding_element_bit_length }}x{{ tree.length_of_encoding_elements }}_{{ node.index }}(OpDecodeContext *context, {{ ns }}uint32 code);
     {%- endfor -%}
 {%- endfor %}
-{% for inst in instruction_decoders %}
+{% for inst in instructions %}
     static int op_parse_{{ inst.name }}(OpDecodeContext *context);
 {%- endfor %}
 
@@ -92,7 +92,7 @@ static {{ ns }}uint32 setbit_count({{ ns }}uint32 value) {
 }
 
 /* individual op parse functions */
-{% for inst in instruction_decoders %}
+{% for inst in instructions %}
     /* {{ inst.name }} */
     static int op_parse_{{ inst.name }}(OpDecodeContext *context) {
         if ((context->code{{ inst.encoding_element_bit_length }}x{{ inst.length_of_encoding_elements }} & OP_FB_MASK_{{ inst.name }}) != OP_FB_{{ inst.name }}) {
@@ -158,7 +158,7 @@ static {{ ns }}uint32 setbit_count({{ ns }}uint32 value) {
 
 /* op parse function */
 int {{ ns }}op_parse({{ ns }}uint16 code[{{ ns }}OP_DECODE_MAX], {{ ns }}OpDecodedCodeType *decoded_code, {{ ns }}OperationCodeType *optype) {
-    {% if machine_decoder.byteorder == 'big' %}
+    {% if machine.byteorder == 'big' %}
         {{ ns }}uint8 *raw_code = ({{ ns }}uint8 *) &code[0];
         {{ ns }}uint16 word1_16bit = ((({{ ns }}uint16) raw_code[0]) << 8) | (({{ ns }}uint16) raw_code[1]);
         {{ ns }}uint16 word2_16bit = ((({{ ns }}uint16) raw_code[2]) << 8) | (({{ ns }}uint16) raw_code[3]);
@@ -168,7 +168,7 @@ int {{ ns }}op_parse({{ ns }}uint16 code[{{ ns }}OP_DECODE_MAX], {{ ns }}OpDecod
     context.code = &code[0];
     context.decoded_code = decoded_code;
     context.optype = optype;
-    {% if machine_decoder.byteorder == 'little' %}
+    {% if machine.byteorder == 'little' %}
         context.code16x1 = code[0];
         context.code16x2 = ((({{ ns }}uint32) code[0]) << 16) | (({{ ns }}uint32) code[1]);
         context.code32x1 = *(({{ ns }}uint32 *) &code[0]);

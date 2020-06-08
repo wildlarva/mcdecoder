@@ -2,12 +2,12 @@
 /*
  * This file is generated for:
  *   - Compiler: {{ extras.compiler }}
- *   - Architecture: {{ machine_decoder.extras.arch_type }}
+ *   - Architecture: {{ machine.extras.arch_type }}
  */
 #include "{{ ns }}constants.h"
 
 const uint8 CLOCKS[] = {
-    {%- for inst in instruction_decoders -%}
+    {%- for inst in instructions -%}
         {# Example usage of user-defined data for instructions #}
         {# Check if the attribute 'clocks' exists #}
         {%- if inst.extras.clocks -%}
