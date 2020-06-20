@@ -10,3 +10,4 @@ Specifications
     spec_mcdecoder_api
     spec_template_var
     spec_mcdecoder_model
+    spec_limit
