@@ -53,8 +53,12 @@ How to run tests for mcdecoder
     cd <path-to-cloned-directory>
     source env/bin/activate
 
-    # Run tests
+    # Run tests without coverage report
     pytest
+
+    # Run tests with coverage report
+    # The coverage report will be generated in the directory 'htmlcov'
+    pytest --cov=src --cov-report html
 
 How to run tests for generated decoders
 =============================================
