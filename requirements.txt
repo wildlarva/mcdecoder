@@ -5,6 +5,7 @@ jsonschema
 lark-parser
 numpy
 pytest
+pytest-cov
 PyYAML
 Sphinx>=3
 sphinx-argparse
