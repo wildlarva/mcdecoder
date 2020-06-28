@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,12 +11,20 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -29,12 +36,6 @@
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Coding style" href="dev_coding_style.html" />
@@ -52,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> mcdecoder
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> mcdecoder
           
 
           
@@ -75,6 +76,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -110,6 +112,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -148,7 +151,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="dev_docs.html">Documents for mcdecoder developers</a> &raquo;</li>
         
@@ -310,7 +313,7 @@ If byteorder is not specified, big endian is used by default.</p>
 <p>‘and’ condition subclass for InstructionDecoderCondition to combine conditions with AND operator</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.AndIdCondition.conditions">
-<code class="sig-name descname">conditions</code><em class="property">: List[InstructionDecoderCondition]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.AndIdCondition.conditions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">conditions</code><em class="property">: List<span class="p">[</span>InstructionDecoderCondition<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.AndIdCondition.conditions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child InstructionDecoderConditions combined with logical AND operation</p>
 </dd></dl>
 
@@ -329,13 +332,13 @@ If byteorder is not specified, big endian is used by default.</p>
 <p>Parsed bit range</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.BitRangeDescription.end">
-<code class="sig-name descname">end</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.BitRangeDescription.end" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">end</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.BitRangeDescription.end" title="Permalink to this definition">¶</a></dt>
 <dd><p>LSB of a bit range</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.BitRangeDescription.start">
-<code class="sig-name descname">start</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.BitRangeDescription.start" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">start</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.BitRangeDescription.start" title="Permalink to this definition">¶</a></dt>
 <dd><p>MSB of a bit range</p>
 </dd></dl>
 
@@ -348,25 +351,25 @@ If byteorder is not specified, big endian is used by default.</p>
 <p>Context information while decoding. It is used for non-vectorized calculations.</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.DecodeContext.code16x1">
-<code class="sig-name descname">code16x1</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContext.code16x1" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">code16x1</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.DecodeContext.code16x1" title="Permalink to this definition">¶</a></dt>
 <dd><p>16-bit code(1 word of 16-bit)</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.DecodeContext.code16x2">
-<code class="sig-name descname">code16x2</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContext.code16x2" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">code16x2</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.DecodeContext.code16x2" title="Permalink to this definition">¶</a></dt>
 <dd><p>16-bit code(2 words of 16-bit)</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.DecodeContext.code32x1">
-<code class="sig-name descname">code32x1</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContext.code32x1" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">code32x1</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.DecodeContext.code32x1" title="Permalink to this definition">¶</a></dt>
 <dd><p>32-bit code(1 word of 32-bit)</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.DecodeContext.mcdecoder">
-<code class="sig-name descname">mcdecoder</code><em class="property">: McDecoder</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContext.mcdecoder" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">mcdecoder</code><em class="property">: McDecoder</em><a class="headerlink" href="#mcdecoder.core.DecodeContext.mcdecoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>McDecoder used for decoding</p>
 </dd></dl>
 
@@ -380,25 +383,25 @@ If byteorder is not specified, big endian is used by default.</p>
 <p>NOTE The length of code16x1_vec, code16x2_vec and code32x1_vec must be the same.</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.DecodeContextVectorized.code16x1_vec">
-<code class="sig-name descname">code16x1_vec</code><em class="property">: np.ndarray</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized.code16x1_vec" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">code16x1_vec</code><em class="property">: np.ndarray</em><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized.code16x1_vec" title="Permalink to this definition">¶</a></dt>
 <dd><p>N-vector of 16-bit codes(1 word of 16-bit)</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.DecodeContextVectorized.code16x2_vec">
-<code class="sig-name descname">code16x2_vec</code><em class="property">: np.ndarray</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized.code16x2_vec" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">code16x2_vec</code><em class="property">: np.ndarray</em><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized.code16x2_vec" title="Permalink to this definition">¶</a></dt>
 <dd><p>N-vector of 16-bit codes(2 words of 16-bit)</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.DecodeContextVectorized.code32x1_vec">
-<code class="sig-name descname">code32x1_vec</code><em class="property">: np.ndarray</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized.code32x1_vec" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">code32x1_vec</code><em class="property">: np.ndarray</em><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized.code32x1_vec" title="Permalink to this definition">¶</a></dt>
 <dd><p>N-vector of 32-bit codes(1 word of 32-bit)</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.DecodeContextVectorized.mcdecoder">
-<code class="sig-name descname">mcdecoder</code><em class="property">: McDecoder</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized.mcdecoder" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">mcdecoder</code><em class="property">: McDecoder</em><a class="headerlink" href="#mcdecoder.core.DecodeContextVectorized.mcdecoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>McDecoder used for decoding</p>
 </dd></dl>
 
@@ -412,19 +415,19 @@ If byteorder is not specified, big endian is used by default.</p>
 <p>Supported operators are ==, !=, &gt;, &gt;=, &lt; and &lt;=.</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.EqualityIdCondition.object">
-<code class="sig-name descname">object</code><em class="property">: InstructionDecoderConditionObject</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.EqualityIdCondition.object" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">object</code><em class="property">: InstructionDecoderConditionObject</em><a class="headerlink" href="#mcdecoder.core.EqualityIdCondition.object" title="Permalink to this definition">¶</a></dt>
 <dd><p>Objective InstructionDecoderConditionObject to test with</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.EqualityIdCondition.operator">
-<code class="sig-name descname">operator</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.EqualityIdCondition.operator" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">operator</code><em class="property">: str</em><a class="headerlink" href="#mcdecoder.core.EqualityIdCondition.operator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Operator to test</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.EqualityIdCondition.subject">
-<code class="sig-name descname">subject</code><em class="property">: InstructionDecoderConditionObject</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.EqualityIdCondition.subject" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">subject</code><em class="property">: InstructionDecoderConditionObject</em><a class="headerlink" href="#mcdecoder.core.EqualityIdCondition.subject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subjective InstructionDecoderConditionObject to be tested</p>
 </dd></dl>
 
@@ -443,19 +446,19 @@ If byteorder is not specified, big endian is used by default.</p>
 <p>Parsed equality condition of an instruction such as ‘==’, ‘in’, etc.</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.EqualityInstructionConditionDescription.object">
-<code class="sig-name descname">object</code><em class="property">: InstructionConditionObjectDescription</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionConditionDescription.object" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">object</code><em class="property">: InstructionConditionObjectDescription</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionConditionDescription.object" title="Permalink to this definition">¶</a></dt>
 <dd><p>Objective InstructionConditionObjectDescription to test with</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.EqualityInstructionConditionDescription.operator">
-<code class="sig-name descname">operator</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionConditionDescription.operator" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">operator</code><em class="property">: str</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionConditionDescription.operator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Operator to test</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.EqualityInstructionConditionDescription.subject">
-<code class="sig-name descname">subject</code><em class="property">: InstructionConditionObjectDescription</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionConditionDescription.subject" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">subject</code><em class="property">: InstructionConditionObjectDescription</em><a class="headerlink" href="#mcdecoder.core.EqualityInstructionConditionDescription.subject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subjective InstructionConditionObjectDescription to be tested</p>
 </dd></dl>
 
@@ -468,13 +471,13 @@ If byteorder is not specified, big endian is used by default.</p>
 <p>Field object/subject subclass for InstructionDecoderConditionObject</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.FieldIdConditionObject.element_index">
-<code class="sig-name descname">element_index</code><em class="property">: Optional[int]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.FieldIdConditionObject.element_index" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">element_index</code><em class="property">: Optional<span class="p">[</span>int<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.FieldIdConditionObject.element_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bit element index of a field to be tested</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.FieldIdConditionObject.field">
-<code class="sig-name descname">field</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.FieldIdConditionObject.field" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">field</code><em class="property">: str</em><a class="headerlink" href="#mcdecoder.core.FieldIdConditionObject.field" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of a field to be tested</p>
 </dd></dl>
 
@@ -493,13 +496,13 @@ If byteorder is not specified, big endian is used by default.</p>
 <p>Field object/subject in an instruction condition</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.FieldInstructionConditionObjectDescription.element_index">
-<code class="sig-name descname">element_index</code><em class="property">: Optional[int]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.FieldInstructionConditionObjectDescription.element_index" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">element_index</code><em class="property">: Optional<span class="p">[</span>int<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.FieldInstructionConditionObjectDescription.element_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bit element index of a field to be tested</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.FieldInstructionConditionObjectDescription.field">
-<code class="sig-name descname">field</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.FieldInstructionConditionObjectDescription.field" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">field</code><em class="property">: str</em><a class="headerlink" href="#mcdecoder.core.FieldInstructionConditionObjectDescription.field" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of a field to be tested</p>
 </dd></dl>
 
@@ -512,13 +515,13 @@ If byteorder is not specified, big endian is used by default.</p>
 <p>Uses the result of a function call as an object/subject. It is a subclass for InstructionDecoderConditionObject</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.FunctionIdConditionObject.argument">
-<code class="sig-name descname">argument</code><em class="property">: FieldIdConditionObject</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.FunctionIdConditionObject.argument" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">argument</code><em class="property">: FieldIdConditionObject</em><a class="headerlink" href="#mcdecoder.core.FunctionIdConditionObject.argument" title="Permalink to this definition">¶</a></dt>
 <dd><p>Argument FieldIdConditionObject</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.FunctionIdConditionObject.function">
-<code class="sig-name descname">function</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.FunctionIdConditionObject.function" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">function</code><em class="property">: str</em><a class="headerlink" href="#mcdecoder.core.FunctionIdConditionObject.function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of a function to be called</p>
 </dd></dl>
 
@@ -537,13 +540,13 @@ If byteorder is not specified, big endian is used by default.</p>
 <p>Uses the result of a function call as an object/subject in an instruction condition</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.FunctionInstructionConditionObjectDescription.argument">
-<code class="sig-name descname">argument</code><em class="property">: FieldInstructionConditionObjectDescription</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.FunctionInstructionConditionObjectDescription.argument" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">argument</code><em class="property">: FieldInstructionConditionObjectDescription</em><a class="headerlink" href="#mcdecoder.core.FunctionInstructionConditionObjectDescription.argument" title="Permalink to this definition">¶</a></dt>
 <dd><p>Argument FieldInstructionConditionObjectDescription</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.FunctionInstructionConditionObjectDescription.function">
-<code class="sig-name descname">function</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.FunctionInstructionConditionObjectDescription.function" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">function</code><em class="property">: str</em><a class="headerlink" href="#mcdecoder.core.FunctionInstructionConditionObjectDescription.function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of a function to be called</p>
 </dd></dl>
 
@@ -562,7 +565,7 @@ If byteorder is not specified, big endian is used by default.</p>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.ImmediateIdConditionObject.value">
-<code class="sig-name descname">value</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.ImmediateIdConditionObject.value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">value</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.ImmediateIdConditionObject.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Value to be tested</p>
 </dd></dl>
 
@@ -575,7 +578,7 @@ If byteorder is not specified, big endian is used by default.</p>
 <p>Immediate value object/subject in an instruction condition</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.ImmediateInstructionConditionObjectDescription.value">
-<code class="sig-name descname">value</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.ImmediateInstructionConditionObjectDescription.value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">value</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.ImmediateInstructionConditionObjectDescription.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Value to be tested</p>
 </dd></dl>
 
@@ -588,7 +591,7 @@ If byteorder is not specified, big endian is used by default.</p>
 <p>‘in’ condition subclass for InstructionDecoderCondition to test an instruction field is in a value set</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.InIdCondition.subject">
-<code class="sig-name descname">subject</code><em class="property">: InstructionDecoderConditionObject</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InIdCondition.subject" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">subject</code><em class="property">: InstructionDecoderConditionObject</em><a class="headerlink" href="#mcdecoder.core.InIdCondition.subject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subjective InstructionDecoderConditionObject to be tested</p>
 </dd></dl>
 
@@ -600,7 +603,7 @@ If byteorder is not specified, big endian is used by default.</p>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InIdCondition.values">
-<code class="sig-name descname">values</code><em class="property">: List[int]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InIdCondition.values" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">values</code><em class="property">: List<span class="p">[</span>int<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InIdCondition.values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Value set a field must be in</p>
 </dd></dl>
 
@@ -613,13 +616,13 @@ If byteorder is not specified, big endian is used by default.</p>
 <p>Parsed ‘in’ condition of an instruction</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.InInstructionConditionDescription.subject">
-<code class="sig-name descname">subject</code><em class="property">: InstructionConditionObjectDescription</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InInstructionConditionDescription.subject" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">subject</code><em class="property">: InstructionConditionObjectDescription</em><a class="headerlink" href="#mcdecoder.core.InInstructionConditionDescription.subject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subjective InstructionConditionObjectDescription to be tested</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InInstructionConditionDescription.values">
-<code class="sig-name descname">values</code><em class="property">: List[int]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InInstructionConditionDescription.values" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">values</code><em class="property">: List<span class="p">[</span>int<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InInstructionConditionDescription.values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Values to test with</p>
 </dd></dl>
 
@@ -633,7 +636,7 @@ If byteorder is not specified, big endian is used by default.</p>
 to test an instruction field is in a value range(inclusive)</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.InRangeIdCondition.subject">
-<code class="sig-name descname">subject</code><em class="property">: InstructionDecoderConditionObject</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InRangeIdCondition.subject" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">subject</code><em class="property">: InstructionDecoderConditionObject</em><a class="headerlink" href="#mcdecoder.core.InRangeIdCondition.subject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subjective InstructionDecoderConditionObject to be tested</p>
 </dd></dl>
 
@@ -645,13 +648,13 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InRangeIdCondition.value_end">
-<code class="sig-name descname">value_end</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InRangeIdCondition.value_end" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">value_end</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InRangeIdCondition.value_end" title="Permalink to this definition">¶</a></dt>
 <dd><p>End of a value range a field must be in</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InRangeIdCondition.value_start">
-<code class="sig-name descname">value_start</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InRangeIdCondition.value_start" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">value_start</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InRangeIdCondition.value_start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start of a value range a field must be in</p>
 </dd></dl>
 
@@ -664,19 +667,19 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Parsed ‘in_range’ condition of an instruction</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.InRangeInstructionConditionDescription.subject">
-<code class="sig-name descname">subject</code><em class="property">: InstructionConditionObjectDescription</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionConditionDescription.subject" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">subject</code><em class="property">: InstructionConditionObjectDescription</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionConditionDescription.subject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subjective InstructionConditionObjectDescription to be tested</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InRangeInstructionConditionDescription.value_end">
-<code class="sig-name descname">value_end</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionConditionDescription.value_end" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">value_end</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionConditionDescription.value_end" title="Permalink to this definition">¶</a></dt>
 <dd><p>End of a value range a field must be in</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InRangeInstructionConditionDescription.value_start">
-<code class="sig-name descname">value_start</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionConditionDescription.value_start" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">value_start</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InRangeInstructionConditionDescription.value_start" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start of a value range a field must be in</p>
 </dd></dl>
 
@@ -703,7 +706,7 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Decoding result of an instruction</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDecodeResult.decoder">
-<code class="sig-name descname">decoder</code><em class="property">: InstructionDecoder</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecodeResult.decoder" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">decoder</code><em class="property">: InstructionDecoder</em><a class="headerlink" href="#mcdecoder.core.InstructionDecodeResult.decoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Corresponding InstructionDecoder</p>
 </dd></dl>
 
@@ -718,7 +721,7 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDecodeResult.fields">
-<code class="sig-name descname">fields</code><em class="property">: List[InstructionFieldDecodeResult]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecodeResult.fields" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fields</code><em class="property">: List<span class="p">[</span>InstructionFieldDecodeResult<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionDecodeResult.fields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child InstructionFieldDecodeResults</p>
 </dd></dl>
 
@@ -731,13 +734,13 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Decoder for an instruction</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDecoder.encoding_element_bit_length">
-<code class="sig-name descname">encoding_element_bit_length</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.encoding_element_bit_length" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">encoding_element_bit_length</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.encoding_element_bit_length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bit length of an encoding element</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDecoder.extras">
-<code class="sig-name descname">extras</code><em class="property">: Optional[Any]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.extras" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extras</code><em class="property">: Optional<span class="p">[</span>Any<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.extras" title="Permalink to this definition">¶</a></dt>
 <dd><p>User-defined data for an instruction</p>
 </dd></dl>
 
@@ -752,19 +755,19 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDecoder.fields">
-<code class="sig-name descname">fields</code><em class="property">: List[InstructionFieldDecoder]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.fields" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fields</code><em class="property">: List<span class="p">[</span>InstructionFieldDecoder<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.fields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child InstructionFieldDecoders</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDecoder.fixed_bit_mask">
-<code class="sig-name descname">fixed_bit_mask</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.fixed_bit_mask" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fixed_bit_mask</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.fixed_bit_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mask of fixed bit positions of an instruction</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDecoder.fixed_bits">
-<code class="sig-name descname">fixed_bits</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.fixed_bits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fixed_bits</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.fixed_bits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fixed bits of an instruction</p>
 </dd></dl>
 
@@ -779,25 +782,25 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDecoder.length_of_encoding_elements">
-<code class="sig-name descname">length_of_encoding_elements</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.length_of_encoding_elements" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">length_of_encoding_elements</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.length_of_encoding_elements" title="Permalink to this definition">¶</a></dt>
 <dd><p>Length of encoding elements</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDecoder.match_condition">
-<code class="sig-name descname">match_condition</code><em class="property">: Optional[InstructionDecoderCondition]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.match_condition" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">match_condition</code><em class="property">: Optional<span class="p">[</span>InstructionDecoderCondition<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.match_condition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Condition an instruction must satisfy</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDecoder.name">
-<code class="sig-name descname">name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">name</code><em class="property">: str</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of an instruction</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDecoder.type_bit_length">
-<code class="sig-name descname">type_bit_length</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.type_bit_length" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">type_bit_length</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.type_bit_length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bit length of a data type used for an instruction</p>
 </dd></dl>
 
@@ -812,7 +815,7 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDecoder.unmatch_condition">
-<code class="sig-name descname">unmatch_condition</code><em class="property">: Optional[InstructionDecoderCondition]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.unmatch_condition" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unmatch_condition</code><em class="property">: Optional<span class="p">[</span>InstructionDecoderCondition<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionDecoder.unmatch_condition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Condition an instruction must not satisfy</p>
 </dd></dl>
 
@@ -848,42 +851,42 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py class">
 <dt id="mcdecoder.core.InstructionDescription">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDescription</code><a class="headerlink" href="#mcdecoder.core.InstructionDescription" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">InstructionDescription</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.InstructionDescription" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>Describes an instruction</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDescription.extras">
-<code class="sig-name descname">extras</code><em class="property">: Optional[Any]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDescription.extras" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extras</code><em class="property">: Optional<span class="p">[</span>Any<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionDescription.extras" title="Permalink to this definition">¶</a></dt>
 <dd><p>Container of user-defined data for an instruction</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDescription.field_extras">
-<code class="sig-name descname">field_extras</code><em class="property">: Optional[Dict[str, Any]]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDescription.field_extras" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">field_extras</code><em class="property">: Optional<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionDescription.field_extras" title="Permalink to this definition">¶</a></dt>
 <dd><p>Container of user-defined data for each field</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDescription.format">
-<code class="sig-name descname">format</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDescription.format" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">format</code><em class="property">: str</em><a class="headerlink" href="#mcdecoder.core.InstructionDescription.format" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encoding format of an instruction</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDescription.match_condition">
-<code class="sig-name descname">match_condition</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDescription.match_condition" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">match_condition</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionDescription.match_condition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Condition an instruction must satisfy</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDescription.name">
-<code class="sig-name descname">name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDescription.name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">name</code><em class="property">: str</em><a class="headerlink" href="#mcdecoder.core.InstructionDescription.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of an instruction</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionDescription.unmatch_condition">
-<code class="sig-name descname">unmatch_condition</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionDescription.unmatch_condition" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unmatch_condition</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionDescription.unmatch_condition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Condition an instruction must not satisfy</p>
 </dd></dl>
 
@@ -896,7 +899,7 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Parsed encoding format of an instruction</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionEncodingDescription.elements">
-<code class="sig-name descname">elements</code><em class="property">: List[InstructionEncodingElementDescription]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionEncodingDescription.elements" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">elements</code><em class="property">: List<span class="p">[</span>InstructionEncodingElementDescription<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionEncodingDescription.elements" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child InstructionEncodingElementDescriptions</p>
 </dd></dl>
 
@@ -909,7 +912,7 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Parsed encoding element of an instruction</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionEncodingElementDescription.fields">
-<code class="sig-name descname">fields</code><em class="property">: List[InstructionFieldEncodingDescription]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionEncodingElementDescription.fields" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fields</code><em class="property">: List<span class="p">[</span>InstructionFieldEncodingDescription<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionEncodingElementDescription.fields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child InstructionFieldEncodingDescriptions</p>
 </dd></dl>
 
@@ -922,13 +925,13 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Decoding result of an instruction field</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionFieldDecodeResult.decoder">
-<code class="sig-name descname">decoder</code><em class="property">: InstructionFieldDecoder</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecodeResult.decoder" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">decoder</code><em class="property">: InstructionFieldDecoder</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecodeResult.decoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Corresponding InstructionFieldDecoder</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionFieldDecodeResult.value">
-<code class="sig-name descname">value</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecodeResult.value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">value</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecodeResult.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decoded value for a field</p>
 </dd></dl>
 
@@ -941,13 +944,13 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Decoder for an instruction field</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionFieldDecoder.extras">
-<code class="sig-name descname">extras</code><em class="property">: Optional[Any]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecoder.extras" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extras</code><em class="property">: Optional<span class="p">[</span>Any<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecoder.extras" title="Permalink to this definition">¶</a></dt>
 <dd><p>User-defined data for a field</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionFieldDecoder.name">
-<code class="sig-name descname">name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecoder.name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">name</code><em class="property">: str</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecoder.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of a field</p>
 </dd></dl>
 
@@ -962,13 +965,13 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionFieldDecoder.subfields">
-<code class="sig-name descname">subfields</code><em class="property">: List[InstructionSubfieldDecoder]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecoder.subfields" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">subfields</code><em class="property">: List<span class="p">[</span>InstructionSubfieldDecoder<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecoder.subfields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child InstructionSubfieldDecoders</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionFieldDecoder.type_bit_length">
-<code class="sig-name descname">type_bit_length</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecoder.type_bit_length" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">type_bit_length</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldDecoder.type_bit_length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bit length of a data type used for a field</p>
 </dd></dl>
 
@@ -990,19 +993,19 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Parsed encoding format of an instruction field</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionFieldEncodingDescription.bit_ranges">
-<code class="sig-name descname">bit_ranges</code><em class="property">: List[BitRangeDescription]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldEncodingDescription.bit_ranges" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">bit_ranges</code><em class="property">: List<span class="p">[</span>BitRangeDescription<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionFieldEncodingDescription.bit_ranges" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bit ranges of a field that the encoding format corresponds to</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionFieldEncodingDescription.bits_format">
-<code class="sig-name descname">bits_format</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldEncodingDescription.bits_format" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">bits_format</code><em class="property">: str</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldEncodingDescription.bits_format" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encoding format of a field</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionFieldEncodingDescription.name">
-<code class="sig-name descname">name</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionFieldEncodingDescription.name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">name</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.InstructionFieldEncodingDescription.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of a field</p>
 </dd></dl>
 
@@ -1033,31 +1036,31 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionSubfieldDecoder.index">
-<code class="sig-name descname">index</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionSubfieldDecoder.index" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">index</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InstructionSubfieldDecoder.index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Index number of a subfield in a field: 0th to (n-1)th</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionSubfieldDecoder.lsb_in_field">
-<code class="sig-name descname">lsb_in_field</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionSubfieldDecoder.lsb_in_field" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">lsb_in_field</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InstructionSubfieldDecoder.lsb_in_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>LSB of a subfield in a field</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionSubfieldDecoder.lsb_in_instruction">
-<code class="sig-name descname">lsb_in_instruction</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionSubfieldDecoder.lsb_in_instruction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">lsb_in_instruction</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InstructionSubfieldDecoder.lsb_in_instruction" title="Permalink to this definition">¶</a></dt>
 <dd><p>LSB of a subfield in an instruction</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionSubfieldDecoder.mask">
-<code class="sig-name descname">mask</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionSubfieldDecoder.mask" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">mask</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InstructionSubfieldDecoder.mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mask of a subfield in an instruction</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.InstructionSubfieldDecoder.msb_in_instruction">
-<code class="sig-name descname">msb_in_instruction</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.InstructionSubfieldDecoder.msb_in_instruction" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">msb_in_instruction</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.InstructionSubfieldDecoder.msb_in_instruction" title="Permalink to this definition">¶</a></dt>
 <dd><p>MSB of a subfield in an instruction</p>
 </dd></dl>
 
@@ -1079,7 +1082,7 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Raised when an error occurs while loading</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.LoadError.message">
-<code class="sig-name descname">message</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.LoadError.message" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">message</code><em class="property">: str</em><a class="headerlink" href="#mcdecoder.core.LoadError.message" title="Permalink to this definition">¶</a></dt>
 <dd><p>explanation of the error</p>
 </dd></dl>
 
@@ -1092,13 +1095,13 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Parsed logical condition of an instruction, ‘and’ or ‘or’</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.LogicalInstructionConditionDescription.conditions">
-<code class="sig-name descname">conditions</code><em class="property">: List[InstructionConditionDescription]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.LogicalInstructionConditionDescription.conditions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">conditions</code><em class="property">: List<span class="p">[</span>InstructionConditionDescription<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.LogicalInstructionConditionDescription.conditions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Conditions combined with an logical operator</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.LogicalInstructionConditionDescription.operator">
-<code class="sig-name descname">operator</code><em class="property">: Literal['and', 'or']</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.LogicalInstructionConditionDescription.operator" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">operator</code><em class="property">: Literal[‘and’, ‘or’]</em><a class="headerlink" href="#mcdecoder.core.LogicalInstructionConditionDescription.operator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Operator of a logical condition</p>
 </dd></dl>
 
@@ -1111,13 +1114,13 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Decoder for a machine</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.MachineDecoder.byteorder">
-<code class="sig-name descname">byteorder</code><em class="property">: Literal['big', 'little']</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.MachineDecoder.byteorder" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">byteorder</code><em class="property">: Literal[‘big’, ‘little’]</em><a class="headerlink" href="#mcdecoder.core.MachineDecoder.byteorder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Byte order of a machine</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.MachineDecoder.extras">
-<code class="sig-name descname">extras</code><em class="property">: Optional[Any]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.MachineDecoder.extras" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extras</code><em class="property">: Optional<span class="p">[</span>Any<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.MachineDecoder.extras" title="Permalink to this definition">¶</a></dt>
 <dd><p>User-defined data for a machine</p>
 </dd></dl>
 
@@ -1125,18 +1128,18 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py class">
 <dt id="mcdecoder.core.MachineDescription">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">MachineDescription</code><a class="headerlink" href="#mcdecoder.core.MachineDescription" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">MachineDescription</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.MachineDescription" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>Describes a machine</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.MachineDescription.byteorder">
-<code class="sig-name descname">byteorder</code><em class="property">: Literal['big', 'little']</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.MachineDescription.byteorder" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">byteorder</code><em class="property">: Literal[‘big’, ‘little’]</em><a class="headerlink" href="#mcdecoder.core.MachineDescription.byteorder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Byte order of a machine</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.MachineDescription.extras">
-<code class="sig-name descname">extras</code><em class="property">: Optional[Any]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.MachineDescription.extras" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extras</code><em class="property">: Optional<span class="p">[</span>Any<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.MachineDescription.extras" title="Permalink to this definition">¶</a></dt>
 <dd><p>Container of user-defined data for a machine</p>
 </dd></dl>
 
@@ -1149,13 +1152,13 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Decoder itself. The root model element of MC decoder model</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.McDecoder.decision_trees">
-<code class="sig-name descname">decision_trees</code><em class="property">: List[McdDecisionTree]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDecoder.decision_trees" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">decision_trees</code><em class="property">: List<span class="p">[</span>McdDecisionTree<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.McDecoder.decision_trees" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child McdDecisionTrees</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McDecoder.extras">
-<code class="sig-name descname">extras</code><em class="property">: Optional[Any]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDecoder.extras" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extras</code><em class="property">: Optional<span class="p">[</span>Any<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.McDecoder.extras" title="Permalink to this definition">¶</a></dt>
 <dd><p>User-defined data not related to a machine, an instruction and a field</p>
 </dd></dl>
 
@@ -1170,13 +1173,13 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McDecoder.instructions">
-<code class="sig-name descname">instructions</code><em class="property">: List[InstructionDecoder]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDecoder.instructions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">instructions</code><em class="property">: List<span class="p">[</span>InstructionDecoder<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.McDecoder.instructions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child InstructionDecoders</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McDecoder.machine">
-<code class="sig-name descname">machine</code><em class="property">: MachineDecoder</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDecoder.machine" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">machine</code><em class="property">: MachineDecoder</em><a class="headerlink" href="#mcdecoder.core.McDecoder.machine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child MachineDecoder</p>
 </dd></dl>
 
@@ -1191,13 +1194,13 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McDecoder.namespace">
-<code class="sig-name descname">namespace</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDecoder.namespace" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">namespace</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.McDecoder.namespace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Namespace of generated codes</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McDecoder.namespace_prefix">
-<code class="sig-name descname">namespace_prefix</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDecoder.namespace_prefix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">namespace_prefix</code><em class="property">: str</em><a class="headerlink" href="#mcdecoder.core.McDecoder.namespace_prefix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Namespace prefix of generated codes</p>
 </dd></dl>
 
@@ -1205,18 +1208,18 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py class">
 <dt id="mcdecoder.core.McDecoderDescription">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McDecoderDescription</code><a class="headerlink" href="#mcdecoder.core.McDecoderDescription" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McDecoderDescription</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.McDecoderDescription" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>Decoder information that isn’t related to a machine, an instruction and a field</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.McDecoderDescription.namespace">
-<code class="sig-name descname">namespace</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDecoderDescription.namespace" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">namespace</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.McDecoderDescription.namespace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Namespace for the symbols of a generated decoder</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McDecoderDescription.process_instruction_hook">
-<code class="sig-name descname">process_instruction_hook</code><em class="property">: Optional[str]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDecoderDescription.process_instruction_hook" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">process_instruction_hook</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.McDecoderDescription.process_instruction_hook" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hook function to process model for an instruction decoder</p>
 </dd></dl>
 
@@ -1224,30 +1227,30 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py class">
 <dt id="mcdecoder.core.McDescription">
-<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McDescription</code><a class="headerlink" href="#mcdecoder.core.McDescription" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">McDescription</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#mcdecoder.core.McDescription" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>Describes a machine code specification. The root element of MC description model</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.McDescription.decoder">
-<code class="sig-name descname">decoder</code><em class="property">: Optional[McDecoderDescription]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDescription.decoder" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">decoder</code><em class="property">: Optional<span class="p">[</span>McDecoderDescription<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.McDescription.decoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child McDecoderDescription</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McDescription.extras">
-<code class="sig-name descname">extras</code><em class="property">: Optional[Any]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDescription.extras" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">extras</code><em class="property">: Optional<span class="p">[</span>Any<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.McDescription.extras" title="Permalink to this definition">¶</a></dt>
 <dd><p>User-defined data not related to a machine, an instruction and a field</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McDescription.instructions">
-<code class="sig-name descname">instructions</code><em class="property">: List[InstructionDescription]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDescription.instructions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">instructions</code><em class="property">: List<span class="p">[</span>InstructionDescription<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.McDescription.instructions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child InstructionDescriptions</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McDescription.machine">
-<code class="sig-name descname">machine</code><em class="property">: MachineDescription</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McDescription.machine" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">machine</code><em class="property">: MachineDescription</em><a class="headerlink" href="#mcdecoder.core.McDescription.machine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child MachineDescription</p>
 </dd></dl>
 
@@ -1272,31 +1275,31 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McdDecisionNode.arbitrary_bit_node">
-<code class="sig-name descname">arbitrary_bit_node</code><em class="property">: Optional['McdDecisionNode']</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.arbitrary_bit_node" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">arbitrary_bit_node</code><em class="property">: Optional[‘McdDecisionNode’]</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.arbitrary_bit_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Arbitrary bit McdDecisionNode</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McdDecisionNode.fixed_bit_nodes">
-<code class="sig-name descname">fixed_bit_nodes</code><em class="property">: Dict[int, 'McdDecisionNode']</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.fixed_bit_nodes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fixed_bit_nodes</code><em class="property">: Dict[int, ‘McdDecisionNode’]</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.fixed_bit_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary of a threshold value and its fixed bit McdDecisionNode</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McdDecisionNode.index">
-<code class="sig-name descname">index</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.index" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">index</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Index number of a node in a tree</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McdDecisionNode.instructions">
-<code class="sig-name descname">instructions</code><em class="property">: List[InstructionDecoder]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.instructions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">instructions</code><em class="property">: List<span class="p">[</span>InstructionDecoder<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.instructions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instructions decided by a node</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McdDecisionNode.mask">
-<code class="sig-name descname">mask</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.mask" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">mask</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.McdDecisionNode.mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mask of threshold bit positions</p>
 </dd></dl>
 
@@ -1309,19 +1312,19 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Decision tree to find a matched instruction for a code</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.McdDecisionTree.encoding_element_bit_length">
-<code class="sig-name descname">encoding_element_bit_length</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionTree.encoding_element_bit_length" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">encoding_element_bit_length</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.McdDecisionTree.encoding_element_bit_length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bit length of an encoding element</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McdDecisionTree.length_of_encoding_elements">
-<code class="sig-name descname">length_of_encoding_elements</code><em class="property">: int</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionTree.length_of_encoding_elements" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">length_of_encoding_elements</code><em class="property">: int</em><a class="headerlink" href="#mcdecoder.core.McdDecisionTree.length_of_encoding_elements" title="Permalink to this definition">¶</a></dt>
 <dd><p>Length of encoding elements</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="mcdecoder.core.McdDecisionTree.root_node">
-<code class="sig-name descname">root_node</code><em class="property">: McdDecisionNode</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.McdDecisionTree.root_node" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">root_node</code><em class="property">: McdDecisionNode</em><a class="headerlink" href="#mcdecoder.core.McdDecisionTree.root_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Root node of a decision tree</p>
 </dd></dl>
 
@@ -1334,7 +1337,7 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>‘or’ condition subclass for InstructionDecoderCondition to combine conditions with OR operator</p>
 <dl class="py attribute">
 <dt id="mcdecoder.core.OrIdCondition.conditions">
-<code class="sig-name descname">conditions</code><em class="property">: List[InstructionDecoderCondition]</em><em class="property"> = None</em><a class="headerlink" href="#mcdecoder.core.OrIdCondition.conditions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">conditions</code><em class="property">: List<span class="p">[</span>InstructionDecoderCondition<span class="p">]</span></em><a class="headerlink" href="#mcdecoder.core.OrIdCondition.conditions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Child InstructionDecoderConditions combined with logical OR operation</p>
 </dd></dl>
 
@@ -1594,11 +1597,19 @@ Each element holds the boolean result whether a code is matched for an instructi
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2019, wildlarva
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1609,7 +1620,6 @@ Each element holds the boolean result whether a code is matched for an instructi
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

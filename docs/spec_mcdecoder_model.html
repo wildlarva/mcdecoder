@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,12 +11,20 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -29,15 +36,9 @@
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Documents for mcdecoder developers" href="dev_docs.html" />
+    <link rel="next" title="Limitations" href="spec_limit.html" />
     <link rel="prev" title="Template variable specification" href="spec_template_var.html" /> 
 </head>
 
@@ -52,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> mcdecoder
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> mcdecoder
           
 
           
@@ -75,6 +76,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -96,6 +98,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#decision-tree">Decision tree</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="spec_limit.html">Limitations</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a></li>
@@ -105,6 +108,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -143,7 +147,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="specifications.html">Specifications</a> &raquo;</li>
         
@@ -177,13 +181,13 @@
 <p>Decoder itself. The root model element of MC decoder model</p>
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">decision_trees</code><em class="property">: List[McdDecisionTree]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">decision_trees</code><em class="property">: List<span class="p">[</span>McdDecisionTree<span class="p">]</span></em></dt>
 <dd><p>Child McdDecisionTrees</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">extras</code><em class="property">: Optional[Any]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">extras</code><em class="property">: Optional<span class="p">[</span>Any<span class="p">]</span></em></dt>
 <dd><p>User-defined data not related to a machine, an instruction and a field</p>
 </dd></dl>
 
@@ -198,13 +202,13 @@
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">instructions</code><em class="property">: List[InstructionDecoder]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">instructions</code><em class="property">: List<span class="p">[</span>InstructionDecoder<span class="p">]</span></em></dt>
 <dd><p>Child InstructionDecoders</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">machine</code><em class="property">: MachineDecoder</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">machine</code><em class="property">: MachineDecoder</em></dt>
 <dd><p>Child MachineDecoder</p>
 </dd></dl>
 
@@ -219,13 +223,13 @@
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">namespace</code><em class="property">: Optional[str]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">namespace</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em></dt>
 <dd><p>Namespace of generated codes</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">namespace_prefix</code><em class="property">: str</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">namespace_prefix</code><em class="property">: str</em></dt>
 <dd><p>Namespace prefix of generated codes</p>
 </dd></dl>
 
@@ -238,13 +242,13 @@
 <p>Decoder for a machine</p>
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">byteorder</code><em class="property">: Literal['big', 'little']</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">byteorder</code><em class="property">: Literal[‘big’, ‘little’]</em></dt>
 <dd><p>Byte order of a machine</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">extras</code><em class="property">: Optional[Any]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">extras</code><em class="property">: Optional<span class="p">[</span>Any<span class="p">]</span></em></dt>
 <dd><p>User-defined data for a machine</p>
 </dd></dl>
 
@@ -257,13 +261,13 @@
 <p>Decoder for an instruction</p>
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">encoding_element_bit_length</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">encoding_element_bit_length</code><em class="property">: int</em></dt>
 <dd><p>Bit length of an encoding element</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">extras</code><em class="property">: Optional[Any]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">extras</code><em class="property">: Optional<span class="p">[</span>Any<span class="p">]</span></em></dt>
 <dd><p>User-defined data for an instruction</p>
 </dd></dl>
 
@@ -278,19 +282,19 @@
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">fields</code><em class="property">: List[InstructionFieldDecoder]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">fields</code><em class="property">: List<span class="p">[</span>InstructionFieldDecoder<span class="p">]</span></em></dt>
 <dd><p>Child InstructionFieldDecoders</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">fixed_bit_mask</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">fixed_bit_mask</code><em class="property">: int</em></dt>
 <dd><p>Mask of fixed bit positions of an instruction</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">fixed_bits</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">fixed_bits</code><em class="property">: int</em></dt>
 <dd><p>Fixed bits of an instruction</p>
 </dd></dl>
 
@@ -305,25 +309,25 @@
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">length_of_encoding_elements</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">length_of_encoding_elements</code><em class="property">: int</em></dt>
 <dd><p>Length of encoding elements</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">match_condition</code><em class="property">: Optional[InstructionDecoderCondition]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">match_condition</code><em class="property">: Optional<span class="p">[</span>InstructionDecoderCondition<span class="p">]</span></em></dt>
 <dd><p>Condition an instruction must satisfy</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">name</code><em class="property">: str</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">name</code><em class="property">: str</em></dt>
 <dd><p>Name of an instruction</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">type_bit_length</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">type_bit_length</code><em class="property">: int</em></dt>
 <dd><p>Bit length of a data type used for an instruction</p>
 </dd></dl>
 
@@ -338,7 +342,7 @@
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">unmatch_condition</code><em class="property">: Optional[InstructionDecoderCondition]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">unmatch_condition</code><em class="property">: Optional<span class="p">[</span>InstructionDecoderCondition<span class="p">]</span></em></dt>
 <dd><p>Condition an instruction must not satisfy</p>
 </dd></dl>
 
@@ -351,13 +355,13 @@
 <p>Decoder for an instruction field</p>
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">extras</code><em class="property">: Optional[Any]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">extras</code><em class="property">: Optional<span class="p">[</span>Any<span class="p">]</span></em></dt>
 <dd><p>User-defined data for a field</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">name</code><em class="property">: str</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">name</code><em class="property">: str</em></dt>
 <dd><p>Name of a field</p>
 </dd></dl>
 
@@ -372,13 +376,13 @@
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">subfields</code><em class="property">: List[InstructionSubfieldDecoder]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">subfields</code><em class="property">: List<span class="p">[</span>InstructionSubfieldDecoder<span class="p">]</span></em></dt>
 <dd><p>Child InstructionSubfieldDecoders</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">type_bit_length</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">type_bit_length</code><em class="property">: int</em></dt>
 <dd><p>Bit length of a data type used for a field</p>
 </dd></dl>
 
@@ -418,31 +422,31 @@
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">index</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">index</code><em class="property">: int</em></dt>
 <dd><p>Index number of a subfield in a field: 0th to (n-1)th</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">lsb_in_field</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">lsb_in_field</code><em class="property">: int</em></dt>
 <dd><p>LSB of a subfield in a field</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">lsb_in_instruction</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">lsb_in_instruction</code><em class="property">: int</em></dt>
 <dd><p>LSB of a subfield in an instruction</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">mask</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">mask</code><em class="property">: int</em></dt>
 <dd><p>Mask of a subfield in an instruction</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">msb_in_instruction</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">msb_in_instruction</code><em class="property">: int</em></dt>
 <dd><p>MSB of a subfield in an instruction</p>
 </dd></dl>
 
@@ -481,7 +485,7 @@
 <p>‘and’ condition subclass for InstructionDecoderCondition to combine conditions with AND operator</p>
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">conditions</code><em class="property">: List[InstructionDecoderCondition]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">conditions</code><em class="property">: List<span class="p">[</span>InstructionDecoderCondition<span class="p">]</span></em></dt>
 <dd><p>Child InstructionDecoderConditions combined with logical AND operation</p>
 </dd></dl>
 
@@ -500,7 +504,7 @@
 <p>‘or’ condition subclass for InstructionDecoderCondition to combine conditions with OR operator</p>
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">conditions</code><em class="property">: List[InstructionDecoderCondition]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">conditions</code><em class="property">: List<span class="p">[</span>InstructionDecoderCondition<span class="p">]</span></em></dt>
 <dd><p>Child InstructionDecoderConditions combined with logical OR operation</p>
 </dd></dl>
 
@@ -520,19 +524,19 @@
 <p>Supported operators are ==, !=, &gt;, &gt;=, &lt; and &lt;=.</p>
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">object</code><em class="property">: InstructionDecoderConditionObject</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">object</code><em class="property">: InstructionDecoderConditionObject</em></dt>
 <dd><p>Objective InstructionDecoderConditionObject to test with</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">operator</code><em class="property">: str</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">operator</code><em class="property">: str</em></dt>
 <dd><p>Operator to test</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">subject</code><em class="property">: InstructionDecoderConditionObject</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">subject</code><em class="property">: InstructionDecoderConditionObject</em></dt>
 <dd><p>Subjective InstructionDecoderConditionObject to be tested</p>
 </dd></dl>
 
@@ -551,7 +555,7 @@
 <p>‘in’ condition subclass for InstructionDecoderCondition to test an instruction field is in a value set</p>
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">subject</code><em class="property">: InstructionDecoderConditionObject</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">subject</code><em class="property">: InstructionDecoderConditionObject</em></dt>
 <dd><p>Subjective InstructionDecoderConditionObject to be tested</p>
 </dd></dl>
 
@@ -563,7 +567,7 @@
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">values</code><em class="property">: List[int]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">values</code><em class="property">: List<span class="p">[</span>int<span class="p">]</span></em></dt>
 <dd><p>Value set a field must be in</p>
 </dd></dl>
 
@@ -577,7 +581,7 @@
 to test an instruction field is in a value range(inclusive)</p>
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">subject</code><em class="property">: InstructionDecoderConditionObject</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">subject</code><em class="property">: InstructionDecoderConditionObject</em></dt>
 <dd><p>Subjective InstructionDecoderConditionObject to be tested</p>
 </dd></dl>
 
@@ -589,13 +593,13 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">value_end</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">value_end</code><em class="property">: int</em></dt>
 <dd><p>End of a value range a field must be in</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">value_start</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">value_start</code><em class="property">: int</em></dt>
 <dd><p>Start of a value range a field must be in</p>
 </dd></dl>
 
@@ -622,13 +626,13 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Field object/subject subclass for InstructionDecoderConditionObject</p>
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">element_index</code><em class="property">: Optional[int]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">element_index</code><em class="property">: Optional<span class="p">[</span>int<span class="p">]</span></em></dt>
 <dd><p>Bit element index of a field to be tested</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">field</code><em class="property">: str</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">field</code><em class="property">: str</em></dt>
 <dd><p>Name of a field to be tested</p>
 </dd></dl>
 
@@ -653,7 +657,7 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">value</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">value</code><em class="property">: int</em></dt>
 <dd><p>Value to be tested</p>
 </dd></dl>
 
@@ -666,13 +670,13 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Uses the result of a function call as an object/subject. It is a subclass for InstructionDecoderConditionObject</p>
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">argument</code><em class="property">: FieldIdConditionObject</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">argument</code><em class="property">: FieldIdConditionObject</em></dt>
 <dd><p>Argument FieldIdConditionObject</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">function</code><em class="property">: str</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">function</code><em class="property">: str</em></dt>
 <dd><p>Name of a function to be called</p>
 </dd></dl>
 
@@ -694,19 +698,19 @@ to test an instruction field is in a value range(inclusive)</p>
 <p>Decision tree to find a matched instruction for a code</p>
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">encoding_element_bit_length</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">encoding_element_bit_length</code><em class="property">: int</em></dt>
 <dd><p>Bit length of an encoding element</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">length_of_encoding_elements</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">length_of_encoding_elements</code><em class="property">: int</em></dt>
 <dd><p>Length of encoding elements</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">root_node</code><em class="property">: McdDecisionNode</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">root_node</code><em class="property">: McdDecisionNode</em></dt>
 <dd><p>Root node of a decision tree</p>
 </dd></dl>
 
@@ -731,31 +735,31 @@ to test an instruction field is in a value range(inclusive)</p>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">arbitrary_bit_node</code><em class="property">: Optional['McdDecisionNode']</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">arbitrary_bit_node</code><em class="property">: Optional[‘McdDecisionNode’]</em></dt>
 <dd><p>Arbitrary bit McdDecisionNode</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">fixed_bit_nodes</code><em class="property">: Dict[int, 'McdDecisionNode']</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">fixed_bit_nodes</code><em class="property">: Dict[int, ‘McdDecisionNode’]</em></dt>
 <dd><p>Dictionary of a threshold value and its fixed bit McdDecisionNode</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">index</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">index</code><em class="property">: int</em></dt>
 <dd><p>Index number of a node in a tree</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">instructions</code><em class="property">: List[InstructionDecoder]</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">instructions</code><em class="property">: List<span class="p">[</span>InstructionDecoder<span class="p">]</span></em></dt>
 <dd><p>Instructions decided by a node</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt>
-<code class="sig-name descname">mask</code><em class="property">: int</em><em class="property"> = None</em></dt>
+<code class="sig-name descname">mask</code><em class="property">: int</em></dt>
 <dd><p>Mask of threshold bit positions</p>
 </dd></dl>
 
@@ -772,7 +776,7 @@ to test an instruction field is in a value range(inclusive)</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="dev_docs.html" class="btn btn-neutral float-right" title="Documents for mcdecoder developers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="spec_limit.html" class="btn btn-neutral float-right" title="Limitations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="spec_template_var.html" class="btn btn-neutral float-left" title="Template variable specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -784,11 +788,19 @@ to test an instruction field is in a value range(inclusive)</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2019, wildlarva
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -799,7 +811,6 @@ to test an instruction field is in a value range(inclusive)</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
