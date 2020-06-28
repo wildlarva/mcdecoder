@@ -97,7 +97,7 @@ Run the command:
 
 .. code-block:: bash
 
-    mcdecoder emulate arm.yaml --pattern e28db004
+    mcdecoder emulate arm.yaml --input e28db004
 
 Its output will be...
 
