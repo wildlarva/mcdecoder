@@ -40,11 +40,11 @@ def run_app(argv: List[str]) -> int:
         assert args.byteorder is not None
         return emulator.emulate(cast(str, args.mcfile), cast(str, args.bit_pattern), base=args.base, byteorder=args.byteorder)
 
-    elif args.command == 'check':
+    elif args.command == 'check':  # pragma: no branch
         assert args.base is not None
         return checker.check(cast(str, args.mcfile), cast(str, args.bit_pattern), base=args.base)
 
-    return 0
+    return 0  # pragma: no cover
 
 
 # endregion

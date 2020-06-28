@@ -25,6 +25,11 @@ def test_emulate_with_little_endian() -> None:
                    byteorder='little') == 0
 
 
+def test_emulate_unmatch() -> None:
+    assert emulate('test/arm.yaml',
+                   'ff 00 00 00') == 0
+
+
 def test__emulate_with_base2_big_endian() -> None:
     instructions = _emulate(
         'test/arm.yaml', '1110 1001 0010 1101 0100 1000 0000 0000', 2, 'big')

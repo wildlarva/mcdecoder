@@ -137,3 +137,5 @@ Gemfile.lock
 
 # mcdecoder
 out/
+somedir/
+somedir

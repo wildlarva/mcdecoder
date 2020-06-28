@@ -1,11 +1,13 @@
 import csv
+import os
+import pathlib
 import shutil
 
 from ..exporter import export
 
 
 def test_export_without_condition() -> None:
-    shutil.rmtree('out', ignore_errors=True)
+    _remove_temp_file('out')
 
     assert export('test/riscv.yaml', 'out/riscv.csv') == 0
 
@@ -23,7 +25,7 @@ def test_export_without_condition() -> None:
 
 
 def test_export_with_condition() -> None:
-    shutil.rmtree('out', ignore_errors=True)
+    _remove_temp_file('out')
 
     assert export('test/arm.yaml', 'out/arm.csv') == 0
 
@@ -40,3 +42,17 @@ def test_export_with_condition() -> None:
         list('xxxx0010100xxxxxxxxxxxxxxxxxxxxx') + ['not (cond == 15)']
     assert push_row == [
         'push_1'] + list('xxxx100100101101xxxxxxxxxxxxxxxx') + ['cond in_range 0-14']
+
+
+def test_export_parent_dir_is_file() -> None:
+    _remove_temp_file('out')
+    pathlib.Path('out').touch()
+
+    assert export('test/arm.yaml', 'out/arm.csv') == 1
+
+
+def _remove_temp_file(file: str):
+    if os.path.isfile(file):
+        os.remove(file)
+    elif os.path.isdir(file):
+        shutil.rmtree(file, ignore_errors=True)

@@ -227,21 +227,21 @@ class InstructionSubfieldDecoder:
                             details='Use msb_in_instruction instead')
     def start_bit_in_instruction(self) -> int:
         """MSB of a subfield in an instruction"""
-        return self.msb_in_instruction
+        return self.msb_in_instruction  # pragma: no cover
 
     @property
     @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
                             details='Use lsb_in_instruction instead')
     def end_bit_in_instruction(self) -> int:
         """LSB of a subfield in an instruction"""
-        return self.lsb_in_instruction
+        return self.lsb_in_instruction  # pragma: no cover
 
     @property
     @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
                             details='Use lsb_in_field instead')
     def end_bit_in_field(self) -> int:
         """LSB of a subfield in a field"""
-        return self.lsb_in_field
+        return self.lsb_in_field  # pragma: no cover
 
 
 @dataclass
@@ -263,14 +263,14 @@ class InstructionFieldDecoder:
                             details='Use type_bit_length instead')
     def type_bit_size(self) -> int:
         """Bit length of a data type used for a field"""
-        return self.type_bit_length
+        return self.type_bit_length  # pragma: no cover
 
     @property
     @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
                             details='Use subfields instead')
     def subfield_decoders(self) -> List[InstructionSubfieldDecoder]:
         """Child InstructionSubfieldDecoders"""
-        return self.subfields
+        return self.subfields  # pragma: no cover
 
 
 @dataclass
@@ -449,21 +449,21 @@ class InstructionDecoder:
                             details='Use type_bit_length instead')
     def type_bit_size(self) -> int:
         """Bit length of a data type used for an instruction"""
-        return self.type_bit_length
+        return self.type_bit_length  # pragma: no cover
 
     @property
     @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
                             details='Use fixed_bit_mask instead')
     def fixed_bits_mask(self) -> int:
         """Mask of fixed bit positions of an instruction"""
-        return self.fixed_bit_mask
+        return self.fixed_bit_mask  # pragma: no cover
 
     @property
     @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
                             details='Use fields instead')
     def field_decoders(self) -> List[InstructionFieldDecoder]:
         """Child InstructionFieldDecoders"""
-        return self.fields
+        return self.fields  # pragma: no cover
 
 
 @dataclass
@@ -542,14 +542,14 @@ class McDecoder:
                             details='Use machine instead')
     def machine_decoder(self) -> MachineDecoder:
         """Child MachineDecoder"""
-        return self.machine
+        return self.machine  # pragma: no cover
 
     @property
     @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
                             details='Use instructions instead')
     def instruction_decoders(self) -> List[InstructionDecoder]:
         """Child InstructionDecoders"""
-        return self.instructions
+        return self.instructions  # pragma: no cover
 
 # endregion
 
@@ -608,7 +608,7 @@ class InstructionDecodeResult:
                             details='Use fields instead')
     def field_results(self) -> List[InstructionFieldDecodeResult]:
         """Child InstructionFieldDecodeResults"""
-        return self.fields
+        return self.fields  # pragma: no cover
 
 
 # endregion
@@ -1216,13 +1216,13 @@ def _create_instruction_decoder_condition(condition: InstructionConditionDescrip
             condition.subject)
         return InIdCondition(subject=decoder_condition_subject, values=condition.values)
 
-    elif isinstance(condition, InRangeInstructionConditionDescription):
+    elif isinstance(condition, InRangeInstructionConditionDescription):  # pragma: no branch
         decoder_condition_subject = _create_instruction_decoder_condition_object(
             condition.subject)
         return InRangeIdCondition(subject=decoder_condition_subject, value_start=condition.value_start,
                                   value_end=condition.value_end)
 
-    else:
+    else:  # pragma: no cover
         raise RuntimeError(f'Unknown condition type: {condition}')
 
 
@@ -1232,11 +1232,11 @@ def _create_instruction_decoder_condition_object(object: InstructionConditionObj
         return FieldIdConditionObject(field=object.field, element_index=object.element_index)
     elif isinstance(object, ImmediateInstructionConditionObjectDescription):
         return ImmediateIdConditionObject(value=object.value)
-    elif isinstance(object, FunctionInstructionConditionObjectDescription):
+    elif isinstance(object, FunctionInstructionConditionObjectDescription):  # pragma: no branch
         decoder_condition_argument = cast(FieldIdConditionObject,
                                           _create_instruction_decoder_condition_object(object.argument))
         return FunctionIdConditionObject(function=object.function, argument=decoder_condition_argument)
-    else:
+    else:  # pragma: no cover
         raise RuntimeError(f'Unknown condition object type: {object}')
 
 
@@ -1383,7 +1383,11 @@ def _create_decision_node(context: _DecisionTreeCreateContext, encoding_mat: np.
         return decision_node
 
 
-def _print_node(node: McdDecisionNode, level: int) -> None:
+def _print_node(node: McdDecisionNode, level: int) -> None:  # pragma: no cover
+    """
+    Print the debug information of McdDecisionNode.
+    NOTE This is only used for debugging.
+    """
     if node.mask != 0:
         print(f'{" |" * level}(mask: {node.mask:#x})')
 
@@ -1412,9 +1416,10 @@ def _get_appropriate_code(context: DecodeContext, instruction_decoder: Instructi
         return context.code16x1
     elif instruction_decoder.encoding_element_bit_length == 16 and instruction_decoder.length_of_encoding_elements == 2:
         return context.code16x2
-    elif instruction_decoder.encoding_element_bit_length == 32 and instruction_decoder.length_of_encoding_elements == 1:
+    elif instruction_decoder.encoding_element_bit_length == 32 \
+            and instruction_decoder.length_of_encoding_elements == 1:  # pragma: no branch
         return context.code32x1
-    else:
+    else:  # pragma: no cover
         return 0
 
 
@@ -1456,9 +1461,9 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
             return subject_vec <= object_vec
         elif condition.operator == '>':
             return subject_vec > object_vec
-        elif condition.operator == '>=':
+        elif condition.operator == '>=':  # pragma: no branch
             return subject_vec >= object_vec
-        else:
+        else:  # pragma: no cover
             return np.full_like(code_vec, False)
 
     elif isinstance(condition, InIdCondition):
@@ -1466,13 +1471,13 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
             code_vec, condition.subject, instruction_decoder)
         return np.isin(subject_vec, condition.values)
 
-    elif isinstance(condition, InRangeIdCondition):
+    elif isinstance(condition, InRangeIdCondition):  # pragma: no branch
         subject_vec = _instruction_condition_object_vectorized(
             code_vec, condition.subject, instruction_decoder)
         return np.logical_and(  # type: ignore # TODO pyright can't recognize numpy.logical_and
             subject_vec >= condition.value_start, subject_vec <= condition.value_end)
 
-    else:
+    else:  # pragma: no cover
         return np.full_like(code_vec, False)
 
 
@@ -1495,7 +1500,7 @@ def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: Instr
         # Returns scalar
         return np.array(object.value)
 
-    elif isinstance(object, FunctionIdConditionObject):
+    elif isinstance(object, FunctionIdConditionObject):  # pragma: no branch
         if not (object.function in _FUNCTION_NAME_TO_FUNCTION):
             return np.zeros_like(code_vec)
 
@@ -1504,7 +1509,7 @@ def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: Instr
             code_vec, object.argument, instruction_decoder)
         return function(value_vec)
 
-    else:
+    else:  # pragma: no cover
         return np.zeros_like(code_vec)
 
 

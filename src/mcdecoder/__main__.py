@@ -12,5 +12,5 @@ def main() -> int:
     return app.run_app(sys.argv)
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     sys.exit(main())
