@@ -3,7 +3,9 @@ import pytest
 from ..core import (
     EqualityIdCondition,
     FieldIdConditionObject,
+    FunctionIdConditionObject,
     ImmediateIdConditionObject,
+    InIdCondition,
     InRangeIdCondition,
     LoadError,
     create_mcdecoder_model,
@@ -210,6 +212,84 @@ def test_create_mcdecoder_model_condition() -> None:
     assert push_condition.subject.field == 'cond'
     assert push_condition.value_start == 0
     assert push_condition.value_end == 14
+
+
+def test_create_mcdecoder_model_primitive_condition() -> None:
+    mcdecoder_model = create_mcdecoder_model(
+        'test/primitive_condition.yaml')
+
+    equality_condition = mcdecoder_model.instructions[0].match_condition
+    assert isinstance(equality_condition, EqualityIdCondition)
+    assert equality_condition.type == 'equality'
+    assert isinstance(equality_condition.subject, FieldIdConditionObject)
+    assert equality_condition.subject.type == 'field'
+    assert equality_condition.subject.field == 'cond1'
+    assert equality_condition.subject.element_index is None
+    assert equality_condition.operator == '=='
+    assert isinstance(equality_condition.object, ImmediateIdConditionObject)
+    assert equality_condition.object.type == 'immediate'
+    assert equality_condition.object.value == 1
+
+    in_condition = mcdecoder_model.instructions[1].match_condition
+    assert isinstance(in_condition, InIdCondition)
+    assert in_condition.type == 'in'
+    assert isinstance(in_condition.subject, FieldIdConditionObject)
+    assert in_condition.subject.type == 'field'
+    assert in_condition.subject.field == 'cond1'
+    assert in_condition.subject.element_index is None
+    assert in_condition.values == [1, 0b11]
+
+    in_range_condition = mcdecoder_model.instructions[2].unmatch_condition
+    assert isinstance(in_range_condition, InRangeIdCondition)
+    assert in_range_condition.type == 'in_range'
+    assert isinstance(in_range_condition.subject, FieldIdConditionObject)
+    assert in_range_condition.subject.type == 'field'
+    assert in_range_condition.subject.field == 'cond1'
+    assert in_range_condition.subject.element_index is None
+    assert in_range_condition.value_start == 1
+    assert in_range_condition.value_end == 0xa
+
+    field_element_subject_condition = mcdecoder_model.instructions[3].match_condition
+    assert isinstance(field_element_subject_condition, EqualityIdCondition)
+    assert field_element_subject_condition.type == 'equality'
+    assert isinstance(field_element_subject_condition.subject,
+                      FieldIdConditionObject)
+    assert field_element_subject_condition.subject.type == 'field'
+    assert field_element_subject_condition.subject.field == 'cond1'
+    assert field_element_subject_condition.subject.element_index == 0
+    assert field_element_subject_condition.operator == '=='
+    assert isinstance(field_element_subject_condition.object,
+                      ImmediateIdConditionObject)
+    assert field_element_subject_condition.object.type == 'immediate'
+    assert field_element_subject_condition.object.value == 1
+
+    field_object_condition = mcdecoder_model.instructions[4].match_condition
+    assert isinstance(field_object_condition, EqualityIdCondition)
+    assert field_object_condition.type == 'equality'
+    assert isinstance(field_object_condition.subject, FieldIdConditionObject)
+    assert field_object_condition.subject.type == 'field'
+    assert field_object_condition.subject.field == 'cond1'
+    assert field_object_condition.subject.element_index is None
+    assert field_object_condition.operator == '=='
+    assert isinstance(field_object_condition.object, FieldIdConditionObject)
+    assert field_object_condition.object.type == 'field'
+    assert field_object_condition.object.field == 'cond2'
+    assert field_object_condition.object.element_index is None
+
+    function_subject_condition = mcdecoder_model.instructions[5].match_condition
+    assert isinstance(function_subject_condition, EqualityIdCondition)
+    assert function_subject_condition.type == 'equality'
+    assert isinstance(function_subject_condition.subject,
+                      FunctionIdConditionObject)
+    assert function_subject_condition.subject.type == 'function'
+    assert function_subject_condition.subject.function == 'setbit_count'
+    assert function_subject_condition.subject.argument.field == 'cond1'
+    assert function_subject_condition.subject.argument.element_index is None
+    assert function_subject_condition.operator == '=='
+    assert isinstance(function_subject_condition.object,
+                      ImmediateIdConditionObject)
+    assert function_subject_condition.object.type == 'immediate'
+    assert function_subject_condition.object.value == 2
 
 
 def test_load_mc_description_model_include() -> None:
