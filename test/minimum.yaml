@@ -1,0 +1,5 @@
+machine:
+  byteorder: little
+instructions:
+  - name: c_addi_1
+    format: 000:funct3|x:imm[5]|xxxx x:dest|xxx xx:imm[4:0]|01:op

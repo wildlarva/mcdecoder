@@ -1,6 +1,7 @@
 import pytest
 
 from ..core import (
+    AndIdCondition,
     EqualityIdCondition,
     FieldIdConditionObject,
     FunctionIdConditionObject,
@@ -8,16 +9,25 @@ from ..core import (
     InIdCondition,
     InRangeIdCondition,
     LoadError,
+    OrIdCondition,
     create_mcdecoder_model,
     load_mc_description_model,
 )
+
+
+def test_create_mcdecoder_model_without_decoder_desc() -> None:
+    mcdecoder_model = create_mcdecoder_model(
+        'test/minimum.yaml')
+
+    assert mcdecoder_model.namespace is None
+    assert mcdecoder_model.namespace_prefix == ''
 
 
 def test_create_mcdecoder_model_namespace() -> None:
     mcdecoder_model = create_mcdecoder_model(
         'test/arm.yaml')
 
-    mcdecoder_model.namespace_prefix == 'arm_'
+    assert mcdecoder_model.namespace_prefix == 'arm_'
 
 
 def test_create_mcdecoder_model_with_config() -> None:
@@ -32,6 +42,12 @@ def test_create_mcdecoder_model_without_config() -> None:
     with pytest.raises(LoadError):
         create_mcdecoder_model(
             'test/process_instruction_hook_without_config/process_instruction_hook.yaml')
+
+
+def test_create_mcdecoder_model_with_unknown_hook() -> None:
+    with pytest.raises(LoadError):
+        create_mcdecoder_model(
+            'test/process_instruction_hook_without_func/process_instruction_hook.yaml')
 
 
 def test_create_mcdecoder_model_extras() -> None:
@@ -218,6 +234,7 @@ def test_create_mcdecoder_model_primitive_condition() -> None:
     mcdecoder_model = create_mcdecoder_model(
         'test/primitive_condition.yaml')
 
+    # equality condition
     equality_condition = mcdecoder_model.instructions[0].match_condition
     assert isinstance(equality_condition, EqualityIdCondition)
     assert equality_condition.type == 'equality'
@@ -230,6 +247,7 @@ def test_create_mcdecoder_model_primitive_condition() -> None:
     assert equality_condition.object.type == 'immediate'
     assert equality_condition.object.value == 1
 
+    # in-a-set condition
     in_condition = mcdecoder_model.instructions[1].match_condition
     assert isinstance(in_condition, InIdCondition)
     assert in_condition.type == 'in'
@@ -239,6 +257,7 @@ def test_create_mcdecoder_model_primitive_condition() -> None:
     assert in_condition.subject.element_index is None
     assert in_condition.values == [1, 0b11]
 
+    # in-range condition
     in_range_condition = mcdecoder_model.instructions[2].unmatch_condition
     assert isinstance(in_range_condition, InRangeIdCondition)
     assert in_range_condition.type == 'in_range'
@@ -249,6 +268,7 @@ def test_create_mcdecoder_model_primitive_condition() -> None:
     assert in_range_condition.value_start == 1
     assert in_range_condition.value_end == 0xa
 
+    # with a field-element subject
     field_element_subject_condition = mcdecoder_model.instructions[3].match_condition
     assert isinstance(field_element_subject_condition, EqualityIdCondition)
     assert field_element_subject_condition.type == 'equality'
@@ -263,6 +283,7 @@ def test_create_mcdecoder_model_primitive_condition() -> None:
     assert field_element_subject_condition.object.type == 'immediate'
     assert field_element_subject_condition.object.value == 1
 
+    # with a field object
     field_object_condition = mcdecoder_model.instructions[4].match_condition
     assert isinstance(field_object_condition, EqualityIdCondition)
     assert field_object_condition.type == 'equality'
@@ -276,6 +297,7 @@ def test_create_mcdecoder_model_primitive_condition() -> None:
     assert field_object_condition.object.field == 'cond2'
     assert field_object_condition.object.element_index is None
 
+    # with a function subject
     function_subject_condition = mcdecoder_model.instructions[5].match_condition
     assert isinstance(function_subject_condition, EqualityIdCondition)
     assert function_subject_condition.type == 'equality'
@@ -290,6 +312,165 @@ def test_create_mcdecoder_model_primitive_condition() -> None:
                       ImmediateIdConditionObject)
     assert function_subject_condition.object.type == 'immediate'
     assert function_subject_condition.object.value == 2
+
+
+def test_create_mcdecoder_model_complex_condition() -> None:
+    mcdecoder_model = create_mcdecoder_model(
+        'test/complex_condition.yaml')
+
+    # and condition
+    and_condition = mcdecoder_model.instructions[0].match_condition
+    assert isinstance(and_condition, AndIdCondition)
+    assert and_condition.type == 'and'
+    assert len(and_condition.conditions) == 2
+
+    and_condition_0 = and_condition.conditions[0]
+    assert isinstance(and_condition_0, EqualityIdCondition)
+    assert and_condition_0.type == 'equality'
+    assert isinstance(and_condition_0.subject, FieldIdConditionObject)
+    assert and_condition_0.subject.type == 'field'
+    assert and_condition_0.subject.field == 'cond1'
+    assert and_condition_0.subject.element_index is None
+    assert and_condition_0.operator == '=='
+    assert isinstance(and_condition_0.object, ImmediateIdConditionObject)
+    assert and_condition_0.object.type == 'immediate'
+    assert and_condition_0.object.value == 1
+
+    and_condition_1 = and_condition.conditions[1]
+    assert isinstance(and_condition_1, EqualityIdCondition)
+    assert and_condition_1.type == 'equality'
+    assert isinstance(and_condition_1.subject, FieldIdConditionObject)
+    assert and_condition_1.subject.type == 'field'
+    assert and_condition_1.subject.field == 'cond2'
+    assert and_condition_1.subject.element_index is None
+    assert and_condition_1.operator == '=='
+    assert isinstance(and_condition_1.object, ImmediateIdConditionObject)
+    assert and_condition_1.object.type == 'immediate'
+    assert and_condition_1.object.value == 2
+
+    # or condition
+    or_condition = mcdecoder_model.instructions[1].unmatch_condition
+    assert isinstance(or_condition, OrIdCondition)
+    assert or_condition.type == 'or'
+    assert len(or_condition.conditions) == 2
+
+    or_condition_0 = or_condition.conditions[0]
+    assert isinstance(or_condition_0, EqualityIdCondition)
+    assert or_condition_0.type == 'equality'
+    assert isinstance(or_condition_0.subject, FieldIdConditionObject)
+    assert or_condition_0.subject.type == 'field'
+    assert or_condition_0.subject.field == 'cond1'
+    assert or_condition_0.subject.element_index is None
+    assert or_condition_0.operator == '=='
+    assert isinstance(or_condition_0.object, ImmediateIdConditionObject)
+    assert or_condition_0.object.type == 'immediate'
+    assert or_condition_0.object.value == 1
+
+    or_condition_1 = or_condition.conditions[1]
+    assert isinstance(or_condition_1, EqualityIdCondition)
+    assert or_condition_1.type == 'equality'
+    assert isinstance(or_condition_1.subject, FieldIdConditionObject)
+    assert or_condition_1.subject.type == 'field'
+    assert or_condition_1.subject.field == 'cond2'
+    assert or_condition_1.subject.element_index is None
+    assert or_condition_1.operator == '=='
+    assert isinstance(or_condition_1.object, ImmediateIdConditionObject)
+    assert or_condition_1.object.type == 'immediate'
+    assert or_condition_1.object.value == 2
+
+    # and/or condition without parenthesis
+    and_or_condition1 = mcdecoder_model.instructions[2].match_condition
+    assert isinstance(and_or_condition1, OrIdCondition)
+    assert and_or_condition1.type == 'or'
+    assert len(and_or_condition1.conditions) == 2
+
+    and_or_condition1_0 = and_or_condition1.conditions[0]
+    assert isinstance(and_or_condition1_0, AndIdCondition)
+    assert and_or_condition1_0.type == 'and'
+    assert len(and_or_condition1_0.conditions) == 2
+
+    and_or_condition1_0_0 = and_or_condition1_0.conditions[0]
+    assert isinstance(and_or_condition1_0_0, EqualityIdCondition)
+    assert and_or_condition1_0_0.type == 'equality'
+    assert isinstance(and_or_condition1_0_0.subject, FieldIdConditionObject)
+    assert and_or_condition1_0_0.subject.type == 'field'
+    assert and_or_condition1_0_0.subject.field == 'cond1'
+    assert and_or_condition1_0_0.subject.element_index is None
+    assert and_or_condition1_0_0.operator == '=='
+    assert isinstance(and_or_condition1_0_0.object, ImmediateIdConditionObject)
+    assert and_or_condition1_0_0.object.type == 'immediate'
+    assert and_or_condition1_0_0.object.value == 1
+
+    and_or_condition1_0_1 = and_or_condition1_0.conditions[1]
+    assert isinstance(and_or_condition1_0_1, EqualityIdCondition)
+    assert and_or_condition1_0_1.type == 'equality'
+    assert isinstance(and_or_condition1_0_1.subject, FieldIdConditionObject)
+    assert and_or_condition1_0_1.subject.type == 'field'
+    assert and_or_condition1_0_1.subject.field == 'cond2'
+    assert and_or_condition1_0_1.subject.element_index is None
+    assert and_or_condition1_0_1.operator == '=='
+    assert isinstance(and_or_condition1_0_1.object, ImmediateIdConditionObject)
+    assert and_or_condition1_0_1.object.type == 'immediate'
+    assert and_or_condition1_0_1.object.value == 2
+
+    and_or_condition1_1 = and_or_condition1.conditions[1]
+    assert isinstance(and_or_condition1_1, EqualityIdCondition)
+    assert and_or_condition1_1.type == 'equality'
+    assert isinstance(and_or_condition1_1.subject, FieldIdConditionObject)
+    assert and_or_condition1_1.subject.type == 'field'
+    assert and_or_condition1_1.subject.field == 'cond1'
+    assert and_or_condition1_1.subject.element_index is None
+    assert and_or_condition1_1.operator == '=='
+    assert isinstance(and_or_condition1_1.object, ImmediateIdConditionObject)
+    assert and_or_condition1_1.object.type == 'immediate'
+    assert and_or_condition1_1.object.value == 3
+
+    # and/or condition with parenthesis
+    and_or_condition2 = mcdecoder_model.instructions[3].unmatch_condition
+    assert isinstance(and_or_condition2, OrIdCondition)
+    assert and_or_condition2.type == 'or'
+    assert len(and_or_condition2.conditions) == 2
+
+    and_or_condition2_0 = and_or_condition2.conditions[0]
+    assert isinstance(and_or_condition2_0, AndIdCondition)
+    assert and_or_condition2_0.type == 'and'
+    assert len(and_or_condition2_0.conditions) == 2
+
+    and_or_condition2_0_0 = and_or_condition2_0.conditions[0]
+    assert isinstance(and_or_condition2_0_0, EqualityIdCondition)
+    assert and_or_condition2_0_0.type == 'equality'
+    assert isinstance(and_or_condition2_0_0.subject, FieldIdConditionObject)
+    assert and_or_condition2_0_0.subject.type == 'field'
+    assert and_or_condition2_0_0.subject.field == 'cond1'
+    assert and_or_condition2_0_0.subject.element_index is None
+    assert and_or_condition2_0_0.operator == '=='
+    assert isinstance(and_or_condition2_0_0.object, ImmediateIdConditionObject)
+    assert and_or_condition2_0_0.object.type == 'immediate'
+    assert and_or_condition2_0_0.object.value == 1
+
+    and_or_condition2_0_1 = and_or_condition2_0.conditions[1]
+    assert isinstance(and_or_condition2_0_1, EqualityIdCondition)
+    assert and_or_condition2_0_1.type == 'equality'
+    assert isinstance(and_or_condition2_0_1.subject, FieldIdConditionObject)
+    assert and_or_condition2_0_1.subject.type == 'field'
+    assert and_or_condition2_0_1.subject.field == 'cond2'
+    assert and_or_condition2_0_1.subject.element_index is None
+    assert and_or_condition2_0_1.operator == '=='
+    assert isinstance(and_or_condition2_0_1.object, ImmediateIdConditionObject)
+    assert and_or_condition2_0_1.object.type == 'immediate'
+    assert and_or_condition2_0_1.object.value == 2
+
+    and_or_condition2_1 = and_or_condition2.conditions[1]
+    assert isinstance(and_or_condition2_1, EqualityIdCondition)
+    assert and_or_condition2_1.type == 'equality'
+    assert isinstance(and_or_condition2_1.subject, FieldIdConditionObject)
+    assert and_or_condition2_1.subject.type == 'field'
+    assert and_or_condition2_1.subject.field == 'cond1'
+    assert and_or_condition2_1.subject.element_index is None
+    assert and_or_condition2_1.operator == '=='
+    assert isinstance(and_or_condition2_1.object, ImmediateIdConditionObject)
+    assert and_or_condition2_1.object.type == 'immediate'
+    assert and_or_condition2_1.object.value == 3
 
 
 def test_load_mc_description_model_include() -> None:
