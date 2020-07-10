@@ -1,6 +1,0 @@
-machine:
-  byteorder: little
-instructions: []
-extras:
-  included_list: !include children/child_list*.yaml
-  included_mapping: !include children/child_mapping*.yaml

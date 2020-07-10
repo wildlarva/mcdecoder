@@ -958,13 +958,11 @@ class _DecisionTreeCreateContext:
 def _yaml_include_constructor(loader: yaml.Loader, node: yaml.Node) -> Any:
     """Constructor for YAML !include tag"""
     if not isinstance(node, yaml.ScalarNode):
-        raise TypeError(f'Unsupported type for !include: {node}')
+        raise LoadError(f'Unsupported type for !include: {node}')
 
     # Make path pattern
-    path_pattern = loader.construct_scalar(node)
-    if _yaml_include_context.base_dir is not None:
-        path_pattern = os.path.join(
-            _yaml_include_context.base_dir, path_pattern)
+    path_pattern = os.path.join(
+        _yaml_include_context.base_dir, loader.construct_scalar(node))
 
     # Load included yamls
     results = []
@@ -979,7 +977,7 @@ def _yaml_include_constructor(loader: yaml.Loader, node: yaml.Node) -> Any:
         return None
 
     if len(result_types) > 1:
-        raise RuntimeError(
+        raise LoadError(
             f'The result of !include cannot be combinations of multiple types: {result_types}')
 
     # Combine included data

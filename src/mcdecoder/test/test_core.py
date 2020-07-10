@@ -474,14 +474,14 @@ def test_create_mcdecoder_model_complex_condition() -> None:
 
 
 def test_load_mc_description_model_include() -> None:
-    mc_desc = load_mc_description_model('test/include.yaml')
+    mc_desc = load_mc_description_model('test/include/include.yaml')
 
-    included_list = mc_desc['extras']['included_list']
-    assert len(included_list) == 4
-    assert included_list[0] == 1
-    assert included_list[1] == 2
-    assert included_list[2] == 3
-    assert included_list[3] == 4
+    included_sequence = mc_desc['extras']['included_sequence']
+    assert len(included_sequence) == 4
+    assert included_sequence[0] == 1
+    assert included_sequence[1] == 2
+    assert included_sequence[2] == 3
+    assert included_sequence[3] == 4
 
     included_mapping = mc_desc['extras']['included_mapping']
     assert len(included_mapping) == 4
@@ -489,6 +489,28 @@ def test_load_mc_description_model_include() -> None:
     assert included_mapping['b'] == 2
     assert included_mapping['c'] == 3
     assert included_mapping['d'] == 4
+
+    included_scalar = mc_desc['extras']['included_scalar']
+    assert len(included_scalar) == 2
+    assert included_scalar[0] == 1
+    assert included_scalar[1] == 2
+
+
+def test_load_mc_description_model_include_arg_not_scalar() -> None:
+    with pytest.raises(LoadError):
+        load_mc_description_model('test/include_arg_not_scalar.yaml')
+
+
+def test_load_mc_description_model_include_none() -> None:
+    mc_desc = load_mc_description_model('test/include_none/include.yaml')
+
+    included = mc_desc['extras']['included']
+    assert included is None
+
+
+def test_load_mc_description_model_include_mixture() -> None:
+    with pytest.raises(LoadError):
+        load_mc_description_model('test/include_mixture/include.yaml')
 
 
 def test_create_mcdecoder_model_decision_tree_code32x1() -> None:

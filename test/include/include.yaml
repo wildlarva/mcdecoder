@@ -1,0 +1,7 @@
+machine:
+  byteorder: little
+instructions: []
+extras:
+  included_sequence: !include children/child_sequence*.yaml
+  included_mapping: !include children/child_mapping*.yaml
+  included_scalar: !include children/child_scalar*.yaml

@@ -1,0 +1,5 @@
+machine:
+  byteorder: little
+instructions: []
+extras:
+  included: !include children/child_*.yaml
