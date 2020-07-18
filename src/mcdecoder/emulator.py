@@ -48,7 +48,7 @@ def emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16] = 16, byteorder:
 # region Internal functions
 
 def _emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16],
-             byteorder: Literal['big', 'little']) -> List[core.InstructionDecodeResult]:
+             byteorder: Literal['big', 'little', 'raw']) -> List[core.InstructionDecodeResult]:
     # Create MC decoder model
     mcdecoder = core.create_mcdecoder_model(mcfile)
 
@@ -60,16 +60,17 @@ def _emulate(mcfile: str, bit_pattern: str, base: Literal[2, 16],
         trimmed_bit_pattern, base, 32)
 
     # Convert bit pattern to int based on the specified byteorder
+    actual_byteorder = mcdecoder.machine.byteorder if byteorder == 'raw' else byteorder
     byte_str_len = common.string_length_for_byte(base)
     word1_16bit = _bit_pattern_to_int(
-        padded_bit_pattern[:byte_str_len * 2], base, byteorder)
+        padded_bit_pattern[:byte_str_len * 2], base, actual_byteorder)
     word2_16bit = _bit_pattern_to_int(
-        padded_bit_pattern[byte_str_len * 2:byte_str_len * 4], base, byteorder)
+        padded_bit_pattern[byte_str_len * 2:byte_str_len * 4], base, actual_byteorder)
 
     code16x1 = word1_16bit
     code16x2 = (word1_16bit << 16) | word2_16bit
     code32x1 = _bit_pattern_to_int(
-        padded_bit_pattern[:byte_str_len * 4], base, byteorder)
+        padded_bit_pattern[:byte_str_len * 4], base, actual_byteorder)
 
     # Create decode context
     decode_context = core.DecodeContext(
