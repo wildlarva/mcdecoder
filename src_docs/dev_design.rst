@@ -35,6 +35,7 @@ Runtime structure and dependencies
 
     lark [label = "Lark"]
     numpy [label = "NumPy"]
+    deprecation
 
 Modules in mcdecoder
 ================================================
@@ -136,6 +137,8 @@ Dependencies to external packages
     +-------------+--------------------------------------------------+
     |Jinja2       |Used to generate codes                            |
     +-------------+--------------------------------------------------+
+    |deprecation  |Used to warn users about deprecated specifications|
+    +-------------+--------------------------------------------------+
 
 *********************************
 Development environment
@@ -173,9 +176,17 @@ Development structure and dependencies
         cucumber [label = "Cucumber"]
     }
 
+    subgraph cluster_pytest {
+        label = "pytest"
+
+        pytest_cov [label = "pytest-cov"]
+    }
+
+    behave [label = "Behave"]
     graphviz [label = "Graphviz"]
 
-    mcdecoder -> pytest
+    mcdecoder -> pytest_cov [lhead=cluster_pytest]
+    mcdecoder -> behave
     mcdecoder -> cucumber -> cucumber_cpp
     mcdecoder -> sphinx_rtd_theme [lhead=cluster_sphinx]
     sphinx_rtd_theme -> graphviz [ltail=cluster_sphinx]
@@ -189,12 +200,15 @@ Packages
     Package                       Description
     ============================= ==========================================================
     mcdecoder                     This project
-    pytest                        Used to test mcdecoder
-    Bundler                       Used to fix the version of Cucumber
-    Cucumber                      Used to test generated decoders
+    pytest                        Used for unit tests for mcdecoder 
+    pytest-cov                    Used to measure code coverage of unit tests
+    Behave                        Used for feature tests for mcdecoder
+    Bundler                       Used to fix the version of Cucumber.
+                                  Cucumber-Cpp requires Cucumber v2.0
+    Cucumber                      Used for feature tests for generated decoders
     Conan                         Used to manage packages of C/C++
-    Cucumber-Cpp                  Used to test generated decoders in C/C++
-    Google Test                   Used to test generated decoders in C/C++
+    Cucumber-Cpp                  Used for feature tests for generated decoders in C/C++
+    Google Test                   Provides testing functionalities to Cucumber-Cpp
     Sphinx                        Used to build documents
     sphinx-argparse               Used to build documents about command line options
     Sphinx JSON Schema            Used to build documents about the schema of MC description
@@ -210,12 +224,12 @@ Directories
     ============================= ==========================================================
     Directory                     Description of contents
     ============================= ==========================================================
-    ctest                         Tests for generated decoders
     docs                          Documents published to GitHub Pages
     examples                      Example files used in tutorials and other documents
     src                           Source files to implement a mcdecoder
-    src/test                      Tests for mcdecoder
     src_docs                      RST files to generate documents in docs directory
-    test                          Files used for both mcdecoder tests and
-                                  generated decoder tests
+    tests/common                  Common files used for both unit tests and feature tests
+    tests/feature                 Feature tests for mcdecoders.
+                                  This is mainly for testing generated decoders
+    tests/module                  Unit tests for mcdecoder modules
     ============================= ==========================================================
