@@ -33,7 +33,7 @@ def given_decoding(context: _Context, decoder: str) -> None:
 @when('I decode "{code}"')
 def when_decode(context: _Context, code: str) -> None:
     context.results = emulator._emulate(
-        'tests/common/' + _DEC_NAME_TO_MC_DESC_NAME[context.decoder] + '.yaml', code, 16, 'raw')
+        '../common/' + _DEC_NAME_TO_MC_DESC_NAME[context.decoder] + '.yaml', code, 16, 'raw')
 
     if len(context.results) >= 1:
         context.result = context.results[0]

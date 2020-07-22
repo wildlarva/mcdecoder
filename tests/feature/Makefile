@@ -16,6 +16,7 @@ all: setup
 
 test: setup
 	make -f build.mk test
+	behave features
 
 generate: setup
 	make -f build.mk generate
