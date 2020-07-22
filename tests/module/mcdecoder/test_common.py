@@ -1,7 +1,7 @@
 import os
 import pathlib
 
-from ..common import make_parent_directories
+from mcdecoder.common import make_parent_directories
 
 
 def test_make_parent_directories_not_exist() -> None:

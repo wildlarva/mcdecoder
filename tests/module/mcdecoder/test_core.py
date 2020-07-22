@@ -1,6 +1,6 @@
 import pytest
 
-from ..core import (
+from mcdecoder.core import (
     AndIdCondition,
     EqualityIdCondition,
     FieldIdConditionObject,
@@ -17,7 +17,7 @@ from ..core import (
 
 def test_create_mcdecoder_model_without_decoder_desc() -> None:
     mcdecoder_model = create_mcdecoder_model(
-        'test/minimum.yaml')
+        'tests/common/minimum.yaml')
 
     assert mcdecoder_model.namespace is None
     assert mcdecoder_model.namespace_prefix == ''
@@ -25,14 +25,14 @@ def test_create_mcdecoder_model_without_decoder_desc() -> None:
 
 def test_create_mcdecoder_model_namespace() -> None:
     mcdecoder_model = create_mcdecoder_model(
-        'test/arm.yaml')
+        'tests/common/arm.yaml')
 
     assert mcdecoder_model.namespace_prefix == 'arm_'
 
 
 def test_create_mcdecoder_model_with_config() -> None:
     mcdecoder_model = create_mcdecoder_model(
-        'test/process_instruction_hook_with_config/process_instruction_hook.yaml')
+        'tests/common/process_instruction_hook_with_config/process_instruction_hook.yaml')
 
     instruction = mcdecoder_model.instructions[0]
     assert instruction.extras['extra_attribute'] == 'extra_content'
@@ -41,18 +41,18 @@ def test_create_mcdecoder_model_with_config() -> None:
 def test_create_mcdecoder_model_without_config() -> None:
     with pytest.raises(LoadError):
         create_mcdecoder_model(
-            'test/process_instruction_hook_without_config/process_instruction_hook.yaml')
+            'tests/common/process_instruction_hook_without_config/process_instruction_hook.yaml')
 
 
 def test_create_mcdecoder_model_with_unknown_hook() -> None:
     with pytest.raises(LoadError):
         create_mcdecoder_model(
-            'test/process_instruction_hook_without_func/process_instruction_hook.yaml')
+            'tests/common/process_instruction_hook_without_func/process_instruction_hook.yaml')
 
 
 def test_create_mcdecoder_model_extras() -> None:
     mcdecoder_model = create_mcdecoder_model(
-        'test/arm.yaml')
+        'tests/common/arm.yaml')
     assert mcdecoder_model.extras is not None
     assert mcdecoder_model.extras['compiler'] == 'gcc'
 
@@ -75,7 +75,7 @@ def test_create_mcdecoder_model_extras() -> None:
 
 def test_create_mcdecoder_model_32bit_instructions() -> None:
     mcdecoder_model = create_mcdecoder_model(
-        'test/arm.yaml')
+        'tests/common/arm.yaml')
 
     assert len(mcdecoder_model.instructions) == 2
 
@@ -102,7 +102,7 @@ def test_create_mcdecoder_model_32bit_instructions() -> None:
 
 
 def test_create_mcdecoder_model_16bit_x2_instructions() -> None:
-    mcdecoder = create_mcdecoder_model('test/arm_thumb.yaml')
+    mcdecoder = create_mcdecoder_model('tests/common/arm_thumb.yaml')
 
     assert len(mcdecoder.instructions) == 2
 
@@ -144,7 +144,7 @@ def test_create_mcdecoder_model_16bit_x2_instructions() -> None:
 
 def test_create_mcdecoder_model_16bit_instructions() -> None:
     mcdecoder_model = create_mcdecoder_model(
-        'test/riscv.yaml')
+        'tests/common/riscv.yaml')
 
     assert len(mcdecoder_model.instructions) == 2
 
@@ -210,7 +210,7 @@ def test_create_mcdecoder_model_16bit_instructions() -> None:
 
 def test_create_mcdecoder_model_condition() -> None:
     mcdecoder_model = create_mcdecoder_model(
-        'test/arm.yaml')
+        'tests/common/arm.yaml')
 
     add_condition = mcdecoder_model.instructions[0].unmatch_condition
     assert isinstance(add_condition, EqualityIdCondition)
@@ -232,7 +232,7 @@ def test_create_mcdecoder_model_condition() -> None:
 
 def test_create_mcdecoder_model_primitive_condition() -> None:
     mcdecoder_model = create_mcdecoder_model(
-        'test/primitive_condition.yaml')
+        'tests/common/primitive_condition.yaml')
 
     # equality condition
     equality_condition = mcdecoder_model.instructions[0].match_condition
@@ -316,7 +316,7 @@ def test_create_mcdecoder_model_primitive_condition() -> None:
 
 def test_create_mcdecoder_model_complex_condition() -> None:
     mcdecoder_model = create_mcdecoder_model(
-        'test/complex_condition.yaml')
+        'tests/common/complex_condition.yaml')
 
     # and condition
     and_condition = mcdecoder_model.instructions[0].match_condition
@@ -474,7 +474,7 @@ def test_create_mcdecoder_model_complex_condition() -> None:
 
 
 def test_load_mc_description_model_include() -> None:
-    mc_desc = load_mc_description_model('test/include/include.yaml')
+    mc_desc = load_mc_description_model('tests/common/include/include.yaml')
 
     included_sequence = mc_desc['extras']['included_sequence']
     assert len(included_sequence) == 4
@@ -498,11 +498,12 @@ def test_load_mc_description_model_include() -> None:
 
 def test_load_mc_description_model_include_arg_not_scalar() -> None:
     with pytest.raises(LoadError):
-        load_mc_description_model('test/include_arg_not_scalar.yaml')
+        load_mc_description_model('tests/common/include_arg_not_scalar.yaml')
 
 
 def test_load_mc_description_model_include_none() -> None:
-    mc_desc = load_mc_description_model('test/include_none/include.yaml')
+    mc_desc = load_mc_description_model(
+        'tests/common/include_none/include.yaml')
 
     included = mc_desc['extras']['included']
     assert included is None
@@ -510,12 +511,12 @@ def test_load_mc_description_model_include_none() -> None:
 
 def test_load_mc_description_model_include_mixture() -> None:
     with pytest.raises(LoadError):
-        load_mc_description_model('test/include_mixture/include.yaml')
+        load_mc_description_model('tests/common/include_mixture/include.yaml')
 
 
 def test_create_mcdecoder_model_decision_tree_code32x1() -> None:
     mcdecoder_model = create_mcdecoder_model(
-        'test/decision_tree_code32x1.yaml')
+        'tests/common/decision_tree_code32x1.yaml')
 
     # Decision tree
     assert len(mcdecoder_model.decision_trees) == 1
@@ -618,7 +619,7 @@ def test_create_mcdecoder_model_decision_tree_code32x1() -> None:
 
 def test_create_mcdecoder_model_decision_tree_code16x2() -> None:
     mcdecoder_model = create_mcdecoder_model(
-        'test/decision_tree_code16x2.yaml')
+        'tests/common/decision_tree_code16x2.yaml')
 
     # Decision tree
     assert len(mcdecoder_model.decision_trees) == 1

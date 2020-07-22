@@ -1,6 +1,6 @@
 import sys
 
-from ..__main__ import main
+from mcdecoder.__main__ import main
 
 
 def test_main(monkeypatch) -> None:

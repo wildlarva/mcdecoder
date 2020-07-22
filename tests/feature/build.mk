@@ -6,8 +6,8 @@ include $(BUILD_DIR)/conanbuildinfo.mak
 #	 Make variables
 #----------------------------------------
 
-COMMON_TEST_DIR = ../test
-SRC_TEMPLATE_DIR = ../src/mcdecoder/templates
+COMMON_TEST_DIR = ../common
+SRC_TEMPLATE_DIR = ../../src/mcdecoder/templates
 TEST_TEMPLATE_DIR = templates
 STEPS_DIR = features/step_definitions
 DECODER_DIR = out

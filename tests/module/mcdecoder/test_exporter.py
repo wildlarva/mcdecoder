@@ -3,13 +3,13 @@ import os
 import pathlib
 import shutil
 
-from ..exporter import export
+from mcdecoder.exporter import export
 
 
 def test_export_without_condition() -> None:
     _remove_temp_file('out')
 
-    assert export('test/riscv.yaml', 'out/riscv.csv') == 0
+    assert export('tests/common/riscv.yaml', 'out/riscv.csv') == 0
 
     with open('out/riscv.csv', 'r') as file:
         reader = csv.reader(file)
@@ -27,7 +27,7 @@ def test_export_without_condition() -> None:
 def test_export_with_condition() -> None:
     _remove_temp_file('out')
 
-    assert export('test/arm.yaml', 'out/arm.csv') == 0
+    assert export('tests/common/arm.yaml', 'out/arm.csv') == 0
 
     with open('out/arm.csv', 'r') as file:
         reader = csv.reader(file)
@@ -48,7 +48,7 @@ def test_export_parent_dir_is_file() -> None:
     _remove_temp_file('out')
     pathlib.Path('out').touch()
 
-    assert export('test/arm.yaml', 'out/arm.csv') == 1
+    assert export('tests/common/arm.yaml', 'out/arm.csv') == 1
 
 
 def _remove_temp_file(file: str):

@@ -4,19 +4,19 @@ from typing import List, cast
 
 import jinja2
 
-from ..core import (
+from mcdecoder.core import (
     AndIdCondition, EqualityIdCondition, FieldIdConditionObject, ImmediateIdConditionObject,
     InRangeIdCondition, InstructionDecoderCondition,
     InstructionDecoder, InstructionFieldDecoder, InstructionSubfieldDecoder,
     MachineDecoder, McDecoder, McdDecisionNode, McdDecisionTree)
-from ..generator import _generate, generate
+from mcdecoder.generator import _generate, generate
 import pathlib
 
 
 def test_generate_without_arguments() -> None:
     _remove_temp_file('out')
 
-    assert generate('test/arm.yaml', output_directory='out') == 0
+    assert generate('tests/common/arm.yaml', output_directory='out') == 0
     assert os.path.isfile('out/arm_mcdecoder.c') is True
     assert os.path.isfile('out/arm_mcdecoder.h') is True
 
@@ -24,7 +24,7 @@ def test_generate_without_arguments() -> None:
 def test_generate_with_type() -> None:
     _remove_temp_file('out')
 
-    assert generate('test/arm.yaml', type='athrill',
+    assert generate('tests/common/arm.yaml', type='athrill',
                     output_directory='out') == 0
     assert os.path.isfile('out/arm_mcdecoder.c') is True
     assert os.path.isfile('out/arm_mcdecoder.h') is True
@@ -33,14 +33,14 @@ def test_generate_with_type() -> None:
 def test_generate_with_unknown_type() -> None:
     _remove_temp_file('out')
 
-    assert generate('test/arm.yaml', type='unknown') == 1
+    assert generate('tests/common/arm.yaml', type='unknown') == 1
 
 
 def test_generate_with_template_dir() -> None:
     _remove_temp_file('out')
 
-    assert generate('test/arm.yaml', output_directory='out',
-                    template_directory='test/user_templates') == 0
+    assert generate('tests/common/arm.yaml', output_directory='out',
+                    template_directory='tests/common/user_templates') == 0
     assert os.path.isfile('out/arm_template.c') is True
     assert os.path.isfile('out/arm_template.h') is True
 
@@ -48,7 +48,7 @@ def test_generate_with_template_dir() -> None:
 def test_generate_with_output_dir() -> None:
     _remove_temp_file('out')
 
-    assert generate('test/arm.yaml', output_directory='out/out2') == 0
+    assert generate('tests/common/arm.yaml', output_directory='out/out2') == 0
     assert os.path.isfile('out/out2/arm_mcdecoder.c') is True
     assert os.path.isfile('out/out2/arm_mcdecoder.h') is True
 
@@ -57,7 +57,7 @@ def test_generate_parent_dir_is_file() -> None:
     _remove_temp_file('out')
     pathlib.Path('out').touch()
 
-    assert generate('test/arm.yaml', output_directory='out') == 1
+    assert generate('tests/common/arm.yaml', output_directory='out') == 1
 
 
 def test__generate() -> None:
