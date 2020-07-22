@@ -1,6 +1,6 @@
 behave
 conan
-deprecation<2.1
+deprecation<2.1 # Specify version for conan
 Jinja2
 jsonschema
 lark-parser
@@ -8,6 +8,7 @@ numpy
 pytest
 pytest-cov
 PyYAML
+six<=1.14.0 # Specify version for conan
 Sphinx>=3
 sphinx-argparse
 sphinx-jsonschema
