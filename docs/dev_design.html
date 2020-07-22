@@ -184,7 +184,7 @@
 <h2>Runtime environment<a class="headerlink" href="#runtime-environment" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="runtime-structure-and-dependencies">
 <h3>Runtime structure and dependencies<a class="headerlink" href="#runtime-structure-and-dependencies" title="Permalink to this headline">¶</a></h3>
-<div class="graphviz"><img src="_images/graphviz-aa6f6f549c3d4c0f35d35bec9168692ab3dadc48.png" alt="digraph runtime {
+<div class="graphviz"><img src="_images/graphviz-049c64c5b03ef7521c66486b4d5cc5ce0ad244c6.png" alt="digraph runtime {
 node [shape=box]
 edge [style=dotted]
 
@@ -209,6 +209,7 @@ core -&gt; {PyYAML, jsonschema, lark, numpy}
 
 lark [label = &quot;Lark&quot;]
 numpy [label = &quot;NumPy&quot;]
+deprecation
 }" class="graphviz" /></div>
 </div>
 <div class="section" id="modules-in-mcdecoder">
@@ -350,6 +351,9 @@ so its performance is so important.</p></li>
 <tr class="row-even"><td><p>Jinja2</p></td>
 <td><p>Used to generate codes</p></td>
 </tr>
+<tr class="row-odd"><td><p>deprecation</p></td>
+<td><p>Used to warn users about deprecated specifications</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -358,7 +362,7 @@ so its performance is so important.</p></li>
 <h2>Development environment<a class="headerlink" href="#development-environment" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="development-structure-and-dependencies">
 <h3>Development structure and dependencies<a class="headerlink" href="#development-structure-and-dependencies" title="Permalink to this headline">¶</a></h3>
-<div class="graphviz"><img src="_images/graphviz-ba7cd910c085a112f80f2428b65f096b2b86a967.png" alt="digraph develop {
+<div class="graphviz"><img src="_images/graphviz-d691dd417210887720052335573973caea2094d1.png" alt="digraph develop {
 compound = true
 node [shape=box]
 edge [style=dotted]
@@ -386,9 +390,17 @@ subgraph cluster_bundler {
     cucumber [label = &quot;Cucumber&quot;]
 }
 
+subgraph cluster_pytest {
+    label = &quot;pytest&quot;
+
+    pytest_cov [label = &quot;pytest-cov&quot;]
+}
+
+behave [label = &quot;Behave&quot;]
 graphviz [label = &quot;Graphviz&quot;]
 
-mcdecoder -&gt; pytest
+mcdecoder -&gt; pytest_cov [lhead=cluster_pytest]
+mcdecoder -&gt; behave
 mcdecoder -&gt; cucumber -&gt; cucumber_cpp
 mcdecoder -&gt; sphinx_rtd_theme [lhead=cluster_sphinx]
 sphinx_rtd_theme -&gt; graphviz [ltail=cluster_sphinx]
@@ -411,22 +423,29 @@ sphinx_rtd_theme -&gt; graphviz [ltail=cluster_sphinx]
 <td><p>This project</p></td>
 </tr>
 <tr class="row-odd"><td><p>pytest</p></td>
-<td><p>Used to test mcdecoder</p></td>
+<td><p>Used for unit tests for mcdecoder</p></td>
+</tr>
+<tr class="row-even"><td><p>pytest-cov</p></td>
+<td><p>Used to measure code coverage of unit tests</p></td>
+</tr>
+<tr class="row-odd"><td><p>Behave</p></td>
+<td><p>Used for feature tests for mcdecoder</p></td>
 </tr>
 <tr class="row-even"><td><p>Bundler</p></td>
-<td><p>Used to fix the version of Cucumber</p></td>
+<td><p>Used to fix the version of Cucumber.
+Cucumber-Cpp requires Cucumber v2.0</p></td>
 </tr>
 <tr class="row-odd"><td><p>Cucumber</p></td>
-<td><p>Used to test generated decoders</p></td>
+<td><p>Used for feature tests for generated decoders</p></td>
 </tr>
 <tr class="row-even"><td><p>Conan</p></td>
 <td><p>Used to manage packages of C/C++</p></td>
 </tr>
 <tr class="row-odd"><td><p>Cucumber-Cpp</p></td>
-<td><p>Used to test generated decoders in C/C++</p></td>
+<td><p>Used for feature tests for generated decoders in C/C++</p></td>
 </tr>
 <tr class="row-even"><td><p>Google Test</p></td>
-<td><p>Used to test generated decoders in C/C++</p></td>
+<td><p>Provides testing functionalities to Cucumber-Cpp</p></td>
 </tr>
 <tr class="row-odd"><td><p>Sphinx</p></td>
 <td><p>Used to build documents</p></td>
@@ -459,27 +478,27 @@ sphinx_rtd_theme -&gt; graphviz [ltail=cluster_sphinx]
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>ctest</p></td>
-<td><p>Tests for generated decoders</p></td>
-</tr>
-<tr class="row-odd"><td><p>docs</p></td>
+<tr class="row-even"><td><p>docs</p></td>
 <td><p>Documents published to GitHub Pages</p></td>
 </tr>
-<tr class="row-even"><td><p>examples</p></td>
+<tr class="row-odd"><td><p>examples</p></td>
 <td><p>Example files used in tutorials and other documents</p></td>
 </tr>
-<tr class="row-odd"><td><p>src</p></td>
+<tr class="row-even"><td><p>src</p></td>
 <td><p>Source files to implement a mcdecoder</p></td>
-</tr>
-<tr class="row-even"><td><p>src/test</p></td>
-<td><p>Tests for mcdecoder</p></td>
 </tr>
 <tr class="row-odd"><td><p>src_docs</p></td>
 <td><p>RST files to generate documents in docs directory</p></td>
 </tr>
-<tr class="row-even"><td><p>test</p></td>
-<td><p>Files used for both mcdecoder tests and
-generated decoder tests</p></td>
+<tr class="row-even"><td><p>tests/common</p></td>
+<td><p>Common files used for both unit tests and feature tests</p></td>
+</tr>
+<tr class="row-odd"><td><p>tests/feature</p></td>
+<td><p>Feature tests for mcdecoders.
+This is mainly for testing generated decoders</p></td>
+</tr>
+<tr class="row-even"><td><p>tests/module</p></td>
+<td><p>Unit tests for mcdecoder modules</p></td>
 </tr>
 </tbody>
 </table>

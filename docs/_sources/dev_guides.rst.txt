@@ -70,7 +70,7 @@ How to run tests for generated decoders
     source env/bin/activate
 
     # Run tests
-    make -C ctest clean test
+    make -C tests/feature clean test
 
 
 How to build documents
