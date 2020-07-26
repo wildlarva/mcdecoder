@@ -2,6 +2,7 @@ import pytest
 
 from mcdecoder.core import (
     AndIdCondition,
+    DecodeContext,
     EqualityIdCondition,
     FieldIdConditionObject,
     FunctionIdConditionObject,
@@ -11,6 +12,8 @@ from mcdecoder.core import (
     LoadError,
     OrIdCondition,
     create_mcdecoder_model,
+    decode_instruction,
+    find_matched_instructions,
     load_mc_description_model,
 )
 
@@ -718,3 +721,164 @@ def test_create_mcdecoder_model_decision_tree_code16x2() -> None:
     assert node0101_ab.arbitrary_bit_node is None
     assert len(node0101_ab.instructions) == 1
     assert node0101_ab.instructions[0].name == 'instruction0101_ab'
+
+
+def test_decode_instruction() -> None:
+    # Prepare instruction model
+    mcdecoder_model = create_mcdecoder_model(
+        'tests/common/riscv.yaml')
+    instrution = mcdecoder_model.instructions[0]
+
+    # Decode instruction
+    code = 0x1141
+    context = DecodeContext(mcdecoder=mcdecoder_model,
+                            code16x1=code, code16x2=code, code32x1=code)
+    result = decode_instruction(context, instrution)
+    assert result.decoder == instrution
+    assert result.fields[0].decoder == instrution.fields[0]
+    assert result.fields[0].value == 0x0
+    assert result.fields[1].decoder == instrution.fields[1]
+    assert result.fields[1].value == 0x30
+    assert result.fields[2].decoder == instrution.fields[2]
+    assert result.fields[2].value == 0x2
+    assert result.fields[3].decoder == instrution.fields[3]
+    assert result.fields[3].value == 0x1
+
+
+def test_find_matched_instructions() -> None:
+    # Prapare decoder model
+    mcdecoder_model = create_mcdecoder_model(
+        'tests/common/equality_operator.yaml')
+    context = DecodeContext(mcdecoder=mcdecoder_model,
+                            code16x1=0, code16x2=0, code32x1=0)
+
+    # Equal to
+    # Matched
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x10000000
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 1
+    assert instructions[0].name == 'equal_to_condition'
+
+    # Unmatched
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x00000000
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 0
+
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x20000000
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 0
+
+    context.code16x1 = context.code16x2 = context.code32x1 = 0xf0000000
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 0
+
+    # Unequal to
+    # Matched
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x10000001
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 1
+    assert instructions[0].name == 'unequal_to_condition'
+
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x00000001
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 1
+    assert instructions[0].name == 'unequal_to_condition'
+
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x30000001
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 1
+    assert instructions[0].name == 'unequal_to_condition'
+
+    context.code16x1 = context.code16x2 = context.code32x1 = 0xf0000001
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 1
+    assert instructions[0].name == 'unequal_to_condition'
+
+    # Unmatched
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x20000001
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 0
+
+    # Less than
+    # Matched
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x20000002
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 1
+    assert instructions[0].name == 'less_than_condition'
+
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x00000002
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 1
+    assert instructions[0].name == 'less_than_condition'
+
+    # Unmatched
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x30000002
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 0
+
+    context.code16x1 = context.code16x2 = context.code32x1 = 0xf0000002
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 0
+
+    # Less than or equal to
+    # Matched
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x40000003
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 1
+    assert instructions[0].name == 'leq_condition'
+
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x00000003
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 1
+    assert instructions[0].name == 'leq_condition'
+
+    # Unmatched
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x50000003
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 0
+
+    context.code16x1 = context.code16x2 = context.code32x1 = 0xf0000003
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 0
+
+    # Greater than
+    # Matched
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x60000004
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 1
+    assert instructions[0].name == 'greater_than_condition'
+
+    context.code16x1 = context.code16x2 = context.code32x1 = 0xf0000004
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 1
+    assert instructions[0].name == 'greater_than_condition'
+
+    # Unmatched
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x50000004
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 0
+
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x00000004
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 0
+
+    # Greater than or equal to
+    # Matched
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x60000005
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 1
+    assert instructions[0].name == 'geq_condition'
+
+    context.code16x1 = context.code16x2 = context.code32x1 = 0xf0000005
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 1
+    assert instructions[0].name == 'geq_condition'
+
+    # Unmatched
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x50000005
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 0
+
+    context.code16x1 = context.code16x2 = context.code32x1 = 0x00000005
+    instructions = find_matched_instructions(context)
+    assert len(instructions) == 0

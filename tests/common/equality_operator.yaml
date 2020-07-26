@@ -1,0 +1,23 @@
+machine:
+  byteorder: little
+instructions:
+  - name: equal_to_condition
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0000
+    match_condition: cond1 == 1
+  - name: unequal_to_condition
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0001
+    match_condition: cond1 != 2
+  - name: less_than_condition
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0010
+    match_condition: cond1 < 3
+  - name: leq_condition
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0011
+    match_condition: cond1 <= 4
+  - name: greater_than_condition
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0100
+    match_condition: cond1 > 5
+  - name: geq_condition
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0101
+    match_condition: cond1 >= 6
+decoder:
+  namespace: eo

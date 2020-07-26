@@ -23,7 +23,7 @@ ID: /[A-Za-z]\w*/
 DECIMAL_NUMBER: /\d+/
 HEX_NUMBER: /0x[\dA-Fa-f]+/
 BINARY_NUMBER: /0b[01]+/
-EQUALITY_OP: "==" | "!=" | ">" | ">=" | "<" | "<="
+EQUALITY_OP: "==" | "!=" | ">=" | ">" | "<=" | "<"
 
 %import common.WS
 %ignore WS
