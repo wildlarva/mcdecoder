@@ -1482,8 +1482,8 @@ def _test_instruction_condition_vectorized(code_vec: np.ndarray, condition: Inst
 def _instruction_condition_object_vectorized(code_vec: np.ndarray, object: InstructionDecoderConditionObject,
                                              instruction_decoder: InstructionDecoder) -> np.ndarray:
     if isinstance(object, FieldIdConditionObject):
-        field_decoder = next((field for field in instruction_decoder.fields if field.name ==
-                              object.field), None)
+        field_decoder = next(
+            (field for field in instruction_decoder.fields if field.name == object.field), None)
         if field_decoder is None:
             return np.zeros_like(code_vec)
 

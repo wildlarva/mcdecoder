@@ -29,7 +29,7 @@ def check(mcfile: str, bit_pattern: str, base: Literal[2, 16] = 16) -> int:
     # Check and output progress
     print('-' * 80)
     print('Checking instructions...')
-    result = _check(mcfile, bit_pattern, base, _output_error)
+    result = _check(mcfile, bit_pattern, base, _VEC_SIZE, _output_error)
     print('Done.')
 
     # Output check results
@@ -143,12 +143,13 @@ def _output_error(errors: List[_Error]) -> None:
         if error.type == 'undefined':
             print(
                 f'{error.bits_start:#010x} - {error.bits_end:#010x}: Undefined (has no instructions)')
-        elif error.type == 'duplicate':
+        elif error.type == 'duplicate':  # pragma: no branch
             print(
                 f'{error.bits_start:#010x} - {error.bits_end:#010x}: Duplicate (has duplicate instructions)')
 
 
-def _check(mcfile: str, bit_pattern: str, base: Literal[2, 16], callback: Callable[[List[_Error]], None]) -> _CheckResult:
+def _check(mcfile: str, bit_pattern: str, base: Literal[2, 16], vec_size: int, callback: Callable[[List[_Error]], None]) \
+        -> _CheckResult:
     """Testable implementation of check sub-command"""
     # Create MC decoder model
     mcdecoder = core.create_mcdecoder_model(mcfile)
@@ -168,10 +169,10 @@ def _check(mcfile: str, bit_pattern: str, base: Literal[2, 16], callback: Callab
     parsed_bit_pattern = _create_bit_pattern(converted_bit_pattern, base)
 
     # Check instructions
-    return _check_instructions_vectorized(mcdecoder, parsed_bit_pattern, callback)
+    return _check_instructions_vectorized(mcdecoder, parsed_bit_pattern, vec_size, callback)
 
 
-def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitPattern,
+def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitPattern, vec_size: int,
                                    callback: Callable[[List[_Error]], None]) -> _CheckResult:
     """
     Check instructions if they have any errors.
@@ -191,8 +192,8 @@ def _check_instructions_vectorized(mcdecoder: core.McDecoder, bit_pattern: _BitP
                             duplicate_instruction_mat=duplicate_instruction_mat)
 
     # Iterate over variable bits and emulate decoder
-    for step_start in range(0, total_count, _VEC_SIZE):
-        step_end = min(step_start + _VEC_SIZE, total_count) - 1
+    for step_start in range(0, total_count, vec_size):
+        step_end = min(step_start + vec_size, total_count) - 1
 
         # Make bits to test
         step_vec = np.arange(step_start, step_end + 1)

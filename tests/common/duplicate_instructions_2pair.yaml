@@ -1,0 +1,11 @@
+machine:
+  byteorder: little
+instructions:
+  - name: duplicate_instruction_1_1
+    format: xxxxxxxx|0001|xxxx
+  - name: duplicate_instruction_1_2
+    format: xxxxxxxx|0001|xxxx
+  - name: duplicate_instruction_2_1
+    format: xxxxxxxx|0010|0010
+  - name: duplicate_instruction_2_2
+    format: xxxxxxxx|0010|0010
