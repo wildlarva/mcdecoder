@@ -7,6 +7,8 @@ The mcdecoder (Machine Code Decoder) is a set of tools to implement a machine co
 - Check the integrity of a machine code specification
 - etc.
 
+Currently, the mcdecoder only generates decoders in C language.
+
 ## Quickstart
 
 1. Define your machine code specification
@@ -26,7 +28,7 @@ The mcdecoder (Machine Code Decoder) is a set of tools to implement a machine co
     mcdecoder generate arm.yaml
     ```
 
-3. Use the decoder from a client
+3. Use the decoder from a C client
 
     ```c
     const uint8_t kMachineCodes[] = { 0x04, 0xB0, 0x8D, 0xE2, };
