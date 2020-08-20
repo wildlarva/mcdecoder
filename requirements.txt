@@ -1,14 +1,14 @@
 behave>=1.2.6
 conan>=1.28.1
-deprecation>=2.0,<2.1 # Specify version for conan
+deprecation>=2.0.7,<2.1 # Specify version for conan
 Jinja2>=2.11.2
-jsonschema>=3.0.2
-lark-parser>=0.6.6
-numpy>=1.17.3
+jsonschema>=3.2.0
+lark-parser>=0.9.0
+numpy>=1.19.1
 pytest>=6.0.1
 pytest-cov>=2.10.1
 PyYAML>=5.2
-six>=1.11.0,<=1.15.0 # Specify version for jsonschema and conan
+six>=1.15.0,<=1.15.0 # Specify version for jsonschema and conan
 Sphinx>=3.2.1
 sphinx-argparse>=0.2.5
 sphinx-jsonschema>=1.15
