@@ -18,6 +18,6 @@ setup(
         'console_scripts': ['mcdecoder = mcdecoder.__main__:main']
     },
     python_requires='>=3.8',
-    install_requires=['deprecation', 'Jinja2', 'jsonschema',
-                      'lark-parser', 'numpy', 'PyYAML'],
+    install_requires=['deprecation>=2.0', 'Jinja2>=2.11.2', 'jsonschema>=3.0.2',
+                      'lark-parser>=0.6.6', 'numpy>=1.17.3', 'PyYAML>=5.2'],
 )
