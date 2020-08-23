@@ -17,7 +17,7 @@ Requirements for development
 Branch policy
 =============================================
 
-For simplicity, we use the master branch as a unstable, development branch and do not have an additional stable branch.
+For simplicity, we use the master branch as an unstable, development branch and do not have an additional stable branch.
 Stable codes are marked as release tags.
 If you need a stable code base, please check out one of the release tags.
 
