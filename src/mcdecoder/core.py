@@ -223,21 +223,21 @@ class InstructionSubfieldDecoder:
     """LSB of a subfield in a field"""
 
     @property
-    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
+    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='1.0', current_version=__version__.__version__,
                             details='Use msb_in_instruction instead')
     def start_bit_in_instruction(self) -> int:
         """MSB of a subfield in an instruction"""
         return self.msb_in_instruction  # pragma: no cover
 
     @property
-    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
+    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='1.0', current_version=__version__.__version__,
                             details='Use lsb_in_instruction instead')
     def end_bit_in_instruction(self) -> int:
         """LSB of a subfield in an instruction"""
         return self.lsb_in_instruction  # pragma: no cover
 
     @property
-    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
+    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='1.0', current_version=__version__.__version__,
                             details='Use lsb_in_field instead')
     def end_bit_in_field(self) -> int:
         """LSB of a subfield in a field"""
@@ -259,14 +259,14 @@ class InstructionFieldDecoder:
     """MSB of a field in an instruction"""
 
     @property
-    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
+    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='1.0', current_version=__version__.__version__,
                             details='Use type_bit_length instead')
     def type_bit_size(self) -> int:
         """Bit length of a data type used for a field"""
         return self.type_bit_length  # pragma: no cover
 
     @property
-    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
+    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='1.0', current_version=__version__.__version__,
                             details='Use subfields instead')
     def subfield_decoders(self) -> List[InstructionSubfieldDecoder]:
         """Child InstructionSubfieldDecoders"""
@@ -445,21 +445,21 @@ class InstructionDecoder:
     """Encoding of an instruction"""
 
     @property
-    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
+    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='1.0', current_version=__version__.__version__,
                             details='Use type_bit_length instead')
     def type_bit_size(self) -> int:
         """Bit length of a data type used for an instruction"""
         return self.type_bit_length  # pragma: no cover
 
     @property
-    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
+    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='1.0', current_version=__version__.__version__,
                             details='Use fixed_bit_mask instead')
     def fixed_bits_mask(self) -> int:
         """Mask of fixed bit positions of an instruction"""
         return self.fixed_bit_mask  # pragma: no cover
 
     @property
-    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
+    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='1.0', current_version=__version__.__version__,
                             details='Use fields instead')
     def field_decoders(self) -> List[InstructionFieldDecoder]:
         """Child InstructionFieldDecoders"""
@@ -538,14 +538,14 @@ class McDecoder:
     """User-defined data not related to a machine, an instruction and a field"""
 
     @property
-    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
+    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='1.0', current_version=__version__.__version__,
                             details='Use machine instead')
     def machine_decoder(self) -> MachineDecoder:
         """Child MachineDecoder"""
         return self.machine  # pragma: no cover
 
     @property
-    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
+    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='1.0', current_version=__version__.__version__,
                             details='Use instructions instead')
     def instruction_decoders(self) -> List[InstructionDecoder]:
         """Child InstructionDecoders"""
@@ -604,7 +604,7 @@ class InstructionDecodeResult:
     """Child InstructionFieldDecodeResults"""
 
     @property
-    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='0.1b1', current_version=__version__.__version__,
+    @deprecation.deprecated(deprecated_in='0.1a6.*', removed_in='1.0', current_version=__version__.__version__,
                             details='Use fields instead')
     def field_results(self) -> List[InstructionFieldDecodeResult]:
         """Child InstructionFieldDecodeResults"""

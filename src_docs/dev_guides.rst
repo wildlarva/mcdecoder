@@ -14,6 +14,13 @@ Requirements for development
 
   * Recommended packages: ruby and ruby-dev
 
+Branch policy
+=============================================
+
+For simplicity, we use the master branch as a unstable, development branch and do not have an additional stable branch.
+Stable codes are marked as release tags.
+If you need a stable code base, please check out one of the release tags.
+
 How to setup environment for development
 =============================================
 
@@ -71,7 +78,6 @@ How to run tests for generated decoders
 
     # Run tests
     make -C tests/feature clean test
-
 
 How to build documents
 =============================================

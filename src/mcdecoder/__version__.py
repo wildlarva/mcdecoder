@@ -1,2 +1,2 @@
-__version__ = '0.1a6.dev1'
+__version__ = '0.1.dev1'
 """Current version of mcdecoder"""

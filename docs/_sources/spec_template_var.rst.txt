@@ -13,13 +13,13 @@ Template variable specification
     machine_decoder      :code:`MachineDecoder`      Decoding information about machine.
                                                      Shorthand for :code:`mcdecoder.machine`.
 
-                                                     Deprecated and will be removed in version 0.1b1
+                                                     Deprecated and will be removed in version 1.0
     instructions         Sequence of                 Decoding information about instructions.
                          :code:`InstructionDecoder`  Shorthand for :code:`mcdecoder.instructions`
     instruction_decoders Sequence of                 Decoding information about instructions.
                          :code:`InstructionDecoder`  Shorthand for :code:`mcdecoder.instructions`.
 
-                                                     Deprecated and will be removed in version 0.1b1
+                                                     Deprecated and will be removed in version 1.0
     ns                   string                      Namespace prefix for generated codes.
                                                      Shorthand for :code:`mcdecoder.namespace_prefix`
     extras               any (user-specific)         User-defined data for the global scope.

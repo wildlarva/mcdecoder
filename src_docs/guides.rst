@@ -9,3 +9,4 @@ User guides
     README
     quickstart
     user_templates
+    version
