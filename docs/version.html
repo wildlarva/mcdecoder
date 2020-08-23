@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Limitations &mdash; mcdecoder  documentation</title>
+  <title>Release cycle and versioniong policy &mdash; mcdecoder  documentation</title>
   
 
   
@@ -38,8 +38,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Documents for mcdecoder developers" href="dev_docs.html" />
-    <link rel="prev" title="MC decoder model specification" href="spec_mcdecoder_model.html" /> 
+    <link rel="next" title="Specifications" href="specifications.html" />
+    <link rel="prev" title="User templates" href="user_templates.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -86,16 +86,19 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="guides.html">User guides</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="specifications.html">Specifications</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="spec_commandline_options.html">Command line option specification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="spec_mc_desc.html">MC description specification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="spec_mcdecoder_api.html">MC decoder API specification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="spec_template_var.html">Template variable specification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="spec_mcdecoder_model.html">MC decoder model specification</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Limitations</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="guides.html">User guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="README.html">README: mcdecoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_templates.html">User templates</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Release cycle and versioniong policy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#release-cycle">Release cycle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deprecation-policy">Deprecation policy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#versioning-policy">Versioning policy</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/wildlarva/mcdecoder">Back to GitHub</a></li>
 </ul>
@@ -144,15 +147,15 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="specifications.html">Specifications</a> &raquo;</li>
+          <li><a href="guides.html">User guides</a> &raquo;</li>
         
-      <li>Limitations</li>
+      <li>Release cycle and versioniong policy</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/spec_limit.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/version.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -165,18 +168,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="limitations">
-<h1>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h1>
-<p>Generated decoders have the limitations below:</p>
-<ul class="simple">
-<li><p>The decoder codes are in C language(C11 standard).</p></li>
-<li><p>The host computer which runs the decoders must be of little endian.</p></li>
-<li><p>The bit length of instruction encodings must be 16 bit or 32 bit.</p>
-<ul>
-<li><p>Do not support others, such as 8 bit, 24 bit, 64 bit, etc.</p></li>
-</ul>
-</li>
-</ul>
+  <div class="section" id="release-cycle-and-versioniong-policy">
+<h1>Release cycle and versioniong policy<a class="headerlink" href="#release-cycle-and-versioniong-policy" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="release-cycle">
+<h2>Release cycle<a class="headerlink" href="#release-cycle" title="Permalink to this headline">¶</a></h2>
+<p>We have 2 regular releases of mcdecoder in a year, or once in 6 months.
+Additionally, we have a bugfix release for the latest version each time we find bugs.</p>
+</div>
+<div class="section" id="deprecation-policy">
+<h2>Deprecation policy<a class="headerlink" href="#deprecation-policy" title="Permalink to this headline">¶</a></h2>
+<p>If some part of the specifications are marked <code class="code docutils literal notranslate"><span class="pre">deprecated</span></code>, they will be removed following the next 2 regular releases, that is, 1 year later.</p>
+</div>
+<div class="section" id="versioning-policy">
+<h2>Versioning policy<a class="headerlink" href="#versioning-policy" title="Permalink to this headline">¶</a></h2>
+<p><code class="code docutils literal notranslate"><span class="pre">&lt;major&gt;.&lt;minor&gt;.&lt;micro&gt;</span></code></p>
+<p>The number in each part is increased when,</p>
+<dl class="simple">
+<dt>&lt;major&gt;</dt><dd><p>A significant change is made to the specifications of mcdecoder.
+<code class="code docutils literal notranslate"><span class="pre">0</span></code> means that mcdecoder is under evaluation against a real use case.</p>
+</dd>
+<dt>&lt;minor&gt;</dt><dd><p>Some features are added to or removed from mcdecoder.</p>
+</dd>
+<dt>&lt;micro&gt;</dt><dd><p>Some bugs are fixed or some improvements are taken place.</p>
+</dd>
+</dl>
+</div>
 </div>
 
 
@@ -187,10 +203,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="dev_docs.html" class="btn btn-neutral float-right" title="Documents for mcdecoder developers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="specifications.html" class="btn btn-neutral float-right" title="Specifications" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="spec_mcdecoder_model.html" class="btn btn-neutral float-left" title="MC decoder model specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="user_templates.html" class="btn btn-neutral float-left" title="User templates" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

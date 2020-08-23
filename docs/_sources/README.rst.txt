@@ -8,6 +8,8 @@ The mcdecoder (Machine Code Decoder) is a set of tools to implement a machine co
 * Check the integrity of a machine code specification
 * etc.
 
+Currently, the mcdecoder only generates decoders in C language.
+
 Quickstart
 ----------
 
@@ -28,7 +30,7 @@ Quickstart
 
        mcdecoder generate arm.yaml
 
-#. Use the decoder from a client
+#. Use the decoder from a C client
 
    .. code-block:: c
 

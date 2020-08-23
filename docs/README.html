@@ -99,6 +99,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart tutorial</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_templates.html">User templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version.html">Release cycle and versioniong policy</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
@@ -180,6 +181,7 @@
 <li><p>Check the integrity of a machine code specification</p></li>
 <li><p>etc.</p></li>
 </ul>
+<p>Currently, the mcdecoder only generates decoders in C language.</p>
 <div class="section" id="quickstart">
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
@@ -200,7 +202,7 @@
 </pre></div>
 </div>
 </li>
-<li><p>Use the decoder from a client</p>
+<li><p>Use the decoder from a C client</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">const</span> <span class="kt">uint8_t</span> <span class="n">kMachineCodes</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x8D</span><span class="p">,</span> <span class="mh">0xE2</span><span class="p">,</span> <span class="p">};</span>
 <span class="n">DecodeRequest</span> <span class="n">request</span><span class="p">;</span>
 <span class="n">DecodeResult</span> <span class="n">result</span><span class="p">;</span>
