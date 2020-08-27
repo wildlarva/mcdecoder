@@ -72,9 +72,7 @@ Installation
 
 .. code-block:: bash
 
-    git clone https://github.com/wildlarva/mcdecoder.git
-    cd mcdecoder
-    python3.8 -m pip install .
+    python3.8 -m pip install mcdecoder
 
 License
 -------

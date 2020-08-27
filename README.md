@@ -62,14 +62,12 @@ It will be independent from athrill and be a more general tool in the near futur
 ## Installation
 
 ```bash
-git clone https://github.com/wildlarva/mcdecoder.git
-cd mcdecoder
-python3.8 -m pip install .
+python3.8 -m pip install mcdecoder
 ```
 
 ## License
 
-The mcdecoder uses MIT License. See [LICENSE](LICENSE) for more details.
+The mcdecoder uses MIT License. See [LICENSE](https://github.com/wildlarva/mcdecoder/blob/master/LICENSE) for more details.
 
 ## More details about usage
 
