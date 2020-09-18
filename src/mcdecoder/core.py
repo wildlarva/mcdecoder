@@ -999,10 +999,50 @@ def _add_yaml_include_constructor() -> None:
 
 
 def _validate_mc_desc_model(mc_desc_model: Any) -> None:
+    _validate_mc_desc_model_for_schema(mc_desc_model)
+    _validate_mc_desc_model_for_constraints(mc_desc_model)
+    _validate_mc_desc_model_for_limitations(mc_desc_model)
+
+
+def _validate_mc_desc_model_for_schema(mc_desc_model: Any) -> None:
     with importlib.resources.open_text('mcdecoder.schemas', 'mc_desc_schema.json') as file:
         schema = json.load(file)
 
     jsonschema.validate(mc_desc_model, schema)
+
+
+def _validate_mc_desc_model_for_constraints(mc_desc_model: Any) -> None:
+    for instruction_desc in mc_desc_model['instructions']:
+        instruction_encoding = parse_instruction_encoding(
+            instruction_desc['format'])
+
+        _validate_instruction_encoding_lengths(
+            instruction_desc, instruction_encoding)
+
+
+def _validate_instruction_encoding_lengths(instruction_desc: InstructionDescription,
+                                           instruction_encoding: InstructionEncodingDescription) -> None:
+    encoding_element_lengths = set(_calc_instruction_encoding_element_bit_length(
+        element) for element in instruction_encoding.elements)
+    if len(encoding_element_lengths) != 1:
+        raise LoadError(
+            f"The bit lengths of the instruction encodings must be the same: {instruction_desc['name']}")
+
+
+def _validate_mc_desc_model_for_limitations(mc_desc_model: Any) -> None:
+    for instruction_desc in mc_desc_model['instructions']:
+        instruction_encoding = parse_instruction_encoding(
+            instruction_desc['format'])
+
+        _validate_instruction_length(instruction_desc, instruction_encoding)
+
+
+def _validate_instruction_length(instruction_desc: InstructionDescription,
+                                 instruction_encoding: InstructionEncodingDescription) -> None:
+    bit_length = calc_instruction_bit_size(instruction_encoding)
+    if bit_length not in [16, 32]:
+        raise LoadError(
+            f"The bit length of an instruction must be 16 or 32: {instruction_desc['name']}")
 
 
 def _create_instruction_encoding_parser() -> lark.Lark:

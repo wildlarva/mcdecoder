@@ -517,6 +517,24 @@ def test_load_mc_description_model_include_mixture() -> None:
         load_mc_description_model('tests/common/include_mixture/include.yaml')
 
 
+def test_load_mc_description_model_unsupported_instruction_lengths() -> None:
+    with pytest.raises(LoadError):
+        load_mc_description_model(
+            'tests/common/unsupported_instruction_length_8.yaml')
+    with pytest.raises(LoadError):
+        load_mc_description_model(
+            'tests/common/unsupported_instruction_length_24.yaml')
+    with pytest.raises(LoadError):
+        load_mc_description_model(
+            'tests/common/unsupported_instruction_length_64.yaml')
+
+
+def test_load_mc_description_model_unmatched_instruction_encodings() -> None:
+    with pytest.raises(LoadError):
+        load_mc_description_model(
+            'tests/common/unmatched_instruction_encodings.yaml')
+
+
 def test_create_mcdecoder_model_decision_tree_code32x1() -> None:
     mcdecoder_model = create_mcdecoder_model(
         'tests/common/decision_tree_code32x1.yaml')

@@ -1,0 +1,5 @@
+machine:
+  byteorder: little
+instructions:
+  - name: inst_1
+    format: 0000xxxx 0001xxxx 00010xxxx
