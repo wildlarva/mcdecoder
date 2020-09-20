@@ -5,6 +5,7 @@ import importlib.resources
 import importlib.util
 import itertools
 import json
+from os import name
 import os.path
 from types import ModuleType
 from typing import (
@@ -1000,8 +1001,7 @@ def _add_yaml_include_constructor() -> None:
 
 def _validate_mc_desc(mc_desc: Any) -> None:
     _validate_mc_desc_for_schema(mc_desc)
-    _validate_mc_desc_for_constraints(mc_desc)
-    _validate_mc_desc_for_limitations(mc_desc)
+    _validate_mc_desc_for_constraint(mc_desc)
 
 
 def _validate_mc_desc_for_schema(mc_desc: Any) -> None:
@@ -1011,13 +1011,27 @@ def _validate_mc_desc_for_schema(mc_desc: Any) -> None:
     jsonschema.validate(mc_desc, schema)
 
 
-def _validate_mc_desc_for_constraints(mc_desc: Any) -> None:
+def _validate_mc_desc_for_constraint(mc_desc: Any) -> None:
     for instruction_desc in mc_desc['instructions']:
         instruction_encoding = parse_instruction_encoding(
             instruction_desc['format'])
 
+        instruction_condition: Optional[InstructionConditionDescription] = None
+        if 'match_condition' in instruction_desc:
+            instruction_condition = _parse_instruction_condition(
+                instruction_desc['match_condition'])
+        elif 'unmatch_condition' in instruction_desc:
+            instruction_condition = _parse_instruction_condition(
+                instruction_desc['unmatch_condition'])
+
         _validate_instruction_encoding_lengths(
             instruction_desc, instruction_encoding)
+        _validate_supported_instruction_length(
+            instruction_desc, instruction_encoding)
+
+        if instruction_condition is not None:
+            _validate_instruction_conditions(
+                instruction_desc, instruction_encoding, instruction_condition)
 
 
 def _validate_instruction_encoding_lengths(instruction_desc: InstructionDescription,
@@ -1026,23 +1040,72 @@ def _validate_instruction_encoding_lengths(instruction_desc: InstructionDescript
         element) for element in instruction_encoding.elements)
     if len(encoding_element_lengths) != 1:
         raise LoadError(
-            f"The bit lengths of the instruction encodings must be the same: {instruction_desc['name']}")
+            f"The bit lengths of the instruction encoding elements must be the same: {instruction_desc['name']}")
 
 
-def _validate_mc_desc_for_limitations(mc_desc: Any) -> None:
-    for instruction_desc in mc_desc['instructions']:
-        instruction_encoding = parse_instruction_encoding(
-            instruction_desc['format'])
-
-        _validate_instruction_length(instruction_desc, instruction_encoding)
-
-
-def _validate_instruction_length(instruction_desc: InstructionDescription,
-                                 instruction_encoding: InstructionEncodingDescription) -> None:
+def _validate_supported_instruction_length(instruction_desc: InstructionDescription,
+                                           instruction_encoding: InstructionEncodingDescription) -> None:
     bit_length = calc_instruction_bit_size(instruction_encoding)
     if bit_length not in [16, 32]:
         raise LoadError(
-            f"The bit length of an instruction must be 16 or 32: {instruction_desc['name']}")
+            f"The bit length of the instruction must be 16 or 32: {instruction_desc['name']}")
+
+
+def _validate_instruction_conditions(instruction_desc: InstructionDescription,
+                                     instruction_encoding: InstructionEncodingDescription,
+                                     condition: InstructionConditionDescription) -> None:
+    if isinstance(condition, LogicalInstructionConditionDescription):
+        for child_condition in condition.conditions:
+            _validate_instruction_conditions(
+                instruction_desc, instruction_encoding, child_condition)
+
+    elif isinstance(condition, EqualityInstructionConditionDescription):
+        _validate_instruction_condition_object_field(
+            instruction_desc, instruction_encoding, condition.subject)
+        _validate_instruction_condition_object_field(
+            instruction_desc, instruction_encoding, condition.object)
+
+    elif isinstance(condition, InInstructionConditionDescription):
+        _validate_instruction_condition_object_field(
+            instruction_desc, instruction_encoding, condition.subject)
+
+    elif isinstance(condition, InRangeInstructionConditionDescription):  # pragma: no branch
+        _validate_instruction_condition_object_field(
+            instruction_desc, instruction_encoding, condition.subject)
+
+    else:  # pragma: no cover
+        raise RuntimeError(f'Unknown condition type: {condition}')
+
+
+def _validate_instruction_condition_object_field(instruction_desc: InstructionDescription,
+                                                 instruction_encoding: InstructionEncodingDescription,
+                                                 condition_object: InstructionConditionObjectDescription) -> None:
+    if isinstance(condition_object, FieldInstructionConditionObjectDescription):
+        _validate_instruction_condition_field_existence(
+            instruction_desc, instruction_encoding, condition_object)
+
+    elif isinstance(condition_object, ImmediateInstructionConditionObjectDescription):
+        # Do nothing
+        pass
+
+    elif isinstance(condition_object, FunctionInstructionConditionObjectDescription):  # pragma: no branch
+        _validate_instruction_condition_object_field(
+            instruction_desc, instruction_encoding, condition_object.argument)
+
+    else:  # pragma: no cover
+        raise RuntimeError(
+            f'Unknown condition object type: {condition_object}')
+
+
+def _validate_instruction_condition_field_existence(instruction_desc: InstructionDescription,
+                                                    instruction_encoding: InstructionEncodingDescription,
+                                                    condition_object: FieldInstructionConditionObjectDescription) -> None:
+    valid_fields = itertools.chain.from_iterable(
+        element.fields for element in instruction_encoding.elements)
+    valid_field_names = set(field.name for field in valid_fields)
+    if condition_object.field not in valid_field_names:
+        raise LoadError(
+            f"The instruction condition uses the missing field '{condition_object.field}': {instruction_desc['name']}")
 
 
 def _create_instruction_encoding_parser() -> lark.Lark:

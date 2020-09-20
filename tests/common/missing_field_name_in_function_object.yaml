@@ -1,0 +1,6 @@
+machine:
+  byteorder: little
+instructions:
+  - name: function_subject
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0101
+    match_condition: setbit_count(cond3) == 2

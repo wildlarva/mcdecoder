@@ -1,0 +1,6 @@
+machine:
+  byteorder: little
+instructions:
+  - name: in_condition
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0001
+    match_condition: cond3 in [1, 0b11]

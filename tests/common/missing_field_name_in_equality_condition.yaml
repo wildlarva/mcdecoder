@@ -1,0 +1,6 @@
+machine:
+  byteorder: little
+instructions:
+  - name: equality_condition
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0000
+    match_condition: cond3 == 1

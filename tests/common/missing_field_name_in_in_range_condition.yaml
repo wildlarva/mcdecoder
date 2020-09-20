@@ -1,0 +1,6 @@
+machine:
+  byteorder: little
+instructions:
+  - name: in_range_condition
+    format: xxxx:cond1|xxxx:cond2|0000 0000 0000 0000 0000 0010
+    unmatch_condition: cond3 in_range 1-0xa

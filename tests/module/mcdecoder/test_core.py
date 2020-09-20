@@ -741,6 +741,24 @@ def test_load_mc_description_unmatched_instruction_encodings() -> None:
             'tests/common/unmatched_instruction_encodings.yaml')
 
 
+def test_load_mc_description_missing_field_name() -> None:
+    with pytest.raises(LoadError):
+        load_mc_description(
+            'tests/common/missing_field_name_in_equality_condition.yaml')
+    with pytest.raises(LoadError):
+        load_mc_description(
+            'tests/common/missing_field_name_in_in_condition.yaml')
+    with pytest.raises(LoadError):
+        load_mc_description(
+            'tests/common/missing_field_name_in_in_range_condition.yaml')
+    with pytest.raises(LoadError):
+        load_mc_description(
+            'tests/common/missing_field_name_in_field_object.yaml')
+    with pytest.raises(LoadError):
+        load_mc_description(
+            'tests/common/missing_field_name_in_function_object.yaml')
+
+
 def test_decode_instruction() -> None:
     # Prepare instruction model
     mcdecoder_model = create_mcdecoder_model(
