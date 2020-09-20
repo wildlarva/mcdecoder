@@ -14,7 +14,7 @@ from mcdecoder.core import (
     create_mcdecoder_model,
     decode_instruction,
     find_matched_instructions,
-    load_mc_description_model,
+    load_mc_description,
 )
 
 
@@ -682,8 +682,8 @@ def test_create_mcdecoder_model_decision_tree_code16x2() -> None:
     assert node0101_ab.instructions[0].name == 'instruction0101_ab'
 
 
-def test_load_mc_description_model_include() -> None:
-    mc_desc = load_mc_description_model('tests/common/include/include.yaml')
+def test_load_mc_description_include() -> None:
+    mc_desc = load_mc_description('tests/common/include/include.yaml')
 
     included_sequence = mc_desc['extras']['included_sequence']
     assert len(included_sequence) == 4
@@ -705,39 +705,39 @@ def test_load_mc_description_model_include() -> None:
     assert included_scalar[1] == 2
 
 
-def test_load_mc_description_model_include_arg_not_scalar() -> None:
+def test_load_mc_description_include_arg_not_scalar() -> None:
     with pytest.raises(LoadError):
-        load_mc_description_model('tests/common/include_arg_not_scalar.yaml')
+        load_mc_description('tests/common/include_arg_not_scalar.yaml')
 
 
-def test_load_mc_description_model_include_none() -> None:
-    mc_desc = load_mc_description_model(
+def test_load_mc_description_include_none() -> None:
+    mc_desc = load_mc_description(
         'tests/common/include_none/include.yaml')
 
     included = mc_desc['extras']['included']
     assert included is None
 
 
-def test_load_mc_description_model_include_mixture() -> None:
+def test_load_mc_description_include_mixture() -> None:
     with pytest.raises(LoadError):
-        load_mc_description_model('tests/common/include_mixture/include.yaml')
+        load_mc_description('tests/common/include_mixture/include.yaml')
 
 
-def test_load_mc_description_model_unsupported_instruction_lengths() -> None:
+def test_load_mc_description_unsupported_instruction_lengths() -> None:
     with pytest.raises(LoadError):
-        load_mc_description_model(
+        load_mc_description(
             'tests/common/unsupported_instruction_length_8.yaml')
     with pytest.raises(LoadError):
-        load_mc_description_model(
+        load_mc_description(
             'tests/common/unsupported_instruction_length_24.yaml')
     with pytest.raises(LoadError):
-        load_mc_description_model(
+        load_mc_description(
             'tests/common/unsupported_instruction_length_64.yaml')
 
 
-def test_load_mc_description_model_unmatched_instruction_encodings() -> None:
+def test_load_mc_description_unmatched_instruction_encodings() -> None:
     with pytest.raises(LoadError):
-        load_mc_description_model(
+        load_mc_description(
             'tests/common/unmatched_instruction_encodings.yaml')
 
 

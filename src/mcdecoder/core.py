@@ -627,7 +627,7 @@ def create_mcdecoder_model(mcfile: str) -> McDecoder:
     :raises LoadError: if there's an invalid or inconsistent information
     """
     # Load MC description
-    mc_desc_model = load_mc_description_model(mcfile)
+    mc_desc = load_mc_description(mcfile)
 
     # Load config
     config_file = os.path.join(os.path.dirname(mcfile), 'config.py')
@@ -636,22 +636,22 @@ def create_mcdecoder_model(mcfile: str) -> McDecoder:
         config_module = _load_config_module(config_file)
 
     # Create machine and instruction decoders
-    machine_decoder = _create_machine_decoder_model(mc_desc_model['machine'])
+    machine_decoder = _create_machine_decoder_model(mc_desc['machine'])
     instruction_decoders = [_create_instruction_decoder_model(
-        instruction_desc_model) for instruction_desc_model in mc_desc_model['instructions']]
+        instruction_desc) for instruction_desc in mc_desc['instructions']]
 
     # Create decision tree
     decision_trees = _create_decision_trees(instruction_decoders)
 
     # Create MC decoder
     namespace: Optional[str] = None
-    decoder_desc_model: Optional[McDecoderDescription] = None
-    if 'decoder' in mc_desc_model:
-        decoder_desc_model = mc_desc_model['decoder']
-        if 'namespace' in decoder_desc_model:
-            namespace = decoder_desc_model['namespace']
+    decoder_desc: Optional[McDecoderDescription] = None
+    if 'decoder' in mc_desc:
+        decoder_desc = mc_desc['decoder']
+        if 'namespace' in decoder_desc:
+            namespace = decoder_desc['namespace']
 
-    extras = mc_desc_model['extras'] if 'extras' in mc_desc_model else None
+    extras = mc_desc['extras'] if 'extras' in mc_desc else None
     mcd = McDecoder(
         namespace=namespace,
         namespace_prefix=_make_namespace_prefix(namespace),
@@ -664,10 +664,10 @@ def create_mcdecoder_model(mcfile: str) -> McDecoder:
     # Process model
     process_instruction_hook: Optional[Callable[[
         InstructionDecoder], None]] = None
-    if decoder_desc_model is not None:
-        if 'process_instruction_hook' in decoder_desc_model:
+    if decoder_desc is not None:
+        if 'process_instruction_hook' in decoder_desc:
             process_instruction_hook_name = cast(
-                str, decoder_desc_model['process_instruction_hook'])
+                str, decoder_desc['process_instruction_hook'])
             if config_module is None:
                 raise LoadError(
                     "There must be config.py for the attribute decoder.process_instruction_hook.")
@@ -685,7 +685,7 @@ def create_mcdecoder_model(mcfile: str) -> McDecoder:
     return mcd
 
 
-def load_mc_description_model(mcfile: str) -> McDescription:
+def load_mc_description(mcfile: str) -> McDescription:
     """
     Load an MC description file and validate against the schema
 
@@ -695,12 +695,12 @@ def load_mc_description_model(mcfile: str) -> McDescription:
     # Load MC description
     _yaml_include_context.base_dir = os.path.dirname(mcfile)
     with open(mcfile, 'rb') as file:
-        mc_desc_model = yaml.load(file, Loader=yaml.Loader)
+        mc_desc = yaml.load(file, Loader=yaml.Loader)
 
     # Validate
-    _validate_mc_desc_model(mc_desc_model)
+    _validate_mc_desc(mc_desc)
 
-    return cast(McDescription, mc_desc_model)
+    return cast(McDescription, mc_desc)
 
 
 def _load_config_module(config_file: str) -> ModuleType:
@@ -998,21 +998,21 @@ def _add_yaml_include_constructor() -> None:
     yaml.add_constructor('!include', _yaml_include_constructor)
 
 
-def _validate_mc_desc_model(mc_desc_model: Any) -> None:
-    _validate_mc_desc_model_for_schema(mc_desc_model)
-    _validate_mc_desc_model_for_constraints(mc_desc_model)
-    _validate_mc_desc_model_for_limitations(mc_desc_model)
+def _validate_mc_desc(mc_desc: Any) -> None:
+    _validate_mc_desc_for_schema(mc_desc)
+    _validate_mc_desc_for_constraints(mc_desc)
+    _validate_mc_desc_for_limitations(mc_desc)
 
 
-def _validate_mc_desc_model_for_schema(mc_desc_model: Any) -> None:
+def _validate_mc_desc_for_schema(mc_desc: Any) -> None:
     with importlib.resources.open_text('mcdecoder.schemas', 'mc_desc_schema.json') as file:
         schema = json.load(file)
 
-    jsonschema.validate(mc_desc_model, schema)
+    jsonschema.validate(mc_desc, schema)
 
 
-def _validate_mc_desc_model_for_constraints(mc_desc_model: Any) -> None:
-    for instruction_desc in mc_desc_model['instructions']:
+def _validate_mc_desc_for_constraints(mc_desc: Any) -> None:
+    for instruction_desc in mc_desc['instructions']:
         instruction_encoding = parse_instruction_encoding(
             instruction_desc['format'])
 
@@ -1029,8 +1029,8 @@ def _validate_instruction_encoding_lengths(instruction_desc: InstructionDescript
             f"The bit lengths of the instruction encodings must be the same: {instruction_desc['name']}")
 
 
-def _validate_mc_desc_model_for_limitations(mc_desc_model: Any) -> None:
-    for instruction_desc in mc_desc_model['instructions']:
+def _validate_mc_desc_for_limitations(mc_desc: Any) -> None:
+    for instruction_desc in mc_desc['instructions']:
         instruction_encoding = parse_instruction_encoding(
             instruction_desc['format'])
 
@@ -1060,23 +1060,23 @@ def _calc_instruction_encoding_element_bit_length(encoding_element: InstructionE
     return sum(len(field.bits_format) for field in encoding_element.fields)
 
 
-def _create_machine_decoder_model(machine_desc_model: MachineDescription) -> MachineDecoder:
+def _create_machine_decoder_model(machine_desc: MachineDescription) -> MachineDecoder:
     extras: Optional[Any] = None
-    if 'extras' in machine_desc_model:
-        extras = machine_desc_model['extras']
+    if 'extras' in machine_desc:
+        extras = machine_desc['extras']
 
-    return MachineDecoder(byteorder=machine_desc_model['byteorder'], extras=extras)
+    return MachineDecoder(byteorder=machine_desc['byteorder'], extras=extras)
 
 
 def _make_namespace_prefix(namespace: Optional[str]) -> str:
     return namespace + '_' if namespace is not None else ''
 
 
-def _create_instruction_decoder_model(instruction_desc_model: InstructionDescription) -> InstructionDecoder:
+def _create_instruction_decoder_model(instruction_desc: InstructionDescription) -> InstructionDecoder:
     """Create a model which contains information of individual instruction decoder"""
     # Parse instruction encoding
     instruction_encoding = parse_instruction_encoding(
-        instruction_desc_model['format'])
+        instruction_desc['format'])
     field_encodings = list(itertools.chain.from_iterable(
         element.fields for element in instruction_encoding.elements))
     instruction_bit_size = calc_instruction_bit_size(instruction_encoding)
@@ -1099,8 +1099,8 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
     # Create field decoders
     field_names = set(cast(str, field.name)
                       for field in field_encodings if field.name is not None)
-    field_extras_dict: Dict[str, Any] = cast(Dict[str, Any], instruction_desc_model['field_extras']) \
-        if 'field_extras' in instruction_desc_model else {}
+    field_extras_dict: Dict[str, Any] = cast(Dict[str, Any], instruction_desc['field_extras']) \
+        if 'field_extras' in instruction_desc else {}
     field_decoders = []
 
     for field_name in field_names:
@@ -1114,23 +1114,23 @@ def _create_instruction_decoder_model(instruction_desc_model: InstructionDescrip
         field_decoders, key=lambda field: field._msb, reverse=True)
 
     # Create instruction decode conditions
-    if 'match_condition' in instruction_desc_model:
+    if 'match_condition' in instruction_desc:
         match_condition = _parse_and_create_instruction_decoder_condition(
-            cast(str, instruction_desc_model['match_condition']))
+            cast(str, instruction_desc['match_condition']))
     else:
         match_condition = None
 
-    if 'unmatch_condition' in instruction_desc_model:
+    if 'unmatch_condition' in instruction_desc:
         unmatch_condition = _parse_and_create_instruction_decoder_condition(
-            cast(str, instruction_desc_model['unmatch_condition']))
+            cast(str, instruction_desc['unmatch_condition']))
     else:
         unmatch_condition = None
 
     # Create instruction decoder model
-    instruction_extras = instruction_desc_model['extras'] if 'extras' in instruction_desc_model else None
+    instruction_extras = instruction_desc['extras'] if 'extras' in instruction_desc else None
 
     return InstructionDecoder(
-        name=instruction_desc_model['name'],
+        name=instruction_desc['name'],
         _encoding=_instruction_encoding_string(instruction_encoding),
         encoding_element_bit_length=encoding_element_bit_length,
         length_of_encoding_elements=len(instruction_encoding.elements),

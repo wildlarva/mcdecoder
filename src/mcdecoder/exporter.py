@@ -45,7 +45,7 @@ class _InstructionInfo:
 
 def _export(mcfile: str, output_file: str) -> bool:
     # Load MC description
-    mc_desc = core.load_mc_description_model(mcfile)
+    mc_desc = core.load_mc_description(mcfile)
 
     # Parse instruction formats
     instruction_infos = [_InstructionInfo(instruction=instruction, encoding=core.parse_instruction_encoding(
