@@ -1024,7 +1024,7 @@ def _validate_mc_desc_for_constraint(mc_desc: Any) -> None:
             instruction_condition = _parse_instruction_condition(
                 instruction_desc['unmatch_condition'])
 
-        _validate_instruction_encoding_lengths(
+        _validate_instruction_encoding_length_consistency(
             instruction_desc, instruction_encoding)
         _validate_supported_instruction_length(
             instruction_desc, instruction_encoding)
@@ -1034,8 +1034,8 @@ def _validate_mc_desc_for_constraint(mc_desc: Any) -> None:
                 instruction_desc, instruction_encoding, instruction_condition)
 
 
-def _validate_instruction_encoding_lengths(instruction_desc: InstructionDescription,
-                                           instruction_encoding: InstructionEncodingDescription) -> None:
+def _validate_instruction_encoding_length_consistency(instruction_desc: InstructionDescription,
+                                                      instruction_encoding: InstructionEncodingDescription) -> None:
     encoding_element_lengths = set(_calc_instruction_encoding_element_bit_length(
         element) for element in instruction_encoding.elements)
     if len(encoding_element_lengths) != 1:
