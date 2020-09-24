@@ -7,7 +7,7 @@ lark-parser>=0.9.0
 numpy>=1.19.1
 pytest>=6.0.1
 pytest-cov>=2.10.1
-PyYAML>=5.2
+PyYAML>=5.3.1
 six>=1.14.0,<=1.14.0 # Specify version for jsonschema and conan
 Sphinx>=3.2.1
 sphinx-argparse>=0.2.5
