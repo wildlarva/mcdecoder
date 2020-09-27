@@ -10,7 +10,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='mcdecoder',
-    version='0.1.dev1',
+    version='0.1',
     packages=find_packages(
         'src', exclude=['test', 'test.*', '*.test', '*.test.*']),
     package_dir={'': 'src'},

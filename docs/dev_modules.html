@@ -91,21 +91,11 @@
 <li class="toctree-l1 current"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="dev_guides.html">Developer guides</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev_design.html">Internal design</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Internal modules and members</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-mcdecoder.__main__">__main__</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mcdecoder.app">app</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mcdecoder.generator">generator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mcdecoder.exporter">exporter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mcdecoder.emulator">emulator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mcdecoder.checker">checker</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mcdecoder.core">core</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mcdecoder.common">common</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mcdecoder.__version__">__version__</a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Internal modules and members</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev_coding_style.html">Coding style</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/wildlarva/mcdecoder">Back to GitHub</a></li>
 </ul>
 
@@ -216,7 +206,7 @@
 <dd><p>Implementation the sub-command ‘generate’.</p>
 <p>Generate MC decoder files from MC description file.</p>
 <p>If output_directory is not specified, it is defaulted to the current directory.
-If template_directory is not specified, the default decoder template (athrill decoder) is used.</p>
+If template_directory is not specified, the default decoder template (c_decoder decoder) is used.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1427,8 +1417,8 @@ Each element holds the boolean result whether a code is matched for an instructi
 </dd></dl>
 
 <dl class="py function">
-<dt id="mcdecoder.core.load_mc_description_model">
-<code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">load_mc_description_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mcfile</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mcdecoder.core.McDescription" title="mcdecoder.core.McDescription">mcdecoder.core.McDescription</a><a class="headerlink" href="#mcdecoder.core.load_mc_description_model" title="Permalink to this definition">¶</a></dt>
+<dt id="mcdecoder.core.load_mc_description">
+<code class="sig-prename descclassname">mcdecoder.core.</code><code class="sig-name descname">load_mc_description</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mcfile</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#mcdecoder.core.McDescription" title="mcdecoder.core.McDescription">mcdecoder.core.McDescription</a><a class="headerlink" href="#mcdecoder.core.load_mc_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load an MC description file and validate against the schema</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1570,7 +1560,7 @@ Each element holds the boolean result whether a code is matched for an instructi
 <span id="version"></span><h2>__version__<a class="headerlink" href="#module-mcdecoder.__version__" title="Permalink to this headline">¶</a></h2>
 <dl class="py data">
 <dt id="mcdecoder.__version__.__version__">
-<code class="sig-prename descclassname">mcdecoder.__version__.</code><code class="sig-name descname">__version__</code><em class="property"> = '0.1.dev1'</em><a class="headerlink" href="#mcdecoder.__version__.__version__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">mcdecoder.__version__.</code><code class="sig-name descname">__version__</code><em class="property"> = '0.1'</em><a class="headerlink" href="#mcdecoder.__version__.__version__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Current version of mcdecoder</p>
 </dd></dl>
 
@@ -1598,7 +1588,7 @@ Each element holds the boolean result whether a code is matched for an instructi
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, wildlarva
+        &copy; Copyright 2019-2020, wildlarva
 
     </p>
   </div>

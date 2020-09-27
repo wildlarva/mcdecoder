@@ -88,18 +88,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="guides.html">User guides</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="specifications.html">Specifications</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Command line option specification</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Positional Arguments">Positional Arguments</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Sub-commands:">Sub-commands:</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#generate">generate</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#export">export</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#emulate">emulate</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#check">check</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Command line option specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spec_mc_desc.html">MC description specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spec_mcdecoder_api.html">MC decoder API specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="spec_template_var.html">Template variable specification</a></li>
@@ -108,6 +97,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dev_docs.html">Documents for mcdecoder developers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/wildlarva/mcdecoder">Back to GitHub</a></li>
 </ul>
 
@@ -224,6 +214,7 @@
 <li><p>c_decoder: Generating standard decoder API in C</p></li>
 <li><p>athrill: Generating decoder API for athrill</p></li>
 </ul>
+<p>The gererator ‘athrill’ is deprecated and will be removed in version 1.0</p>
 </dd>
 <dt><kbd>--template</kbd></dt>
 <dd><p>A path to a directoy including user-defined template files</p>
@@ -238,8 +229,8 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate a decoder to &#39;out&#39; directory</span>
 mcdecoder generate --output out mc.yaml
 
-<span class="c1"># Generate codes with the generator &#39;athrill&#39;</span>
-mcdecoder generate --type athrill --output out mc.yaml
+<span class="c1"># Generate codes with the generator &#39;c_decoder&#39;</span>
+mcdecoder generate --type c_decoder --output out mc.yaml
 
 <span class="c1"># Generate codes according to user-defined template files in &#39;user_templates&#39; directory</span>
 mcdecoder generate --template user_templates --output out mc.yaml
@@ -392,7 +383,7 @@ mcdecoder check --input xx2d4800 mc.yaml
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, wildlarva
+        &copy; Copyright 2019-2020, wildlarva
 
     </p>
   </div>
