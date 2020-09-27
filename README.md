@@ -52,8 +52,8 @@ For more details, follow Installation steps below and go on to [Quickstart tutor
   - Hands-on approach to learn: write and test actual machine codes
 
 Implementing and maintaining a decoder are tough and cumbersome. The mcdecoder soothes these pains by generating a decoder.
-The mcdecoder was originally developed for [athrill](https://github.com/tmori/athrill/), a CPU emulator.
-It will be independent from athrill and be a more general tool in the near future.
+The mcdecoder was originally developed for [athrill](https://github.com/toppers/athrill), a CPU emulator.
+It is now independent from athrill.
 
 ## Requirements
 

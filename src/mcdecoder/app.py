@@ -89,8 +89,8 @@ def _create_parser() -> argparse.ArgumentParser:
               # Generate a decoder to 'out' directory
               mcdecoder generate --output out mc.yaml
 
-              # Generate codes with the generator 'athrill'
-              mcdecoder generate --type athrill --output out mc.yaml
+              # Generate codes with the generator 'c_decoder'
+              mcdecoder generate --type c_decoder --output out mc.yaml
               
               # Generate codes according to user-defined template files in 'user_templates' directory
               mcdecoder generate --template user_templates --output out mc.yaml
@@ -101,6 +101,8 @@ def _create_parser() -> argparse.ArgumentParser:
 
         * c_decoder: Generating standard decoder API in C
         * athrill: Generating decoder API for athrill
+
+        The gererator 'athrill' is deprecated and will be removed in version 1.0
         '''))
     generator_group.add_argument(
         '--template', metavar='templatedir', dest='template_directory',

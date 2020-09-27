@@ -17,7 +17,7 @@ def generate(mcfile: str, type: Optional[str] = None, template_directory: Option
     Generate MC decoder files from MC description file.
 
     If output_directory is not specified, it is defaulted to the current directory.
-    If template_directory is not specified, the default decoder template (athrill decoder) is used.
+    If template_directory is not specified, the default decoder template (c_decoder decoder) is used.
 
     :param mcfile: Path to an MC description file
     :param type: Code type to generate
