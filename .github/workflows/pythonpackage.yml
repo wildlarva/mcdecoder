@@ -22,7 +22,7 @@ jobs:
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.5
-    - name: Install dependencies
+    - name: Install dependencies from ${{ matrix.python-requirements }}
       run: |
         # install python tools and libraries
         python -m pip install --upgrade pip
