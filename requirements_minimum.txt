@@ -1,7 +1,7 @@
 behave==1.2.6
 conan==1.28.1
 deprecation==2.0.7
-Jinja2==2.11.2
+Jinja2==2.11.3
 jsonschema==3.2.0
 lark-parser==0.9.0
 numpy==1.19.1
