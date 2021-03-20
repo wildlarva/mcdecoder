@@ -6,14 +6,14 @@ Release cycle and versioniong policy
 Release cycle
 ********************************
 
-We have 2 regular releases of mcdecoder in a year, or once in 6 months.
+We have a yearly regular release of mcdecoder.
 Additionally, we have a bugfix release for the latest version each time we find bugs.
 
 ********************************
 Deprecation policy
 ********************************
 
-If some part of the specifications are marked :code:`deprecated`, they will be removed following the next 2 regular releases, that is, 1 year later.
+If some part of the specifications are marked :code:`deprecated`, they will be removed following the next 2 regular releases, that is, 2 year later.
 
 ********************************
 Versioning policy
