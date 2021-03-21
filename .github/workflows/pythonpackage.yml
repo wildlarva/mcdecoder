@@ -11,6 +11,7 @@ jobs:
       matrix:
         python-version: [3.8, 3.9]
         python-requirements: [requirements, requirements_minimum]
+        gcc-version: [7]
 
     steps:
     - uses: actions/checkout@v1
@@ -46,5 +47,8 @@ jobs:
       run: |
         pytest
     - name: Feature test
+      env:
+        CC: gcc-${{ matrix.gcc-version }}
+        CXX: g++-${{ matrix.gcc-version }}
       run: |
         make -C tests/feature clean test
