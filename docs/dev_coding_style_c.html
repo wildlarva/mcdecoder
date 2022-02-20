@@ -1,70 +1,36 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>C coding style &mdash; mcdecoder  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="C++ coding style" href="dev_coding_style_cpp.html" />
     <link rel="prev" title="Python coding style" href="dev_coding_style_python.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> mcdecoder
-          
-
-          
+            <a href="index.html" class="icon icon-home"> mcdecoder
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -72,19 +38,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="guides.html">User guides</a></li>
 <li class="toctree-l1"><a class="reference internal" href="specifications.html">Specifications</a></li>
@@ -104,82 +59,41 @@
 <li class="toctree-l1"><a class="reference external" href="https://github.com/wildlarva/mcdecoder">Back to GitHub</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">mcdecoder</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="dev_docs.html">Documents for mcdecoder developers</a> &raquo;</li>
-        
           <li><a href="dev_coding_style.html">Coding style</a> &raquo;</li>
-        
       <li>C coding style</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/dev_coding_style_c.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="c-coding-style">
-<h1>C coding style<a class="headerlink" href="#c-coding-style" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="c-coding-style">
+<h1>C coding style<a class="headerlink" href="#c-coding-style" title="Permalink to this headline"></a></h1>
 <p>The coding style of mcdecoder in C is based on <a class="reference external" href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a>.
 The mcdecoder adds some modifications to it
 because it is for C++ and some codes in mcdecoder are generated by a tool.</p>
-<div class="section" id="exceptions-to-the-rule">
-<h2>Exceptions to the rule<a class="headerlink" href="#exceptions-to-the-rule" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="naming">
-<h3>Naming<a class="headerlink" href="#naming" title="Permalink to this headline">¶</a></h3>
+<section id="exceptions-to-the-rule">
+<h2>Exceptions to the rule<a class="headerlink" href="#exceptions-to-the-rule" title="Permalink to this headline"></a></h2>
+<section id="naming">
+<h3>Naming<a class="headerlink" href="#naming" title="Permalink to this headline"></a></h3>
 <p>For type names, constant names, function names and enumerator names:</p>
 <dl>
 <dt>This project</dt><dd><p>You can use underscores to split the namespace part, the base part and
@@ -211,9 +125,9 @@ the generated part of a type name, we put underscore symbol between them.</p></l
 </dd>
 </dl>
 <p>You can see also <a class="reference external" href="https://google.github.io/styleguide/cppguide.html#Naming">the original ‘Naming’</a>.</p>
-</div>
-<div class="section" id="naming-enumerator-names">
-<h3>Naming / Enumerator Names<a class="headerlink" href="#naming-enumerator-names" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="naming-enumerator-names">
+<h3>Naming / Enumerator Names<a class="headerlink" href="#naming-enumerator-names" title="Permalink to this headline"></a></h3>
 <dl>
 <dt>This project</dt><dd><p>Use an enumeration type name prefix in an enumerator name:
 &lt;enumeration_type&gt;_&lt;enumerator&gt;.</p>
@@ -228,9 +142,9 @@ among enumeration types.</p>
 </dd>
 </dl>
 <p>You can see also <a class="reference external" href="https://google.github.io/styleguide/cppguide.html#Enumerator_Names">the original ‘Naming / Enumerator Names’</a>.</p>
-</div>
-<div class="section" id="formatting-line-length">
-<h3>Formatting / Line length<a class="headerlink" href="#formatting-line-length" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="formatting-line-length">
+<h3>Formatting / Line length<a class="headerlink" href="#formatting-line-length" title="Permalink to this headline"></a></h3>
 <dl class="simple">
 <dt>This project</dt><dd><p>127 characters is the maximum.</p>
 </dd>
@@ -241,85 +155,60 @@ make it code vertically longer and less readable in my opinion.</p>
 </dd>
 </dl>
 <p>You can see also <a class="reference external" href="https://google.github.io/styleguide/cppguide.html#Line_Length">the original ‘Formatting / Line length’</a>.</p>
-</div>
-</div>
-<div class="section" id="addition-to-the-rule">
-<h2>Addition to the rule<a class="headerlink" href="#addition-to-the-rule" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="c-version">
-<h3>C Version<a class="headerlink" href="#c-version" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="addition-to-the-rule">
+<h2>Addition to the rule<a class="headerlink" href="#addition-to-the-rule" title="Permalink to this headline"></a></h2>
+<section id="c-version">
+<h3>C Version<a class="headerlink" href="#c-version" title="Permalink to this headline"></a></h3>
 <dl class="simple">
 <dt>Rule</dt><dd><p>Code should target C11, i.e., should not use C18 features.</p>
 </dd>
 <dt>Rationale</dt><dd><p>To be portable to environments supporting C11 and above.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="comments-comment-style">
-<h3>Comments / Comment Style<a class="headerlink" href="#comments-comment-style" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="comments-comment-style">
+<h3>Comments / Comment Style<a class="headerlink" href="#comments-comment-style" title="Permalink to this headline"></a></h3>
 <dl class="simple">
 <dt>Rule</dt><dd><p>Use <code class="code docutils literal notranslate"><span class="pre">/**</span> <span class="pre">*/</span></code> in API comments and <code class="code docutils literal notranslate"><span class="pre">/*</span> <span class="pre">*/</span></code> for others.</p>
 </dd>
 <dt>Rationale</dt><dd><p>To identify API comments from Doxygen.</p>
 </dd>
 </dl>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="dev_coding_style_cpp.html" class="btn btn-neutral float-right" title="C++ coding style" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="dev_coding_style_python.html" class="btn btn-neutral float-left" title="Python coding style" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dev_coding_style_python.html" class="btn btn-neutral float-left" title="Python coding style" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dev_coding_style_cpp.html" class="btn btn-neutral float-right" title="C++ coding style" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2019-2020, wildlarva
-
-    </p>
+    <p>&#169; Copyright 2019-2020, wildlarva.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
