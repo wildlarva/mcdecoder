@@ -10,7 +10,7 @@ jobs:
       matrix:
         python-version: [3.8, 3.10]
         python-requirements: [requirements, requirements_minimum]
-        gcc-version: [9, 11]
+        gcc-version: [9]
 
     steps:
     - uses: actions/checkout@v1
