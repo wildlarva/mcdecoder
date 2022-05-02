@@ -153,8 +153,8 @@ Development structure and dependencies
     node [shape=box]
     edge [style=dotted]
 
-    subgraph cluster_conan {
-        label = "Conan"
+    subgraph cluster_cmake {
+        label = "CMake"
 
         cucumber_cpp [label = "Cucumber-Cpp"]
         google_test [label = "Google Test"]
@@ -187,6 +187,7 @@ Development structure and dependencies
 
     mcdecoder -> pytest_cov [lhead=cluster_pytest]
     mcdecoder -> behave
+    mcdecoder -> cucumber_cpp [lhead=cluster_cmake]
     mcdecoder -> cucumber -> cucumber_cpp
     mcdecoder -> sphinx_rtd_theme [lhead=cluster_sphinx]
     sphinx_rtd_theme -> graphviz [ltail=cluster_sphinx]
@@ -205,8 +206,9 @@ Packages
     Behave                        Used for feature tests for mcdecoder
     Bundler                       Used to fix the version of Cucumber.
                                   Cucumber-Cpp requires Cucumber v2.0
+    CMake                         Used to build mcdecoder feature tests.
+                                  It is also used to fetch and build packages of C/C++
     Cucumber                      Used for feature tests for generated decoders
-    Conan                         Used to manage packages of C/C++
     Cucumber-Cpp                  Used for feature tests for generated decoders in C/C++
     Google Test                   Provides testing functionalities to Cucumber-Cpp
     Sphinx                        Used to build documents

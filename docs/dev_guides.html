@@ -84,7 +84,7 @@
 <section id="requirements-for-development">
 <h2>Requirements for development<a class="headerlink" href="#requirements-for-development" title="Permalink to this headline"></a></h2>
 <ul class="simple">
-<li><p>Ubuntu 18.x or above</p></li>
+<li><p>Ubuntu 20.x or above</p></li>
 <li><p>Python 3.8 or above (with pip and venv)</p>
 <ul>
 <li><p>Recommended packages: python3.8, python3-pip and python3.8-venv</p></li>
@@ -106,7 +106,7 @@ If you need a stable code base, please check out one of the release tags.</p>
 <section id="how-to-setup-environment-for-development">
 <h2>How to setup environment for development<a class="headerlink" href="#how-to-setup-environment-for-development" title="Permalink to this headline"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install platform tools</span>
-sudo apt install graphviz
+sudo apt install cmake graphviz
 
 <span class="c1"># Clone mcdecoder</span>
 git clone https://github.com/wildlarva/mcdecoder.git
@@ -118,7 +118,6 @@ python3.8 -m venv env
 
 <span class="c1"># Install python tools and libraries</span>
 pip install -r requirements.txt
-conan remote add helmesjo https://api.bintray.com/conan/helmesjo/public-conan
 
 <span class="c1"># Install ruby tools</span>
 sudo gem install bundler
@@ -153,7 +152,7 @@ pytest --cov<span class="o">=</span>src --cov-report html
 <span class="nb">source</span> env/bin/activate
 
 <span class="c1"># Run tests</span>
-make -C tests/feature clean <span class="nb">test</span>
+cmake -B build <span class="o">&amp;&amp;</span> cmake --build build <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nb">cd</span> build <span class="o">&amp;&amp;</span> ctest<span class="o">)</span>
 </pre></div>
 </div>
 </section>

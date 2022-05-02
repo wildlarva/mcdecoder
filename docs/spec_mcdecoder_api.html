@@ -102,13 +102,13 @@
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">succeeded</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="cm">/* Which instruction is decoded? */</span><span class="w"></span>
 <span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">instruction_id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nl">InstructionId_k_push</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_k_push</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="cm">/* Get the decoded result for push */</span><span class="w"></span>
 <span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;instruction: push</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;cond: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">cond</span><span class="p">);</span><span class="w"></span>
 <span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;register_list: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">register_list</span><span class="p">);</span><span class="w"></span>
 <span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nl">InstructionId_kUnknown</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_kUnknown</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="cm">/* Handle an unknown instruction */</span><span class="w"></span>
 <span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>

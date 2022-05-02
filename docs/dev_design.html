@@ -263,13 +263,13 @@ so its performance is so important.</p></li>
 <h2>Development environment<a class="headerlink" href="#development-environment" title="Permalink to this headline"></a></h2>
 <section id="development-structure-and-dependencies">
 <h3>Development structure and dependencies<a class="headerlink" href="#development-structure-and-dependencies" title="Permalink to this headline"></a></h3>
-<div class="graphviz"><img src="_images/graphviz-d691dd417210887720052335573973caea2094d1.png" alt="digraph develop {
+<div class="graphviz"><img src="_images/graphviz-e6e9111ac1803494d1e3c1609a6e6514cda8e21b.png" alt="digraph develop {
 compound = true
 node [shape=box]
 edge [style=dotted]
 
-subgraph cluster_conan {
-    label = &quot;Conan&quot;
+subgraph cluster_cmake {
+    label = &quot;CMake&quot;
 
     cucumber_cpp [label = &quot;Cucumber-Cpp&quot;]
     google_test [label = &quot;Google Test&quot;]
@@ -302,6 +302,7 @@ graphviz [label = &quot;Graphviz&quot;]
 
 mcdecoder -&gt; pytest_cov [lhead=cluster_pytest]
 mcdecoder -&gt; behave
+mcdecoder -&gt; cucumber_cpp [lhead=cluster_cmake]
 mcdecoder -&gt; cucumber -&gt; cucumber_cpp
 mcdecoder -&gt; sphinx_rtd_theme [lhead=cluster_sphinx]
 sphinx_rtd_theme -&gt; graphviz [ltail=cluster_sphinx]
@@ -336,11 +337,12 @@ sphinx_rtd_theme -&gt; graphviz [ltail=cluster_sphinx]
 <td><p>Used to fix the version of Cucumber.
 Cucumber-Cpp requires Cucumber v2.0</p></td>
 </tr>
-<tr class="row-odd"><td><p>Cucumber</p></td>
-<td><p>Used for feature tests for generated decoders</p></td>
+<tr class="row-odd"><td><p>CMake</p></td>
+<td><p>Used to build mcdecoder feature tests.
+It is also used to fetch and build packages of C/C++</p></td>
 </tr>
-<tr class="row-even"><td><p>Conan</p></td>
-<td><p>Used to manage packages of C/C++</p></td>
+<tr class="row-even"><td><p>Cucumber</p></td>
+<td><p>Used for feature tests for generated decoders</p></td>
 </tr>
 <tr class="row-odd"><td><p>Cucumber-Cpp</p></td>
 <td><p>Used for feature tests for generated decoders in C/C++</p></td>

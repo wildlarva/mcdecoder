@@ -5,7 +5,7 @@ Developer guides
 Requirements for development
 =============================================
 
-* Ubuntu 18.x or above
+* Ubuntu 20.x or above
 * Python 3.8 or above (with pip and venv)
 
   * Recommended packages: python3.8, python3-pip and python3.8-venv
@@ -27,7 +27,7 @@ How to setup environment for development
 .. code-block:: bash
 
     # Install platform tools
-    sudo apt install graphviz
+    sudo apt install cmake graphviz
 
     # Clone mcdecoder
     git clone https://github.com/wildlarva/mcdecoder.git
@@ -39,7 +39,6 @@ How to setup environment for development
 
     # Install python tools and libraries
     pip install -r requirements.txt
-    conan remote add helmesjo https://api.bintray.com/conan/helmesjo/public-conan
 
     # Install ruby tools
     sudo gem install bundler
@@ -77,7 +76,7 @@ How to run tests for generated decoders
     source env/bin/activate
 
     # Run tests
-    make -C tests/feature clean test
+    cmake -B build && cmake --build build && (cd build && ctest)
 
 How to build documents
 =============================================

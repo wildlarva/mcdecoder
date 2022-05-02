@@ -382,16 +382,16 @@ as you did with <code class="code docutils literal notranslate"><span class="pre
 
 <span class="w">    </span><span class="cm">/* Which instruction is decoded? */</span><span class="w"></span>
 <span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">instruction_id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="k">case</span><span class="w"> </span><span class="nl">InstructionId_k_add_immediate_a1</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_k_add_immediate_a1</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="cm">/* Get the decoded result of add_immediate_a1 */</span><span class="w"></span>
 <span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Instruction: add_immediate_a1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Rn: %d</span><span class="se">\n</span><span class="s">Rd: %d</span><span class="se">\n</span><span class="s">imm12: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">Rn</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">Rd</span><span class="p">,</span><span class="w"></span>
 <span class="w">               </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">imm12</span><span class="p">);</span><span class="w"></span>
 <span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">      </span><span class="k">case</span><span class="w"> </span><span class="nl">InstructionId_k_push_a1</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_k_push_a1</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="cm">/* Handle push_a1 */</span><span class="w"></span>
 <span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">      </span><span class="k">case</span><span class="w"> </span><span class="nl">InstructionId_kUnknown</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_kUnknown</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="cm">/* Handle an unknown instruction */</span><span class="w"></span>
 <span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
 <span class="w">      </span><span class="k">default</span><span class="o">:</span><span class="w"></span>
