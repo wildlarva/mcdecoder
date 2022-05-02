@@ -2,7 +2,6 @@
     "editor.formatOnSave": true,
     "files.associations": {
         "**/*templates/**": "jinja",
-        "ctest/conanfile.txt": "properties",
         "cctype": "cpp",
         "clocale": "cpp",
         "cmath": "cpp",
@@ -97,5 +96,5 @@
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": false,
-    "restructuredtext.confPath": "${workspaceFolder}/src_docs",
+    "esbonio.sphinx.confDir": "${workspaceFolder}/src_docs",
 }

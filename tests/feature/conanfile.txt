@@ -1,5 +1,0 @@
-[requires]
-cucumber-cpp/0.5@helmesjo/stable
-
-[generators]
-make
