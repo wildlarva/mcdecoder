@@ -263,7 +263,7 @@ so its performance is so important.</p></li>
 <h2>Development environment<a class="headerlink" href="#development-environment" title="Permalink to this headline"></a></h2>
 <section id="development-structure-and-dependencies">
 <h3>Development structure and dependencies<a class="headerlink" href="#development-structure-and-dependencies" title="Permalink to this headline"></a></h3>
-<div class="graphviz"><img src="_images/graphviz-e6e9111ac1803494d1e3c1609a6e6514cda8e21b.png" alt="digraph develop {
+<div class="graphviz"><img src="_images/graphviz-08e410f68e83dc95224d409071abb03ff2b6a410.png" alt="digraph develop {
 compound = true
 node [shape=box]
 edge [style=dotted]
@@ -273,8 +273,10 @@ subgraph cluster_cmake {
 
     cucumber_cpp [label = &quot;Cucumber-Cpp&quot;]
     google_test [label = &quot;Google Test&quot;]
+    boost [label = &quot;Boost&quot;]
 
     cucumber_cpp -&gt; google_test
+    cucumber_cpp -&gt; boost
 }
 
 subgraph cluster_sphinx {
@@ -333,36 +335,39 @@ sphinx_rtd_theme -&gt; graphviz [ltail=cluster_sphinx]
 <tr class="row-odd"><td><p>Behave</p></td>
 <td><p>Used for feature tests for mcdecoder</p></td>
 </tr>
-<tr class="row-even"><td><p>Bundler</p></td>
+<tr class="row-even"><td><p>Boost</p></td>
+<td><p>Provides core functionalities to Cucumber-Cpp</p></td>
+</tr>
+<tr class="row-odd"><td><p>Bundler</p></td>
 <td><p>Used to fix the version of Cucumber.
 Cucumber-Cpp requires Cucumber v2.0</p></td>
 </tr>
-<tr class="row-odd"><td><p>CMake</p></td>
+<tr class="row-even"><td><p>CMake</p></td>
 <td><p>Used to build mcdecoder feature tests.
 It is also used to fetch and build packages of C/C++</p></td>
 </tr>
-<tr class="row-even"><td><p>Cucumber</p></td>
+<tr class="row-odd"><td><p>Cucumber</p></td>
 <td><p>Used for feature tests for generated decoders</p></td>
 </tr>
-<tr class="row-odd"><td><p>Cucumber-Cpp</p></td>
+<tr class="row-even"><td><p>Cucumber-Cpp</p></td>
 <td><p>Used for feature tests for generated decoders in C/C++</p></td>
 </tr>
-<tr class="row-even"><td><p>Google Test</p></td>
+<tr class="row-odd"><td><p>Google Test</p></td>
 <td><p>Provides testing functionalities to Cucumber-Cpp</p></td>
 </tr>
-<tr class="row-odd"><td><p>Sphinx</p></td>
+<tr class="row-even"><td><p>Sphinx</p></td>
 <td><p>Used to build documents</p></td>
 </tr>
-<tr class="row-even"><td><p>sphinx-argparse</p></td>
+<tr class="row-odd"><td><p>sphinx-argparse</p></td>
 <td><p>Used to build documents about command line options</p></td>
 </tr>
-<tr class="row-odd"><td><p>Sphinx JSON Schema</p></td>
+<tr class="row-even"><td><p>Sphinx JSON Schema</p></td>
 <td><p>Used to build documents about the schema of MC description</p></td>
 </tr>
-<tr class="row-even"><td><p>Read the Docs Sphinx Theme</p></td>
+<tr class="row-odd"><td><p>Read the Docs Sphinx Theme</p></td>
 <td><p>Used to improve usability of generated documents</p></td>
 </tr>
-<tr class="row-odd"><td><p>Graphviz</p></td>
+<tr class="row-even"><td><p>Graphviz</p></td>
 <td><p>Used to show diagrams in documents</p></td>
 </tr>
 </tbody>
