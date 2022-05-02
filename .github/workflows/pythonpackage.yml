@@ -19,12 +19,12 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Set up Ruby
-      uses: actions/setup-ruby@v1
+      uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.5
     - name: Install dependencies on ubuntu
       run: |
-        apt install cmake
+        sudo apt-get install cmake libboost-all-dev
     - name: Install dependencies from ${{ matrix.python-requirements }}
       run: |
         python -m pip install --upgrade pip
