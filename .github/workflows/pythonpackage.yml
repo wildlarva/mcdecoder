@@ -4,14 +4,13 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.8, 3.9]
+        python-version: [3.8, 3.10]
         python-requirements: [requirements, requirements_minimum]
-        gcc-version: [7]
+        gcc-version: [9, 11]
 
     steps:
     - uses: actions/checkout@v1
@@ -23,14 +22,15 @@ jobs:
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.5
+    - name: Install dependencies on ubuntu
+      run: |
+        apt install cmake
     - name: Install dependencies from ${{ matrix.python-requirements }}
       run: |
-        # install python tools and libraries
         python -m pip install --upgrade pip
         pip install -r ${{ matrix.python-requirements }}.txt
-        conan remote add helmesjo https://api.bintray.com/conan/helmesjo/public-conan
-
-        # install ruby tools
+    - name: Install dependencies on ruby
+      run: |
         gem install bundler
         bundle install
     - name: Lint with flake8
@@ -46,9 +46,11 @@ jobs:
     - name: Unit test
       run: |
         pytest
-#    - name: Feature test
-#      env:
-#        CC: gcc-${{ matrix.gcc-version }}
-#        CXX: g++-${{ matrix.gcc-version }}
-#      run: |
-#        make -C tests/feature clean test
+    - name: Feature test
+      env:
+        CC: gcc-${{ matrix.gcc-version }}
+        CXX: g++-${{ matrix.gcc-version }}
+      run: |
+        cmake -B build
+        cmake --build build
+        (cd build && ctest)
