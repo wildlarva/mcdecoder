@@ -158,8 +158,10 @@ Development structure and dependencies
 
         cucumber_cpp [label = "Cucumber-Cpp"]
         google_test [label = "Google Test"]
+        boost [label = "Boost"]
 
         cucumber_cpp -> google_test
+        cucumber_cpp -> boost
     }
 
     subgraph cluster_sphinx {
@@ -204,6 +206,7 @@ Packages
     pytest                        Used for unit tests for mcdecoder 
     pytest-cov                    Used to measure code coverage of unit tests
     Behave                        Used for feature tests for mcdecoder
+    Boost                         Provides core functionalities to Cucumber-Cpp
     Bundler                       Used to fix the version of Cucumber.
                                   Cucumber-Cpp requires Cucumber v2.0
     CMake                         Used to build mcdecoder feature tests.

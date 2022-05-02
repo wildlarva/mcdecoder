@@ -27,7 +27,7 @@ How to setup environment for development
 .. code-block:: bash
 
     # Install platform tools
-    sudo apt install cmake graphviz
+    sudo apt install cmake libboost-all-dev graphviz
 
     # Clone mcdecoder
     git clone https://github.com/wildlarva/mcdecoder.git
