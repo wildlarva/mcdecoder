@@ -57,12 +57,12 @@ It is now independent from athrill.
 
 ## Requirements
 
-- Python 3.8 (with pip)
+- Python 3.8 and above (with pip)
 
 ## Installation
 
 ```bash
-python3.8 -m pip install mcdecoder
+python3 -m pip install mcdecoder
 ```
 
 ## License
