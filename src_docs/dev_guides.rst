@@ -10,7 +10,7 @@ Requirements for development
 
   * Recommended packages: python3.8, python3-pip and python3.8-venv
 
-* Ruby 2.5 or above (with RubyGems and Ruby header files)
+* Ruby 3.0 or above (with RubyGems and Ruby header files)
 
   * Recommended packages: ruby and ruby-dev
 
