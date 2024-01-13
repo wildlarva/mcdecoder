@@ -12,13 +12,9 @@ include(FetchContent)
 FetchContent_Declare(
   CucumberCpp
   GIT_REPOSITORY https://github.com/cucumber/cucumber-cpp.git
-  GIT_TAG a41565d8fd7b87fd160e441602b398dc76f6d739
+  GIT_TAG v0.7.0
 )
 FetchContent_MakeAvailable(CucumberCpp)
-
-# Get Google Test source directory
-ExternalProject_Get_property(gmock SOURCE_DIR)
-set(GTEST_ROOT ${SOURCE_DIR})
 
 #------------------------------------------------------------------------------
 # Variables
@@ -101,7 +97,6 @@ foreach(decoder_type ${DECODER_TYPES})
     ${DECODER_TEST_TARGET} PRIVATE
     .
     ${DECODER_DIR}
-    ${GTEST_ROOT}/googletest/include
   )
 
   #------------------------------------------------------------------------------
