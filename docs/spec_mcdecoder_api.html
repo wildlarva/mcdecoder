@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MC decoder API specification &mdash; mcdecoder  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="_static/css/override.css?v=5a14f012" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -29,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> mcdecoder
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            mcdecoder
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -69,9 +76,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="specifications.html">Specifications</a> &raquo;</li>
-      <li>MC decoder API specification</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="specifications.html">Specifications</a></li>
+      <li class="breadcrumb-item active">MC decoder API specification</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/spec_mcdecoder_api.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -82,42 +89,42 @@
            <div itemprop="articleBody">
              
   <section id="mc-decoder-api-specification">
-<h1>MC decoder API specification<a class="headerlink" href="#mc-decoder-api-specification" title="Permalink to this headline"></a></h1>
+<h1>MC decoder API specification<a class="headerlink" href="#mc-decoder-api-specification" title="Permalink to this heading"></a></h1>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
 <p>Here’s an example of using <code class="code docutils literal notranslate"><span class="pre">DecodeInstruction</span></code> (without namespace).</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;mcdecoder.h&quot;</span><span class="cp"></span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;mcdecoder.h&quot;</span>
 
-<span class="cm">/* Decode an instruction */</span><span class="w"></span>
-<span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">kCodes</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x48</span><span class="p">,</span><span class="w"> </span><span class="mh">0x2d</span><span class="p">,</span><span class="w"> </span><span class="mh">0xe9</span><span class="p">,</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+<span class="cm">/* Decode an instruction */</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">kCodes</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x48</span><span class="p">,</span><span class="w"> </span><span class="mh">0x2d</span><span class="p">,</span><span class="w"> </span><span class="mh">0xe9</span><span class="p">,</span><span class="w"> </span><span class="p">};</span>
 
-<span class="n">DecodeRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-<span class="n">DecodeResult</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="w"></span>
-<span class="kt">bool</span><span class="w"> </span><span class="n">succeeded</span><span class="p">;</span><span class="w"></span>
+<span class="n">DecodeRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+<span class="n">DecodeResult</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">succeeded</span><span class="p">;</span>
 
-<span class="n">request</span><span class="p">.</span><span class="n">codes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">kCodes</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
-<span class="n">succeeded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DecodeInstruction</span><span class="p">(</span><span class="o">&amp;</span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">result</span><span class="p">);</span><span class="w"></span>
+<span class="n">request</span><span class="p">.</span><span class="n">codes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">kCodes</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="n">succeeded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DecodeInstruction</span><span class="p">(</span><span class="o">&amp;</span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">result</span><span class="p">);</span>
 
-<span class="cm">/* Decoding succeeded? */</span><span class="w"></span>
-<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">succeeded</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="cm">/* Which instruction is decoded? */</span><span class="w"></span>
-<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">instruction_id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_k_push</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="cm">/* Get the decoded result for push */</span><span class="w"></span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;instruction: push</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;cond: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">cond</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;register_list: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">register_list</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_kUnknown</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="cm">/* Handle an unknown instruction */</span><span class="w"></span>
-<span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="cm">/* Decoding succeeded? */</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">succeeded</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* Which instruction is decoded? */</span>
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">instruction_id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_k_push</span><span class="p">:</span>
+<span class="w">        </span><span class="cm">/* Get the decoded result for push */</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;instruction: push</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;cond: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">cond</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;register_list: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">push</span><span class="p">.</span><span class="n">register_list</span><span class="p">);</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_kUnknown</span><span class="p">:</span>
+<span class="w">        </span><span class="cm">/* Handle an unknown instruction */</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </section>
 <section id="types">
-<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline"></a></h2>
+<h2>Types<a class="headerlink" href="#types" title="Permalink to this heading"></a></h2>
 <dl class="c struct">
 <dt class="sig sig-object c" id="c.DecodeRequest">
 <span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DecodeRequest</span></span></span><a class="headerlink" href="#c.DecodeRequest" title="Permalink to this definition"></a><br /></dt>
@@ -203,7 +210,7 @@
 
 </section>
 <section id="macros">
-<h2>Macros<a class="headerlink" href="#macros" title="Permalink to this headline"></a></h2>
+<h2>Macros<a class="headerlink" href="#macros" title="Permalink to this heading"></a></h2>
 <dl class="c var">
 <dt class="sig sig-object c" id="c.INSTRUCTION_ID_MAX">
 <a class="reference internal" href="#c.InstructionId" title="InstructionId"><span class="n"><span class="pre">InstructionId</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">INSTRUCTION_ID_MAX</span></span></span><a class="headerlink" href="#c.INSTRUCTION_ID_MAX" title="Permalink to this definition"></a><br /></dt>
@@ -212,19 +219,19 @@
 
 </section>
 <section id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h2>
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h2>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.DecodeInstruction">
 <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DecodeInstruction</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#c.DecodeRequest" title="DecodeRequest"><span class="n"><span class="pre">DecodeRequest</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">request</span></span>, <a class="reference internal" href="#c.DecodeResult" title="DecodeResult"><span class="n"><span class="pre">DecodeResult</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.DecodeInstruction" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Decode an instruction</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>request</strong> – Decoding request</p></li>
 <li><p><strong>result</strong> – Decoding result</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><code class="code docutils literal notranslate"><span class="pre">true</span></code> if an instruction matches codes. <code class="code docutils literal notranslate"><span class="pre">false</span></code> otherwise</p>
 </dd>
 </dl>

@@ -10,7 +10,7 @@ Requirements for development
 
   * Recommended packages: python3.8, python3-pip and python3.8-venv
 
-* Ruby 2.5 or above (with RubyGems and Ruby header files)
+* Ruby 3.0 or above (with RubyGems and Ruby header files)
 
   * Recommended packages: ruby and ruby-dev
 
@@ -27,7 +27,7 @@ How to setup environment for development
 .. code-block:: bash
 
     # Install platform tools
-    sudo apt install cmake libboost-all-dev graphviz
+    sudo apt install cmake graphviz libboost-all-dev nlohmann-json3-dev libasio-dev libtclap-dev
 
     # Clone mcdecoder
     git clone https://github.com/wildlarva/mcdecoder.git
@@ -42,6 +42,7 @@ How to setup environment for development
 
     # Install ruby tools
     sudo gem install bundler
+    bundle config set --local path gems
     bundle install
 
     # Install mcdecoder

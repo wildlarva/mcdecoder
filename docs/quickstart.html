@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quickstart tutorial &mdash; mcdecoder  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="_static/css/override.css?v=5a14f012" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -29,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> mcdecoder
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            mcdecoder
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -67,9 +74,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="guides.html">User guides</a> &raquo;</li>
-      <li>Quickstart tutorial</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="guides.html">User guides</a></li>
+      <li class="breadcrumb-item active">Quickstart tutorial</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -80,7 +87,7 @@
            <div itemprop="articleBody">
              
   <section id="quickstart-tutorial">
-<h1>Quickstart tutorial<a class="headerlink" href="#quickstart-tutorial" title="Permalink to this headline"></a></h1>
+<h1>Quickstart tutorial<a class="headerlink" href="#quickstart-tutorial" title="Permalink to this heading"></a></h1>
 <p>You can generate a machine code decoder with mcdecoder
 by defining specifications of machine code.
 In this tutorial, you’ll see how to define machine code specifications
@@ -94,7 +101,7 @@ and generate a decoder from the specification.</p>
 <li><p>Run the decoder from a C client code</p></li>
 </ol>
 <section id="introduce-an-example-instruction-encoding-to-be-decoded">
-<h2>1. Introduce an example instruction encoding to be decoded<a class="headerlink" href="#introduce-an-example-instruction-encoding-to-be-decoded" title="Permalink to this headline"></a></h2>
+<h2>1. Introduce an example instruction encoding to be decoded<a class="headerlink" href="#introduce-an-example-instruction-encoding-to-be-decoded" title="Permalink to this heading"></a></h2>
 <p>In this tutorial, We use the ARM instructions below as an example.</p>
 <ul class="simple">
 <li><p>ADD (immediate, ARM) Encoding A1</p></li>
@@ -102,41 +109,41 @@ and generate a decoder from the specification.</p>
 </ul>
 <p>We ignore instruction matching conditions using field values
 (e.g. Rn == 0b1111 and S == 0) here for simplicity.</p>
-<table class="colwidths-given instruction-encoding docutils align-default" id="id1">
+<table class="instruction-encoding docutils align-default" id="id1">
 <caption><span class="caption-text">The instruction encoding of ADD (immediate, ARM) Encoding A1</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
 <colgroup>
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
 </colgroup>
 <tbody>
 <tr class="row-odd"><td colspan="2"><p>MSB</p></td>
@@ -187,41 +194,41 @@ and generate a decoder from the specification.</p>
 </tr>
 </tbody>
 </table>
-<table class="colwidths-given instruction-encoding docutils align-default" id="id2">
+<table class="instruction-encoding docutils align-default" id="id2">
 <caption><span class="caption-text">The instruction encoding of PUSH Encoding A1</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
 <colgroup>
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
-<col style="width: 3%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
+<col style="width: 3.1%" />
 </colgroup>
 <tbody>
 <tr class="row-odd"><td colspan="2"><p>MSB</p></td>
@@ -272,7 +279,7 @@ and generate a decoder from the specification.</p>
 </table>
 </section>
 <section id="write-an-mc-description-to-express-the-encoding">
-<h2>2. Write an MC description to express the encoding<a class="headerlink" href="#write-an-mc-description-to-express-the-encoding" title="Permalink to this headline"></a></h2>
+<h2>2. Write an MC description to express the encoding<a class="headerlink" href="#write-an-mc-description-to-express-the-encoding" title="Permalink to this heading"></a></h2>
 <p>Write machine code specifications as a file.
 In mcdecoder, we call it a machine code description file or
 an MC description file.
@@ -285,19 +292,19 @@ See <a class="reference internal" href="spec_mc_desc.html"><span class="doc">MC 
 <p>Make <code class="code docutils literal notranslate"><span class="pre">arm.yaml</span></code> with the following content.</p>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">arm.yaml</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">byteorder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">little</span><span class="w"></span>
-<span class="nt">instructions</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add_immediate_a1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">push_a1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">byteorder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">little</span>
+<span class="nt">instructions</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add_immediate_a1</span>
+<span class="w">    </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">push_a1</span>
+<span class="w">    </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list</span>
 </pre></div>
 </div>
 </div>
 </section>
 <section id="check-if-the-mc-description-is-working">
-<h2>3. Check if the MC description is working<a class="headerlink" href="#check-if-the-mc-description-is-working" title="Permalink to this headline"></a></h2>
+<h2>3. Check if the MC description is working<a class="headerlink" href="#check-if-the-mc-description-is-working" title="Permalink to this heading"></a></h2>
 <p>Now you have a minimum MC description.
 Let’s check if it is working.
 For this, you can use <code class="code docutils literal notranslate"><span class="pre">mcdecoder</span> <span class="pre">emulate</span></code> command
@@ -311,17 +318,17 @@ and the fields in its encoding format should be:</p>
 <li><p>imm12 = 4</p></li>
 </ul>
 <p>Run the command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder emulate arm.yaml --input e28db004
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder<span class="w"> </span>emulate<span class="w"> </span>arm.yaml<span class="w"> </span>--input<span class="w"> </span>e28db004
 </pre></div>
 </div>
 <p>Its output will be…</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>instruction: add_immediate_a1
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>instruction:<span class="w"> </span>add_immediate_a1
 
-cond: <span class="m">14</span>, 0xe, 0b1110
-S: <span class="m">0</span>, 0x0, 0b0
-Rn: <span class="m">13</span>, 0xd, 0b1101
-Rd: <span class="m">11</span>, 0xb, 0b1011
-imm12: <span class="m">4</span>, 0x4, 0b100
+cond:<span class="w"> </span><span class="m">14</span>,<span class="w"> </span>0xe,<span class="w"> </span>0b1110
+S:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span>0x0,<span class="w"> </span>0b0
+Rn:<span class="w"> </span><span class="m">13</span>,<span class="w"> </span>0xd,<span class="w"> </span>0b1101
+Rd:<span class="w"> </span><span class="m">11</span>,<span class="w"> </span>0xb,<span class="w"> </span>0b1011
+imm12:<span class="w"> </span><span class="m">4</span>,<span class="w"> </span>0x4,<span class="w"> </span>0b100
 </pre></div>
 </div>
 <p>Fine. It looks working.</p>
@@ -329,26 +336,26 @@ imm12: <span class="m">4</span>, 0x4, 0b100
 about <code class="code docutils literal notranslate"><span class="pre">emulate</span></code> sub-command if you’d like.</p>
 </section>
 <section id="generate-a-decoder-from-the-mc-description">
-<h2>4. Generate a decoder from the MC description<a class="headerlink" href="#generate-a-decoder-from-the-mc-description" title="Permalink to this headline"></a></h2>
+<h2>4. Generate a decoder from the MC description<a class="headerlink" href="#generate-a-decoder-from-the-mc-description" title="Permalink to this heading"></a></h2>
 <p>Run <code class="code docutils literal notranslate"><span class="pre">mcdecoder</span> <span class="pre">generate</span></code> command to generate a decoder
 from the MC description.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder generate --output out arm.yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mcdecoder<span class="w"> </span>generate<span class="w"> </span>--output<span class="w"> </span>out<span class="w"> </span>arm.yaml
 </pre></div>
 </div>
 <p>You’ll get generated files below:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>out
-├── mcdecoder.c
-└── mcdecoder.h
+├──<span class="w"> </span>mcdecoder.c
+└──<span class="w"> </span>mcdecoder.h
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="spec_commandline_options.html"><span class="doc">Command line option specification</span></a> for more details
 about <code class="code docutils literal notranslate"><span class="pre">generate</span></code> sub-command if you’d like.</p>
 </section>
 <section id="run-the-decoder-from-a-c-client-code">
-<h2>5. Run the decoder from a C client code<a class="headerlink" href="#run-the-decoder-from-a-c-client-code" title="Permalink to this headline"></a></h2>
+<h2>5. Run the decoder from a C client code<a class="headerlink" href="#run-the-decoder-from-a-c-client-code" title="Permalink to this heading"></a></h2>
 <p>Create a C client code to test the function of the generated decoder.
 Use a decoder API <code class="code docutils literal notranslate"><span class="pre">DecodeInstruction</span></code> in the client.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">bool</span><span class="w"> </span><span class="nf">DecodeInstruction</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">DecodeRequest</span><span class="w"> </span><span class="o">*</span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">DecodeResult</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="p">);</span><span class="w"></span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">bool</span><span class="w"> </span><span class="nf">DecodeInstruction</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">DecodeRequest</span><span class="w"> </span><span class="o">*</span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">DecodeResult</span><span class="w"> </span><span class="o">*</span><span class="n">result</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>In the client code, input the machine code <code class="code docutils literal notranslate"><span class="pre">e28db004</span></code>
@@ -356,65 +363,65 @@ as you did with <code class="code docutils literal notranslate"><span class="pre
 <p>Make the following C client code.</p>
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text">client.c</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;out/mcdecoder.h&quot;</span><span class="cp"></span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;out/mcdecoder.h&quot;</span>
 
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="cm">/* Machine codes to be decoded */</span><span class="w"></span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">kMachineCodes</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="mh">0x04</span><span class="p">,</span><span class="w"> </span><span class="mh">0xB0</span><span class="p">,</span><span class="w"> </span><span class="mh">0x8D</span><span class="p">,</span><span class="w"> </span><span class="mh">0xE2</span><span class="p">,</span><span class="w"> </span><span class="cm">/* add FP, SP, #4 */</span><span class="w"></span>
-<span class="w">  </span><span class="p">};</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="cm">/* Machine codes to be decoded */</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">kMachineCodes</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="mh">0x04</span><span class="p">,</span><span class="w"> </span><span class="mh">0xB0</span><span class="p">,</span><span class="w"> </span><span class="mh">0x8D</span><span class="p">,</span><span class="w"> </span><span class="mh">0xE2</span><span class="p">,</span><span class="w"> </span><span class="cm">/* add FP, SP, #4 */</span>
+<span class="w">  </span><span class="p">};</span>
 
-<span class="w">  </span><span class="cm">/* Decode an instruction */</span><span class="w"></span>
-<span class="w">  </span><span class="n">DecodeRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="n">DecodeResult</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">succeeded</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="cm">/* Decode an instruction */</span>
+<span class="w">  </span><span class="n">DecodeRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">DecodeResult</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">succeeded</span><span class="p">;</span>
 
-<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">codes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">kMachineCodes</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
-<span class="w">  </span><span class="n">succeeded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DecodeInstruction</span><span class="p">(</span><span class="o">&amp;</span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">result</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">codes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">kMachineCodes</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">  </span><span class="n">succeeded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DecodeInstruction</span><span class="p">(</span><span class="o">&amp;</span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">result</span><span class="p">);</span>
 
-<span class="w">  </span><span class="cm">/* Decoding succeeded? */</span><span class="w"></span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">succeeded</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Decoding failed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="cm">/* Decoding succeeded? */</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">succeeded</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Decoding failed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
 
-<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Decoding succeeded.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Decoding succeeded.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
 
-<span class="w">    </span><span class="cm">/* Which instruction is decoded? */</span><span class="w"></span>
-<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">instruction_id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_k_add_immediate_a1</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="cm">/* Get the decoded result of add_immediate_a1 */</span><span class="w"></span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Instruction: add_immediate_a1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Rn: %d</span><span class="se">\n</span><span class="s">Rd: %d</span><span class="se">\n</span><span class="s">imm12: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">Rn</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">Rd</span><span class="p">,</span><span class="w"></span>
-<span class="w">               </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">imm12</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">      </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_k_push_a1</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="cm">/* Handle push_a1 */</span><span class="w"></span>
-<span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">      </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_kUnknown</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="cm">/* Handle an unknown instruction */</span><span class="w"></span>
-<span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">      </span><span class="k">default</span><span class="o">:</span><span class="w"></span>
-<span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* Which instruction is decoded? */</span>
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">instruction_id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_k_add_immediate_a1</span><span class="p">:</span>
+<span class="w">        </span><span class="cm">/* Get the decoded result of add_immediate_a1 */</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Instruction: add_immediate_a1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Rn: %d</span><span class="se">\n</span><span class="s">Rd: %d</span><span class="se">\n</span><span class="s">imm12: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">Rn</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">Rd</span><span class="p">,</span>
+<span class="w">               </span><span class="n">result</span><span class="p">.</span><span class="n">instruction</span><span class="p">.</span><span class="n">add_immediate_a1</span><span class="p">.</span><span class="n">imm12</span><span class="p">);</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">      </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_k_push_a1</span><span class="p">:</span>
+<span class="w">        </span><span class="cm">/* Handle push_a1 */</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">      </span><span class="k">case</span><span class="w"> </span><span class="no">InstructionId_kUnknown</span><span class="p">:</span>
+<span class="w">        </span><span class="cm">/* Handle an unknown instruction */</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">      </span><span class="k">default</span><span class="o">:</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
 
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
 <p>Now compile and execute the client code to get the decoding result.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcc client.c out/mcdecoder.c
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcc<span class="w"> </span>client.c<span class="w"> </span>out/mcdecoder.c
 ./a.out
 </pre></div>
 </div>
 <p>The result will be:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Decoding succeeded.
-Instruction: add_immediate_a1
-Rn: <span class="m">13</span>
-Rd: <span class="m">11</span>
-imm12: <span class="m">4</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Decoding<span class="w"> </span>succeeded.
+Instruction:<span class="w"> </span>add_immediate_a1
+Rn:<span class="w"> </span><span class="m">13</span>
+Rd:<span class="w"> </span><span class="m">11</span>
+imm12:<span class="w"> </span><span class="m">4</span>
 </pre></div>
 </div>
 <p>Good! It coincides with the result of <code class="code docutils literal notranslate"><span class="pre">mcdecoder</span> <span class="pre">emulate</span></code> and
@@ -423,7 +430,7 @@ the tutorial is over.</p>
 You can see <a class="reference external" href="https://github.com/wildlarva/mcdecoder/blob/master/examples/quickstart">example files in the tutorial in github</a>.</p>
 </section>
 <section id="what-s-next">
-<h2>What’s next?<a class="headerlink" href="#what-s-next" title="Permalink to this headline"></a></h2>
+<h2>What’s next?<a class="headerlink" href="#what-s-next" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="spec_mc_desc.html"><span class="doc">More details about MC description</span></a></p></li>
 <li><p><a class="reference internal" href="spec_mcdecoder_api.html"><span class="doc">More details about MC decoder API</span></a></p></li>

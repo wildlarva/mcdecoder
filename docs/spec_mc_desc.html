@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MC description specification &mdash; mcdecoder  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/override.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="_static/css/override.css?v=5a14f012" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -29,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> mcdecoder
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            mcdecoder
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -69,9 +76,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="specifications.html">Specifications</a> &raquo;</li>
-      <li>MC description specification</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="specifications.html">Specifications</a></li>
+      <li class="breadcrumb-item active">MC description specification</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/spec_mc_desc.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -82,79 +89,79 @@
            <div itemprop="articleBody">
              
   <section id="mc-description-specification">
-<h1>MC description specification<a class="headerlink" href="#mc-description-specification" title="Permalink to this headline"></a></h1>
+<h1>MC description specification<a class="headerlink" href="#mc-description-specification" title="Permalink to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>Machine code description file or MC description file is defined
 as a YAML format.
 Here is an overview of MC description.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span><span class="w"> </span><span class="c1"># Describes a machine</span><span class="w"></span>
-<span class="w">  </span><span class="nt">byteorder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">little</span><span class="w"> </span><span class="c1"># Byte order of a machine</span><span class="w"></span>
-<span class="w">  </span><span class="nt">extras</span><span class="p">:</span><span class="w"> </span><span class="c1"># [optional] User-defined data for a machine</span><span class="w"></span>
-<span class="w">    </span><span class="nt">arch_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arm</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span><span class="w"> </span><span class="c1"># Describes a machine</span>
+<span class="w">  </span><span class="nt">byteorder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">little</span><span class="w"> </span><span class="c1"># Byte order of a machine</span>
+<span class="w">  </span><span class="nt">extras</span><span class="p">:</span><span class="w"> </span><span class="c1"># [optional] User-defined data for a machine</span>
+<span class="w">    </span><span class="nt">arch_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arm</span>
 
-<span class="nt">instructions</span><span class="p">:</span><span class="w"> </span><span class="c1"># Describes instructions</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add_1</span><span class="w"> </span><span class="c1"># Name of an instruction</span><span class="w"></span>
+<span class="nt">instructions</span><span class="p">:</span><span class="w"> </span><span class="c1"># Describes instructions</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add_1</span><span class="w"> </span><span class="c1"># Name of an instruction</span>
 
-<span class="w">    </span><span class="c1"># Encoding format of an instruction</span><span class="w"></span>
-<span class="w">    </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># Encoding format of an instruction</span>
+<span class="w">    </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
 
-<span class="w">    </span><span class="c1"># [optional] Condition when an instruction applys</span><span class="w"></span>
-<span class="w">    </span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(cond in_range 0-14 and S == 1) or cond == 15</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># [optional] Condition when an instruction applys</span>
+<span class="w">    </span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(cond in_range 0-14 and S == 1) or cond == 15</span>
 
-<span class="w">    </span><span class="c1"># [optional] Condition when an instruction does not apply</span><span class="w"></span>
-<span class="w">    </span><span class="nt">unmatch_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cond == 15</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># [optional] Condition when an instruction does not apply</span>
+<span class="w">    </span><span class="nt">unmatch_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cond == 15</span>
 
-<span class="w">    </span><span class="nt">extras</span><span class="p">:</span><span class="w"> </span><span class="c1"># [optional] User-defined data for an instruction</span><span class="w"></span>
-<span class="w">      </span><span class="nt">clocks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
-<span class="w">    </span><span class="nt">field_extras</span><span class="p">:</span><span class="w"> </span><span class="c1"># [optional] User-defined data for each field</span><span class="w"></span>
-<span class="w">      </span><span class="nt">Rn</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="nv">register</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="w">    </span><span class="nt">extras</span><span class="p">:</span><span class="w"> </span><span class="c1"># [optional] User-defined data for an instruction</span>
+<span class="w">      </span><span class="nt">clocks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">    </span><span class="nt">field_extras</span><span class="p">:</span><span class="w"> </span><span class="c1"># [optional] User-defined data for each field</span>
+<span class="w">      </span><span class="nt">Rn</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="nv">register</span><span class="p p-Indicator">}</span>
 
-<span class="nt">decoder</span><span class="p">:</span><span class="w"> </span><span class="c1"># [optional] Decoder information of the global scope</span><span class="w"></span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ns</span><span class="w"> </span><span class="c1"># [optional] Namespace for the symbols of a generated decoder</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># [optional] Name of the hook function to process user-specific information for an instruction</span><span class="w"></span>
-<span class="w">  </span><span class="nt">process_instruction_hook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">process_instruction</span><span class="w"></span>
+<span class="nt">decoder</span><span class="p">:</span><span class="w"> </span><span class="c1"># [optional] Decoder information of the global scope</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ns</span><span class="w"> </span><span class="c1"># [optional] Namespace for the symbols of a generated decoder</span>
+<span class="w">  </span><span class="c1"># [optional] Name of the hook function to process user-specific information for an instruction</span>
+<span class="w">  </span><span class="nt">process_instruction_hook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">process_instruction</span>
 
-<span class="nt">extras</span><span class="p">:</span><span class="w"> </span><span class="c1"># [optional] User-defined data for the global scope</span><span class="w"></span>
-<span class="w">  </span><span class="nt">compiler</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcc</span><span class="w"></span>
+<span class="nt">extras</span><span class="p">:</span><span class="w"> </span><span class="c1"># [optional] User-defined data for the global scope</span>
+<span class="w">  </span><span class="nt">compiler</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcc</span>
 </pre></div>
 </div>
 </section>
 <section id="machine">
-<h2>machine<a class="headerlink" href="#machine" title="Permalink to this headline"></a></h2>
+<h2>machine<a class="headerlink" href="#machine" title="Permalink to this heading"></a></h2>
 <p><code class="code docutils literal notranslate"><span class="pre">machine</span></code> describes the specification of a machine.</p>
 <section id="machine-byteorder">
-<h3>machine.byteorder<a class="headerlink" href="#machine-byteorder" title="Permalink to this headline"></a></h3>
+<h3>machine.byteorder<a class="headerlink" href="#machine-byteorder" title="Permalink to this heading"></a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">byteorder</span></code> is the byte order of a machine.
 It can be <code class="code docutils literal notranslate"><span class="pre">big</span></code> (big endian) or <code class="code docutils literal notranslate"><span class="pre">little</span></code> (little endian).</p>
 </section>
 <section id="machine-extras">
-<h3>machine.extras<a class="headerlink" href="#machine-extras" title="Permalink to this headline"></a></h3>
+<h3>machine.extras<a class="headerlink" href="#machine-extras" title="Permalink to this heading"></a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">extras</span></code> defines user-defined data for a machine.
 Any structure can be defined as user-defined data.</p>
 <p>Here is an example of defining a mapping as user-defined data.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extras</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">arch_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arm</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extras</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">arch_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arm</span>
 </pre></div>
 </div>
 <p>Here is an example of defining a sequence as user-defined data.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extras</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extras</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
 </pre></div>
 </div>
 </section>
 </section>
 <section id="instructions">
-<h2>instructions<a class="headerlink" href="#instructions" title="Permalink to this headline"></a></h2>
+<h2>instructions<a class="headerlink" href="#instructions" title="Permalink to this heading"></a></h2>
 <p><code class="code docutils literal notranslate"><span class="pre">instructions</span></code> describes the specification of instructions.
 Each list element in <code class="code docutils literal notranslate"><span class="pre">instructions</span></code> represents an instruction.</p>
 <section id="instructions-name">
-<h3>instructions.name<a class="headerlink" href="#instructions-name" title="Permalink to this headline"></a></h3>
+<h3>instructions.name<a class="headerlink" href="#instructions-name" title="Permalink to this heading"></a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">name</span></code> defines the name of an instruction.</p>
 </section>
 <section id="instructions-format">
-<h3>instructions.format<a class="headerlink" href="#instructions-format" title="Permalink to this headline"></a></h3>
+<h3>instructions.format<a class="headerlink" href="#instructions-format" title="Permalink to this heading"></a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">format</span></code> defines the encoding format of an instruction.</p>
 <p>Instruction can be split into multiple parts,
 which are named instruction fields.
@@ -164,21 +171,21 @@ Each bit range is called a subfield in a field.</p>
 Each word is called an encoding element in an instruction.</p>
 <p>Here is an example of instruction fields
 (the fields ‘cond’, ‘S’, ‘Rn’, ‘Rd’ and ‘imm12’).</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
 </pre></div>
 </div>
 <p>Here is an example of instruction subfields
 (the field ‘imm’ is split into several bit ranges).</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">000:funct3|x:imm[5]|xxxx x:dest|xxx xx:imm[4:0]|01:op</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">000:funct3|x:imm[5]|xxxx x:dest|xxx xx:imm[4:0]|01:op</span>
 </pre></div>
 </div>
 <p>Here is another example of instruction subfields
 (the field ‘offset’ is split into adjacent bit ranges).</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">111:funct3|x xxxx x:offset[5:3,8:6]|xxx xx:src|10:op</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">111:funct3|x xxxx x:offset[5:3,8:6]|xxx xx:src|10:op</span>
 </pre></div>
 </div>
 <p>Here is an example of encoding elements in an instruction (2 words of 16-bit).</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn // xxxx:Rd|xxxx xxxx xxxx:imm12</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn // xxxx:Rd|xxxx xxxx xxxx:imm12</span>
 </pre></div>
 </div>
 <p>Expression: <code class="code docutils literal notranslate"><span class="pre">&lt;field_bits&gt;:&lt;field_name&gt;[&lt;field_bit_ranges&gt;]|...</span> <span class="pre">//</span> <span class="pre">...</span></code></p>
@@ -209,7 +216,7 @@ Bit ranges are separated by comma symbol(<code class="code docutils literal notr
 </dl>
 </section>
 <section id="instructions-match-condition">
-<h3>instructions.match_condition<a class="headerlink" href="#instructions-match-condition" title="Permalink to this headline"></a></h3>
+<h3>instructions.match_condition<a class="headerlink" href="#instructions-match-condition" title="Permalink to this heading"></a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">match_condition</span></code> defines the condition when an instruction applys.
 The following condition types are supported.</p>
 <ul class="simple">
@@ -222,23 +229,23 @@ The following condition types are supported.</p>
 You can also use <code class="code docutils literal notranslate"><span class="pre">(</span></code> and <code class="code docutils literal notranslate"><span class="pre">)</span></code> for grouping conditions or
 just for readability.</p>
 <section id="equality-condition">
-<h4>Equality condition<a class="headerlink" href="#equality-condition" title="Permalink to this headline"></a></h4>
+<h4>Equality condition<a class="headerlink" href="#equality-condition" title="Permalink to this heading"></a></h4>
 <p>It defines a condition to test the equality between a field value and
 a given value.</p>
 <p>When the field ‘cond’ equals 15,</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cond == 15</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cond == 15</span>
 </pre></div>
 </div>
 <p>When the field ‘Rn’ equals the field ‘Rd’,</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Rn == Rd</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Rn == Rd</span>
 </pre></div>
 </div>
 <p>When the 15th bit of the field ‘register_list’ equals 1,</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">register_list[15] == 1</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">register_list[15] == 1</span>
 </pre></div>
 </div>
 <p>When the set bit count of the field ‘register_list’ is less than 2,</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setbit_count(register_list) &lt; 2</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setbit_count(register_list) &lt; 2</span>
 </pre></div>
 </div>
 <p>Expression: <code class="code docutils literal notranslate"><span class="pre">&lt;subject&gt;</span> <span class="pre">&lt;operator&gt;</span> <span class="pre">&lt;object&gt;</span></code></p>
@@ -252,10 +259,10 @@ a given value.</p>
 <p>See also the common expressions below.</p>
 </section>
 <section id="in-a-set-condition">
-<h4>In-a-set condition<a class="headerlink" href="#in-a-set-condition" title="Permalink to this headline"></a></h4>
+<h4>In-a-set condition<a class="headerlink" href="#in-a-set-condition" title="Permalink to this heading"></a></h4>
 <p>It defines a condition to test that a field value is in a given value set.</p>
 <p>When the field ‘cond’ is in a set [13, 15],</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cond in [13, 15]</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cond in [13, 15]</span>
 </pre></div>
 </div>
 <p>Expression: <code class="code docutils literal notranslate"><span class="pre">&lt;subject&gt;</span> <span class="pre">in</span> <span class="pre">&lt;values&gt;</span></code></p>
@@ -270,11 +277,11 @@ a given value.</p>
 <p>See also the common expressions below.</p>
 </section>
 <section id="in-a-range-condition">
-<h4>In-a-range condition<a class="headerlink" href="#in-a-range-condition" title="Permalink to this headline"></a></h4>
+<h4>In-a-range condition<a class="headerlink" href="#in-a-range-condition" title="Permalink to this heading"></a></h4>
 <p>It defines a condition to test that a field value is
 in a given value range(inclusive).</p>
 <p>When the field ‘cond’ is in a range from 10 to 15,</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cond in_range 10-15</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cond in_range 10-15</span>
 </pre></div>
 </div>
 <p>Expression: <code class="code docutils literal notranslate"><span class="pre">&lt;subject&gt;</span> <span class="pre">in_range</span> <span class="pre">&lt;value_start&gt;-&lt;value_end&gt;</span></code></p>
@@ -292,17 +299,17 @@ in a given value range(inclusive).</p>
 <p>See also the common expressions below.</p>
 </section>
 <section id="complex-condition">
-<h4>Complex condition<a class="headerlink" href="#complex-condition" title="Permalink to this headline"></a></h4>
+<h4>Complex condition<a class="headerlink" href="#complex-condition" title="Permalink to this heading"></a></h4>
 <p>The conditions explained before can be combined together.</p>
 <p>Here’s an example of a combination of the conditions.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">  </span><span class="no">Rn != 15</span><span class="w"></span>
-<span class="w">  </span><span class="no">and (cond in_range 10-11 or cond in [13, 15])</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">  </span><span class="no">Rn != 15</span>
+<span class="w">  </span><span class="no">and (cond in_range 10-11 or cond in [13, 15])</span>
 </pre></div>
 </div>
 </section>
 <section id="common-expressions">
-<h4>Common expressions<a class="headerlink" href="#common-expressions" title="Permalink to this headline"></a></h4>
+<h4>Common expressions<a class="headerlink" href="#common-expressions" title="Permalink to this heading"></a></h4>
 <dl>
 <dt>&lt;subject&gt;</dt><dd><p>Subject to be tested</p>
 <p>Expression: <code class="code docutils literal notranslate"><span class="pre">&lt;field_object&gt;</span></code> or <code class="code docutils literal notranslate"><span class="pre">&lt;function_object&gt;</span></code></p>
@@ -336,58 +343,58 @@ in a given value range(inclusive).</p>
 </section>
 </section>
 <section id="instructions-unmatch-condition">
-<h3>instructions.unmatch_condition<a class="headerlink" href="#instructions-unmatch-condition" title="Permalink to this headline"></a></h3>
+<h3>instructions.unmatch_condition<a class="headerlink" href="#instructions-unmatch-condition" title="Permalink to this heading"></a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">unmatch_condition</span></code> defines the condition
 when an instruction does not apply.
 The expression is the same as that of <code class="code docutils literal notranslate"><span class="pre">match_condition</span></code>.
 <code class="code docutils literal notranslate"><span class="pre">unmatch_condition</span></code> is mutually exclusive with <code class="code docutils literal notranslate"><span class="pre">match_condition</span></code>.</p>
 </section>
 <section id="instructions-extras">
-<h3>instructions.extras<a class="headerlink" href="#instructions-extras" title="Permalink to this headline"></a></h3>
+<h3>instructions.extras<a class="headerlink" href="#instructions-extras" title="Permalink to this heading"></a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">extras</span></code> defines user-defined data for an instruction.
 Any structure can be defined as user-defined data.</p>
 <p>Here is an example of defining a mapping as user-defined data.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extras</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">clocks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extras</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clocks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 </pre></div>
 </div>
 <p>Here is an example of defining a sequence as user-defined data.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extras</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extras</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
 </pre></div>
 </div>
 </section>
 <section id="instructions-field-extras">
-<h3>instructions.field_extras<a class="headerlink" href="#instructions-field-extras" title="Permalink to this headline"></a></h3>
+<h3>instructions.field_extras<a class="headerlink" href="#instructions-field-extras" title="Permalink to this heading"></a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">field_extras</span></code> defines user-defined data for each field.
 Each mapping key in <code class="code docutils literal notranslate"><span class="pre">field_extras</span></code> represents a field
 defining user-defined data and its value holds user-defined data for the field.
 Any structure can be defined as user-defined data.</p>
 <p>Here is an example of defining a mapping as user-defined data.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">field_extras</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">Rn</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="nv">register</span><span class="p p-Indicator">}</span><span class="w"> </span><span class="c1"># User-defined data for the field &#39;Rn&#39;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">imm12</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="nv">immediate</span><span class="p p-Indicator">}</span><span class="w"> </span><span class="c1"># User-defined data for the field &#39;imm12&#39;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">field_extras</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">Rn</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="nv">register</span><span class="p p-Indicator">}</span><span class="w"> </span><span class="c1"># User-defined data for the field &#39;Rn&#39;</span>
+<span class="w">  </span><span class="nt">imm12</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="nv">immediate</span><span class="p p-Indicator">}</span><span class="w"> </span><span class="c1"># User-defined data for the field &#39;imm12&#39;</span>
 </pre></div>
 </div>
 <p>Here is an example of defining a sequence as user-defined data.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">field_extras</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">Rn</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">20</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># User-defined data for the field &#39;Rn&#39;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">imm12</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">30</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">40</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># User-defined data for the field &#39;imm12&#39;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">field_extras</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">Rn</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">20</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># User-defined data for the field &#39;Rn&#39;</span>
+<span class="w">  </span><span class="nt">imm12</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">30</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">40</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># User-defined data for the field &#39;imm12&#39;</span>
 </pre></div>
 </div>
 </section>
 </section>
 <section id="decoder">
-<h2>decoder<a class="headerlink" href="#decoder" title="Permalink to this headline"></a></h2>
+<h2>decoder<a class="headerlink" href="#decoder" title="Permalink to this heading"></a></h2>
 <p><code class="code docutils literal notranslate"><span class="pre">decoder</span></code> is a decoder information for the global scope,
 which isn’t related to a machine, an instruction and a field.</p>
 <section id="decoder-namespace">
-<h3>decoder.namespace<a class="headerlink" href="#decoder-namespace" title="Permalink to this headline"></a></h3>
+<h3>decoder.namespace<a class="headerlink" href="#decoder-namespace" title="Permalink to this heading"></a></h3>
 <p><code class="code docutils literal notranslate"><span class="pre">namespace</span></code> defines the namespace for the symbols of a generated decoder.</p>
 </section>
 <section id="decoder-process-instruction-hook">
-<h3>decoder.process_instruction_hook<a class="headerlink" href="#decoder-process-instruction-hook" title="Permalink to this headline"></a></h3>
+<h3>decoder.process_instruction_hook<a class="headerlink" href="#decoder-process-instruction-hook" title="Permalink to this heading"></a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>This is an experimental feature. The name and form of this attribute might be changed in the future release.</p>
@@ -399,8 +406,8 @@ The hook function must be defined in the python config file named <code class="c
 </pre></div>
 </div>
 <p>Here’s an example of defining a hook function to process user-specific information.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">decoder</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">process_instruction_hook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">process_instruction</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">decoder</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">process_instruction_hook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">process_instruction</span>
 </pre></div>
 </div>
 <div class="literal-block-wrapper docutils container" id="id1">
@@ -416,27 +423,27 @@ The hook function must be defined in the python config file named <code class="c
 </section>
 </section>
 <section id="extras">
-<h2>extras<a class="headerlink" href="#extras" title="Permalink to this headline"></a></h2>
+<h2>extras<a class="headerlink" href="#extras" title="Permalink to this heading"></a></h2>
 <p><code class="code docutils literal notranslate"><span class="pre">extras</span></code> defines user-defined data for the global scope,
 which isn’t related to a machine, an instruction and a field.
 Any structure can be defined as user-defined data.</p>
 <p>Here is an example of defining a mapping as user-defined data.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extras</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">compiler</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcc</span><span class="w"></span>
-<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extras</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">compiler</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcc</span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
 </pre></div>
 </div>
 <p>Here is an example of defining a sequence as user-defined data.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extras</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">extras</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
 </pre></div>
 </div>
 </section>
 <section id="additional-specifications">
-<h2>Additional specifications<a class="headerlink" href="#additional-specifications" title="Permalink to this headline"></a></h2>
+<h2>Additional specifications<a class="headerlink" href="#additional-specifications" title="Permalink to this heading"></a></h2>
 <section id="include-tag">
-<h3>!include tag<a class="headerlink" href="#include-tag" title="Permalink to this headline"></a></h3>
+<h3>!include tag<a class="headerlink" href="#include-tag" title="Permalink to this heading"></a></h3>
 <p>You can split a description into multiple files by using <code class="code docutils literal notranslate"><span class="pre">!include</span></code> tag.
 You can use it anywhere in a description and
 the contents of specified files will be inserted into the place
@@ -452,25 +459,25 @@ The behavior depends on the types of the contents of included files:</p>
 <p>Here’s an example of including instructions from other files.</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">arm.yaml</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">byteorder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">little</span><span class="w"></span>
-<span class="nt">instructions</span><span class="p">:</span><span class="w"> </span><span class="kt">!include</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">instructions/*_instructions.yaml</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">machine</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">byteorder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">little</span>
+<span class="nt">instructions</span><span class="p">:</span><span class="w"> </span><span class="kt">!include</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">instructions/*_instructions.yaml</span>
 </pre></div>
 </div>
 </div>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">instructions/add_instructions.yaml</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add_1</span><span class="w"></span>
-<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span><span class="w"></span>
-<span class="w">  </span><span class="nt">unmatch_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cond == 15</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add_1</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|00|1|0100|x:S|xxxx:Rn|xxxx:Rd|xxxx xxxx xxxx:imm12</span>
+<span class="w">  </span><span class="nt">unmatch_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cond == 15</span>
 </pre></div>
 </div>
 </div>
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text">instructions/push_instructions.yaml</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">push_1</span><span class="w"></span>
-<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list</span><span class="w"></span>
-<span class="w">  </span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cond in_range 0-14</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">push_1</span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxx:cond|1001 00|1|0|1101|xxxx xxxx xxxx xxxx:register_list</span>
+<span class="w">  </span><span class="nt">match_condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cond in_range 0-14</span>
 </pre></div>
 </div>
 </div>
@@ -486,16 +493,9 @@ to specify multiple files.</p>
 </section>
 </section>
 <section id="schema-specification">
-<h2>Schema specification<a class="headerlink" href="#schema-specification" title="Permalink to this headline"></a></h2>
+<h2>Schema specification<a class="headerlink" href="#schema-specification" title="Permalink to this heading"></a></h2>
 <p>The schema is defined with JSON Schema and explained with the terms of it.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-<col style="width: 20%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p>type</p></td>
 <td colspan="4"><p><em>object</em></p></td>
