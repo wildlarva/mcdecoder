@@ -19,8 +19,8 @@ setup(
         'console_scripts': ['mcdecoder = mcdecoder.__main__:main']
     },
     python_requires='>=3.8',
-    install_requires=['deprecation>=2.0.7', 'Jinja2>=2.11.2', 'jsonschema>=3.2.0',
-                      'lark-parser>=0.9.0', 'numpy>=1.19.1', 'PyYAML>=5.3.1'],
+    install_requires=['deprecation>=2.0.7', 'Jinja2>=3.1.3', 'jsonschema>=3.2.0',
+                      'lark-parser>=0.9.0', 'numpy>=1.24.0', 'PyYAML>=6.0'],
 
     # Metadata to display on PyPI
     author='wildlarva',
