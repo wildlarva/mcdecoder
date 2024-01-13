@@ -42,6 +42,7 @@ How to setup environment for development
 
     # Install ruby tools
     sudo gem install bundler
+    bundle config set --local path gems
     bundle install
 
     # Install mcdecoder

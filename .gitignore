@@ -133,6 +133,8 @@ dmypy.json
 _build/
 
 # Ruby
+.bundle/
+gems/
 Gemfile.lock
 
 # mcdecoder

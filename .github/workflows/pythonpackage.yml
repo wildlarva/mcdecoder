@@ -21,7 +21,7 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.5
+        ruby-version: 3.0
     - name: Install dependencies on ubuntu
       run: |
         sudo apt-get install cmake libboost-all-dev
