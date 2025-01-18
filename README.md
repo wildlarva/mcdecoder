@@ -57,7 +57,7 @@ It is now independent from athrill.
 
 ## Requirements
 
-- Python 3.8 and above (with pip)
+- Python 3.10 and above (with pip)
 
 ## Installation
 

@@ -5,10 +5,10 @@ Developer guides
 Requirements for development
 =============================================
 
-* Ubuntu 20.x or above
-* Python 3.8 or above (with pip and venv)
+* Ubuntu 22.x or above
+* Python 3.10 or above (with pip and venv)
 
-  * Recommended packages: python3.8, python3-pip and python3.8-venv
+  * Recommended packages: python3.10, python3-pip and python3.10-venv
 
 * Ruby 3.0 or above (with RubyGems and Ruby header files)
 
@@ -34,7 +34,7 @@ How to setup environment for development
 
     # Create virtual environment and switch to it
     cd mcdecoder
-    python3.8 -m venv env
+    python3.10 -m venv env
     source env/bin/activate
 
     # Install python tools and libraries

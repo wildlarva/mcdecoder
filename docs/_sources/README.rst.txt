@@ -65,14 +65,14 @@ The mcdecoder was originally developed for `athrill <https://github.com/toppers/
 Requirements
 ------------
 
-* Python 3.8 (with pip)
+* Python 3.10 (with pip)
 
 Installation
 ------------
 
 .. code-block:: bash
 
-    python3.8 -m pip install mcdecoder
+    python3.10 -m pip install mcdecoder
 
 License
 -------
